@@ -155,10 +155,6 @@ class _MaterialPickState extends State<MaterialPick> {
       appBar: AppBar(
         backgroundColor: Colors.red[400],
         title: const Text('Material'),
-        backwardsCompatibility: false,
-        leading: Container(
-          width: 0,
-        ),
         actions: [
           Container(
             height: 40,

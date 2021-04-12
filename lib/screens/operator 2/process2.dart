@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
+import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%202/scanbundle.dart';
 import 'package:molex/screens/operator/bin.dart';
 
@@ -19,11 +21,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[400],
-        title: const Text('Material'),
-        backwardsCompatibility: false,
-        leading: Container(
-          width: 0,
-        ),
+        title: const Text('Process Page 2'),
         actions: [
           Container(
             height: 40,
@@ -240,6 +238,16 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   String _chosenValue;
   String value;
+  bool scanTap = false;
+  FocusNode scanBundleFocus = new FocusNode();
+  List<BundleScan> bundleScan = [];
+  String scanId;
+  TextEditingController _scanIdController = new TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -256,10 +264,10 @@ class _DetailState extends State<Detail> {
             children: [
               startProcess(),
               ElevatedButton(
-                 style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // background
-                        onPrimary: Colors.white,
-                      ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red, // background
+                    onPrimary: Colors.white,
+                  ),
                   onPressed: () {
                     setState(() {
                       value = _chosenValue;
@@ -269,114 +277,303 @@ class _DetailState extends State<Detail> {
             ],
           ),
           Process(type: value),
+          SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.all(50.0),
+            padding: const EdgeInsets.all(8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                // Vertiacal Buttons
                 Container(
-                  height: 50,
-                  width: 200,
-                  padding: const EdgeInsets.all(0.0),
-                  child: Container(
-                    color: Colors.transparent,
-                    child: ElevatedButton(
-                       style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // background
-                        onPrimary: Colors.white,
-                      ),
-                        child: Text(
-                          'Scan Bundle',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal,
+                  height: 240,
+                  width: 600,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      //Scan Bundle Button
+                      Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 200,
+                            padding: const EdgeInsets.all(0.0),
+                            child: Container(
+                              color: Colors.transparent,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.red, // background
+                                    onPrimary: Colors.white,
+                                  ),
+                                  child: Text(
+                                    'Scan Bundle',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      scanTap = !scanTap;
+                                      Future.delayed(
+                                        const Duration(milliseconds: 50),
+                                        () {
+                                          SystemChannels.textInput
+                                              .invokeMethod('TextInput.hide');
+                                        },
+                                      );
+                                    });
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) => Bundle()),
+                                    // );
+                                  }),
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Bundle()),
-                        );
-                        }
-                        ),
+                          //text feild
+                          (() {
+                            if (scanTap) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  SizedBox(width: 10),
+                                  Container(
+                                    height: 50,
+                                    width: 200,
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      child: RawKeyboardListener(
+                                        focusNode: FocusNode(),
+                                        onKey: (event) => handleKey(event.data),
+                                        child: Container(
+                                            child: TextField(
+                                          controller: _scanIdController,
+                                          focusNode: scanBundleFocus,
+                                          autofocus: true,
+                                          onTap: () {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          },
+                                          decoration: new InputDecoration(
+                                            labelText: "Scan Bundle",
+                                            fillColor: Colors.white,
+                                            border: new OutlineInputBorder(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      5.0),
+                                              borderSide: new BorderSide(),
+                                            ),
+                                            //fillColor: Colors.green
+                                          ),
+                                        )),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Container(
+                                    height: 50,
+                                    width: 150,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                side: BorderSide(
+                                                    color:
+                                                        Colors.transparent))),
+                                        backgroundColor: MaterialStateProperty
+                                            .resolveWith<Color>(
+                                          (Set<MaterialState> states) {
+                                            if (states.contains(
+                                                MaterialState.pressed))
+                                              return Colors.green[200];
+                                            return Colors.green[
+                                                500]; // Use the component's default.
+                                          },
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Add',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      onPressed: (){
+                                        setState(() {
+                                              bundleScan.add(BundleScan(
+                                          bundleId: _scanIdController.text,
+                                          bundleProcessQty: "30",
+                                          bundleQty: "100"
+                                        ));
+                                        _scanIdController.clear();
+                                        });
+                                    
+
+                                      },
+                                    ),
+                                  )
+                                ],
+                              );
+                            } else {
+                              return Container();
+                            }
+                          }()),
+                        ],
+                      ),
+                      //100% complete Button
+                      Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red, // background
+                                onPrimary: Colors.white,
+                              ),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return tab1();
+                                    });
+                              },
+                              child: Text(
+                                "100% complete",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      //Partially Complete
+                      Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.red, // background
+                                onPrimary: Colors.white,
+                              ),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return tab1();
+                                    });
+                              },
+                              child: Text(
+                                "Partially  complete",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Relaod Materail
+                      Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red, // background
+                                  onPrimary: Colors.white,
+                                ),
+                                child: Text(
+                                  'Reload Material',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+                //Table for scaned items
                 Container(
-                  height: 50,
-                  width: 200,
-                  child: ElevatedButton(
-                     style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // background
-                        onPrimary: Colors.white,
-                      ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return tab1();
-                          });
-                    },
-                    child: Text(
-                      "100% complete",
-                      style: TextStyle(
-                        
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  width: 200,
-                  child: ElevatedButton(
-                     style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // background
-                        onPrimary: Colors.white,
-                      ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return tab1();
-                          });
-                    },
-                    child: Text(
-                      "Partially  complete",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  width: 200,
-                  child: ElevatedButton(
-                     style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // background
-                        onPrimary: Colors.white,
-                      ),
-                      child: Text(
-                        'Reload Material',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ),
+                  height: 250,
+                  child: scanedTable(),
+                )
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget scanedTable() {
+    if(bundleScan.length>0){
+    return DataTable(
+        columnSpacing: 35,
+        columns: const <DataColumn>[
+          DataColumn(
+            label: Text('S No.'),
+          ),
+          DataColumn(
+            label: Text('Bundle Id'),
+          ),
+          DataColumn(
+            label: Text('Bundle Qty'),
+          ),
+          DataColumn(
+            label: Text('Process Qty'),
+          ),
+          DataColumn(
+            label: Text('Remove'),
+          ),
+        ],
+        rows: bundleScan.map((e) => DataRow(cells: <DataCell>[
+          DataCell(Text("1")),
+              DataCell(Text(
+                e.bundleId,
+              )),
+              DataCell(Text(e.bundleQty,)),
+              DataCell(Text(e.bundleProcessQty,)),
+               DataCell(IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () {
+                                  bundleScan.remove(e);
+                                },
+                              )),
+            ])).toList());
+    }else{
+      return Container();
+    }
+  }
+
+  handleKey(RawKeyEventDataAndroid key) {
+    String _keyCode;
+    _keyCode = key.keyCode.toString(); //keyCode of key event(66 is return )
+    print("why does this run twice $_keyCode");
+
+    setState(() {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    });
   }
   //Material Sheet for qty
 
@@ -474,7 +671,7 @@ class _DetailState extends State<Detail> {
                   height: 45,
                   width: 250,
                   child: ElevatedButton(
-                     style: ElevatedButton.styleFrom(
+                      style: ElevatedButton.styleFrom(
                         primary: Colors.green, // background
                         onPrimary: Colors.white,
                       ),
@@ -920,7 +1117,7 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Container(
-        height: 310,
+        height: 140,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: Row(
@@ -929,17 +1126,20 @@ class _DetailState extends State<Detail> {
             process(
                 'Terminal A',
                 'From Strip Length Spec(mm) - 40',
-                'Process Type(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Comments)(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
+                'Process Type(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Comments)',
+                '(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
                 'From Unsheathing Length (mm) - 40'),
             process(
                 'Cable',
                 'Cut Length Spec(mm) - 2060',
-                'Cable Part Number(Description),884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
+                'Cable Part Number(Description)',
+                '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
                 ''),
             process(
                 'Terminal B',
                 'To Strip Length Spec(mm) - 60',
-                'Process Type(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Comments) (SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',
+                'Process Type(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Comments)',
+                '(SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',
                 'To Unsheathing Length (mm) - 60'),
           ],
         ),
@@ -947,54 +1147,75 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget process(String p1, String p2, String p3, String p4) {
+  Widget process(String p1, String p2, String p3, String p4, String p5) {
     return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(
-            padding: const EdgeInsets.all(15.0),
-            height: 285,
-            width: MediaQuery.of(context).size.width * 0.31,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.grey[200],
+      padding: const EdgeInsets.all(4.0),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        height: 130,
+        width: MediaQuery.of(context).size.width * 0.32,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          color: Colors.grey[200],
+        ),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: Container(
+                height: 80.0,
+                width: 80,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/image/terminal_a.jpg'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
             ),
-            child: Center(
-              child: Column(children: [
-                Text(p1,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                Text(p2,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Container(
-                    height: 140.0,
-                    width: 200.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/image/terminal_a.jpg'),
-                        fit: BoxFit.fill,
+            Container(
+              width: 8,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.31 * 0.725,
+                child: Column(
+                  children: [
+                    Text(p1),
+                    Text(p2),
+                    SizedBox(height: 5),
+                    Text(
+                      p3,
+                      style: TextStyle(fontSize: 11),
+                    ),
+                    Text(
+                      p4,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
+                    SizedBox(height: 5),
+                    Text(
+                      p5,
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ],
                 ),
-                Center(
-                  child: Text(
-                    p3,
-                    style:
-                        TextStyle(fontSize: 11.50, fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Text(p4, style: TextStyle(fontSize: 12)),
-              ]),
-            )));
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget startProcess() {
     return Padding(
-        padding: const EdgeInsets.all(60.0),
+        padding: const EdgeInsets.all(20.0),
         child: Container(
           child: Row(
             children: [
@@ -1057,14 +1278,15 @@ class _ProcessState extends State<Process> {
           Row(
             children: [
               Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    "Process Type : Terminal A,Cutlength,Terminal B",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  )),
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  "Process Type : Terminal A,Cutlength,Terminal B",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
             ],
           ),
           // table for Process

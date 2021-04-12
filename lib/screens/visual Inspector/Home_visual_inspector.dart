@@ -1,32 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:molex/models/Schudule.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/models/Schudule.dart';
+import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/navigation.dart';
-import 'package:molex/screens/operator/materialPick.dart';
 
-class Homepage extends StatefulWidget {
+class HomeVisualInspector extends StatefulWidget {
   String userId;
   String machineId;
-  Homepage({this.userId, this.machineId});
+  HomeVisualInspector({this.userId, this.machineId});
   @override
-  _HomepageState createState() => _HomepageState();
+  _HomeVisualInspectorState createState() => _HomeVisualInspectorState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomeVisualInspectorState extends State<HomeVisualInspector> {
   Schedule schedule;
+  List<ViSchedule> viScheduleList = [];
   @override
   void initState() {
     super.initState();
-    schedule =   Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
-          process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
-          status: "Not Completed");
+    viScheduleList.add(ViSchedule(
+      orderId: "846478041",
+      fgPart: "367810109",
+      scheduleId: "945810107",
+      binId: "BIN8712122",
+      totalBundles: "10",
+      totalbundleQty: "500 Pcs",
+    ));
+    viScheduleList.add(ViSchedule(
+      orderId: "846478042",
+      fgPart: "367810110",
+      scheduleId: "945810108",
+      binId: "BIN8712122",
+      totalBundles: "10",
+      totalbundleQty: "500 Pcs",
+    ));
+    viScheduleList.add(ViSchedule(
+      orderId: "846478043",
+      fgPart: "367810111",
+      scheduleId: "945810108",
+      binId: "BIN8712122",
+      totalBundles: "10",
+      totalbundleQty: "500 Pcs",
+    ));
+    viScheduleList.add(ViSchedule(
+      orderId: "846478043",
+      fgPart: "367810112",
+      scheduleId: "945810108",
+      binId: "BIN8712122",
+      totalBundles: "10",
+      totalbundleQty: "500 Pcs",
+    ));
   }
 
   @override
@@ -34,11 +57,8 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red[400],
-          title: const Text('Dashboard'),
-          backwardsCompatibility: false,
-          leading: Container(
-            width: 0,
-          ),
+          title: const Text('Vi Dashboard'),
+       
           actions: [
             Container(
               height: 40,
@@ -74,11 +94,12 @@ class _HomepageState extends State<Homepage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NavPage(
-                      schedule: schedule,
-                      userId: widget.userId,
-                      machineId: widget.machineId,
-                    )),
+                    MaterialPageRoute(
+                        builder: (context) => NavPage(
+                              schedule: schedule,
+                              userId: widget.userId,
+                              machineId: widget.machineId,
+                            )),
                   );
                 },
                 child: Container(
@@ -108,7 +129,7 @@ class _HomepageState extends State<Homepage> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 7),
-                        height: 60,
+                        height: 70,
                         decoration: BoxDecoration(
                           color: Colors.white,
                         ),
@@ -218,9 +239,88 @@ class _HomepageState extends State<Homepage> {
                                     ),
                                   ],
                                 ),
+                                //Select
                                 Container(
-                                  width: 200,
                                   child: Row(
+                                    children: [
+                                      dropdown(options: [
+                                        "846478041",
+                                        "846478041",
+                                        "846478041",
+                                      ], name: "Select Order Id"),
+                                      SizedBox(width: 10),
+                                      dropdown(options: [
+                                        "846478041",
+                                        "846478041",
+                                        "846478041",
+                                      ], name: "Select  FG Part"),
+                                      SizedBox(width: 10),
+                                      dropdown(options: [
+                                        "846478041",
+                                        "846478041",
+                                        "846478041",
+                                      ], name: "Select Schedule Id"),
+                                      SizedBox(width: 10),
+                                      dropdown(options: [
+                                        "846478041",
+                                        "846478041",
+                                        "846478041",
+                                      ], name: "Select Bin"),
+                                    ],
+                                  ),
+                                ),
+                                //Scan
+                                Container(
+                                  child: ElevatedButton(
+                                       style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                side: BorderSide(
+                                                    color:
+                                                        Colors.transparent))),
+                                        backgroundColor: MaterialStateProperty
+                                            .resolveWith<Color>(
+                                          (Set<MaterialState> states) {
+                                            if (states.contains(
+                                                MaterialState.pressed))
+                                              return Colors.green[200];
+                                            return Colors.green[
+                                                500]; // Use the component's default.
+                                          },
+                                        ),
+                                      ),
+                                    child: Container(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              height: 28,
+                                              width: 28,
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          "assets/image/scan.png"))),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              'Scan',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    onPressed: (){},
+                                  ),
+                                ),
+                                //Date
+                                Container(
+                                  width: 100,
+                                  child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -228,7 +328,7 @@ class _HomepageState extends State<Homepage> {
                                         DateFormat('MM-dd-yyyy')
                                             .format(DateTime.now()),
                                         style: TextStyle(
-                                            fontSize: 20, color: Colors.grey),
+                                            fontSize: 12, color: Colors.grey),
                                       ),
                                       Text(
                                           DateFormat('hh:mm')
@@ -236,7 +336,7 @@ class _HomepageState extends State<Homepage> {
                                           style: TextStyle(
                                             color: Colors.blue,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 25,
+                                            fontSize: 23,
                                           )),
                                     ],
                                   ),
@@ -251,84 +351,52 @@ class _HomepageState extends State<Homepage> {
                       color: Colors.redAccent,
                       thickness: 2,
                     ),
-                    SchudleTable(
-                        userId: widget.userId, machineId: widget.machineId),
+                    ViScheduleTable(
+                      viScheduleList: viScheduleList,
+                    )
                   ],
                 ),
               );
             }));
   }
-}
 
-class SchudleTable extends StatefulWidget {
-  Schedule schedule;
-  String userId;
-  String machineId;
-  SchudleTable({Key key, this.schedule, this.userId, this.machineId})
-      : super(key: key);
-
-  @override
-  _SchudleTableState createState() => _SchudleTableState();
-}
-
-class _SchudleTableState extends State<SchudleTable> {
-  List<Schedule> rowList = [];
-
-  List<DataRow> datarows = [];
-  @override
-  void initState() {
-    rowList.add(
-      Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
-          process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
-          status: "Not Completed"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
-          process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
-          status: "Completed"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
-          process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
-          status: "Pending"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
-          process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
-          status: "Completed"),
-    );
-
-    super.initState();
+  Widget dropdown({List<String> options, String name}) {
+    String _chosenValue;
+    return Container(
+        child: DropdownButton<String>(
+      focusColor: Colors.white,
+      value: _chosenValue,
+      style: TextStyle(color: Colors.white),
+      iconEnabledColor: Colors.black,
+      items: options.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            style: TextStyle(color: Colors.black),
+          ),
+        );
+      }).toList(),
+      hint: Text(
+        name,
+        style: TextStyle(
+            color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+      onChanged: (String value) {
+        _chosenValue = value;
+      },
+    ));
   }
+}
 
+class ViScheduleTable extends StatefulWidget {
+  List<ViSchedule> viScheduleList;
+  ViScheduleTable({this.viScheduleList});
+  @override
+  _ViScheduleTableState createState() => _ViScheduleTableState();
+}
+
+class _ViScheduleTableState extends State<ViScheduleTable> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -344,9 +412,10 @@ class _SchudleTableState extends State<SchudleTable> {
               child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: rowList.length,
+                  itemCount: widget.viScheduleList.length,
                   itemBuilder: (context, index) {
-                    return buildDataRow(schedule: rowList[index]);
+                    return buildDataRow(
+                        viSchedule: widget.viScheduleList[index]);
                   }),
             ),
           ],
@@ -381,13 +450,9 @@ class _SchudleTableState extends State<SchudleTable> {
               cell("Order Id", 0.08),
               cell("FG Part", 0.08),
               cell("Schedule ID", 0.08),
-              cell("Cable Part No.", 0.1),
-              cell("Process", 0.08),
-              cell("Cut Length(mm)", 0.12),
-              cell("Color", 0.07),
-              cell("Scheduled Qty", 0.1),
-              cell("Status", 0.1),
-              cell("Action", 0.1),
+              cell("Bin Id", 0.1),
+              cell("Total Bundles", 0.10),
+              cell("Total Bundle Qty", 0.12),
             ],
           ),
         ],
@@ -395,7 +460,7 @@ class _SchudleTableState extends State<SchudleTable> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({ViSchedule viSchedule, int c}) {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
@@ -413,81 +478,25 @@ class _SchudleTableState extends State<SchudleTable> {
       height: 60,
       color: Colors.grey[100],
       child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-              left: BorderSide(
-            color: schedule.status == "Completed"
-                ? Colors.green
-                : schedule.status == "Pending"
-                    ? Colors.red
-                    : Colors.green[100],
-            width: 5,
-          )),
-        ),
+        decoration: BoxDecoration(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell(schedule.orderId, 0.08),
+            cell(viSchedule.orderId, 0.08),
             //Fg Part
-            cell(schedule.fgpart, 0.08),
+            cell(viSchedule.fgPart, 0.08),
 
             //Schudule ID
-            cell(schedule.scheudleId, 0.08),
+            cell(viSchedule.scheduleId, 0.08),
             //Cable Part
-            cell(schedule.cablePart, 0.1),
+            cell(viSchedule.binId, 0.1),
 
             //Process
-            cell(schedule.process, 0.08),
+            cell(viSchedule.totalBundles, 0.08),
             // Cut length
-            cell(schedule.cutLength, 0.12),
-            //Color
-            cell(schedule.color, 0.07),
-            //Scheduled Qty
-            cell(schedule.scheduledQty, 0.1),
-
-            //Status
-            cell(schedule.status, 0.1),
+            cell(viSchedule.totalbundleQty, 0.12),
             //Action
-            Container(
-              width: 100,
-              child: Center(
-                child: schedule.status == "Completed"
-                    ? Text("-")
-                    : ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.pressed))
-                                return Colors.green;
-                              return schedule.status == "Pending"
-                                  ? Colors.red
-                                  : Colors
-                                      .green; // Use the component's default.
-                            },
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MaterialPick(
-                                      schedule: schedule,
-                                      userId: widget.userId,
-                                      machineId: widget.machineId,
-                                    )),
-                          );
-                        },
-                        child: Container(
-                            child: schedule.status == "Not Completed"
-                                ? Text("Accept")
-                                : schedule.status == "Pending"
-                                    ? Text('Continue')
-                                    : Text('')),
-                      ),
-              ),
-            )
           ],
         ),
       ),

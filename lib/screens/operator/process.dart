@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
+import 'package:molex/models/bundle_print.dart';
 import 'package:molex/screens/operator/bin.dart';
 
 class ProcessPage extends StatefulWidget {
@@ -19,10 +22,6 @@ class _ProcessPageState extends State<ProcessPage> {
       appBar: AppBar(
         backgroundColor: Colors.red[400],
         title: const Text('Material'),
-        backwardsCompatibility: false,
-        leading: Container(
-          width: 0,
-        ),
         actions: [
           Container(
             height: 40,
@@ -239,6 +238,32 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   String _chosenValue;
   String value;
+  List<BundlePrint> bundlePrint = [];
+  static const platform = const MethodChannel('com.impereal.dev/tsc');
+   String _printerStatus = 'Waiting';
+   Future<void> _print() async {
+    String printerStatus;
+    try {
+      final String result = await platform.invokeMethod('Print');
+      printerStatus = 'Printer status : $result % .';
+      
+    } on PlatformException catch (e) {
+      printerStatus = "Failed to get printer: '${e.message}'.";
+    }
+    Fluttertoast.showToast(
+        msg: "$printerStatus",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+
+    setState(() {
+      _printerStatus = printerStatus;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -268,58 +293,203 @@ class _DetailState extends State<Detail> {
             ],
           ),
           Process(type: value),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Container(
-                child: Column(
-              children: [
-                Text('Bundle Qty (SPQ)'),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 100,
-                    height: 30,
-                    child: TextField(
-                        decoration: new InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(17.0),
-                        ),
-                        borderSide: BorderSide(color: Colors.red, width: 2.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(17.0),
-                        ),
-                        borderSide: BorderSide(color: Colors.black, width: 2.0),
-                      ),
-                    )),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 170,
-                              padding: const EdgeInsets.all(0.0),
-                              child: Container(
-                                color: Colors.transparent,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.red, // background
-                                      onPrimary: Colors.white,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              //buttons
+              Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(30.0),
+                          child: Container(
+                              child: Column(
+                            children: [
+                              Text('Bundle Qty (SPQ)'),
+                              //text input
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 150,
+                                  height: 50,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: TextField(
+                                      textAlign: TextAlign.center,
+                                      keyboardType: TextInputType.number,
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      style: TextStyle(fontSize: 20),
+                                      decoration: new InputDecoration(
+                                        labelText: "Quantity",
+                                        fillColor: Colors.white,
+                                        border: new OutlineInputBorder(
+                                          borderRadius:
+                                              new BorderRadius.circular(5.0),
+                                          borderSide: new BorderSide(),
+                                        ),
+                                        //fillColor: Colors.green
+                                      ),
                                     ),
-                                    child: Text(
-                                      'Generate Label',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          //Generate Label
+                                          Container(
+                                            height: 50,
+                                            width: 170,
+                                            padding: const EdgeInsets.all(0.0),
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty.all<
+                                                            RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20.0),
+                                                            side: BorderSide(
+                                                                color: Colors
+                                                                    .transparent))),
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .resolveWith<Color>(
+                                                      (Set<MaterialState>
+                                                          states) {
+                                                        if (states.contains(
+                                                            MaterialState
+                                                                .pressed))
+                                                          return Colors
+                                                              .green[200];
+                                                        return Colors.green[
+                                                            500]; // Use the component's default.
+                                                      },
+                                                    ),
+                                                  ),
+                                                  // style: ButtonStyle(
+                                                  //   elevation: ,
+                                                  //   backgroundColor: MaterialStateProperty
+                                                  //       .resolveWith<Color>(
+                                                  //     (Set<MaterialState> states) {
+                                                  //       if (states
+                                                  //           .contains(MaterialState.pressed))
+                                                  //         return Colors.green[200];
+                                                  //       return Colors.green[
+                                                  //           500]; // Use the component's default.
+                                                  //     },
+                                                  //   ),
+                                                  // ),
+                                                  child: Text(
+                                                    'Generate Label',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    showModalBottomSheet(
+                                                        isScrollControlled:
+                                                            true,
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return tab2();
+                                                        });
+                                                  }),
+                                            ),
+                                          ),
+                                          SizedBox(width: 20),
+                                          //bundel button
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              height: 50,
+                                              width: 150,
+                                              child: ElevatedButton(
+                                                  style: ButtonStyle(
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20.0),
+                                                        side: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                    ),
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .resolveWith<Color>(
+                                                      (Set<MaterialState>
+                                                          states) {
+                                                        if (states.contains(
+                                                            MaterialState
+                                                                .pressed))
+                                                          return Colors
+                                                              .green[200];
+                                                        return Colors.red[
+                                                            500]; // Use the component's default.
+                                                      },
+                                                    ),
+                                                  ),
+                                                  onPressed: () {},
+                                                  child: Text('Bundle')),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            height: 200,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                //100% complete
+                                Container(
+                                  height: 60,
+                                  width: 280,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                              side: BorderSide(
+                                                  color: Colors.transparent))),
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states
+                                              .contains(MaterialState.pressed))
+                                            return Colors.green[200];
+                                          return Colors.green[
+                                              500]; // Use the component's default.
+                                        },
                                       ),
                                     ),
                                     onPressed: () {
@@ -327,117 +497,228 @@ class _DetailState extends State<Detail> {
                                           isScrollControlled: true,
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return tab2();
+                                            return tab1();
                                           });
-                                    }),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 50,
-                                width: 150,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.red, // background
-                                      onPrimary: Colors.white,
+                                    },
+                                    child: Text(
+                                      "100% complete",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                     ),
-                                    onPressed: () {},
-                                    child: Text('Bundle')),
-                              ),
-                            )
-                          ],
+                                  ),
+                                ),
+                                //Partially complete button
+                                Container(
+                                  height: 60,
+                                  width: 280,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                              side: BorderSide(
+                                                  color: Colors.transparent))),
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states
+                                              .contains(MaterialState.pressed))
+                                            return Colors.green[200];
+                                          return Colors.red[
+                                              500]; // Use the component's default.
+                                        },
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return tab1();
+                                          });
+                                    },
+                                    child: Text(
+                                      "Partially  complete",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                //Relaod Material
+                                Container(
+                                  height: 60,
+                                  width: 280,
+                                  child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                side: BorderSide(
+                                                    color:
+                                                        Colors.transparent))),
+                                        backgroundColor: MaterialStateProperty
+                                            .resolveWith<Color>(
+                                          (Set<MaterialState> states) {
+                                            if (states.contains(
+                                                MaterialState.pressed))
+                                              return Colors.green[200];
+                                            return Colors.blue[
+                                                500]; // Use the component's default.
+                                          },
+                                        ),
+                                      ),
+                                      child: Text(
+                                        'Reload Material',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 50,
-                  width: 150,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red, // background
-                      onPrimary: Colors.white,
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return tab1();
-                          });
-                    },
-                    child: Text(
-                      "100% complete",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.normal,
-                      ),
+                      ],
                     ),
                   ),
-                ),
-                Container(
-                  height: 50,
-                  width: 160,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red, // background
-                      onPrimary: Colors.white,
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return tab1();
-                          });
-                    },
-                    child: Text(
-                      "Partially  complete",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.normal,
-                      ),
+                ],
+              ),
+              // Table for bundles generated
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 400,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: SingleChildScrollView(
+                      child: bundleTable(),
                     ),
                   ),
-                ),
-                Container(
-                  height: 50,
-                  width: 150,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.red, // background
-                        onPrimary: Colors.white,
-                      ),
-                      child: Text(
-                        'Reload Material',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
     );
   }
-  //Material Sheet for qty
 
+  //Bundle table
+  Widget bundleTable() {
+    return DataTable(
+        columnSpacing: 40,
+        columns: const <DataColumn>[
+          DataColumn(
+            label: Text('No.'),
+          ),
+          DataColumn(
+            label: Text('Bundle Id'),
+          ),
+          DataColumn(
+            label: Text('Bundel Qty'),
+          ),
+          DataColumn(
+            label: Text('Action'),
+          ),
+        ],
+        rows: bundlePrint
+            .map((e) => DataRow(cells: <DataCell>[
+                  DataCell(Text("1")),
+                  DataCell(Text(e.bundelId)),
+                  DataCell(Text(e.bundleQty)),
+                  DataCell(ElevatedButton(
+                    onPressed: () {
+                      _print();
+                      
+
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              side: BorderSide(color: Colors.red))),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.redAccent;
+                          return Colors.red; // Use the component's default.
+                        },
+                      ),
+                    ),
+                    child: Text(
+                      "Print",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ))
+                ]))
+            .toList());
+  }
+     Future<void> _showConfirmationDialog() async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Transfer'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Status ${_printerStatus}')
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => Colors.redAccent),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Future.delayed(
+                    const Duration(milliseconds: 50),
+                    () {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    },
+                  );
+                },
+                child: Text('Cancel Transfer')),
+            ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => Colors.green),
+                ),
+                onPressed: () {
+          
+                  
+                },
+                child: Text('Confirm Transfer')),
+          ],
+        );
+      },
+    );
+  }
+  //Material Sheet for qty
   Widget tab1() {
     return Container(
       decoration: BoxDecoration(
@@ -648,9 +929,14 @@ class _DetailState extends State<Detail> {
                       ),
                       child: Text("Save & Generate Label"),
                       onPressed: () {
-                        Navigator.pop(
-                          context,
-                        );
+                        setState(() {
+                          bundlePrint.add(BundlePrint(
+                              bundelId: "0123456789", bundleQty: "100"));
+
+                          Navigator.pop(
+                            context,
+                          );
+                        });
                       }),
                 ),
               ),
@@ -873,7 +1159,7 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-
+  //not used
   Widget scheduleDetail() {
     Widget cell(String name, double width) {
       return Container(
@@ -1051,14 +1337,19 @@ class _DetailState extends State<Detail> {
                       p3,
                       style: TextStyle(fontSize: 11),
                     ),
+                    Text(
+                      p4,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(
-                          p4,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
+                    Text(
+                      p5,
+                      style: TextStyle(fontSize: 12),
                     ),
                   ],
                 ),
@@ -1448,26 +1739,35 @@ class _ProcessState extends State<Process> {
                       width: MediaQuery.of(context).size.width * 0.30 * 0.25,
                       child: Center(child: Text('REQUIRED'))),
                   Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 40,
-                      width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text('LOADED'))),
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2.0, color: Colors.grey[100])),
+                    height: 40,
+                    width: MediaQuery.of(context).size.width * 0.30 * 0.25,
+                    child: Center(
+                      child: Text('LOADED'),
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 40,
-                      width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text('AVAILABLE'))),
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2.0, color: Colors.grey[100])),
+                    height: 40,
+                    width: MediaQuery.of(context).size.width * 0.30 * 0.25,
+                    child: Center(
+                      child: Text('AVAILABLE'),
+                    ),
+                  ),
                   Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 40,
-                      width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text('PENDING'))),
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2.0, color: Colors.grey[100])),
+                    height: 40,
+                    width: MediaQuery.of(context).size.width * 0.30 * 0.25,
+                    child: Center(
+                      child: Text('PENDING'),
+                    ),
+                  ),
                 ],
               )
             ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:molex/login.dart';
 import 'package:molex/screens/operator/Homepage.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -11,14 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Homepage(
-          machineId: "0123456789",
-          userId: "0123456789",
-        ));
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginScan(),
+    );
   }
 }

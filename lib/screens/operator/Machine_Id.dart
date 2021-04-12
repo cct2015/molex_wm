@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:lottie/lottie.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 
 class MachineId extends StatefulWidget {
@@ -105,8 +106,9 @@ class _MachineIdState extends State<MachineId> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(children: [
-                      // Lottie.asset('assets/lottie/scan-barcode.json',
-                      //     width: 350, fit: BoxFit.cover),
+
+                      Lottie.asset('assets/lottie/scan-barcode.json',
+                          width: 350, fit: BoxFit.cover),
                       Text(
                         'Scan Machine ',
                         style: TextStyle(color: Colors.grey, fontSize: 20),

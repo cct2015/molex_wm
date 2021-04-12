@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lottie/lottie.dart';
 // import 'package:lottie/lottie.dart';
 import 'package:molex/screens/operator/Machine_Id.dart';
 
@@ -111,8 +112,9 @@ class _LoginScanState extends State<LoginScan> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            // Lottie.asset('assets/lottie/scan-barcode.json',
-                            //     width: 350, fit: BoxFit.cover),
+                            
+                            Lottie.asset('assets/lottie/scan-barcode.json',
+                                width: 350, fit: BoxFit.cover),
                             Text(
                               'Scan Id card to Login $userId ',
                               style:
