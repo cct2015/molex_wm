@@ -340,7 +340,7 @@ class _DetailState extends State<Detail> {
                   children: [
                     Process(type: _chosenValue),
                     Container(
-                        width: MediaQuery.of(context).size.width * 0.19,
+                        width: MediaQuery.of(context).size.width * 0.18,
                         child: Row(
                           children: [
                             Column(
@@ -647,7 +647,7 @@ class _DetailState extends State<Detail> {
                                         children: [
                                           Container(
                                             height: 40,
-                                            width: 150,
+                                            width: 125,
                                             child: ElevatedButton(
                                               style: ButtonStyle(
                                                 shape: MaterialStateProperty.all<
@@ -685,7 +685,7 @@ class _DetailState extends State<Detail> {
                                               child: Text(
                                                 "Partially  complete",
                                                 style: TextStyle(
-                                                  fontSize: 12,
+                                                  fontSize: 10,
                                                   fontWeight: FontWeight.normal,
                                                 ),
                                               ),
@@ -693,7 +693,7 @@ class _DetailState extends State<Detail> {
                                           ),
                                           Container(
                                             height: 40,
-                                            width: 120,
+                                            width: 110,
                                             child: ElevatedButton(
                                                 style: ButtonStyle(
                                                   shape: MaterialStateProperty.all<
@@ -724,7 +724,7 @@ class _DetailState extends State<Detail> {
                                                 child: Text(
                                                   'Reload Material',
                                                   style: TextStyle(
-                                                    fontSize: 12,
+                                                    fontSize: 10,
                                                     fontWeight:
                                                         FontWeight.normal,
                                                   ),
@@ -1069,7 +1069,7 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(.0),
       child: Container(
-        padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(0.0),
         height: 80,
         // width: MediaQuery.of(context).size.width * 0.32,
         decoration: BoxDecoration(
@@ -1115,13 +1115,13 @@ class _DetailState extends State<Detail> {
                     SizedBox(height: 5),
                     Text(
                       p3,
-                      style: TextStyle(fontSize: 11),
+                      style: TextStyle(fontSize: 9),
                     ),
                     Text(
                       p4,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.red,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1176,8 +1176,7 @@ class _DetailState extends State<Detail> {
                           quantitycell("Resetting CFM Program	", 10),
                           quantitycell("New Program Setting CVM/CFM	", 10),
                           quantitycell("Air Pressure Low", 10),
-                          quantitycell("Machine Taken for Removing CVM	", 10),
-                          quantitycell("No Material	", 10),
+                        
                         ],
                       ),
                       Column(
@@ -1188,7 +1187,7 @@ class _DetailState extends State<Detail> {
                           quantitycell("Applicator Position Setting", 10),
                           quantitycell("Validation", 10),
                           quantitycell("Cable Entangle	", 10),
-                          quantitycell("Job Ticket Issue", 10),
+                        
                         ],
                       ),
                       Column(
@@ -1199,8 +1198,7 @@ class _DetailState extends State<Detail> {
                           quantitycell("CVM Error Correction	", 10),
                           quantitycell("Cable Feeding Front Unit Problem	", 10),
                           quantitycell("Drift Limit Reached", 10),
-                          quantitycell("Machine Slow", 10),
-                          quantitycell("No Plan for Machine	", 10),
+                        
                         ],
                       ),
                       Column(
@@ -1211,8 +1209,7 @@ class _DetailState extends State<Detail> {
                           quantitycell("CFM Error", 10),
                           quantitycell("Supplier Taken for Maintenance", 10),
                           quantitycell("Roller Changeover	", 10),
-                          quantitycell("Gripen Unit Problem", 10),
-                          quantitycell("Technician Not Available	", 10),
+                         
                         ],
                       ),
                       Column(
@@ -1223,8 +1220,7 @@ class _DetailState extends State<Detail> {
                           quantitycell("CVM Error", 10),
                           quantitycell("Length Variations	", 10),
                           quantitycell("Power Failure	", 10),
-                          quantitycell("Machine Cleaning", 10),
-                          quantitycell("No Operator	", 10),
+                        
                         ],
                       ),
                       Column(
@@ -1235,8 +1231,6 @@ class _DetailState extends State<Detail> {
                           quantitycell("CVM Program Reloading	", 10),
                           quantitycell("Sensor Not Working", 10),
                           quantitycell("Preventive Maintenance", 10),
-                          quantitycell("Meeting", 10),
-                          quantitycell("System Fault", 10),
                         ],
                       ),
                     ],
@@ -1245,7 +1239,7 @@ class _DetailState extends State<Detail> {
               ),
             ),
             Container(
-              height: 100,
+              height: 50,
               child: Center(
                 child: Container(
                   height: 45,
@@ -1761,7 +1755,7 @@ class _ProcessState extends State<Process> {
                       Padding(
                           padding: const EdgeInsets.all(0.0),
                           child: Text(
-                            "Process Type : Terminal A,Cutlength,Terminal B",
+                            "Process Type : \nTerminal A,Cutlength,Terminal B",
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
@@ -1807,7 +1801,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Process Type : Terminal A",
+                      "Process Type : \nTerminal A",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -1849,7 +1843,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Text(
-                      "Process Type : Terminal B",
+                      "Process Type : \nTerminal B",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -1889,7 +1883,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Process Type : Terminal A,Cutlength",
+                      "Process Type :\n Terminal A,Cutlength",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -1930,7 +1924,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Text(
-                      "Process Type : Cutlenght, Terminal B",
+                      "Process Type : \nCutlenght, Terminal B",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -1970,7 +1964,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Text(
-                      "Process Type : Preparation",
+                      "Process Type : \n Preparation",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -2042,7 +2036,6 @@ class _ProcessState extends State<Process> {
     return Padding(
       padding: const EdgeInsets.all(.0),
       child: Container(
-        padding: const EdgeInsets.all(6.0),
         height: 80,
         // width: MediaQuery.of(context).size.width * 0.32,
         decoration: BoxDecoration(
@@ -2082,19 +2075,19 @@ class _ProcessState extends State<Process> {
                     Text(
                       p2,
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 0,
                       ),
                     ),
                     SizedBox(height: 5),
                     Text(
                       p3,
-                      style: TextStyle(fontSize: 11),
+                      style: TextStyle(fontSize: 0),
                     ),
                     Text(
                       p4,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 10,
                         color: Colors.red,
                         fontWeight: FontWeight.w600,
                       ),
@@ -2102,7 +2095,7 @@ class _ProcessState extends State<Process> {
                     SizedBox(height: 5),
                     Text(
                       p5,
-                      style: TextStyle(fontSize: 11),
+                      style: TextStyle(fontSize: 0),
                     ),
                   ],
                 ),
@@ -2344,7 +2337,7 @@ class _ProcessState extends State<Process> {
                   Container(
                       decoration: BoxDecoration(
                           border:
-                              Border.all(width: 2.0, color: Colors.grey[100])),
+                              Border.all(width: 0.5, color: Colors.grey[100])),
                       height: 20,
                       width: MediaQuery.of(context).size.width * 0.1,
                       child: Center(
@@ -2353,7 +2346,7 @@ class _ProcessState extends State<Process> {
                   Container(
                     decoration: BoxDecoration(
                         border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
+                            Border.all(width: 0.5, color: Colors.grey[100])),
                     height: 20,
                     width: MediaQuery.of(context).size.width * 0.07,
                     child: Center(
@@ -2366,7 +2359,7 @@ class _ProcessState extends State<Process> {
                   Container(
                     decoration: BoxDecoration(
                         border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
+                            Border.all(width: 0.5, color: Colors.grey[100])),
                     height: 20,
                     width: MediaQuery.of(context).size.width * 0.1,
                     child: Center(
@@ -2379,7 +2372,7 @@ class _ProcessState extends State<Process> {
                   Container(
                     decoration: BoxDecoration(
                         border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
+                            Border.all(width: 0.5, color: Colors.grey[100])),
                     height: 20,
                     width: MediaQuery.of(context).size.width * 0.1,
                     child: Center(
@@ -2392,7 +2385,7 @@ class _ProcessState extends State<Process> {
                   Container(
                     decoration: BoxDecoration(
                         border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
+                            Border.all(width:0.5, color: Colors.grey[100])),
                     height: 20,
                     width: MediaQuery.of(context).size.width * 0.1,
                     child: Center(
@@ -2405,7 +2398,7 @@ class _ProcessState extends State<Process> {
                   Container(
                     decoration: BoxDecoration(
                         border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
+                            Border.all(width:0.5, color: Colors.grey[100])),
                     height: 20,
                     width: MediaQuery.of(context).size.width * 0.10,
                     child: Center(

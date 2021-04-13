@@ -781,15 +781,16 @@ class _MaterialPickState extends State<MaterialPick> {
     );
   }
 
-  Widget tableHeading() {
-    Widget cell(String name, double width) {
+ Widget tableHeading() {
+    double width = MediaQuery.of(context).size.width;
+    Widget cell(String name, double d) {
       return Container(
-        width: width,
-        height: 25,
+        width: width * d,
+        height: 15,
         child: Center(
           child: Text(
             name,
-            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
           ),
         ),
       );
@@ -797,22 +798,22 @@ class _MaterialPickState extends State<MaterialPick> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 25,
+      height: 15,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              cell("Order Id", 120),
-              cell("FG Part", 140),
-              cell("Schedule ID", 140),
-              cell("Cable Part No.", 140),
-              cell("Process", 140),
-              cell("Cut Length(mm)", 140),
-              cell("Color", 70),
-              cell("Scheduled Qty", 115),
-              cell("Schedule", 115)
+              cell("Order Id", 0.1),
+              cell("FG Part", 0.1),
+              cell("Schedule ID", 0.1),
+              cell("Cable Part No.", 0.1),
+              cell("Process", 0.1),
+              cell("Cut Length(mm)", 0.1),
+              cell("Color", 0.1),
+              cell("Scheduled Qty", 0.1),
+              cell("Schedule", 0.1)
             ],
           ),
         ],
@@ -821,9 +822,26 @@ class _MaterialPickState extends State<MaterialPick> {
   }
 
   Widget buildDataRow({Schedule schedule, int c}) {
+    double width = MediaQuery.of(context).size.width;
+
+    Widget cell(String name, double d) {
+      return Container(
+        width: width * d,
+        child: Center(
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 25,
+      height: 20,
       color: Colors.grey[100],
       child: Container(
         decoration: BoxDecoration(
@@ -841,94 +859,31 @@ class _MaterialPickState extends State<MaterialPick> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            Container(
-              width: 120,
-              child: Center(
-                child: Text(
-                  schedule.orderId,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ),
-            ),
+            cell(schedule.orderId, 0.1),
             //Fg Part
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.fgpart,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ),
-            ),
+            cell(schedule.fgpart, 0.1),
             //Schudule ID
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.scheudleId,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ),
-            ),
+            cell(schedule.scheudleId, 0.1),
+
             //Cable Part
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.cablePart ?? "",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ),
-            ),
+            cell(schedule.cablePart, 0.1),
             //Process
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.process ?? "",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ),
-            ),
+            cell(schedule.process, 0.1),
             // Cut length
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.cutLength ?? "",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ),
-            ),
+            cell(schedule.cutLength, 0.1),
             //Color
-            Container(
-              width: 70,
-              child: Center(
-                child: Text(
-                  schedule.color ?? "",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-              ),
-            ),
+            cell(schedule.color, 0.1),
             //Scheduled Qty
-            Container(
-              width: 115,
-              child: Center(
-                child: Text(
-                  schedule.scheduledQty ?? "",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
-              ),
-            ),
+            cell(schedule.scheduledQty, 0.1),
             //Schudule
             Container(
-              width: 115,
+              width: width * 0.1,
               child: Center(
                 child: Text(
                   "11:00 - 12:00",
                   style: TextStyle(
                     color: Colors.blue,
-                    fontSize: 16,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

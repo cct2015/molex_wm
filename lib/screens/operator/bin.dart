@@ -333,7 +333,7 @@ class _BinState extends State<Bin> {
                       children: [
                         Container(
                           width: 250,
-                          height: 70,
+                          height: 100,
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: RawKeyboardListener(
