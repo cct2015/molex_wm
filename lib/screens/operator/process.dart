@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
@@ -17,35 +18,142 @@ class ProcessPage extends StatefulWidget {
 
 class _ProcessPageState extends State<ProcessPage> {
   @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red[400],
-        title: const Text('Material'),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.red,
+        ),
+        title: const Text(
+          'Process',
+          style: TextStyle(color: Colors.red),
+        ),
+        elevation: 0,
         actions: [
+           Container(
+              width: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat('MM-dd-yyyy').format(DateTime.now()),
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      Text(
+                        DateFormat('hh:mm').format(DateTime.now()),
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 23,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 10)
+                ],
+              ),
+            ),
+           
           Container(
+            padding: EdgeInsets.all(2),
             height: 40,
-            width: 150,
-            child: Column(
+            width: 120,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                // Column(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SizedBox(height: 5),
+                //     Row(
+                //       mainAxisAlignment: MainAxisAlignment.end,
+                //       children: [
+                //         Text(
+                //           "User Id",
+                //           style: TextStyle(color: Colors.grey[100]),
+                //         )
+                //       ],
+                //     ),
+                //     Row(
+                //       mainAxisAlignment: MainAxisAlignment.end,
+                //       children: [
+                //         Text(
+                //           widget.userId ?? "12210",
+                //           style: TextStyle(
+                //               fontWeight: FontWeight.bold, fontSize: 12),
+                //         )
+                //       ],
+                //     )
+                //   ],
+                // ),
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      "User Id",
-                      style: TextStyle(color: Colors.grey[100]),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      widget.userId ?? "12210",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-                    )
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.schedule,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            "Shift A",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 22,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.settings,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.machineId ?? "",
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
                   ],
                 )
               ],
@@ -68,169 +176,30 @@ class _ProcessPageState extends State<ProcessPage> {
           )
         ],
       ),
-      body: StreamBuilder(
-          stream: Stream.periodic(const Duration(milliseconds: 2000)),
-          builder: (context, snapshot) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 7),
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 250,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey[100],
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(100)),
-                                                ),
-                                                child: Center(
-                                                    child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 4.0),
-                                                      child: Icon(
-                                                        Icons.schedule,
-                                                        size: 18,
-                                                        color: Colors.redAccent,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      "Shift A",
-                                                      style: TextStyle(
-                                                          fontSize: 15),
-                                                    ),
-                                                  ],
-                                                )),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 6),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[100],
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(100)),
-                                              ),
-                                              child: Center(
-                                                  child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 4.0),
-                                                    child: Icon(
-                                                      Icons.settings,
-                                                      size: 18,
-                                                      color: Colors.redAccent,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    widget.machineId ?? "",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ],
-                                              )),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                width: 208,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          DateFormat('MM-dd-yyyy')
-                                              .format(DateTime.now()),
-                                          style: TextStyle(
-                                              fontSize: 12, color: Colors.grey),
-                                        ),
-                                        Text(
-                                            DateFormat('hh:mm')
-                                                .format(DateTime.now()),
-                                            style: TextStyle(
-                                              color: Colors.blue,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 23,
-                                            )),
-                                      ],
-                                    ),
-                                    SizedBox(width: 10)
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+      body: SingleChildScrollView(
+              child: StreamBuilder(
+            stream: Stream.periodic(const Duration(milliseconds: 2000)),
+            builder: (context, snapshot) {
+              return Container(
+                child: Column(
+                  children: [
+                    Detail(
+                      schedule: widget.schedule,
                     ),
-                  ),
-                  Detail(
-                    schedule: widget.schedule,
-                  ),
-                ],
-              ),
-            );
-          }),
+                  ],
+                ),
+              );
+            }),
+      ),
+
     );
   }
 }
 
 class Detail extends StatefulWidget {
   Schedule schedule;
-  Detail({this.schedule});
+  String rightside;
+  Detail({this.schedule,this.rightside});
   @override
   _DetailState createState() => _DetailState();
 }
@@ -238,15 +207,20 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   String _chosenValue;
   String value;
+  String output = '';
+  String _output = '';
+  TextEditingController _qtyController = new TextEditingController();
   List<BundlePrint> bundlePrint = [];
   static const platform = const MethodChannel('com.impereal.dev/tsc');
-   String _printerStatus = 'Waiting';
-   Future<void> _print() async {
+  String _printerStatus = 'Waiting';
+  bool orderDetailExpanded = true;
+  String rightside;
+  Future<void> _print() async {
     String printerStatus;
+    
     try {
       final String result = await platform.invokeMethod('Print');
       printerStatus = 'Printer status : $result % .';
-      
     } on PlatformException catch (e) {
       printerStatus = "Failed to get printer: '${e.message}'.";
     }
@@ -257,88 +231,123 @@ class _DetailState extends State<Detail> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
+        fontSize: 16.0);
 
     setState(() {
       _printerStatus = printerStatus;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.maxFinite,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          tableHeading(),
-          buildDataRow(schedule: widget.schedule),
-          box(),
-          terminal(),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                orderDetailExpanded = !orderDetailExpanded;
+              });
+            },
+            child: Container(
+              height: 20,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 4),
+                    child: Text(
+                      "Order Detail",
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                  ),
+                  IconButton(
+                      iconSize: 15,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(0),
+                      icon: orderDetailExpanded? Icon(Icons.keyboard_arrow_down):Icon(Icons.keyboard_arrow_up),
+                      onPressed: () {
+                        setState(() {
+                          orderDetailExpanded = !orderDetailExpanded;
+                        });
+                      })
+                ],
+              ),
+            ),
+          ),
+          (() {
+            if (orderDetailExpanded) {
+              return Column(children: [
+                tableHeading(),
+                buildDataRow(schedule: widget.schedule),
+                box(),
+              ]);
+            } else {
+              return Container();
+            }
+          }()),
+
+          // terminal(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               startProcess(),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green, // background
-                    onPrimary: Colors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      value = _chosenValue;
-                    });
-                  },
-                  child: Text('start Process')),
             ],
           ),
-          Process(type: value),
+          Process(type: _chosenValue),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+         
             children: [
               //buttons
               Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    height: 450,
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(30.0),
+                          padding: const EdgeInsets.all(0.0),
                           child: Container(
-                              child: Column(
+                              child: Row(
                             children: [
-                              Text('Bundle Qty (SPQ)'),
                               //text input
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: 150,
-                                  height: 50,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: TextField(
-                                      textAlign: TextAlign.center,
-                                      keyboardType: TextInputType.number,
-                                      textAlignVertical:
-                                          TextAlignVertical.center,
-                                      style: TextStyle(fontSize: 20),
-                                      decoration: new InputDecoration(
-                                        labelText: "Quantity",
-                                        fillColor: Colors.white,
-                                        border: new OutlineInputBorder(
-                                          borderRadius:
-                                              new BorderRadius.circular(5.0),
-                                          borderSide: new BorderSide(),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Container(
+                                      width: 100,
+                                      height: 40,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: TextField(
+                                          textAlign: TextAlign.center,
+                                          controller: _qtyController,
+                                          keyboardType: TextInputType.number,
+                                          textAlignVertical:
+                                              TextAlignVertical.center,
+                                          style: TextStyle(fontSize: 12),
+                                          decoration: new InputDecoration(
+                                            labelText: "Quantity",
+                                            fillColor: Colors.white,
+                                            border: new OutlineInputBorder(
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      5.0),
+                                              borderSide: new BorderSide(),
+                                            ),
+                                            //fillColor: Colors.green
+                                          ),
                                         ),
-                                        //fillColor: Colors.green
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -347,8 +356,8 @@ class _DetailState extends State<Detail> {
                                         children: [
                                           //Generate Label
                                           Container(
-                                            height: 50,
-                                            width: 170,
+                                            height: 40,
+                                            width: 90,
                                             padding: const EdgeInsets.all(0.0),
                                             child: Container(
                                               color: Colors.transparent,
@@ -395,30 +404,33 @@ class _DetailState extends State<Detail> {
                                                   child: Text(
                                                     'Generate Label',
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize: 11,
                                                       fontWeight:
                                                           FontWeight.normal,
                                                     ),
                                                   ),
                                                   onPressed: () {
-                                                    showModalBottomSheet(
-                                                        isScrollControlled:
-                                                            true,
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return tab2();
-                                                        });
+                                                    setState(() {
+                                                      rightside="label";
+                                                    });
+                                                    // showModalBottomSheet(
+                                                    //     isScrollControlled:
+                                                    //         true,
+                                                    //     context: context,
+                                                    //     builder: (BuildContext
+                                                    //         context) {
+                                                    //       return tab2();
+                                                    //     });
                                                   }),
                                             ),
                                           ),
-                                          SizedBox(width: 20),
+                                          SizedBox(width: 0),
                                           //bundel button
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Container(
-                                              height: 50,
-                                              width: 150,
+                                              height: 40,
+                                              width: 70,
                                               child: ElevatedButton(
                                                   style: ButtonStyle(
                                                     shape: MaterialStateProperty
@@ -448,8 +460,14 @@ class _DetailState extends State<Detail> {
                                                       },
                                                     ),
                                                   ),
-                                                  onPressed: () {},
-                                                  child: Text('Bundle')),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      rightside = "bundle";
+                                                    });
+                                                  },
+                                                  child: Text('Bundle',style: TextStyle(
+                                                    fontSize: 11
+                                                  ),)),
                                             ),
                                           )
                                         ],
@@ -461,17 +479,25 @@ class _DetailState extends State<Detail> {
                             ],
                           )),
                         ),
+                        Row(
+                          children: [
+                            Container(
+                              height: 200,
+                              child: Center(child: keypad()),
+                            ),
+                          ],
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Container(
-                            height: 200,
+                            height: 140,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 //100% complete
                                 Container(
-                                  height: 60,
-                                  width: 280,
+                                  height: 40,
+                                  width: 250,
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all<
@@ -511,8 +537,8 @@ class _DetailState extends State<Detail> {
                                 ),
                                 //Partially complete button
                                 Container(
-                                  height: 60,
-                                  width: 280,
+                                  height: 40,
+                                  width: 250,
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all<
@@ -552,8 +578,8 @@ class _DetailState extends State<Detail> {
                                 ),
                                 //Relaod Material
                                 Container(
-                                  height: 60,
-                                  width: 280,
+                                  height: 40,
+                                  width: 250,
                                   child: ElevatedButton(
                                       style: ButtonStyle(
                                         shape: MaterialStateProperty.all<
@@ -600,14 +626,92 @@ class _DetailState extends State<Detail> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    height: 400,
-                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: 450,
+                    width: MediaQuery.of(context).size.width * 0.75,
                     child: SingleChildScrollView(
-                      child: bundleTable(),
+                      child: ((){
+                        if(rightside==null){
+                          return Container();
+                        }
+                        else if(rightside =="label"){
+                          return tab2();
+                        }
+                        else if(rightside == "compete"){
+                          return tab1();
+                        }
+                        else if(rightside == "bundle"){
+                          return bundleTable();
+                        }
+                      }()),
                     ),
                   ),
                 ],
               ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget keypad() {
+    buttonPressed(String buttonText) {
+      if (buttonText == 'clear') {
+        _output = '';
+      } else {
+        _output = _output + buttonText;
+      }
+
+      print(_output);
+      setState(() {
+        _qtyController.text = _output;
+        output = int.parse(_output).toStringAsFixed(2);
+      });
+    }
+
+    Widget buildbutton(String buttonText) {
+      return new Expanded(
+          child: new OutlineButton(
+        padding: EdgeInsets.all(12.0),
+        child: new Text(
+          buttonText,
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+        ),
+        onPressed: () => {buttonPressed(buttonText)},
+        textColor: Colors.teal,
+      ));
+    }
+
+    return Container(
+      width: 250,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              buildbutton("7"),
+              buildbutton('8'),
+              buildbutton('9'),
+            ],
+          ),
+          Row(
+            children: [
+              buildbutton('4'),
+              buildbutton('5'),
+              buildbutton('6'),
+            ],
+          ),
+          Row(
+            children: [
+              buildbutton('1'),
+              buildbutton('2'),
+              buildbutton('3'),
+            ],
+          ),
+          Row(
+            children: [
+              buildbutton('00'),
+              buildbutton('0'),
+              buildbutton('clear'),
             ],
           ),
         ],
@@ -641,8 +745,6 @@ class _DetailState extends State<Detail> {
                   DataCell(ElevatedButton(
                     onPressed: () {
                       _print();
-                      
-
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -661,13 +763,15 @@ class _DetailState extends State<Detail> {
                       "Print",
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: 12
                       ),
                     ),
                   ))
                 ]))
             .toList());
   }
-     Future<void> _showConfirmationDialog() async {
+
+  Future<void> _showConfirmationDialog() async {
     Future.delayed(
       const Duration(milliseconds: 50),
       () {
@@ -682,9 +786,7 @@ class _DetailState extends State<Detail> {
           title: Text('Confirm Transfer'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
-                Text('Status ${_printerStatus}')
-              ],
+              children: <Widget>[Text('Status ${_printerStatus}')],
             ),
           ),
           actions: <Widget>[
@@ -708,16 +810,14 @@ class _DetailState extends State<Detail> {
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.green),
                 ),
-                onPressed: () {
-          
-                  
-                },
+                onPressed: () {},
                 child: Text('Confirm Transfer')),
           ],
         );
       },
     );
   }
+
   //Material Sheet for qty
   Widget tab1() {
     return Container(
@@ -733,12 +833,12 @@ class _DetailState extends State<Detail> {
                 Text('WireCutting & Crimping Rejection Cases',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
-                      fontSize: 16,
+                      fontSize: 12,
                     ))
               ]),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: SingleChildScrollView(
@@ -930,12 +1030,11 @@ class _DetailState extends State<Detail> {
                       child: Text("Save & Generate Label"),
                       onPressed: () {
                         setState(() {
+                          _print();
                           bundlePrint.add(BundlePrint(
                               bundelId: "0123456789", bundleQty: "100"));
-
-                          Navigator.pop(
-                            context,
-                          );
+                              rightside = null;
+                        
                         });
                       }),
                 ),
@@ -951,7 +1050,7 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 6.0),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.25,
+        width: MediaQuery.of(context).size.width * 0.22,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -960,16 +1059,19 @@ class _DetailState extends State<Detail> {
               child: Text(title,
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    fontSize: 12,
+                    fontSize: 10,
                   )),
             ),
             Container(
-              height: 30,
-              width: 90,
+              height: 20,
+              width: 60,
               child: TextField(
                 keyboardType: TextInputType.number,
                 decoration: new InputDecoration(
                   labelText: "Qty",
+                  labelStyle: TextStyle(
+                    fontSize: 10
+                  ),
                   fillColor: Colors.white,
                   border: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(5.0),
@@ -986,14 +1088,15 @@ class _DetailState extends State<Detail> {
   }
 
   Widget tableHeading() {
-    Widget cell(String name, double width) {
+    double width = MediaQuery.of(context).size.width;
+    Widget cell(String name, double d) {
       return Container(
-        width: width,
-        height: 45,
+        width: width * d,
+        height: 15,
         child: Center(
           child: Text(
             name,
-            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
           ),
         ),
       );
@@ -1001,22 +1104,22 @@ class _DetailState extends State<Detail> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 45,
+      height: 15,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              cell("Order Id", 120),
-              cell("FG Part", 140),
-              cell("Schedule ID", 140),
-              cell("Cable Part No.", 140),
-              cell("Process", 140),
-              cell("Cut Length(mm)", 140),
-              cell("Color", 70),
-              cell("Scheduled Qty", 115),
-              cell("Schedule", 115)
+              cell("Order Id", 0.1),
+              cell("FG Part", 0.1),
+              cell("Schedule ID", 0.1),
+              cell("Cable Part No.", 0.1),
+              cell("Process", 0.1),
+              cell("Cut Length(mm)", 0.1),
+              cell("Color", 0.1),
+              cell("Scheduled Qty", 0.1),
+              cell("Schedule", 0.1)
             ],
           ),
         ],
@@ -1025,9 +1128,26 @@ class _DetailState extends State<Detail> {
   }
 
   Widget buildDataRow({Schedule schedule, int c}) {
+    double width = MediaQuery.of(context).size.width;
+
+    Widget cell(String name, double d) {
+      return Container(
+        width: width * d,
+        child: Center(
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 50,
+      height: 20,
       color: Colors.grey[100],
       child: Container(
         decoration: BoxDecoration(
@@ -1045,110 +1165,31 @@ class _DetailState extends State<Detail> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            Container(
-              width: 120,
-              child: Center(
-                child: Text(
-                  schedule.orderId,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.orderId, 0.1),
             //Fg Part
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.fgpart,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.fgpart, 0.1),
             //Schudule ID
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.scheudleId,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.scheudleId, 0.1),
+
             //Cable Part
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.cablePart ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.cablePart, 0.1),
             //Process
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.process ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.process, 0.1),
             // Cut length
-            Container(
-              width: 140,
-              child: Center(
-                child: Text(
-                  schedule.cutLength ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.cutLength, 0.1),
             //Color
-            Container(
-              width: 70,
-              child: Center(
-                child: Text(
-                  schedule.color ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.color, 0.1),
             //Scheduled Qty
-            Container(
-              width: 115,
-              child: Center(
-                child: Text(
-                  schedule.scheduledQty ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            cell(schedule.scheduledQty, 0.1),
             //Schudule
             Container(
-              width: 115,
+              width: width * 0.1,
               child: Center(
                 child: Text(
                   "11:00 - 12:00",
                   style: TextStyle(
                     color: Colors.blue,
-                    fontSize: 16,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -1159,71 +1200,14 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-  //not used
-  Widget scheduleDetail() {
-    Widget cell(String name, double width) {
-      return Container(
-        width: MediaQuery.of(context).size.width * width,
-        height: 40,
-        child: Center(
-          child: Text(name,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-        ),
-      );
-    }
-
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 90,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              cell(
-                "Order Id",
-                0.1,
-              ),
-              cell(
-                "FG Part",
-                0.1,
-              ),
-              cell("Schedule ID", 0.08),
-              cell("Cable Part No.", 0.08),
-              cell("Process", 0.1),
-              cell("Cut Length(mm)", 0.1),
-              cell("Color", 0.1),
-              cell("Scheduled Qty", 0.1),
-              cell("Scheduled", 0.1),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              cell("846478041", 120),
-              cell("367810109", 140),
-              cell("945810107", 140),
-              cell("824923001", 140),
-              cell("Wirecutting", 140),
-              cell("2060", 140),
-              cell("RED", 70),
-              cell("500 Pcs", 115),
-              cell("11:00-12:00AM", 160),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget box() {
     double width = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(5.0),
       child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 55,
+          height: 30,
           // color: Colors.grey[200],
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
@@ -1244,28 +1228,405 @@ class _DetailState extends State<Detail> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
         color: Colors.grey[200],
       ),
       child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
             str1,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 10),
           ),
           Text(str2,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+              style: TextStyle(
+                  fontWeight: FontWeight.w300,
+                  fontSize: 12,
+                  color: Colors.black)),
         ]),
       ),
     );
   }
 
   //tearmial A b and cable
+  Widget startProcess() {
+    if (_chosenValue == null) {
+      return Padding(
+        padding: const EdgeInsets.all(40.0),
+        child: Container(
+          child: Row(
+            children: [
+              DropdownButton<String>(
+                focusColor: Colors.white,
+                value: _chosenValue,
+                //elevation: 5,
+                style: TextStyle(color: Colors.white),
+                iconEnabledColor: Colors.black,
+
+                items: <String>[
+                  'Terminal A,Cutlength,Terminal B',
+                  'Terminal A,Cutlength',
+                  'Cutlenght, Terminal B',
+                  'Terminal A',
+                  'Terminal B',
+                  'Preparation',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+                hint: Text(
+                  'Select Terminal',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+                onChanged: (String value) {
+                  setState(() {
+                    _chosenValue = value;
+                    value = value;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+}
+
+class Process extends StatefulWidget {
+  String type;
+  Process({this.type});
+  @override
+  _ProcessState createState() => _ProcessState();
+}
+
+class _ProcessState extends State<Process> {
+  bool expanded = true;
+  @override
+  Widget build(BuildContext context) {
+    // Terminal A,Cutlength,Terminal B
+    if (widget.type == "Terminal A,Cutlength,Terminal B") {
+      return Column(
+        children: [
+          Container(
+            height: 30,
+            padding: const EdgeInsets.all(0.0),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  expanded = !expanded;
+                });
+              },
+              child: Row(
+                children: [
+                  SizedBox(width:8),
+                  Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Text(
+                        "Process Type : Terminal A,Cutlength,Terminal B",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      )),
+                  IconButton(
+                     alignment: Alignment.topLeft,
+                     iconSize: 18,
+                      icon: expanded
+                          ? Icon(Icons.keyboard_arrow_down)
+                          : Icon(Icons.keyboard_arrow_up),
+                      onPressed: () {
+                        setState(() {
+                          expanded = !expanded;
+                        });
+                      })
+                ],
+              ),
+            ),
+          ),
+          // table for Process
+          (() {
+            if (expanded) {
+              return Column(
+                children: [
+                  terminal(),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }()),
+        ],
+      );
+    }
+    // Terminal A
+
+    if (widget.type == "Terminal A") {
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                expanded = !expanded;
+              });
+            },
+            child: Row(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "Process Type : Terminal A",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    )),
+                IconButton(
+                   alignment: Alignment.centerLeft,
+                    icon: expanded
+                        ? Icon(Icons.keyboard_arrow_down)
+                        : Icon(Icons.keyboard_arrow_up),
+                    onPressed: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    })
+              ],
+            ),
+          ),
+          (() {
+            if (expanded) {
+              return Column(
+                children: [
+                  terminal(),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }()),
+        ],
+      );
+    }
+    // Terminal B
+
+    if (widget.type == "Terminal B") {
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                expanded = !expanded;
+              });
+            },
+            child: Row(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      "Process Type : Terminal B",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    )),
+                IconButton(
+                   alignment: Alignment.centerLeft,
+                    icon: expanded
+                        ? Icon(Icons.keyboard_arrow_down)
+                        : Icon(Icons.keyboard_arrow_up),
+                    onPressed: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    })
+              ],
+            ),
+          ),
+          (() {
+            if (expanded) {
+              return Column(
+                children: [
+                  terminal(),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }()),
+        ],
+      );
+    }
+    if (widget.type == "Terminal A,Cutlength") {
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                expanded = !expanded;
+              });
+            },
+            child: Row(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "Process Type : Terminal A,Cutlength",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    )),
+                IconButton(
+                   alignment: Alignment.centerLeft,
+                    icon: expanded
+                        ? Icon(Icons.keyboard_arrow_down)
+                        : Icon(Icons.keyboard_arrow_up),
+                    onPressed: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    })
+              ],
+            ),
+          ),
+          (() {
+            if (expanded) {
+              return Column(
+                children: [
+                  terminal(),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }()),
+        ],
+      );
+    }
+
+    if (widget.type == "Cutlenght, Terminal B") {
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                expanded = !expanded;
+              });
+            },
+            child: Row(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      "Process Type : Cutlenght, Terminal B",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    )),
+                IconButton(
+                   alignment: Alignment.centerLeft,
+                    icon: expanded
+                        ? Icon(Icons.keyboard_arrow_down)
+                        : Icon(Icons.keyboard_arrow_up),
+                    onPressed: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    })
+              ],
+            ),
+          ),
+          (() {
+            if (expanded) {
+              return Column(
+                children: [
+                  terminal(),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }()),
+        ],
+      );
+    }
+    if (widget.type == "Preparation") {
+      return Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                expanded = !expanded;
+              });
+            },
+            child: Row(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      "Process Type : Preparation",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    )),
+                IconButton(
+                  alignment: Alignment.centerLeft,
+                    icon: expanded
+                        ? Icon(Icons.keyboard_arrow_down)
+                        : Icon(Icons.keyboard_arrow_up),
+                    onPressed: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    })
+              ],
+            ),
+          ),
+          (() {
+            if (expanded) {
+              return Column(
+                children: [
+                  terminal(),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }()),
+        ],
+      );
+    } else {
+      return Container(
+        child: Center(
+          child: Text(widget.type ?? ""),
+        ),
+      );
+    }
+  }
+
   Widget terminal() {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: Container(
-        height: 140,
+        height: 90,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: Row(
@@ -1299,49 +1660,59 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
-        padding: const EdgeInsets.all(8.0),
-        height: 130,
-        width: MediaQuery.of(context).size.width * 0.32,
+        padding: const EdgeInsets.all(4.0),
+        height: 90,
+        // width: MediaQuery.of(context).size.width * 0.32,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.grey[200],
         ),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Container(
-                height: 80.0,
-                width: 80,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/terminal_a.jpg'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: 8,
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(0.0),
+            //   child: Container(
+            //     height: 80.0,
+            //     width: 85,
+            //     decoration: BoxDecoration(
+            //       image: DecorationImage(
+            //         image: AssetImage('assets/image/terminal_a.jpg'),
+            //         fit: BoxFit.fill,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // Container(
+            //   width: 8,
+            // ),
             Padding(
               padding: const EdgeInsets.all(1.0),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.31 * 0.725,
+                // width: MediaQuery.of(context).size.width * 0.31,
                 child: Column(
                   children: [
-                    Text(p1),
-                    Text(p2),
+                    Text(
+                      p1,
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
+                    Text(
+                      p2,
+                      style: TextStyle(
+                        fontSize: 10,
+                      ),
+                    ),
                     SizedBox(height: 5),
                     Text(
                       p3,
-                      style: TextStyle(fontSize: 11),
+                      style: TextStyle(fontSize: 10),
                     ),
                     Text(
                       p4,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 10,
                         color: Colors.red,
                         fontWeight: FontWeight.w600,
                       ),
@@ -1349,7 +1720,7 @@ class _DetailState extends State<Detail> {
                     SizedBox(height: 5),
                     Text(
                       p5,
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 10),
                     ),
                   ],
                 ),
@@ -1359,350 +1730,6 @@ class _DetailState extends State<Detail> {
         ),
       ),
     );
-  }
-
-  Widget startProcess() {
-    return Padding(
-      padding: const EdgeInsets.all(40.0),
-      child: Container(
-        child: Row(
-          children: [
-            DropdownButton<String>(
-              focusColor: Colors.white,
-              value: _chosenValue,
-              //elevation: 5,
-              style: TextStyle(color: Colors.white),
-              iconEnabledColor: Colors.black,
-
-              items: <String>[
-                'Terminal A,Cutlength,Terminal B',
-                'Terminal A,Cutlength',
-                'Cutlenght, Terminal B',
-                'Terminal A',
-                'Terminal B',
-                'Preparation',
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
-                    style: TextStyle(color: Colors.black),
-                  ),
-                );
-              }).toList(),
-              hint: Text(
-                'Select Terminal',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
-              ),
-              onChanged: (String value) {
-                setState(() {
-                  _chosenValue = value;
-                });
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class Process extends StatefulWidget {
-  String type;
-  Process({this.type});
-  @override
-  _ProcessState createState() => _ProcessState();
-}
-
-class _ProcessState extends State<Process> {
-  @override
-  Widget build(BuildContext context) {
-    // Terminal A,Cutlength,Terminal B
-    if (widget.type == "Terminal A,Cutlength,Terminal B") {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    "Process Type : Terminal A,Cutlength,Terminal B",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  )),
-            ],
-          ),
-          // table for Process
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-          ]),
-        ],
-      );
-    }
-    // Terminal A
-
-    if (widget.type == "Terminal A") {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    "Process Type : Terminal A",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  )),
-            ],
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-          ]),
-        ],
-      );
-    }
-    // Terminal B
-
-    if (widget.type == "Terminal B") {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    "Process Type : Terminal B",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  )),
-            ],
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-          ]),
-        ],
-      );
-    }
-    if (widget.type == "Terminal A,Cutlength") {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    "Process Type : Terminal A,Cutlength",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  )),
-            ],
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-          ]),
-        ],
-      );
-    }
-
-    if (widget.type == "Cutlenght, Terminal B") {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    "Process Type : Cutlenght, Terminal B",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  )),
-            ],
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-          ]),
-        ],
-      );
-    }
-    if (widget.type == "Preparation") {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    "Process Type : Preparation",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  )),
-            ],
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-            table(
-              'Terminal A,Cutlength,Terminal B',
-              '884538504',
-              '5000m',
-              '2500m',
-              '1000m',
-              '2500m',
-            ),
-          ]),
-        ],
-      );
-    } else {
-      return Container(
-        child: Center(
-          child: Text('Select Process To Start'),
-        ),
-      );
-    }
   }
 
   Widget table(String type, String pn, String r, String l, String a, String p) {
@@ -1716,12 +1743,18 @@ class _ProcessState extends State<Process> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      height: 40,
+                      height: 20,
                       width: MediaQuery.of(context).size.width * 0.30 * 0.5,
-                      child: Center(child: Text("PART NO."))),
+                      child: Center(child: Text("PART NO.",style: TextStyle(
+                        fontSize: 12
+                      ),))),
                   Container(
+                     height: 20,
+                    color: Colors.grey[300],
                       width: MediaQuery.of(context).size.width * 0.30 * 0.5,
-                      child: Center(child: Text(pn))),
+                      child: Center(child: Text(pn,style: TextStyle(
+                        fontSize: 12
+                      )))),
                 ],
               )
             ],
@@ -1735,37 +1768,48 @@ class _ProcessState extends State<Process> {
                       decoration: BoxDecoration(
                           border:
                               Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 40,
+                      height: 20,
                       width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text('REQUIRED'))),
+                      child: Center(child: Text('REQUIRED',style: TextStyle(
+                        fontSize: 12
+                      )))),
                   Container(
                     decoration: BoxDecoration(
                         border:
                             Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 40,
+                    height: 20,
                     width: MediaQuery.of(context).size.width * 0.30 * 0.25,
                     child: Center(
-                      child: Text('LOADED'),
+                      child: Text(
+                        'LOADED',
+                        style: TextStyle(fontSize: 10),
+                      ),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                         border:
                             Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 40,
+                    height: 20,
                     width: MediaQuery.of(context).size.width * 0.30 * 0.25,
                     child: Center(
-                      child: Text('AVAILABLE'),
+                      child: Text(
+                        'AVAILABLE',
+                        style: TextStyle(fontSize: 10),
+                      ),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                         border:
                             Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 40,
+                    height: 20,
                     width: MediaQuery.of(context).size.width * 0.30 * 0.25,
                     child: Center(
-                      child: Text('PENDING'),
+                      child: Text(
+                        'PENDING',
+                        style: TextStyle(fontSize: 10),
+                      ),
                     ),
                   ),
                 ],
@@ -1780,34 +1824,79 @@ class _ProcessState extends State<Process> {
                       decoration: BoxDecoration(
                           //color: Colors.red,
                           border: Border.all(width: 1.0, color: Colors.white)),
-                      height: 40,
+                      height: 20,
                       width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text(r))),
+                      child: Center(
+                          child: Text(
+                        r,
+                        style: TextStyle(fontSize: 10),
+                      ))),
                   Container(
                       decoration: BoxDecoration(
                           border:
                               Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 40,
+                      height: 20,
                       width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text(l))),
+                      child: Center(
+                          child: Text(
+                        l,
+                        style: TextStyle(fontSize: 10),
+                      ))),
                   Container(
                       decoration: BoxDecoration(
                           border:
                               Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 40,
+                      height: 20,
                       width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text(a))),
+                      child: Center(
+                          child: Text(
+                        a,
+                        style: TextStyle(fontSize: 10),
+                      ))),
                   Container(
                       decoration: BoxDecoration(
                           border:
                               Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 40,
+                      height: 20,
                       width: MediaQuery.of(context).size.width * 0.30 * 0.25,
-                      child: Center(child: Text(p))),
+                      child: Center(
+                          child: Text(
+                        p,
+                        style: TextStyle(fontSize: 10),
+                      ))),
                 ],
               )
             ],
           )
         ]));
+  }
+
+  Widget tableRow(String name) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      table(
+        name,
+        '884538504',
+        '5000m',
+        '2500m',
+        '1000m',
+        '2500m',
+      ),
+      table(
+        name,
+        '884538504',
+        '5000m',
+        '2500m',
+        '1000m',
+        '2500m',
+      ),
+      table(
+        name,
+        '884538504',
+        '5000m',
+        '2500m',
+        '1000m',
+        '2500m',
+      ),
+    ]);
   }
 }

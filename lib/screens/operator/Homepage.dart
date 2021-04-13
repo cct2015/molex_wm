@@ -17,52 +17,153 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    schedule =   Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
-          process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
-          status: "Not Completed");
+    schedule = Schedule(
+        orderId: "100",
+        fgpart: "300",
+        scheudleId: "300",
+        cablePart: "200",
+        process: "Wirecutting",
+        cutLength: "100",
+        color: "Red",
+        scheduledQty: "50",
+        status: "Not Completed");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.red[400],
-          title: const Text('Dashboard'),
-          backwardsCompatibility: false,
-          leading: Container(
-            width: 0,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red,
           ),
+          backwardsCompatibility: false,
+          leading: null,
+          title: const Text(
+            'DashBoard',
+            style: TextStyle(color: Colors.red),
+          ),
+          elevation: 0,
+          automaticallyImplyLeading: false,
           actions: [
             Container(
-              height: 40,
-              width: 150,
-              child: Column(
+              width: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "User Id",
-                        style: TextStyle(color: Colors.grey[100]),
-                      )
+                        DateFormat('MM-dd-yyyy').format(DateTime.now()),
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      Text(
+                        DateFormat('hh:mm').format(DateTime.now()),
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 23,
+                        ),
+                      ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  SizedBox(width: 10)
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(2),
+              height: 40,
+              width: 120,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // Column(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     SizedBox(height: 5),
+                  //     Row(
+                  //       mainAxisAlignment: MainAxisAlignment.end,
+                  //       children: [
+                  //         Text(
+                  //           "User Id",
+                  //           style: TextStyle(color: Colors.grey[100]),
+                  //         )
+                  //       ],
+                  //     ),
+                  //     Row(
+                  //       mainAxisAlignment: MainAxisAlignment.end,
+                  //       children: [
+                  //         Text(
+                  //           widget.userId ?? "12210",
+                  //           style: TextStyle(
+                  //               fontWeight: FontWeight.bold, fontSize: 12),
+                  //         )
+                  //       ],
+                  //     )
+                  //   ],
+                  // ),
+
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        widget.userId ?? "12210",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22),
-                      )
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 25,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.schedule,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              "Shift A",
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 25,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.settings,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              widget.machineId ?? "",
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
                     ],
                   )
                 ],
@@ -70,183 +171,239 @@ class _HomepageState extends State<Homepage> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NavPage(
-                      schedule: schedule,
-                      userId: widget.userId,
-                      machineId: widget.machineId,
-                    )),
-                  );
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/image/profile.jpg',
-                          ),
-                          fit: BoxFit.fill)),
-                ),
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/profile.jpg',
+                        ),
+                        fit: BoxFit.fill)),
               ),
             )
           ],
         ),
+
+        //  AppBar(
+        //   backgroundColor: Colors.red[400],
+        //   title: const Text('Dashboard'),
+        //   backwardsCompatibility: false,
+        //   leading: Container(
+        //     width: 0,
+        //   ),
+        //   actions: [
+        //     Container(
+        //       height: 40,
+        //       width: 150,
+        //       child: Column(
+        //         children: [
+        //           SizedBox(height: 5),
+        //           Row(
+        //             mainAxisAlignment: MainAxisAlignment.end,
+        //             children: [
+        //               Text(
+        //                 "User Id",
+        //                 style: TextStyle(color: Colors.grey[100]),
+        //               )
+        //             ],
+        //           ),
+        //           Row(
+        //             mainAxisAlignment: MainAxisAlignment.end,
+        //             children: [
+        //               Text(
+        //                 widget.userId ?? "12210",
+        //                 style: TextStyle(
+        //                     fontWeight: FontWeight.bold, fontSize: 22),
+        //               )
+        //             ],
+        //           )
+        //         ],
+        //       ),
+        //     ),
+        //     Padding(
+        //       padding: const EdgeInsets.all(10.0),
+        //       child: GestureDetector(
+        //         onTap: () {
+        //           Navigator.push(
+        //             context,
+        //             MaterialPageRoute(builder: (context) => NavPage(
+        //               schedule: schedule,
+        //               userId: widget.userId,
+        //               machineId: widget.machineId,
+        //             )),
+        //           );
+        //         },
+        //         child: Container(
+        //           height: 40,
+        //           width: 40,
+        //           decoration: BoxDecoration(
+        //               color: Colors.white,
+        //               borderRadius: BorderRadius.all(Radius.circular(100)),
+        //               image: DecorationImage(
+        //                   image: AssetImage(
+        //                     'assets/image/profile.jpg',
+        //                   ),
+        //                   fit: BoxFit.fill)),
+        //         ),
+        //       ),
+        //     )
+        //   ],
+        // ),
+
         body: StreamBuilder(
             stream: Stream.periodic(const Duration(milliseconds: 2000)),
             builder: (context, snapshot) {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 7),
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 250,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4.0),
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[100],
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                100)),
-                                                  ),
-                                                  child: Center(
-                                                      child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    4.0),
-                                                        child: Icon(
-                                                          Icons.schedule,
-                                                          size: 18,
-                                                          color:
-                                                              Colors.redAccent,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "Shift A",
-                                                        style: TextStyle(
-                                                            fontSize: 15),
-                                                      ),
-                                                    ],
-                                                  )),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 6),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey[100],
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(100)),
-                                                ),
-                                                child: Center(
-                                                    child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 4.0),
-                                                      child: Icon(
-                                                        Icons.settings,
-                                                        size: 18,
-                                                        color: Colors.redAccent,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      widget.machineId ?? "",
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                  ],
-                                                )),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  width: 200,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        DateFormat('MM-dd-yyyy')
-                                            .format(DateTime.now()),
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.grey),
-                                      ),
-                                      Text(
-                                          DateFormat('hh:mm')
-                                              .format(DateTime.now()),
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25,
-                                          )),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(),
+                    //   child: Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 10.0, vertical: 7),
+                    //     height: 60,
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //     ),
+                    //     child: Column(
+                    //       children: [
+                    //         SizedBox(height: 5),
+                    //         Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             Row(
+                    //               children: [
+                    //                 Container(
+                    //                   width: 250,
+                    //                   child: Row(
+                    //                     mainAxisAlignment:
+                    //                         MainAxisAlignment.spaceAround,
+                    //                     children: [
+                    //                       Row(
+                    //                         children: [
+                    //                           Padding(
+                    //                             padding:
+                    //                                 const EdgeInsets.symmetric(
+                    //                                     horizontal: 4.0),
+                    //                             child: Container(
+                    //                               padding: EdgeInsets.symmetric(
+                    //                                   horizontal: 10),
+                    //                               height: 40,
+                    //                               decoration: BoxDecoration(
+                    //                                 color: Colors.grey[100],
+                    //                                 borderRadius:
+                    //                                     BorderRadius.all(
+                    //                                         Radius.circular(
+                    //                                             100)),
+                    //                               ),
+                    //                               child: Center(
+                    //                                   child: Row(
+                    //                                 mainAxisAlignment:
+                    //                                     MainAxisAlignment.start,
+                    //                                 children: [
+                    //                                   Padding(
+                    //                                     padding:
+                    //                                         const EdgeInsets
+                    //                                                 .symmetric(
+                    //                                             horizontal:
+                    //                                                 4.0),
+                    //                                     child: Icon(
+                    //                                       Icons.schedule,
+                    //                                       size: 18,
+                    //                                       color:
+                    //                                           Colors.redAccent,
+                    //                                     ),
+                    //                                   ),
+                    //                                   Text(
+                    //                                     "Shift A",
+                    //                                     style: TextStyle(
+                    //                                         fontSize: 15),
+                    //                                   ),
+                    //                                 ],
+                    //                               )),
+                    //                             ),
+                    //                           ),
+                    //                         ],
+                    //                       ),
+                    //                       SizedBox(height: 6),
+                    //                       Row(
+                    //                         mainAxisAlignment:
+                    //                             MainAxisAlignment.start,
+                    //                         children: [
+                    //                           Container(
+                    //                             padding: EdgeInsets.symmetric(
+                    //                                 horizontal: 10),
+                    //                             height: 40,
+                    //                             decoration: BoxDecoration(
+                    //                               color: Colors.grey[100],
+                    //                               borderRadius:
+                    //                                   BorderRadius.all(
+                    //                                       Radius.circular(100)),
+                    //                             ),
+                    //                             child: Center(
+                    //                                 child: Row(
+                    //                               mainAxisAlignment:
+                    //                                   MainAxisAlignment
+                    //                                       .spaceEvenly,
+                    //                               children: [
+                    //                                 Padding(
+                    //                                   padding: const EdgeInsets
+                    //                                           .symmetric(
+                    //                                       horizontal: 4.0),
+                    //                                   child: Icon(
+                    //                                     Icons.settings,
+                    //                                     size: 18,
+                    //                                     color: Colors.redAccent,
+                    //                                   ),
+                    //                                 ),
+                    //                                 Text(
+                    //                                   widget.machineId ?? "",
+                    //                                   style: TextStyle(
+                    //                                       fontSize: 16),
+                    //                                 ),
+                    //                               ],
+                    //                             )),
+                    //                           ),
+                    //                         ],
+                    //                       ),
+                    //                     ],
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             Container(
+                    //               width: 200,
+                    //               child: Row(
+                    //                 mainAxisAlignment:
+                    //                     MainAxisAlignment.spaceEvenly,
+                    //                 children: [
+                    //                   Text(
+                    //                     DateFormat('MM-dd-yyyy')
+                    //                         .format(DateTime.now()),
+                    //                     style: TextStyle(
+                    //                         fontSize: 20, color: Colors.grey),
+                    //                   ),
+                    //                   Text(
+                    //                       DateFormat('hh:mm')
+                    //                           .format(DateTime.now()),
+                    //                       style: TextStyle(
+                    //                         color: Colors.blue,
+                    //                         fontWeight: FontWeight.bold,
+                    //                         fontSize: 25,
+                    //                       )),
+                    //                 ],
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                   
                     Divider(
                       color: Colors.redAccent,
                       thickness: 2,
@@ -363,7 +520,7 @@ class _SchudleTableState extends State<SchudleTable> {
         child: Center(
           child: Text(
             name,
-            style: TextStyle(color: Colors.grey[600], fontSize: 16),
+            style: TextStyle(color: Colors.grey[600], fontSize: 14),
           ),
         ),
       );

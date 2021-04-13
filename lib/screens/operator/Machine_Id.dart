@@ -46,19 +46,10 @@ class _MachineIdState extends State<MachineId> {
   }
 
   checkId(String machineI) {
-    //   if (machineId?.length == 10) {
-    // Fluttertoast.showToast(
-    //     msg: machineId,
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.BOTTOM,
-    //     timeInSecForIosWeb: 1,
-    //     backgroundColor: Colors.red,
-    //     textColor: Colors.white,
-    //     fontSize: 16.0);
     if (machineId?.length == 10) {
       print("machineID:$machineId");
       Future.delayed(Duration.zero, () async {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => Homepage(
@@ -106,7 +97,6 @@ class _MachineIdState extends State<MachineId> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(children: [
-
                       Lottie.asset('assets/lottie/scan-barcode.json',
                           width: 350, fit: BoxFit.cover),
                       Text(

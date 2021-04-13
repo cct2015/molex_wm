@@ -20,4 +20,5 @@ class Schedule {
     this.scheduledQty,
     this.status,
   });
+  
 }

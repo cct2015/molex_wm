@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_scan.dart';
-import 'package:molex/screens/operator%202/scanbundle.dart';
 import 'package:molex/screens/operator/bin.dart';
-import 'package:molex/screens/operator%203/scanid.dart';
 
 class Processpage3 extends StatefulWidget {
   String userId;
