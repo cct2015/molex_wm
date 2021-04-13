@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
 import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/screens/operator/bin.dart';
 
 void main() {
+   SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
-  
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -17,12 +19,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-        SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
   }
 
-
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,11 +31,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:
-       Homepage(
-        machineId: "123456789",
-        userId: "0123456789",
-      ),
+      home: LoginScan(),
     );
   }
 }

@@ -29,10 +29,12 @@ class _MaterialPickState extends State<MaterialPick> {
   List<ItemPart> selectditems = [];
   bool isCollapsedRawMaterial = false;
   bool isCollapsedScannedMaterial = false;
+  DateTime selectedDate = DateTime.now();
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     _textNode.requestFocus();
-     SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     Future.delayed(
       const Duration(milliseconds: 100),
       () {
@@ -165,6 +167,116 @@ class _MaterialPickState extends State<MaterialPick> {
         elevation: 0,
         actions: [
           Container(
+            padding: EdgeInsets.all(5),
+            width: 130,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.schedule,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            "Shift A",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(1),
+            height: 40,
+            width: 130,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.person,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.userId,
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.settings,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.machineId ?? "",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Container(
             width: 80,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -190,107 +302,29 @@ class _MaterialPickState extends State<MaterialPick> {
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.all(2),
-            height: 40,
-            width: 120,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     SizedBox(height: 5),
-                //     Row(
-                //       mainAxisAlignment: MainAxisAlignment.end,
-                //       children: [
-                //         Text(
-                //           "User Id",
-                //           style: TextStyle(color: Colors.grey[100]),
-                //         )
-                //       ],
-                //     ),
-                //     Row(
-                //       mainAxisAlignment: MainAxisAlignment.end,
-                //       children: [
-                //         Text(
-                //           widget.userId ?? "12210",
-                //           style: TextStyle(
-                //               fontWeight: FontWeight.bold, fontSize: 12),
-                //         )
-                //       ],
-                //     )
-                //   ],
-                // ),
-
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 25,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.settings,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            widget.machineId ?? "",
-                            style: TextStyle(fontSize: 12, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
               height: 40,
               width: 40,
               decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.redAccent[100],
+                      offset: const Offset(
+                        2.0,
+                        2.0,
+                      ),
+                      blurRadius: 3.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: const Offset(0.0, 0.0),
+                      blurRadius: 0.0,
+                      spreadRadius: 0.0,
+                    ), //Bo
+                  ],
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(100)),
                   image: DecorationImage(
@@ -302,57 +336,6 @@ class _MaterialPickState extends State<MaterialPick> {
           )
         ],
       ),
-
-      //  AppBar(
-      //   backgroundColor: Colors.red[400],
-      //   title: const Text('Material'),
-      //   actions: [
-      //     Container(
-      //       height: 40,
-      //       width: 150,
-      //       child: Column(
-      //         children: [
-      //           SizedBox(height: 5),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.end,
-      //             children: [
-      //               Text(
-      //                 "User Id",
-      //                 style: TextStyle(color: Colors.grey[100]),
-      //               )
-      //             ],
-      //           ),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.end,
-      //             children: [
-      //               Text(
-      //                 widget.userId ?? "12210",
-      //                 style:
-      //                     TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-      //               )
-      //             ],
-      //           )
-      //         ],
-      //       ),
-      //     ),
-      //     Padding(
-      //       padding: const EdgeInsets.all(10.0),
-      //       child: Container(
-      //         height: 40,
-      //         width: 40,
-      //         decoration: BoxDecoration(
-      //             color: Colors.white,
-      //             borderRadius: BorderRadius.all(Radius.circular(100)),
-      //             image: DecorationImage(
-      //                 image: AssetImage(
-      //                   'assets/image/profile.jpg',
-      //                 ),
-      //                 fit: BoxFit.fill)),
-      //       ),
-      //     )
-      //   ],
-      // ),
-
       body: StreamBuilder(
         stream: Stream.periodic(const Duration(milliseconds: 2000)),
         builder: (context, snapshot) {
@@ -360,7 +343,7 @@ class _MaterialPickState extends State<MaterialPick> {
             child: Column(
               children: [
                 //Shift and machineId
-              Divider(
+                Divider(
                   color: Colors.redAccent,
                   thickness: 2,
                 ),
@@ -374,7 +357,7 @@ class _MaterialPickState extends State<MaterialPick> {
 
                 //Proceed to Process Button
                 Container(
-                  height: 50,
+                  height: 100,
                 ),
               ],
             ),
@@ -419,7 +402,7 @@ class _MaterialPickState extends State<MaterialPick> {
                 onKey: (event) => handleKey(event.data),
                 child: Container(
                     height: 50,
-                    width: width * 0.3,
+                    width: width * 0.25,
                     child: TextField(
                       controller: _partNumberController,
                       autofocus: true,
@@ -449,7 +432,7 @@ class _MaterialPickState extends State<MaterialPick> {
                 onKey: (event) => handleKey(event.data),
                 child: Container(
                     height: 50,
-                    width: width * 0.3,
+                    width: width * 0.25,
                     child: TextField(
                       controller: _trackingNumberController,
                       onChanged: (value) {
@@ -457,7 +440,7 @@ class _MaterialPickState extends State<MaterialPick> {
                       },
                       focusNode: _trackingNumber,
                       decoration: new InputDecoration(
-                        labelText: "Tracking Number",
+                        labelText: "Tracebility Number",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
                           borderRadius: new BorderRadius.circular(5.0),
@@ -466,6 +449,50 @@ class _MaterialPickState extends State<MaterialPick> {
                         //fillColor: Colors.green
                       ),
                     )),
+              ),
+              Container(
+                height: 50,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.event,
+                              color: Colors.grey,
+                              size: 25,
+                            ),
+                            onPressed: () async {
+                              final DateTime picked = await showDatePicker(
+                                context: context,
+                                initialDate: selectedDate, // Refer step 1
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2025),
+                              );
+                              if (picked != null && picked != selectedDate)
+                                setState(() {
+                                  selectedDate = picked;
+                                  Future.delayed(
+                                    const Duration(milliseconds: 100),
+                                    () {
+                                      SystemChannels.textInput
+                                          .invokeMethod('TextInput.hide');
+                                    },
+                                  );
+                                });
+                            }),
+                        Text(
+                          "${selectedDate.toLocal()}".split(' ')[0],
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               RawKeyboardListener(
                 focusNode: FocusNode(),
@@ -514,6 +541,8 @@ class _MaterialPickState extends State<MaterialPick> {
                         for (ItemPart ip in items) {
                           if (ip.partNo == partNumber) {
                             if (!selectditems.contains(ip)) {
+                              ip.date =
+                                  "${selectedDate.toLocal()}".split(' ')[0];
                               selectditems.add(ip);
                               _partNumberController.clear();
                               _trackingNumberController.clear();
@@ -597,7 +626,6 @@ class _MaterialPickState extends State<MaterialPick> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.all(8),
                 child: DataTable(
-                    showCheckboxColumn: true,
                     columns: const <DataColumn>[
                       DataColumn(
                         label: Text('Part No.'),
@@ -616,24 +644,19 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                     ],
                     rows: items
-                        .map((e) => DataRow(
-                                selected: selectditems.contains(e),
-                                onSelectChanged: (b) {
-                                  // onSelectedRow(b, e);
-                                },
-                                cells: <DataCell>[
-                                  DataCell(Text(
-                                    e.partNo,
-                                    style: TextStyle(fontSize: 16),
-                                  )),
-                                  DataCell(Text(
-                                    e.description,
-                                    style: TextStyle(fontSize: 15),
-                                  )),
-                                  DataCell(Text(e.uom)),
-                                  DataCell(Text(e.oty)),
-                                  DataCell(Text(e.schQty)),
-                                ]))
+                        .map((e) => DataRow(cells: <DataCell>[
+                              DataCell(Text(
+                                e.partNo,
+                                style: TextStyle(fontSize: 16),
+                              )),
+                              DataCell(Text(
+                                e.description,
+                                style: TextStyle(fontSize: 15),
+                              )),
+                              DataCell(Text(e.uom)),
+                              DataCell(Text(e.oty)),
+                              DataCell(Text(e.schQty)),
+                            ]))
                         .toList()),
               );
             } else {
@@ -689,29 +712,28 @@ class _MaterialPickState extends State<MaterialPick> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.all(8),
                 child: DataTable(
-                    columnSpacing: 40,
-                    showCheckboxColumn: true,
+                    columnSpacing: 30,
                     columns: const <DataColumn>[
                       DataColumn(
-                        label: Text('Part No.'),
+                        label: Text('PART NO.'),
                       ),
                       DataColumn(
-                        label: Text('Tracking No.'),
+                        label: Text('DESCRIPTION'),
                       ),
                       DataColumn(
-                        label: Text('Description'),
+                        label: Text('TRACEBILITY'),
+                      ),
+                      DataColumn(
+                        label: Text('DATE'),
                       ),
                       DataColumn(
                         label: Text('UOM'),
                       ),
                       DataColumn(
-                        label: Text('REQ Qty/PC'),
+                        label: Text('EXIST QTY	'),
                       ),
                       DataColumn(
-                        label: Text('Total SCh Qty'),
-                      ),
-                      DataColumn(
-                        label: Text('Qty'),
+                        label: Text('SCANNED QTY'),
                       ),
                       DataColumn(
                         label: Text('Delete'),
@@ -724,16 +746,19 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 16),
                               )),
                               DataCell(Text(
-                                e.partNo,
+                                e.description,
                                 style: TextStyle(fontSize: 16),
                               )),
                               DataCell(Text(
-                                e.description,
+                                e.partNo,
+                                style: TextStyle(fontSize: 15),
+                              )),
+                              DataCell(Text(
+                                e.date,
                                 style: TextStyle(fontSize: 15),
                               )),
                               DataCell(Text(e.uom)),
-                              DataCell(Text(e.oty)),
-                              DataCell(Text(e.schQty)),
+                              DataCell(Text("25.5")),
                               DataCell(Text("30")),
                               DataCell(IconButton(
                                 icon: Icon(
@@ -821,10 +846,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.orderId,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ),
             ),
@@ -834,10 +856,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.fgpart,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ),
             ),
@@ -847,10 +866,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.scheudleId,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                     fontSize: 12
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ),
             ),
@@ -860,10 +876,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.cablePart ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                     fontSize: 12
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ),
             ),
@@ -873,10 +886,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.process ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                     fontSize: 12
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ),
             ),
@@ -886,10 +896,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.cutLength ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                     fontSize: 12
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ),
             ),
@@ -899,10 +906,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.color ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                     fontSize: 14
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),
             ),
@@ -912,10 +916,7 @@ class _MaterialPickState extends State<MaterialPick> {
               child: Center(
                 child: Text(
                   schedule.scheduledQty ?? "",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                     fontSize: 14
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
               ),
             ),
@@ -929,7 +930,6 @@ class _MaterialPickState extends State<MaterialPick> {
                     color: Colors.blue,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    
                   ),
                 ),
               ),
