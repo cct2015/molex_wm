@@ -4,6 +4,7 @@ import 'package:molex/models/Schudule.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/materialPick.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class Homepage extends StatefulWidget {
   String userId;
@@ -15,9 +16,10 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   Schedule schedule;
+  int type = 0;
   @override
   void initState() {
-      SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
     schedule = Schedule(
         orderId: "100",
@@ -47,418 +49,321 @@ class _HomepageState extends State<Homepage> {
           ),
           elevation: 0,
           automaticallyImplyLeading: false,
-           actions: [
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(1),
-            height: 40,
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.person,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            widget.userId,
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.settings,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            widget.machineId ?? "",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NavPage(
-                      schedule: schedule,
-                      userId: widget.userId,
-                      machineId: widget.machineId,
-                    )),
-                  );
+          actions: [
+            //typeselect
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: ToggleSwitch(
+                minWidth: 80.0,
+                cornerRadius: 10.0,
+                activeBgColor: Colors.green,
+                activeFgColor: Colors.white,
+                initialLabelIndex: type,
+                inactiveBgColor: Colors.grey[200],
+                inactiveFgColor: Colors.black,
+                labels: ['Auto', 'Mannual'],
+                onToggle: (index) {
+                  print('switched to: $index');
+                  type = index;
 
-            },
-                      child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.redAccent[100],
-                        offset: const Offset(
-                          2.0,
-                          2.0,
-                        ),
-                        blurRadius: 3.0,
-                        spreadRadius: 1.0,
-                      ),
-                      BoxShadow(
-                        color: Colors.white,
-                        offset: const Offset(0.0, 0.0),
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0,
-                      ), //Bo
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                    image: DecorationImage(
-                        image: AssetImage(
-                          'assets/image/profile.jpg',
-                        ),
-                        fit: BoxFit.fill)),
+                  setState(() {
+                    type = index;
+                  });
+                },
               ),
             ),
-          )
-        ],
-       ),
-
-        //  AppBar(
-        //   backgroundColor: Colors.red[400],
-        //   title: const Text('Dashboard'),
-        //   backwardsCompatibility: false,
-        //   leading: Container(
-        //     width: 0,
-        //   ),
-        //   actions: [
-        //     Container(
-        //       height: 40,
-        //       width: 150,
-        //       child: Column(
-        //         children: [
-        //           SizedBox(height: 5),
-        //           Row(
-        //             mainAxisAlignment: MainAxisAlignment.end,
-        //             children: [
-        //               Text(
-        //                 "User Id",
-        //                 style: TextStyle(color: Colors.grey[100]),
-        //               )
-        //             ],
-        //           ),
-        //           Row(
-        //             mainAxisAlignment: MainAxisAlignment.end,
-        //             children: [
-        //               Text(
-        //                 widget.userId ?? "12210",
-        //                 style: TextStyle(
-        //                     fontWeight: FontWeight.bold, fontSize: 22),
-        //               )
-        //             ],
-        //           )
-        //         ],
-        //       ),
-        //     ),
-        //     Padding(
-        //       padding: const EdgeInsets.all(10.0),
-        //       child: GestureDetector(
-        //         onTap: () {
-        //           Navigator.push(
-        //             context,
-        //             MaterialPageRoute(builder: (context) => NavPage(
-        //               schedule: schedule,
-        //               userId: widget.userId,
-        //               machineId: widget.machineId,
-        //             )),
-        //           );
-        //         },
-        //         child: Container(
-        //           height: 40,
-        //           width: 40,
-        //           decoration: BoxDecoration(
-        //               color: Colors.white,
-        //               borderRadius: BorderRadius.all(Radius.circular(100)),
-        //               image: DecorationImage(
-        //                   image: AssetImage(
-        //                     'assets/image/profile.jpg',
-        //                   ),
-        //                   fit: BoxFit.fill)),
-        //         ),
-        //       ),
-        //     )
-        //   ],
-        // ),
-
+            //shift
+            Container(
+              padding: EdgeInsets.all(5),
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.schedule,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              "Shift A",
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            //machine Id
+            Container(
+              padding: EdgeInsets.all(1),
+              height: 40,
+              width: 130,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.person,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              widget.userId,
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.settings,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              widget.machineId ?? "",
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            //user Icon
+            Container(
+              width: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat('MM-dd-yyyy').format(DateTime.now()),
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      Text(
+                        DateFormat('hh:mm').format(DateTime.now()),
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 23,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 10)
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NavPage(
+                            schedule: schedule,
+                            userId: widget.userId,
+                            machineId: widget.machineId,
+                          )),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.redAccent[100],
+                          offset: const Offset(
+                            2.0,
+                            2.0,
+                          ),
+                          blurRadius: 3.0,
+                          spreadRadius: 1.0,
+                        ),
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: const Offset(0.0, 0.0),
+                          blurRadius: 0.0,
+                          spreadRadius: 0.0,
+                        ), //Bo
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      image: DecorationImage(
+                          image: AssetImage(
+                            'assets/image/profile.jpg',
+                          ),
+                          fit: BoxFit.fill)),
+                ),
+              ),
+            )
+          ],
+        ),
         body: StreamBuilder(
             stream: Stream.periodic(const Duration(milliseconds: 2000)),
             builder: (context, snapshot) {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.only(),
-                    //   child: Container(
-                    //     padding: const EdgeInsets.symmetric(
-                    //         horizontal: 10.0, vertical: 7),
-                    //     height: 60,
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //     ),
-                    //     child: Column(
-                    //       children: [
-                    //         SizedBox(height: 5),
-                    //         Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Row(
-                    //               children: [
-                    //                 Container(
-                    //                   width: 250,
-                    //                   child: Row(
-                    //                     mainAxisAlignment:
-                    //                         MainAxisAlignment.spaceAround,
-                    //                     children: [
-                    //                       Row(
-                    //                         children: [
-                    //                           Padding(
-                    //                             padding:
-                    //                                 const EdgeInsets.symmetric(
-                    //                                     horizontal: 4.0),
-                    //                             child: Container(
-                    //                               padding: EdgeInsets.symmetric(
-                    //                                   horizontal: 10),
-                    //                               height: 40,
-                    //                               decoration: BoxDecoration(
-                    //                                 color: Colors.grey[100],
-                    //                                 borderRadius:
-                    //                                     BorderRadius.all(
-                    //                                         Radius.circular(
-                    //                                             100)),
-                    //                               ),
-                    //                               child: Center(
-                    //                                   child: Row(
-                    //                                 mainAxisAlignment:
-                    //                                     MainAxisAlignment.start,
-                    //                                 children: [
-                    //                                   Padding(
-                    //                                     padding:
-                    //                                         const EdgeInsets
-                    //                                                 .symmetric(
-                    //                                             horizontal:
-                    //                                                 4.0),
-                    //                                     child: Icon(
-                    //                                       Icons.schedule,
-                    //                                       size: 18,
-                    //                                       color:
-                    //                                           Colors.redAccent,
-                    //                                     ),
-                    //                                   ),
-                    //                                   Text(
-                    //                                     "Shift A",
-                    //                                     style: TextStyle(
-                    //                                         fontSize: 15),
-                    //                                   ),
-                    //                                 ],
-                    //                               )),
-                    //                             ),
-                    //                           ),
-                    //                         ],
-                    //                       ),
-                    //                       SizedBox(height: 6),
-                    //                       Row(
-                    //                         mainAxisAlignment:
-                    //                             MainAxisAlignment.start,
-                    //                         children: [
-                    //                           Container(
-                    //                             padding: EdgeInsets.symmetric(
-                    //                                 horizontal: 10),
-                    //                             height: 40,
-                    //                             decoration: BoxDecoration(
-                    //                               color: Colors.grey[100],
-                    //                               borderRadius:
-                    //                                   BorderRadius.all(
-                    //                                       Radius.circular(100)),
-                    //                             ),
-                    //                             child: Center(
-                    //                                 child: Row(
-                    //                               mainAxisAlignment:
-                    //                                   MainAxisAlignment
-                    //                                       .spaceEvenly,
-                    //                               children: [
-                    //                                 Padding(
-                    //                                   padding: const EdgeInsets
-                    //                                           .symmetric(
-                    //                                       horizontal: 4.0),
-                    //                                   child: Icon(
-                    //                                     Icons.settings,
-                    //                                     size: 18,
-                    //                                     color: Colors.redAccent,
-                    //                                   ),
-                    //                                 ),
-                    //                                 Text(
-                    //                                   widget.machineId ?? "",
-                    //                                   style: TextStyle(
-                    //                                       fontSize: 16),
-                    //                                 ),
-                    //                               ],
-                    //                             )),
-                    //                           ),
-                    //                         ],
-                    //                       ),
-                    //                     ],
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //             Container(
-                    //               width: 200,
-                    //               child: Row(
-                    //                 mainAxisAlignment:
-                    //                     MainAxisAlignment.spaceEvenly,
-                    //                 children: [
-                    //                   Text(
-                    //                     DateFormat('MM-dd-yyyy')
-                    //                         .format(DateTime.now()),
-                    //                     style: TextStyle(
-                    //                         fontSize: 20, color: Colors.grey),
-                    //                   ),
-                    //                   Text(
-                    //                       DateFormat('hh:mm')
-                    //                           .format(DateTime.now()),
-                    //                       style: TextStyle(
-                    //                         color: Colors.blue,
-                    //                         fontWeight: FontWeight.bold,
-                    //                         fontSize: 25,
-                    //                       )),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-                   
                     Divider(
                       color: Colors.redAccent,
                       thickness: 2,
                     ),
+                    search(),
                     SchudleTable(
                         userId: widget.userId, machineId: widget.machineId),
                   ],
                 ),
               );
             }));
+  }
+
+  Widget search() {
+    if (type == 1) {
+      return Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          children: [
+            SizedBox(width: 10),
+            Container(
+                width: 130,
+                height: 40,
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  onTap: () {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  },
+                  decoration: new InputDecoration(
+                    labelText: "FG Part No.",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(5.0),
+                      borderSide: new BorderSide(),
+                    ),
+                    //fillColor: Colors.green
+                  ),
+                )),
+            SizedBox(width: 10),
+            Container(
+                width: 120,
+                height: 40,
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  onTap: () {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  },
+                  decoration: new InputDecoration(
+                    labelText: "Order Id.",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(5.0),
+                      borderSide: new BorderSide(),
+                    ),
+                    //fillColor: Colors.green
+                  ),
+                )),
+            SizedBox(width: 10),
+            Container(
+                width: 150,
+                height: 40,
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  onTap: () {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  },
+                  decoration: new InputDecoration(
+                    labelText: "Cable Part No.",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(5.0),
+                      borderSide: new BorderSide(),
+                    ),
+                    //fillColor: Colors.green
+                  ),
+                )),
+                SizedBox(width:10),
+                Container(
+                  child: ElevatedButton(
+                    onPressed: (){},
+                    child: Text('Search'),
+
+                  ),
+                )
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
 }
 
@@ -481,50 +386,50 @@ class _SchudleTableState extends State<SchudleTable> {
   void initState() {
     rowList.add(
       Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
+          orderId: "846478041",
+          fgpart: "367810109",
+          scheudleId: "945810107",
+          cablePart: "824923001",
           process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
+          cutLength: "2060",
+          color: "RED",
+          scheduledQty: "500 Pcs",
           status: "Not Completed"),
     );
     rowList.add(
       Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
+          orderId: "846478042",
+          fgpart: "367810110",
+          scheudleId: "945810108",
+          cablePart: "824923002",
           process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
+          cutLength: "2060",
+          color: "Green",
+          scheduledQty: "500 Pcs",
           status: "Completed"),
     );
     rowList.add(
       Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
+          orderId: "846478043",
+          fgpart: "367810111",
+          scheudleId: "945810109",
+          cablePart: "824923003",
           process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
+          cutLength: "2060",
+          color: "Black",
+          scheduledQty: "500 Pcs",
           status: "Pending"),
     );
     rowList.add(
       Schedule(
-          orderId: "100",
-          fgpart: "300",
-          scheudleId: "300",
-          cablePart: "200",
+          orderId: "846478043",
+          fgpart: "367810111",
+          scheudleId: "945810109",
+          cablePart: "824923003",
           process: "Wirecutting",
-          cutLength: "100",
-          color: "Red",
-          scheduledQty: "50",
+          cutLength: "2060",
+          color: "Black",
+          scheduledQty: "500 Pcs",
           status: "Completed"),
     );
 
@@ -565,7 +470,7 @@ class _SchudleTableState extends State<SchudleTable> {
         child: Center(
           child: Text(
             name,
-            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            style: TextStyle(color: Colors.grey[600], fontSize: 12),
           ),
         ),
       );
@@ -601,10 +506,13 @@ class _SchudleTableState extends State<SchudleTable> {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
-        height: 40,
+        height: 30,
         child: Center(
           child: Text(
             name,
+            style: TextStyle(
+              fontSize: 12
+            ),
           ),
         ),
       );
@@ -612,7 +520,7 @@ class _SchudleTableState extends State<SchudleTable> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 60,
+      height: 50,
       color: Colors.grey[100],
       child: Container(
         decoration: BoxDecoration(

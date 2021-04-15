@@ -402,7 +402,7 @@ class _MaterialPickState extends State<MaterialPick> {
                 focusNode: FocusNode(),
                 onKey: (event) => handleKey(event.data),
                 child: Container(
-                    height: 50,
+                    height: 40,
                     width: width * 0.25,
                     child: TextField(
                       controller: _partNumberController,
@@ -432,7 +432,7 @@ class _MaterialPickState extends State<MaterialPick> {
                 focusNode: FocusNode(),
                 onKey: (event) => handleKey(event.data),
                 child: Container(
-                    height: 50,
+                    height: 40,
                     width: width * 0.25,
                     child: TextField(
                       controller: _trackingNumberController,
@@ -451,55 +451,51 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                     )),
               ),
-              Container(
-                height: 50,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.event,
-                              color: Colors.grey,
-                              size: 25,
-                            ),
-                            onPressed: () async {
-                              final DateTime picked = await showDatePicker(
-                                context: context,
-                                initialDate: selectedDate, // Refer step 1
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2025),
-                              );
-                              if (picked != null && picked != selectedDate)
-                                setState(() {
-                                  selectedDate = picked;
-                                  Future.delayed(
-                                    const Duration(milliseconds: 100),
-                                    () {
-                                      SystemChannels.textInput
-                                          .invokeMethod('TextInput.hide');
-                                    },
-                                  );
-                                });
-                            }),
-                        Text(
-                          "${selectedDate.toLocal()}".split(' ')[0],
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ],
+              GestureDetector(
+                onTap: () async {
+                  final DateTime picked = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate, // Refer step 1
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2025),
+                  );
+                  if (picked != null && picked != selectedDate)
+                    setState(() {
+                      selectedDate = picked;
+                      Future.delayed(
+                        const Duration(milliseconds: 100),
+                        () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+                        },
+                      );
+                    });
+                },
+                child: Container(
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.event,
+                        color: Colors.grey,
+                        size: 25,
+                      ),
+                      Text(
+                        "${selectedDate.toLocal()}".split(' ')[0],
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               RawKeyboardListener(
                 focusNode: FocusNode(),
                 onKey: (event) => {},
                 child: Container(
-                  height: 50,
+                  height: 40,
                   width: width * 0.15,
                   child: TextField(
                     controller: _qtyController,
@@ -524,7 +520,7 @@ class _MaterialPickState extends State<MaterialPick> {
                 ),
               ),
               Container(
-                height: 50,
+                height: 40,
                 width: width * 0.18,
                 child: ElevatedButton(
                     style: ButtonStyle(
@@ -585,7 +581,7 @@ class _MaterialPickState extends State<MaterialPick> {
       child: Column(
         children: [
           // heading
-          SizedBox(height: 10),
+          SizedBox(height: 0),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -620,38 +616,62 @@ class _MaterialPickState extends State<MaterialPick> {
             if (!isCollapsedRawMaterial) {
               return Container(
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(2),
                 child: DataTable(
                     columns: const <DataColumn>[
                       DataColumn(
-                        label: Text('Part No.'),
+                        label: Text(
+                          'Part No.',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('Description'),
+                        label: Text(
+                          'Description',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('UOM'),
+                        label: Text(
+                          'UOM',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('REQ Qty/PC'),
+                        label: Text(
+                          'REQ Qty/PC',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('Total SCh Qty'),
+                        label: Text(
+                          'Total SCh Qty',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                     ],
                     rows: items
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
                                 e.partNo,
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
                                 e.description,
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 12),
                               )),
-                              DataCell(Text(e.uom)),
-                              DataCell(Text(e.oty)),
-                              DataCell(Text(e.schQty)),
+                              DataCell(Text(
+                                e.uom,
+                                style: TextStyle(fontSize: 12),
+                              )),
+                              DataCell(Text(
+                                e.oty,
+                                style: TextStyle(fontSize: 12),
+                              )),
+                              DataCell(Text(
+                                e.schQty,
+                                style: TextStyle(fontSize: 12),
+                              )),
                             ]))
                         .toList()),
               );
@@ -659,7 +679,6 @@ class _MaterialPickState extends State<MaterialPick> {
               return Container();
             }
           }()),
-          SizedBox(height: 20)
         ],
       ),
     );
@@ -670,6 +689,7 @@ class _MaterialPickState extends State<MaterialPick> {
     return Container(
       child: Column(
         children: [
+          scannerInput(),
           //Heading
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -700,13 +720,14 @@ class _MaterialPickState extends State<MaterialPick> {
               )
             ],
           ),
-          scannerInput(),
+
           // Table
           (() {
             if (!isCollapsedScannedMaterial) {
               return Container(
+                color: Colors.red,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(4),
                 child: DataTable(
                     columnSpacing: 20,
                     columns: const <DataColumn>[
