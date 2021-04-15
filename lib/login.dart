@@ -35,24 +35,9 @@ class _LoginScanState extends State<LoginScan> {
   }
 
   handleKey(RawKeyEventDataAndroid key) {
-    String _keyCode;
-    _keyCode = key.keyCode.toString(); //keyCode of key event(66 is return )
-    print("why does this run twice $_keyCode");
-    print(_textController.text);
     setState(() {
-      // userId = _textController.text;
-      // _textController.clear();
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
-    // if (userId != "") {
-    //   Navigator.push(
-    //     /',
-    //     MaterialPageRoute(
-    //         builder: (context) => MachineId(
-    //               userId: userId,
-    //             )),
-    //   );
-    // }
   }
 
   @override
@@ -128,6 +113,7 @@ class _LoginScanState extends State<LoginScan> {
                                   focusNode: FocusNode(),
                                   onKey: (event) => handleKey(event.data),
                                   child: TextField(
+                                    onSubmitted: (value){},
                                     onTap: (){
                                         SystemChannels.textInput.invokeMethod('TextInput.hide');
 

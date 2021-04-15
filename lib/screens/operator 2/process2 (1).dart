@@ -7,16 +7,17 @@ import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_print.dart';
 import 'package:molex/screens/operator/bin.dart';
 
-class ProcessPage extends StatefulWidget {
+class ProcessPage2 extends StatefulWidget {
   String userId;
   String machineId;
   Schedule schedule;
-  ProcessPage({this.machineId, this.userId, this.schedule});
+  String bundle;
+  ProcessPage2({this.machineId, this.userId, this.schedule});
   @override
-  _ProcessPageState createState() => _ProcessPageState();
+  _ProcessPage2State createState() => _ProcessPage2State();
 }
 
-class _ProcessPageState extends State<ProcessPage> {
+class _ProcessPage2State extends State<ProcessPage2> {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -574,14 +575,14 @@ class _DetailState extends State<Detail> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * 0.25,
-                          height: 480,
+                          height: 450,
                           child: Column(
                             children: [
                               //keypad and button
                               Row(
                                 children: [
                                   Container(
-                                    height: 193,
+                                    height: 192,
                                     child: Center(child: keypad()),
                                   ),
                                 ],
@@ -1035,7 +1036,7 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0),
       child: Container(
-        height: 70,
+        height: 80,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: Row(
@@ -1070,7 +1071,7 @@ class _DetailState extends State<Detail> {
       padding: const EdgeInsets.all(.0),
       child: Container(
         padding: const EdgeInsets.all(0.0),
-        height: 70,
+        height: 80,
         // width: MediaQuery.of(context).size.width * 0.32,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -1170,32 +1171,32 @@ class _DetailState extends State<Detail> {
                     children: [
                       Column(
                         children: [
-                          quantitycell("First Piece & Patrol", 10),
-                          quantitycell("Spare Changeover", 10),
-                          quantitycell("Crimp Height Setting	", 10),
-                          quantitycell("Resetting CFM Program	", 10),
-                          quantitycell("New Program Setting CVM/CFM	", 10),
-                          quantitycell("Air Pressure Low", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Applicator Changeover	", 10),
-                          quantitycell("Sink Height Adjustment", 10),
-                          quantitycell("Feeding Adjustment", 10),
-                          quantitycell("Applicator Position Setting", 10),
-                          quantitycell("Validation", 10),
-                          quantitycell("Cable Entangle	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Length Changeover", 10),
+                          quantitycell("Terminal Damage", 10),
+                          quantitycell("Window Gap	", 10),
+                          quantitycell("Cut-off Burr", 10),
+                          quantitycell("Terminal Copper Mark", 10),
                           quantitycell("Terminal Bend	", 10),
-                          quantitycell("Cut Off Burr Issue	", 10),
-                          quantitycell("CVM Error Correction	", 10),
-                          quantitycell("Cable Feeding Front Unit Problem	", 10),
-                          quantitycell("Drift Limit Reached", 10),
+                          quantitycell("Crimp On Insulation	", 10),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell("Cut-off Bend	", 10),
+                          quantitycell("Setup Rejections", 10),
+                          quantitycell("Terminal Twist", 10),
+                          quantitycell("Improper Crimping", 10),
+                          quantitycell("Insulation Damage	", 10),
+                          quantitycell("Terminal Back Out", 10),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell("Conductor Curling Up & Down", 10),
+                          quantitycell("Tab Bend / Tap Open	", 10),
+                          quantitycell("Exposure Strands		", 10),
+                          quantitycell("Insulation Curling Up & Down", 10),
+                          quantitycell("Bellmouth Less / More", 10),
+                          quantitycell("Strands Cut", 10),
                         ],
                       ),
                       Column(
@@ -1210,22 +1211,9 @@ class _DetailState extends State<Detail> {
                       ),
                       Column(
                         children: [
-                          quantitycell("Coil Changeover", 10),
-                          quantitycell("Bellmouth Adjustment", 10),
-                          quantitycell("Camera Setting", 10),
-                          quantitycell("CVM Error", 10),
-                          quantitycell("Length Variations	", 10),
-                          quantitycell("Power Failure	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Last Piece", 10),
-                          quantitycell("Curling Adjustment	", 10),
-                          quantitycell("Wire Feeding Adjustment	", 10),
-                          quantitycell("CVM Program Reloading	", 10),
-                          quantitycell("Sensor Not Working", 10),
-                          quantitycell("Preventive Maintenance", 10),
+                          quantitycell("Conductor Burr	", 10),
+                          quantitycell("Cut-Off Less / More	", 10),
+                          quantitycell("Brush Length Less / More", 10),
                         ],
                       ),
                     ],
@@ -1317,6 +1305,8 @@ class _DetailState extends State<Detail> {
                           quantitycell("Resetting CFM Program	", 10),
                           quantitycell("New Program Setting CVM/CFM", 10),
                           quantitycell("Air Pressure Low", 10),
+                          quantitycell("Machine Taken for Removing CVM", 10),
+                          quantitycell("No Material	", 10),
                         ],
                       ),
                       Column(
@@ -1327,6 +1317,8 @@ class _DetailState extends State<Detail> {
                           quantitycell("Applicator Position Setting	", 10),
                           quantitycell("Validation", 10),
                           quantitycell("CFA Crimping Fault", 10),
+                          quantitycell("Cable Entangle", 10),
+                          quantitycell("Job Ticket Issue", 10),
                         ],
                       ),
                       Column(
@@ -1337,6 +1329,8 @@ class _DetailState extends State<Detail> {
                           quantitycell("CVM Error Correction", 10),
                           quantitycell("Cable Feeding Front Unit Problem", 10),
                           quantitycell("Drift Limit Reached	", 10),
+                          quantitycell("Machine Slow", 10),
+                          quantitycell("No Plan for Machine", 10),
                         ],
                       ),
                       Column(
@@ -1347,6 +1341,8 @@ class _DetailState extends State<Detail> {
                           quantitycell("CFM Error", 10),
                           quantitycell("Supplier Taken for Maintenance", 10),
                           quantitycell("Roller Changeover", 10),
+                          quantitycell("Gripen Unit Problem", 10),
+                          quantitycell("Technician Not Available", 10),
                         ],
                       ),
                       Column(
@@ -1355,8 +1351,10 @@ class _DetailState extends State<Detail> {
                           quantitycell("Bellmouth Adjustment	", 10),
                           quantitycell("Camera Setting", 10),
                           quantitycell("CVM Error	", 10),
-                          quantitycell("Terminal Twist", 10),
                           quantitycell("Length Variations		", 10),
+                          quantitycell("Power Failure", 10),
+                          quantitycell("Machine Cleaning", 10),
+                          quantitycell("No Operator", 10),
                         ],
                       ),
                       Column(
@@ -1367,6 +1365,8 @@ class _DetailState extends State<Detail> {
                           quantitycell("CVM Program Reloading	", 10),
                           quantitycell("Sensor Not Working", 10),
                           quantitycell("Preventive Maintenance", 10),
+                          quantitycell("Meeting", 10),
+                          quantitycell("System Fault", 10),
                         ],
                       ),
                     ],
@@ -1403,10 +1403,8 @@ class _DetailState extends State<Detail> {
                             ),
                             child: Text("Accept and Continue Process"),
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pop(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProcessPage()),
                               );
                             }),
                       ),
@@ -1441,10 +1439,9 @@ class _DetailState extends State<Detail> {
                             ),
                             child: Text("Save & End Process"),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Bin()),
-                              );
+                              setState(() {
+                                rightside = 'complete';
+                              });
                             }),
                       ),
                     ),
@@ -1478,7 +1475,6 @@ class _DetailState extends State<Detail> {
               height: 20,
               width: 60,
               child: TextField(
-                readOnly: true,
                 style: TextStyle(fontSize: 12),
                 keyboardType: TextInputType.number,
                 decoration: new InputDecoration(
@@ -1621,10 +1617,10 @@ class _DetailState extends State<Detail> {
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
             boxes("FG Description", 'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
-            boxes("FG Scheduled", '29/03/2021'),
+            boxes("FG Scheduled Date", '29/03/2021'),
             boxes("Customer", 'APC COOLING'),
             boxes("Drg Rev", 'D'),
-            boxes("Cable #", '1'),
+            boxes("Cable Serial No", '1'),
             boxes('Tolerance ', '± 5 / ± 5'),
           ])),
     );
@@ -1776,7 +1772,7 @@ class _ProcessState extends State<Process> {
     // Terminal A
 
     if (widget.type == "Terminal A") {
-      return Row(
+      return Column(
         children: [
           GestureDetector(
             onTap: () {
@@ -1828,22 +1824,32 @@ class _ProcessState extends State<Process> {
             },
             child: Row(
               children: [
-                 Container(
-                  width: MediaQuery.of(context).size.width*0.23,
-                  child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        "Process Type : Terminal B",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                      )),
-                ),
-                     tableRow('Terminal A,Cutlength,Terminal B'),
+                Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      "Process Type : \nTerminal B",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    )),
               ],
             ),
           ),
+          (() {
+            if (expanded) {
+              return Column(
+                children: [
+                  Row(
+                    children: [],
+                  ),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          }()),
         ],
       );
     }
@@ -1867,7 +1873,6 @@ class _ProcessState extends State<Process> {
                         fontSize: 14,
                       ),
                     )),
-                tableRow('Terminal A,Cutlength,Terminal B'),
               ],
             ),
           ),
@@ -1878,6 +1883,7 @@ class _ProcessState extends State<Process> {
                   Row(
                     children: [],
                   ),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
                 ],
               );
             } else {
@@ -1908,7 +1914,6 @@ class _ProcessState extends State<Process> {
                         fontSize: 18,
                       ),
                     )),
-                tableRow('Terminal A,Cutlength,Terminal B'),
               ],
             ),
           ),
@@ -1919,6 +1924,7 @@ class _ProcessState extends State<Process> {
                   Row(
                     children: [],
                   ),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
                 ],
               );
             } else {
@@ -1939,19 +1945,15 @@ class _ProcessState extends State<Process> {
             },
             child: Row(
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width*0.23,
-                  child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        "Process Type : \n Preparation",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )),
-                ),
-                tableRow('Terminal A,Cutlength,Terminal B'),
+                Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      "Process Type : \n Preparation",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    )),
               ],
             ),
           ),
@@ -1962,6 +1964,7 @@ class _ProcessState extends State<Process> {
                   Row(
                     children: [],
                   ),
+                  tableRow('Terminal A,Cutlength,Terminal B'),
                 ],
               );
             } else {
@@ -1983,7 +1986,7 @@ class _ProcessState extends State<Process> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5.0),
       child: Container(
-        height: 70,
+        height: 80,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: Row(
@@ -2017,7 +2020,7 @@ class _ProcessState extends State<Process> {
     return Padding(
       padding: const EdgeInsets.all(.0),
       child: Container(
-        height: 70,
+        height: 80,
         // width: MediaQuery.of(context).size.width * 0.32,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),

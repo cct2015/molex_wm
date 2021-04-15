@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/navigation.dart';
+import 'package:molex/screens/visual%20Inspector/VIscan.dart';
 
 class HomeVisualInspector extends StatefulWidget {
   String userId;
@@ -17,6 +18,16 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
   List<ViSchedule> viScheduleList = [];
   @override
   void initState() {
+    schedule = Schedule(
+        orderId: "100",
+        fgpart: "300",
+        scheudleId: "300",
+        cablePart: "200",
+        process: "Wirecutting",
+        cutLength: "100",
+        color: "Red",
+        scheduledQty: "50",
+        status: "Not Completed");
     super.initState();
     viScheduleList.add(ViSchedule(
       orderId: "846478041",
@@ -56,67 +67,203 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.red[400],
-          title: const Text('Vi Dashboard'),
-       
-          actions: [
-            Container(
-              height: 40,
-              width: 150,
-              child: Column(
-                children: [
-                  SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        "User Id",
-                        style: TextStyle(color: Colors.grey[100]),
-                      )
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red,
+          ),
+          backwardsCompatibility: false,
+          leading: null,
+          title: const Text(
+            'Visual Inspector Dashboard',
+            style: TextStyle(color: Colors.red),
+          ),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+       actions: [
+          Container(
+            padding: EdgeInsets.all(5),
+            width: 130,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.schedule,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            "Shift A",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(1),
+            height: 40,
+            width: 130,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.person,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.userId,
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.settings,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.machineId ?? "",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Container(
+            width: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    Text(
+                      DateFormat('hh:mm').format(DateTime.now()),
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 23,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 10)
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NavPage(
+                      schedule: schedule,
+                      userId: widget.userId,
+                      machineId: widget.machineId,
+                    )),
+                  );
+
+            },
+                      child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.redAccent[100],
+                        offset: const Offset(
+                          2.0,
+                          2.0,
+                        ),
+                        blurRadius: 3.0,
+                        spreadRadius: 1.0,
+                      ),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0,
+                      ), //Bo
                     ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        widget.userId ?? "12210",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22),
-                      )
-                    ],
-                  )
-                ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/profile.jpg',
+                        ),
+                        fit: BoxFit.fill)),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NavPage(
-                              schedule: schedule,
-                              userId: widget.userId,
-                              machineId: widget.machineId,
-                            )),
-                  );
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/image/profile.jpg',
-                          ),
-                          fit: BoxFit.fill)),
-                ),
-              ),
-            )
-          ],
+          )
+        ],
+       
+        
         ),
         body: StreamBuilder(
             stream: Stream.periodic(const Duration(milliseconds: 2000)),
@@ -139,106 +286,8 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 250,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 4.0),
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[100],
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                100)),
-                                                  ),
-                                                  child: Center(
-                                                      child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal:
-                                                                    4.0),
-                                                        child: Icon(
-                                                          Icons.schedule,
-                                                          size: 18,
-                                                          color:
-                                                              Colors.redAccent,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        "Shift A",
-                                                        style: TextStyle(
-                                                            fontSize: 15),
-                                                      ),
-                                                    ],
-                                                  )),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 6),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10),
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey[100],
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(100)),
-                                                ),
-                                                child: Center(
-                                                    child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 4.0),
-                                                      child: Icon(
-                                                        Icons.settings,
-                                                        size: 18,
-                                                        color: Colors.redAccent,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      widget.machineId ?? "",
-                                                      style: TextStyle(
-                                                          fontSize: 16),
-                                                    ),
-                                                  ],
-                                                )),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                             
+                           
                                 //Select
                                 Container(
                                   child: Row(
@@ -314,33 +363,14 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                           ],
                                         ),
                                       ),
-                                    onPressed: (){},
+                                    onPressed: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Viscan( userId:'45642313',machineId:'45642313',schedule:schedule)),
+                                  );
+                                    },
                                   ),
                                 ),
                                 //Date
-                                Container(
-                                  width: 100,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        DateFormat('MM-dd-yyyy')
-                                            .format(DateTime.now()),
-                                        style: TextStyle(
-                                            fontSize: 12, color: Colors.grey),
-                                      ),
-                                      Text(
-                                          DateFormat('hh:mm')
-                                              .format(DateTime.now()),
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 23,
-                                          )),
-                                    ],
-                                  ),
-                                ),
+                             
                               ],
                             ),
                           ],

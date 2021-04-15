@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:molex/models/Schudule.dart';
-import 'package:molex/screens/operator%202/process2.dart';
-import 'package:molex/screens/operator%203/process3.dart';
-import 'package:molex/screens/operator/Home_material_coordinator.dart';
+import 'package:molex/screens/keyboardTest.dart';
+import 'package:molex/screens/operator%202/process/process2.dart';
+import 'package:molex/screens/operator%203/process/process3.dart';
+import 'package:molex/screens/Matrial_Cordinator/Home_material_coordinator.dart';
 import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
 
 class NavPage extends StatefulWidget {
@@ -64,7 +66,7 @@ class _NavPageState extends State<NavPage> {
               );
             },
           ),
-            ListTile(
+          ListTile(
             title: Text("Material Coordinator"),
             onTap: () {
               Navigator.push(
@@ -74,6 +76,15 @@ class _NavPageState extends State<NavPage> {
                           machineId: widget.machineId,
                           userId: widget.userId,
                         )),
+              );
+            },
+          ),
+          ListTile(
+            title: Text("Keyboard Test"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => KeyboardTest()),
               );
             },
           )

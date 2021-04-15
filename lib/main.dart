@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
-void main() {
-  SystemChrome.setEnabledSystemUIOverlays([]);
+import 'package:molex/screens/operator/Homepage.dart';
+
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SharedPreferences preferences = await SharedPreferences.getInstance(); //for recent search in search
+  // var logged = preferences.getString('login');
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  final String logged;
+  MyApp({this.logged});
   // This widget is the root of your application.
 
   @override
@@ -28,7 +34,12 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScan(),
+      home: 
+      // LoginScan(),
+      Homepage(
+        userId: "0123456789",
+        machineId: "0123456789",
+      )
     );
   }
 }

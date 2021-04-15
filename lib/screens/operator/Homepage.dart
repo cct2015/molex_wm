@@ -184,36 +184,49 @@ class _HomepageState extends State<Homepage> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.redAccent[100],
-                      offset: const Offset(
-                        2.0,
-                        2.0,
+          GestureDetector(
+            onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NavPage(
+                      schedule: schedule,
+                      userId: widget.userId,
+                      machineId: widget.machineId,
+                    )),
+                  );
+
+            },
+                      child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.redAccent[100],
+                        offset: const Offset(
+                          2.0,
+                          2.0,
+                        ),
+                        blurRadius: 3.0,
+                        spreadRadius: 1.0,
                       ),
-                      blurRadius: 3.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: const Offset(0.0, 0.0),
-                      blurRadius: 0.0,
-                      spreadRadius: 0.0,
-                    ), //Bo
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                  image: DecorationImage(
-                      image: AssetImage(
-                        'assets/image/profile.jpg',
-                      ),
-                      fit: BoxFit.fill)),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0,
+                      ), //Bo
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/profile.jpg',
+                        ),
+                        fit: BoxFit.fill)),
+              ),
             ),
           )
         ],

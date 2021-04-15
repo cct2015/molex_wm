@@ -378,7 +378,7 @@ class _BinState extends State<Bin> {
                         ),
                         //Scan Bin Button
                         Padding(
-                          padding: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Container(
                               child: ElevatedButton(
                             style: ElevatedButton.styleFrom(

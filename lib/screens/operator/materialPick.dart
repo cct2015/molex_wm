@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/materialItem.dart';
+import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/operator/process.dart';
 
 class MaterialPick extends StatefulWidget {
@@ -573,11 +574,6 @@ class _MaterialPickState extends State<MaterialPick> {
   }
 
   handleKey(RawKeyEventDataAndroid key) {
-    String _keyCode;
-    _keyCode = key.keyCode.toString(); //keyCode of key event(66 is return )
-    print("why does this run twice $_keyCode");
-    print(_partNumberController.text);
-
     setState(() {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
@@ -712,50 +708,74 @@ class _MaterialPickState extends State<MaterialPick> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.all(8),
                 child: DataTable(
-                    columnSpacing: 30,
+                    columnSpacing: 20,
                     columns: const <DataColumn>[
                       DataColumn(
-                        label: Text('PART NO.'),
+                        label: Text(
+                          'PART NO.',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('DESCRIPTION'),
+                        label: Text(
+                          'DESCRIPTION',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('TRACEBILITY'),
+                        label: Text(
+                          'TRACEBILITY',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('DATE'),
+                        label: Text(
+                          'DATE',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('UOM'),
+                        label: Text(
+                          'UOM',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('EXIST QTY	'),
+                        label: Text(
+                          'EXIST QTY	',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('SCANNED QTY'),
+                        label: Text(
+                          'SCANNED QTY',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                       DataColumn(
-                        label: Text('Delete'),
+                        label: Text(
+                          'Delete',
+                          style: TextStyle(fontSize: 12),
+                        ),
                       ),
                     ],
                     rows: selectditems
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
                                 e.partNo,
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
                                 e.description,
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
                                 e.partNo,
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
                                 e.date,
-                                style: TextStyle(fontSize: 15),
+                                style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(e.uom)),
                               DataCell(Text("25.5")),
@@ -781,7 +801,7 @@ class _MaterialPickState extends State<MaterialPick> {
     );
   }
 
- Widget tableHeading() {
+  Widget tableHeading() {
     double width = MediaQuery.of(context).size.width;
     Widget cell(String name, double d) {
       return Container(
