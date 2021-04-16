@@ -25,7 +25,7 @@ class _BinState extends State<Bin> {
   String binState;
   @override
   void initState() {
-      SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     binState = "Scan Bin";
     Future.delayed(
       const Duration(milliseconds: 100),
@@ -38,17 +38,7 @@ class _BinState extends State<Bin> {
 
   void checkBin(String bin) {
     setState(() {
-      if (bin?.length == 10) {
-        hasBin = true;
-        binState = "Scan Next bin";
-        _bundleFocus.requestFocus();
-        Future.delayed(
-          const Duration(milliseconds: 50),
-          () {
-            SystemChannels.textInput.invokeMethod('TextInput.hide');
-          },
-        );
-      }
+      if (bin?.length == 10) {}
     });
   }
 
@@ -60,20 +50,7 @@ class _BinState extends State<Bin> {
     super.dispose();
   }
 
-  void checkBundle(String bundle) {
-    setState(() {
-      if (bundle?.length == 10) {
-        hasBin = true;
-        bundleList.add(Bundle(
-          binId: binId,
-          bundleId: bundle,
-        ));
-        print(bundleList);
-        _bundleController.clear();
-        bundleId = null;
-      }
-    });
-  }
+  void checkBundle(String bundle) {}
 
   @override
   Widget build(BuildContext context) {
@@ -259,61 +236,10 @@ class _BinState extends State<Bin> {
                       ),
                       fit: BoxFit.fill)),
             ),
-          )
+          ),
+          Divider(thickness: 10, color: Colors.red)
         ],
       ),
-
-      // AppBar(
-      //   backgroundColor: Colors.red[400],
-      //   title: const Text('Bundle Transfer'),
-      //   backwardsCompatibility: true,
-      //   actions: [
-      //     Container(
-      //       height: 40,
-      //       width: 150,
-      //       child: Column(
-      //         children: [
-      //           SizedBox(height: 5),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.end,
-      //             children: [
-      //               Text(
-      //                 "User Id",
-      //                 style: TextStyle(color: Colors.grey[100]),
-      //               )
-      //             ],
-      //           ),
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.end,
-      //             children: [
-      //               Text(
-      //                 "12210",
-      //                 style:
-      //                     TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-      //               )
-      //             ],
-      //           )
-      //         ],
-      //       ),
-      //     ),
-      //     Padding(
-      //       padding: const EdgeInsets.all(10.0),
-      //       child: Container(
-      //         height: 40,
-      //         width: 40,
-      //         decoration: BoxDecoration(
-      //             color: Colors.white,
-      //             borderRadius: BorderRadius.all(Radius.circular(100)),
-      //             image: DecorationImage(
-      //                 image: AssetImage(
-      //                   'assets/image/profile.jpg',
-      //                 ),
-      //                 fit: BoxFit.fill)),
-      //       ),
-      //     )
-      //   ],
-      // ),
-
       backgroundColor: Colors.white,
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -327,194 +253,234 @@ class _BinState extends State<Bin> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width * 0.5,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 250,
-                          height: 100,
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: RawKeyboardListener(
-                              focusNode: FocusNode(),
-                              onKey: (event) => handleKey(event.data),
-                              child: TextField(
-                                  autofocus: true,
-                                  controller: _binController,
-                                  onTap: () {
-                                    SystemChannels.textInput
-                                        .invokeMethod('TextInput.hide');
-                                    if (binState == "Scan Next bin") {
-                                      _binController.clear();
-                                      setState(() {
-                                        binId = null;
-                                        binState = "Scan Bin";
-                                      });
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    setState(() {
-                                      binId = value;
-                                    });
-                                  },
-                                  decoration: new InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.redAccent,
-                                            width: 2.0),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.grey[400],
-                                            width: 2.0),
-                                      ),
-                                      hintText: 'Scan bin',
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 5.0))),
-                            ),
-                          ),
-                        ),
-                        //Scan Bin Button
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                              child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.red, // background
-                              onPrimary: Colors.white,
-                            ),
-                            child: Text(
-                              binState,
-                            ),
-                            onPressed: () {},
-                          )),
-                        ),
-                      ],
-                    ),
-
-                    //sCAN bUNDLE bUTTON
-                    (() {
-                      if (hasBin) {
-                        return Container(
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 250,
-                                height: 70,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: RawKeyboardListener(
-                                    focusNode: FocusNode(),
-                                    onKey: (event) => handleKey(event.data),
-                                    child: TextField(
-                                        focusNode: _bundleFocus,
-                                        controller: _bundleController,
-                                        onTap: () {
-                                          SystemChannels.textInput
-                                              .invokeMethod('TextInput.hide');
-                                        },
-                                        onChanged: (value) {
-                                          setState(() {
-                                            bundleId = value;
-                                          });
-                                        },
-                                        decoration: new InputDecoration(
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.redAccent,
-                                                  width: 2.0),
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey[400],
-                                                  width: 2.0),
-                                            ),
-                                            hintText: 'Scan bin',
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 5.0))),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Container(
-                                    child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.red, // background
-                                    onPrimary: Colors.white,
-                                  ),
-                                  child: Text(
-                                    'Scan Bundle',
-                                  ),
-                                  onPressed: () {},
-                                )),
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }()),
-                    (() {
-                      if (bundleList.length > 0) {
-                        return Row(
+                child: Padding(
+                  padding: const EdgeInsets.all(35.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
                           children: [
                             Container(
-                                width: 300,
-                                height: 100,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: 200,
-                                      height: 50,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.green, // background
-                                          onPrimary: Colors.white,
-                                        ),
-                                        onPressed: () {
+                              width: 250,
+                              height: 50,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: RawKeyboardListener(
+                                  focusNode: FocusNode(),
+                                  onKey: (event) => handleKey(event.data),
+                                  child: TextField(
+                                      autofocus: true,
+                                      controller: _binController,
+                                      onSubmitted: (value) {
+                                        hasBin = true;
+                                        binState = "Scan Next bin";
+                                        _bundleFocus.requestFocus();
+                                        Future.delayed(
+                                          const Duration(milliseconds: 50),
+                                          () {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          },
+                                        );
+                                      },
+                                      onTap: () {
+                                        SystemChannels.textInput
+                                            .invokeMethod('TextInput.hide');
+                                        if (binState == "Scan Next bin") {
+                                          _binController.clear();
                                           setState(() {
-                                            _bundleFocus.unfocus();
-                                            _binController.clear();
                                             binId = null;
+                                            binState = "Scan Bin";
                                           });
-
-                                          // _bundleFocus.unfocus();
-                                          _showConfirmationDialog();
-                                          // Future.delayed(
-                                          //   const Duration(milliseconds: 50),
-                                          //   () {
-                                          //     Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           Location()),
-                                          // );
-                                          //   },
-                                          // );
-                                          //
-                                        },
-                                        child: Text('Transfer Bundles'),
-                                      ),
-                                    ),
-                                  ],
-                                )),
+                                        }
+                                      },
+                                      onChanged: (value) {
+                                        setState(() {
+                                          binId = value;
+                                        });
+                                      },
+                                      decoration: new InputDecoration(
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.redAccent,
+                                                width: 2.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.grey[400],
+                                                width: 2.0),
+                                          ),
+                                          hintText: 'Scan bin',
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 5.0))),
+                                ),
+                              ),
+                            ),
+                            //Scan Bin Button
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                  child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 4,
+                                  primary: Colors.red, // background
+                                  onPrimary: Colors.white,
+                                ),
+                                child: Text(
+                                  binState,
+                                ),
+                                onPressed: () {},
+                              )),
+                            ),
                           ],
-                        );
-                      } else {
-                        return Container();
-                      }
-                    }())
-                  ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+
+                      //sCAN bUNDLE bUTTON
+                      (() {
+                        if (hasBin) {
+                          return Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 250,
+                                  height: 50,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: RawKeyboardListener(
+                                      focusNode: FocusNode(),
+                                      onKey: (event) => handleKey(event.data),
+                                      child: TextField(
+                                          focusNode: _bundleFocus,
+                                          controller: _bundleController,
+                                          onSubmitted: (value) {
+                                            setState(() {
+                                              hasBin = true;
+                                              bundleList.add(Bundle(
+                                                binId: binId,
+                                                bundleId: value,
+                                              ));
+                                              print(bundleList);
+                                              _bundleController.clear();
+                                              bundleId = null;
+                                            });
+                                          },
+                                          onTap: () {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                          },
+                                          onChanged: (value) {
+                                            setState(() {
+                                              bundleId = value;
+                                            });
+                                          },
+                                          decoration: new InputDecoration(
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.redAccent,
+                                                    width: 2.0),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey[400],
+                                                    width: 2.0),
+                                              ),
+                                              hintText: 'Scan Bundle',
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 5.0))),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: Container(
+                                      child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 4,
+                                      primary: Colors.red, // background
+                                      onPrimary: Colors.white,
+                                    ),
+                                    child: Text(
+                                      'Scan Bundle',
+                                    ),
+                                    onPressed: () {},
+                                  )),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }()),
+                      (() {
+                        if (bundleList.length > 0) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(
+                                    width: 300,
+                                    height: 100,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 200,
+                                          height: 50,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 4,
+                                              primary:
+                                                  Colors.green, // background
+                                              onPrimary: Colors.white,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                _bundleFocus.unfocus();
+                                                _binController.clear();
+                                                binId = null;
+                                              });
+
+                                              // _bundleFocus.unfocus();
+                                              _showConfirmationDialog();
+                                              // Future.delayed(
+                                              //   const Duration(milliseconds: 50),
+                                              //   () {
+                                              //     Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //       builder: (context) =>
+                                              //           Location()),
+                                              // );
+                                              //   },
+                                              // );
+                                              //
+                                            },
+                                            child: Text('Transfer Bundles'),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }())
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(height: 10),
-              dataTable(),
+              SizedBox(height: 15),
+              SingleChildScrollView(child: dataTable()),
             ]),
       ),
     );
@@ -529,6 +495,7 @@ class _BinState extends State<Bin> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             DataTable(
+              columnSpacing: 30,
               columns: const <DataColumn>[
                 DataColumn(
                   label: Text('No.'),
@@ -592,7 +559,7 @@ class _BinState extends State<Bin> {
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Transfer'),
+          title: Center(child: Text('Confirm Transfer')),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[],

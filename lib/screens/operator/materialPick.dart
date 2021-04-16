@@ -118,24 +118,7 @@ class _MaterialPickState extends State<MaterialPick> {
 
   void checkPartNumber(String pn) {
     setState(() {
-      if (pn?.length == 9) {
-        for (ItemPart ip in items) {
-          if (ip.partNo == pn) {
-            if (!selectditems.contains(ip)) {
-              // selectditems.add(ip);
-              // partNumber = null;
-              // _textController.clear();
-              _trackingNumber.requestFocus();
-              Future.delayed(
-                const Duration(milliseconds: 100),
-                () {
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
-                },
-              );
-            }
-          }
-        }
-      }
+      if (pn?.length == 9) {}
     });
   }
 
@@ -369,6 +352,11 @@ class _MaterialPickState extends State<MaterialPick> {
         height: 50,
         width: 200,
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: 4,
+            primary: Colors.green, // background
+            onPrimary: Colors.white,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -380,7 +368,12 @@ class _MaterialPickState extends State<MaterialPick> {
                       )),
             );
           },
-          child: Text('Proceed to Process'),
+          child: Text(
+            'Proceed to Process',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
@@ -408,6 +401,22 @@ class _MaterialPickState extends State<MaterialPick> {
                       controller: _partNumberController,
                       autofocus: true,
                       focusNode: _textNode,
+                      onSubmitted: (value) {
+                        for (ItemPart ip in items) {
+                          if (ip.partNo == value) {
+                            if (!selectditems.contains(ip)) {
+                              _trackingNumber.requestFocus();
+                              Future.delayed(
+                                const Duration(milliseconds: 100),
+                                () {
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                },
+                              );
+                            }
+                          }
+                        }
+                      },
                       onChanged: (value) {
                         setState(() {
                           partNumber = value;
@@ -436,6 +445,27 @@ class _MaterialPickState extends State<MaterialPick> {
                     width: width * 0.25,
                     child: TextField(
                       controller: _trackingNumberController,
+                      onSubmitted: (value) async {
+                        trackingNumber = value;
+                        final DateTime picked = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDate, // Refer step 1
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2025),
+                        );
+                        if (picked != null && picked != selectedDate)
+                          setState(() {
+                            selectedDate = picked;
+                            Future.delayed(
+                              const Duration(milliseconds: 100),
+                              () {
+                                SystemChannels.textInput
+                                    .invokeMethod('TextInput.hide');
+                              },
+                            );
+                          });
+                        _qty.requestFocus();
+                      },
                       onChanged: (value) {
                         trackingNumber = value;
                       },
@@ -725,7 +755,7 @@ class _MaterialPickState extends State<MaterialPick> {
           (() {
             if (!isCollapsedScannedMaterial) {
               return Container(
-                color: Colors.red,
+                color: Colors.transparent,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.all(4),
                 child: DataTable(

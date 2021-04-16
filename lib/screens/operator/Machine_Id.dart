@@ -45,26 +45,9 @@ class _MachineIdState extends State<MachineId> {
     super.dispose();
   }
 
-  checkId(String machineI) {
-    if (machineId?.length == 10) {
-      print("machineID:$machineId");
-      Future.delayed(Duration.zero, () async {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Homepage(
-                    userId: widget.userId,
-                    machineId: machineId,
-                  )),
-        );
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    checkId(machineId);
-
     return Scaffold(
         body: Stack(
       children: [
@@ -111,6 +94,19 @@ class _MachineIdState extends State<MachineId> {
                               height: 00,
                               width: 0,
                               child: TextField(
+                                onSubmitted: (value) {
+                                  print("machineID:$value");
+                                  Future.delayed(Duration.zero, () async {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage(
+                                                userId: widget.userId,
+                                                machineId: value,
+                                              )),
+                                    );
+                                  });
+                                },
                                 onTap: () {
                                   SystemChannels.textInput
                                       .invokeMethod('TextInput.hide');

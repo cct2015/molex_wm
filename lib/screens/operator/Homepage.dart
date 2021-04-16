@@ -4,6 +4,7 @@ import 'package:molex/models/Schudule.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/materialPick.dart';
+import 'package:molex/screens/widgets/time.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class Homepage extends StatefulWidget {
@@ -36,23 +37,36 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(
-            color: Colors.red,
-          ),
-          backwardsCompatibility: false,
-          leading: null,
-          title: const Text(
-            'DashBoard',
-            style: TextStyle(color: Colors.red),
-          ),
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          actions: [
-            //typeselect
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.red,
+        ),
+        backwardsCompatibility: false,
+        leading: null,
+        title: const Text(
+          'DashBoard',
+          style: TextStyle(color: Colors.red),
+        ),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          //typeselect
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                boxShadow: [
+                  //BoxShadow
+                  BoxShadow(
+                    color: Colors.grey[100],
+                    offset: const Offset(0.0, 0.0),
+                    blurRadius: 3.0,
+                    spreadRadius: 2.0,
+                  ), //BoxShadow
+                ],
+              ),
               child: ToggleSwitch(
                 minWidth: 80.0,
                 cornerRadius: 10.0,
@@ -72,212 +86,181 @@ class _HomepageState extends State<Homepage> {
                 },
               ),
             ),
-            //shift
-            Container(
-              padding: EdgeInsets.all(5),
-              width: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.schedule,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            Text(
-                              "Shift A",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
+          ),
+          //shift
+          Container(
+            padding: EdgeInsets.all(5),
+            width: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
                       ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            //machine Id
-            Container(
-              padding: EdgeInsets.all(1),
-              height: 40,
-              width: 130,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.person,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.schedule,
+                              size: 18,
+                              color: Colors.redAccent,
                             ),
-                            Text(
-                              widget.userId,
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.settings,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            Text(
-                              widget.machineId ?? "",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            //user Icon
-            Container(
-              width: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                      Text(
-                        DateFormat('hh:mm').format(DateTime.now()),
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 23,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 10)
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NavPage(
-                            schedule: schedule,
-                            userId: widget.userId,
-                            machineId: widget.machineId,
-                          )),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.redAccent[100],
-                          offset: const Offset(
-                            2.0,
-                            2.0,
                           ),
-                          blurRadius: 3.0,
-                          spreadRadius: 1.0,
-                        ),
-                        BoxShadow(
-                          color: Colors.white,
-                          offset: const Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0,
-                        ), //Bo
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/image/profile.jpg',
+                          Text(
+                            "Shift A",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
-                          fit: BoxFit.fill)),
-                ),
+                        ],
+                      )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          //machine Id
+          Container(
+            padding: EdgeInsets.all(1),
+            height: 40,
+            // width: 130,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.person,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.userId,
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.settings,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.machineId ?? "",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+
+          TimeDisplay(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NavPage(
+                          schedule: schedule,
+                          userId: widget.userId,
+                          machineId: widget.machineId,
+                        )),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.redAccent[100],
+                        offset: const Offset(
+                          2.0,
+                          2.0,
+                        ),
+                        blurRadius: 3.0,
+                        spreadRadius: 1.0,
+                      ),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0,
+                      ), //Bo
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/profile.jpg',
+                        ),
+                        fit: BoxFit.fill)),
               ),
-            )
+            ),
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Divider(
+              color: Colors.redAccent,
+              thickness: 2,
+            ),
+            search(),
+            SchudleTable(userId: widget.userId, machineId: widget.machineId),
           ],
         ),
-        body: StreamBuilder(
-            stream: Stream.periodic(const Duration(milliseconds: 2000)),
-            builder: (context, snapshot) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Divider(
-                      color: Colors.redAccent,
-                      thickness: 2,
-                    ),
-                    search(),
-                    SchudleTable(
-                        userId: widget.userId, machineId: widget.machineId),
-                  ],
-                ),
-              );
-            }));
+      ),
+    );
   }
 
   Widget search() {
@@ -350,14 +333,13 @@ class _HomepageState extends State<Homepage> {
                     //fillColor: Colors.green
                   ),
                 )),
-                SizedBox(width:10),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    child: Text('Search'),
-
-                  ),
-                )
+            SizedBox(width: 10),
+            Container(
+              child: ElevatedButton(
+                onPressed: () {},
+                child: Text('Search'),
+              ),
+            )
           ],
         ),
       );
@@ -510,9 +492,7 @@ class _SchudleTableState extends State<SchudleTable> {
         child: Center(
           child: Text(
             name,
-            style: TextStyle(
-              fontSize: 12
-            ),
+            style: TextStyle(fontSize: 12),
           ),
         ),
       );

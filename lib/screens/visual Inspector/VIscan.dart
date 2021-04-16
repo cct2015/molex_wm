@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -800,7 +802,9 @@ class _DetailState extends State<Detail> {
                           },
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context,  MaterialPageRoute(builder: (context) => Bin(userId:'121200',machineId: '6541531'),),);
+                      },
                       child: Text('Complete Inspection'),
                     ),
                        ]

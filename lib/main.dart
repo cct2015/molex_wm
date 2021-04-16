@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
 import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/screens/operator/Machine_Id.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // SharedPreferences preferences = await SharedPreferences.getInstance(); //for recent search in search
-  // var logged = preferences.getString('login');
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences =
+      await SharedPreferences.getInstance(); //for recent search in search
+  var logged = preferences.getString('login');
+  runApp(MyApp(logged: logged,));
 }
 
 class MyApp extends StatefulWidget {
@@ -29,17 +32,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: 
-      // LoginScan(),
-      Homepage(
-        userId: "0123456789",
-        machineId: "0123456789",
-      )
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: widget.logged==null
+            ? LoginScan()
+            : MachineId(
+                userId: "${widget.logged}",
+              ));
   }
 }

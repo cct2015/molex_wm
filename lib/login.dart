@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 // import 'package:lottie/lottie.dart';
 import 'package:molex/screens/operator/Machine_Id.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScan extends StatefulWidget {
   @override
@@ -42,26 +43,7 @@ class _LoginScanState extends State<LoginScan> {
 
   @override
   Widget build(BuildContext context) {
-    if (userId?.length==10) {
-      Fluttertoast.showToast(
-          msg: userId,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      Future.delayed(Duration.zero, () async {
-        print("userId:$userId");
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MachineId(
-                    userId: userId,
-                  )),
-        );
-      });
-    }
+    if (userId?.length == 10) {}
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -97,7 +79,6 @@ class _LoginScanState extends State<LoginScan> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            
                             Lottie.asset('assets/lottie/scan-barcode.json',
                                 width: 350, fit: BoxFit.cover),
                             Text(
@@ -113,10 +94,31 @@ class _LoginScanState extends State<LoginScan> {
                                   focusNode: FocusNode(),
                                   onKey: (event) => handleKey(event.data),
                                   child: TextField(
-                                    onSubmitted: (value){},
-                                    onTap: (){
-                                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                                    onSubmitted: (value) async {
+                                      Fluttertoast.showToast(
+                                          msg: value,
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                          preferences.setString('login', '$value');
 
+                                      print("userId:$value");
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MachineId(
+                                                  userId: value,
+                                                )),
+                                      );
+                                    },
+                                    onTap: () {
+                                      SystemChannels.textInput
+                                          .invokeMethod('TextInput.hide');
                                     },
                                     controller: _textController,
                                     autofocus: true,
