@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
+import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/operator/Machine_Id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences preferences =
-      await SharedPreferences.getInstance(); //for recent search in search
-  var logged = preferences.getString('login');
-  runApp(MyApp(logged: logged,));
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SharedPreferences preferences =
+  //     await SharedPreferences.getInstance(); //for recent search in search
+  // var logged = preferences.getString('login');
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -37,10 +38,10 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: widget.logged==null
-            ? LoginScan()
-            : MachineId(
-                userId: "${widget.logged}",
-              ));
+        home: Homepage(
+          userId: "012345678",
+          machineId: "012345678",
+        )
+    );
   }
 }

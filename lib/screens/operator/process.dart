@@ -1073,38 +1073,27 @@ class _DetailState extends State<Detail> {
         // width: MediaQuery.of(context).size.width * 0.32,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.grey[200],
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(.5),
+              blurRadius: 20.0, // soften the shadow
+              spreadRadius: 0.0, //extend the shadow
+              offset: Offset(
+                3.0, // Move to right 10  horizontally
+                3.0, // Move to bottom 10 Vertically
+              ),
+            )
+          ],
         ),
         child: Row(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.all(0.0),
-            //   child: Container(
-            //     height: 80.0,
-            //     width: 85,
-            //     decoration: BoxDecoration(
-            //       image: DecorationImage(
-            //         image: AssetImage('assets/image/terminal_a.jpg'),
-            //         fit: BoxFit.fill,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Container(
-            //   width: 8,
-            // ),
             Padding(
               padding: const EdgeInsets.all(1.0),
               child: Container(
                 // width: MediaQuery.of(context).size.width * 0.31,
                 child: Column(
                   children: [
-                    // Text(
-                    //   p1,
-                    //   style: TextStyle(
-                    //     fontSize: 10,
-                    //   ),
-                    // ),
                     Text(
                       p2,
                       style: TextStyle(
@@ -1614,18 +1603,35 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 30,
-          // color: Colors.grey[200],
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            boxes("FG Description", 'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
-            boxes("FG Scheduled", '29/03/2021'),
-            boxes("Customer", 'APC COOLING'),
-            boxes("Drg Rev", 'D'),
-            boxes("Cable #", '1'),
-            boxes('Tolerance ', '± 5 / ± 5'),
-          ])),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(.5),
+              blurRadius: 20.0, // soften the shadow
+              spreadRadius: 0.0, //extend the shadow
+              offset: Offset(
+                3.0, // Move to right 10  horizontally
+                3.0, // Move to bottom 10 Vertically
+              ),
+            )
+          ],
+        ),
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 40,
+            color: Colors.white,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  boxes("FG Description",
+                      'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
+                  boxes("FG Scheduled", '29/03/2021'),
+                  boxes("Customer", 'APC COOLING'),
+                  boxes("Drg Rev", 'D'),
+                  boxes("Cable #", '1'),
+                  boxes('Tolerance ', '± 5 / ± 5'),
+                ])),
+      ),
     );
   }
 
@@ -1637,7 +1643,7 @@ class _DetailState extends State<Detail> {
       padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: Colors.grey[200],
+        color: Colors.white,
       ),
       child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -1827,8 +1833,8 @@ class _ProcessState extends State<Process> {
             },
             child: Row(
               children: [
-                 Container(
-                  width: MediaQuery.of(context).size.width*0.23,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.23,
                   child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Text(
@@ -1839,7 +1845,7 @@ class _ProcessState extends State<Process> {
                         ),
                       )),
                 ),
-                     tableRow('Terminal A,Cutlength,Terminal B'),
+                tableRow('Terminal A,Cutlength,Terminal B'),
               ],
             ),
           ),
@@ -1939,7 +1945,7 @@ class _ProcessState extends State<Process> {
             child: Row(
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width*0.23,
+                  width: MediaQuery.of(context).size.width * 0.23,
                   child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Text(

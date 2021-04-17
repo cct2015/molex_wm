@@ -7,16 +7,16 @@ import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/operator/process.dart';
 
-class MaterialPick extends StatefulWidget {
+class MaterialPickOp2 extends StatefulWidget {
   Schedule schedule;
   String userId;
   String machineId;
-  MaterialPick({this.userId, this.machineId, this.schedule});
+  MaterialPickOp2({this.userId, this.machineId, this.schedule});
   @override
-  _MaterialPickState createState() => _MaterialPickState();
+  _MaterialPickOp2State createState() => _MaterialPickOp2State();
 }
 
-class _MaterialPickState extends State<MaterialPick> {
+class _MaterialPickOp2State extends State<MaterialPickOp2> {
   TextEditingController _partNumberController = new TextEditingController();
   TextEditingController _trackingNumberController = new TextEditingController();
   TextEditingController _qtyController = new TextEditingController();
@@ -63,34 +63,7 @@ class _MaterialPickState extends State<MaterialPick> {
       oty: "2.5",
       schQty: "1.7",
     ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538507",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538508",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538509",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538510",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
+
     super.initState();
   }
 
@@ -333,8 +306,13 @@ class _MaterialPickState extends State<MaterialPick> {
                 ),
                 tableHeading(),
                 buildDataRow(schedule: widget.schedule),
+
                 //Raw material
                 buildDataRawMaterial(),
+                Divider(
+                  color: Colors.red[100],
+                  thickness: 2,
+                ),
 
                 //Selected material
                 showSelectedRawMaterial(),
@@ -402,7 +380,6 @@ class _MaterialPickState extends State<MaterialPick> {
                       controller: _partNumberController,
                       autofocus: true,
                       focusNode: _textNode,
-                      
                       onSubmitted: (value) {
                         for (ItemPart ip in items) {
                           if (ip.partNo == value) {
@@ -605,7 +582,6 @@ class _MaterialPickState extends State<MaterialPick> {
     setState(() {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
-    
   }
 
   // to Show the raw material required

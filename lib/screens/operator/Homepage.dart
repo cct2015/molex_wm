@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/materialPick.dart';
 import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class Homepage extends StatefulWidget {
@@ -18,8 +19,11 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   Schedule schedule;
   int type = 0;
+  ApiService apiService ;
+
   @override
   void initState() {
+    apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
     schedule = Schedule(
@@ -257,6 +261,25 @@ class _HomepageState extends State<Homepage> {
             ),
             search(),
             SchudleTable(userId: widget.userId, machineId: widget.machineId),
+            FutureBuilder(
+              future: apiService.getScheduelarData(widget.machineId),
+              builder: (context,snapshot){
+                if(snapshot.hasData){
+                  return Container(
+                    height:100,
+                    width:200,
+                    color: Colors.red,
+                  );
+                }else{
+                  return Container(
+                    height:100,
+                    width:200,
+                    color: Colors.blue,
+                  );
+
+                }
+
+              })
           ],
         ),
       ),
@@ -428,7 +451,7 @@ class _SchudleTableState extends State<SchudleTable> {
           children: [
             tableHeading(),
             Container(
-              height: double.maxFinite,
+            
               // height: double.parse("${rowList.length*60}"),
               child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),

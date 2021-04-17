@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:molex/model_api/login_model.dart';
 // import 'package:lottie/lottie.dart';
 import 'package:molex/screens/operator/Machine_Id.dart';
+import 'package:molex/service/apiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScan extends StatefulWidget {
@@ -16,9 +18,13 @@ class _LoginScanState extends State<LoginScan> {
   TextEditingController _textController = new TextEditingController();
   FocusNode _textNode = new FocusNode();
   String userId;
+  ApiService apiService;
+  Employee employee;
 
   @override
   void initState() {
+    apiService = new ApiService();
+    employee = new Employee();
     _textNode.requestFocus();
     Future.delayed(
       const Duration(milliseconds: 10),
@@ -43,7 +49,6 @@ class _LoginScanState extends State<LoginScan> {
 
   @override
   Widget build(BuildContext context) {
-    if (userId?.length == 10) {}
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -92,30 +97,42 @@ class _LoginScanState extends State<LoginScan> {
                                 height: 0,
                                 child: RawKeyboardListener(
                                   focusNode: FocusNode(),
-                                  onKey: (event) => handleKey(event.data),
-                                  child: TextField(
-                                    onSubmitted: (value) async {
+                                  onKey: (event) async {
+                                    if (event
+                                        .isKeyPressed(LogicalKeyboardKey.tab)) {
                                       Fluttertoast.showToast(
-                                          msg: value,
+                                          msg: userId,
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
                                           backgroundColor: Colors.red,
                                           textColor: Colors.white,
                                           fontSize: 16.0);
-                                      SharedPreferences preferences =
-                                          await SharedPreferences.getInstance();
-                                          preferences.setString('login', '$value');
 
-                                      print("userId:$value");
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MachineId(
-                                                  userId: value,
-                                                )),
-                                      );
-                                    },
+                                      print("userId:$userId");
+                                       Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => MachineId(
+                                                      userId: userId,
+                                                    )),
+                                          );
+                                      apiService
+                                          .empIdlogin(userId)
+                                          .then((value) {
+                                        if (value != null) {
+                                         
+                                        }
+                                        else{
+
+                                        }
+                                      });
+                                    }
+                                    handleKey(event.data);
+                                  },
+                                  child: TextField(
+                                    textInputAction: TextInputAction.search,
+                                    onSubmitted: (value) async {},
                                     onTap: () {
                                       SystemChannels.textInput
                                           .invokeMethod('TextInput.hide');

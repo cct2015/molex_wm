@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/screens/keyboardTest.dart';
+import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
+import 'package:molex/screens/operator%203/Home_0p3.dart';
 import 'package:molex/screens/operator%203/process/process3.dart';
 import 'package:molex/screens/Matrial_Cordinator/Home_material_coordinator.dart';
 import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
@@ -33,8 +35,7 @@ class _NavPageState extends State<NavPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ProcessPage2(
-                          schedule: widget.schedule,
+                    builder: (context) => HomePageOp2(
                           machineId: widget.machineId,
                           userId: widget.userId,
                         )),
@@ -47,8 +48,7 @@ class _NavPageState extends State<NavPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Processpage3(
-                          schedule: widget.schedule,
+                    builder: (context) => HomePageOp3(
                           machineId: widget.machineId,
                           userId: widget.userId,
                         )),
@@ -92,9 +92,10 @@ class _NavPageState extends State<NavPage> {
           ),
           ListTile(
             title: Text("Log Out"),
-            onTap: () async{
-              SharedPreferences preferences = await SharedPreferences.getInstance();
-              preferences.setString('login', '');
+            onTap: () async {
+              SharedPreferences preferences =
+                  await SharedPreferences.getInstance();
+              preferences.remove('login');
 
               Navigator.pushReplacement(
                 context,

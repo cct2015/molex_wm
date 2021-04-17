@@ -4,20 +4,21 @@ import 'package:molex/models/Schudule.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator%202/materialPick2.dart';
+import 'package:molex/screens/operator%203/materialPick3.dart';
 import 'package:molex/screens/operator/materialPick.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class HomePageOp2 extends StatefulWidget {
+class HomePageOp3 extends StatefulWidget {
   String userId;
   String machineId;
-  HomePageOp2({this.userId, this.machineId});
+  HomePageOp3({this.userId, this.machineId});
   @override
-  _HomePageOp2State createState() => _HomePageOp2State();
+  _HomePageOp3State createState() => _HomePageOp3State();
 }
 
-class _HomePageOp2State extends State<HomePageOp2> {
+class _HomePageOp3State extends State<HomePageOp3> {
   Schedule schedule;
   int type = 0;
   ApiService apiService;
@@ -50,7 +51,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
         backwardsCompatibility: false,
         leading: null,
         title: const Text(
-          'DashBoard Operator 2',
+          'DashBoard Operator 3',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,
@@ -545,10 +546,12 @@ class _SchudleTableState extends State<SchudleTable> {
             cell(schedule.orderId, 0.1),
             //Fg Part
             cell(schedule.fgpart, 0.1),
+
             //Schudule ID
             cell(schedule.scheudleId, 0.1),
             //Cable Part
             cell(schedule.cablePart, 0.1),
+
             //Process
             cell(schedule.process, 0.07),
             // Cut length
@@ -588,7 +591,7 @@ class _SchudleTableState extends State<SchudleTable> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MaterialPickOp2(
+                                builder: (context) => MaterialPickOp3(
                                       schedule: schedule,
                                       userId: widget.userId,
                                       machineId: widget.machineId,

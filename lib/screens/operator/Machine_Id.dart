@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 
@@ -45,7 +46,6 @@ class _MachineIdState extends State<MachineId> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,24 +89,37 @@ class _MachineIdState extends State<MachineId> {
                       Container(
                         child: RawKeyboardListener(
                             focusNode: FocusNode(),
-                            onKey: (event) => handleKey(event.data),
+                            onKey: (event) {
+                              if (event.isKeyPressed(LogicalKeyboardKey.tab)) {
+                                Fluttertoast.showToast(
+                                    msg: machineId,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+
+                                print("machineID:$machineId");
+
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Homepage(
+                                            userId: widget.userId,
+                                            machineId: machineId,
+                                          )),
+                                );
+                              }
+
+                              handleKey(event.data);
+                            },
                             child: Container(
                               height: 00,
                               width: 0,
                               child: TextField(
-                                onSubmitted: (value) {
-                                  print("machineID:$value");
-                                  Future.delayed(Duration.zero, () async {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.userId,
-                                                machineId: value,
-                                              )),
-                                    );
-                                  });
-                                },
+                                textInputAction: TextInputAction.done,
+                                onSubmitted: (value) {},
                                 onTap: () {
                                   SystemChannels.textInput
                                       .invokeMethod('TextInput.hide');

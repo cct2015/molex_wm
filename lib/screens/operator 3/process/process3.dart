@@ -24,7 +24,7 @@ class _Processpage3State extends State<Processpage3> {
 
   }
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -1252,11 +1252,6 @@ class _DetailState extends State<Detail> {
                 iconEnabledColor: Colors.black,
 
                 items: <String>[
-                  'Terminal A,Cutlength,Terminal B',
-                  'Terminal A,Cutlength',
-                  'Cutlenght, Terminal B',
-                  'Terminal A',
-                  'Terminal B',
                   'Preparation',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -1547,7 +1542,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget loaduserpop() {
+  Widget loaduserpop() {  
     return Container(
       width: MediaQuery.of(context).size.width * 0.3,
       height: 150,
@@ -1832,7 +1827,9 @@ class _ProcessState extends State<Process> {
                 ],
               );
             } else {
-              return Container();
+              return Container(
+
+              );
             }
           }()),
         ],
