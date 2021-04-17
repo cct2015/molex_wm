@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
-import 'package:molex/screens/operator/process.dart';
+import 'package:molex/screens/operator/process/process.dart';
 
 class MaterialPickOp2 extends StatefulWidget {
   Schedule schedule;
