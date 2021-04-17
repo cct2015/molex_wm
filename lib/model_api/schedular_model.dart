@@ -58,6 +58,7 @@ class Schedule1 {
         this.currentTime,
         this.shiftType,
         this.currentDate,
+        this.machineName,
         this.orderId,
         this.finishedGoodsNumber,
         this.scheduledId,
@@ -69,18 +70,19 @@ class Schedule1 {
         this.process,
     });
 
-    String machineNumber;
+    dynamic machineNumber;
     dynamic currentTime;
     dynamic shiftType;
     dynamic currentDate;
-    int orderId;
-    int finishedGoodsNumber;
+    dynamic machineName;
+    String orderId;
+    String finishedGoodsNumber;
     String scheduledId;
-    dynamic cablePartNumber;
-    int length;
+    String cablePartNumber;
+    String length;
     String color;
-    int scheduledQuantity;
-    dynamic scheduledStatus;
+    String scheduledQuantity;
+    String scheduledStatus;
     String process;
 
     factory Schedule1.fromJson(Map<String, dynamic> json) => Schedule1(
@@ -88,12 +90,13 @@ class Schedule1 {
         currentTime: json["currentTime"],
         shiftType: json["shiftType"],
         currentDate: json["currentDate"],
+        machineName: json["machineName"],
         orderId: json["orderId"],
         finishedGoodsNumber: json["finishedGoodsNumber"],
         scheduledId: json["scheduledId"],
         cablePartNumber: json["cablePartNumber"],
         length: json["length"],
-        color: json["color"],
+        color:json["color"],
         scheduledQuantity: json["scheduledQuantity"],
         scheduledStatus: json["scheduledStatus"],
         process: json["process"],
@@ -104,6 +107,7 @@ class Schedule1 {
         "currentTime": currentTime,
         "shiftType": shiftType,
         "currentDate": currentDate,
+        "machineName": machineName,
         "orderId": orderId,
         "finishedGoodsNumber": finishedGoodsNumber,
         "scheduledId": scheduledId,
@@ -115,3 +119,4 @@ class Schedule1 {
         "process": process,
     };
 }
+

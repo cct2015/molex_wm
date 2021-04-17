@@ -4,6 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/service/apiService.dart';
 
 class MachineId extends StatefulWidget {
   String userId;
@@ -16,9 +17,11 @@ class _MachineIdState extends State<MachineId> {
   TextEditingController _textController = new TextEditingController();
   FocusNode _textNode = new FocusNode();
   String machineId;
+  ApiService apiService;
 
   @override
   void initState() {
+    apiService = new ApiService();
     _textNode.requestFocus();
     Future.delayed(
       const Duration(milliseconds: 100),
@@ -86,31 +89,74 @@ class _MachineIdState extends State<MachineId> {
                         'Scan Machine ',
                         style: TextStyle(color: Colors.grey, fontSize: 20),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              apiService
+                                  .getmachinedetails(machineId)
+                                  .then((value) {
+                                if (value != null) {
+                                  Fluttertoast.showToast(
+                                      msg: machineId,
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+
+                                  print("machineID:$machineId");
+
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Homepage(
+                                              userId: widget.userId,
+                                              machineId: machineId,
+                                            )),
+                                  );
+                                }else{
+                                  Fluttertoast.showToast(
+                                          msg: "Machine not Found",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                      setState(() {
+                                        machineId = null;
+                                        _textController.clear();
+                                      });
+
+                                }
+                              });
+                            },
+                            child: Text('Next'),
+                          ),
+                          SizedBox(width:10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Homepage(
+                                          userId: widget.userId,
+                                          machineId: machineId,
+                                        )),
+                              );
+                            },
+                            child: Text('Skip'),
+                          ),
+                        ],
+                      ),
                       Container(
                         child: RawKeyboardListener(
                             focusNode: FocusNode(),
                             onKey: (event) {
-                              if (event.isKeyPressed(LogicalKeyboardKey.tab)) {
-                                Fluttertoast.showToast(
-                                    msg: machineId,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-
-                                print("machineID:$machineId");
-
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Homepage(
-                                            userId: widget.userId,
-                                            machineId: machineId,
-                                          )),
-                                );
-                              }
+                              if (event.isKeyPressed(LogicalKeyboardKey.tab)) {}
 
                               handleKey(event.data);
                             },

@@ -91,6 +91,43 @@ class _LoginScanState extends State<LoginScan> {
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 20),
                             ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  apiService.empIdlogin(userId).then((value) {
+                                    if (value != null) {
+                                      Fluttertoast.showToast(
+                                          msg: "logged In",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                      print("userId:$userId");
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MachineId(
+                                                  userId: value.empId,
+                                                )),
+                                      );
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "login Failed",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                      setState(() {
+                                        userId = null;
+                                        _textController.clear();
+                                      });
+                                    }
+                                  });
+                                },
+                                child: Text('Login')),
                             Container(
                                 alignment: Alignment.center,
                                 width: 0,
@@ -101,31 +138,15 @@ class _LoginScanState extends State<LoginScan> {
                                     if (event
                                         .isKeyPressed(LogicalKeyboardKey.tab)) {
                                       Fluttertoast.showToast(
-                                          msg: userId,
+                                          msg: "Got tab at the end",
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
                                           backgroundColor: Colors.red,
                                           textColor: Colors.white,
                                           fontSize: 16.0);
-
-                                      print("userId:$userId");
-                                       Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => MachineId(
-                                                      userId: userId,
-                                                    )),
-                                          );
-                                      apiService
-                                          .empIdlogin(userId)
-                                          .then((value) {
-                                        if (value != null) {
-                                         
-                                        }
-                                        else{
-
-                                        }
+                                      setState(() {
+                                        userId = null;
                                       });
                                     }
                                     handleKey(event.data);

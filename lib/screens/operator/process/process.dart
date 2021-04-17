@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_print.dart';
 import 'package:molex/screens/operator/bin.dart';
@@ -10,7 +11,7 @@ import 'package:molex/screens/operator/process/generateLabel.dart';
 class ProcessPage extends StatefulWidget {
   String userId;
   String machineId;
-  Schedule schedule;
+  Schedule1 schedule;
   ProcessPage({this.machineId, this.userId, this.schedule});
   @override
   _ProcessPageState createState() => _ProcessPageState();
@@ -230,7 +231,7 @@ class _ProcessPageState extends State<ProcessPage> {
 }
 
 class Detail extends StatefulWidget {
-  Schedule schedule;
+  Schedule1 schedule;
   String rightside;
   String userId;
   String machineId;
@@ -249,7 +250,7 @@ class _DetailState extends State<Detail> {
   static const platform = const MethodChannel('com.impereal.dev/tsc');
   String _printerStatus = 'Waiting';
   bool orderDetailExpanded = true;
-  String rightside ='label';
+  String rightside = 'label';
   Future<void> _print() async {
     String printerStatus;
 
@@ -342,67 +343,108 @@ class _DetailState extends State<Detail> {
                     Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: Container(
+                        width: 300,
                         height: 100,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             //100% complete
-                            Container(
-                              height: 40,
-                              width: 250,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          side: BorderSide(
-                                              color: Colors.transparent))),
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      if (states
-                                          .contains(MaterialState.pressed))
-                                        return Colors.green[200];
-                                      return Colors.green[
-                                          500]; // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    rightside = 'complete';
-                                  });
-                                  // showModalBottomSheet(
-                                  //     isScrollControlled: true,
-                                  //     context: context,
-                                  //     builder: (BuildContext context) {
-                                  //       return productionReport();
-                                  //     });
-                                },
-                                child: Text(
-                                  "100% complete",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            //Partially complete button
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
+                                //Label
                                 Container(
                                   height: 40,
-                                  width: 125,
+                                  width: 145,
                                   child: ElevatedButton(
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(20.0),
+                                                  BorderRadius.circular(10.0),
+                                              side: BorderSide(
+                                                  color: Colors.transparent))),
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states
+                                              .contains(MaterialState.pressed))
+                                            return Colors.green[200];
+                                          return Colors.green[
+                                              500]; // Use the component's default.
+                                        },
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        rightside = "label";
+                                      });
+                                    },
+                                    child: Text(
+                                      "Label",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                                //100% complete
+                                Container(
+                                  height: 40,
+                                  width: 145,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              side: BorderSide(
+                                                  color: Colors.transparent))),
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states
+                                              .contains(MaterialState.pressed))
+                                            return Colors.green[200];
+                                          return Colors.green[
+                                              500]; // Use the component's default.
+                                        },
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        rightside = 'complete';
+                                      });
+                                    },
+                                    child: Text(
+                                      "100% complete",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                //partially complete
+                                Container(
+                                  height: 40,
+                                  width: 145,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
                                               side: BorderSide(
                                                   color: Colors.transparent))),
                                       backgroundColor: MaterialStateProperty
@@ -420,12 +462,6 @@ class _DetailState extends State<Detail> {
                                       setState(() {
                                         rightside = "partial";
                                       });
-                                      // showModalBottomSheet(
-                                      //     isScrollControlled: true,
-                                      //     context: context,
-                                      //     builder: (BuildContext context) {
-                                      //       return partialCompletion();
-                                      //     });
                                     },
                                     child: Text(
                                       "Partially  complete",
@@ -436,16 +472,17 @@ class _DetailState extends State<Detail> {
                                     ),
                                   ),
                                 ),
+                                //Reload material
                                 Container(
                                   height: 40,
-                                  width: 110,
+                                  width: 145,
                                   child: ElevatedButton(
                                       style: ButtonStyle(
                                         shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(20.0),
+                                                    BorderRadius.circular(10.0),
                                                 side: BorderSide(
                                                     color:
                                                         Colors.transparent))),
@@ -478,200 +515,6 @@ class _DetailState extends State<Detail> {
                         ),
                       ),
                     ),
-
-                    // Container(
-                    //     width: MediaQuery.of(context).size.width * 0.18,
-                    //     child: Row(
-                    //       children: [
-                    //         Column(
-                    //           children: [
-                    //             //text input
-                    //             Row(
-                    //               children: [
-                    //                 Padding(
-                    //                   padding: const EdgeInsets.all(0.0),
-                    //                   child: Container(
-                    //                     width:
-                    //                         MediaQuery.of(context).size.width *
-                    //                             0.18,
-                    //                     height: 40,
-                    //                     child: Padding(
-                    //                       padding: const EdgeInsets.all(4.0),
-                    //                       child: TextField(
-                    //                         textAlign: TextAlign.center,
-                    //                         controller: _qtyController,
-                    //                         keyboardType: TextInputType.number,
-                    //                         textAlignVertical:
-                    //                             TextAlignVertical.center,
-                    //                         style: TextStyle(fontSize: 12),
-                    //                         decoration: new InputDecoration(
-                    //                           contentPadding:
-                    //                               EdgeInsets.symmetric(
-                    //                                   horizontal: 3),
-                    //                           labelText: "Bundle Qty (SPQ)",
-                    //                           fillColor: Colors.white,
-                    //                           border: new OutlineInputBorder(
-                    //                             borderRadius:
-                    //                                 new BorderRadius.circular(
-                    //                                     5.0),
-                    //                             borderSide: new BorderSide(),
-                    //                           ),
-                    //                           //fillColor: Colors.green
-                    //                         ),
-                    //                       ),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //             // bundle and generate label button
-                    //             Container(
-                    //               child: Row(
-                    //                 mainAxisAlignment: MainAxisAlignment.center,
-                    //                 children: [
-                    //                   Container(
-                    //                     child: Row(
-                    //                       children: [
-                    //                         //Generate Label
-                    //                         Container(
-                    //                           height: 40,
-                    //                           width: MediaQuery.of(context)
-                    //                                   .size
-                    //                                   .width *
-                    //                               0.12,
-                    //                           padding:
-                    //                               const EdgeInsets.all(0.0),
-                    //                           child: Container(
-                    //                             color: Colors.transparent,
-                    //                             child: ElevatedButton(
-                    //                                 style: ButtonStyle(
-                    //                                   shape: MaterialStateProperty.all<
-                    //                                           RoundedRectangleBorder>(
-                    //                                       RoundedRectangleBorder(
-                    //                                           borderRadius:
-                    //                                               BorderRadius
-                    //                                                   .circular(
-                    //                                                       20.0),
-                    //                                           side: BorderSide(
-                    //                                               color: Colors
-                    //                                                   .transparent))),
-                    //                                   backgroundColor:
-                    //                                       MaterialStateProperty
-                    //                                           .resolveWith<
-                    //                                               Color>(
-                    //                                     (Set<MaterialState>
-                    //                                         states) {
-                    //                                       if (states.contains(
-                    //                                           MaterialState
-                    //                                               .pressed))
-                    //                                         return Colors
-                    //                                             .green[200];
-                    //                                       return Colors.green[
-                    //                                           500]; // Use the component's default.
-                    //                                     },
-                    //                                   ),
-                    //                                 ),
-                    //                                 // style: ButtonStyle(
-                    //                                 //   elevation: ,
-                    //                                 //   backgroundColor: MaterialStateProperty
-                    //                                 //       .resolveWith<Color>(
-                    //                                 //     (Set<MaterialState> states) {
-                    //                                 //       if (states
-                    //                                 //           .contains(MaterialState.pressed))
-                    //                                 //         return Colors.green[200];
-                    //                                 //       return Colors.green[
-                    //                                 //           500]; // Use the component's default.
-                    //                                 //     },
-                    //                                 //   ),
-                    //                                 // ),
-                    //                                 child: Text(
-                    //                                   'Generate Label',
-                    //                                   style: TextStyle(
-                    //                                     fontSize: 11,
-                    //                                     fontWeight:
-                    //                                         FontWeight.normal,
-                    //                                   ),
-                    //                                 ),
-                    //                                 onPressed: () {
-                    //                                   setState(() {
-                    //                                     rightside = "label";
-                    //                                   });
-                    //                                   // showModalBottomSheet(
-                    //                                   //     isScrollControlled:
-                    //                                   //         true,
-                    //                                   //     context: context,
-                    //                                   //     builder: (BuildContext
-                    //                                   //         context) {
-                    //                                   //       return tab2();
-                    //                                   //     });
-                    //                                 }),
-                    //                           ),
-                    //                         ),
-                    //                         SizedBox(width: 0),
-                    //                         //bundel button
-                    //                         Padding(
-                    //                           padding:
-                    //                               const EdgeInsets.all(5.0),
-                    //                           child: Container(
-                    //                             height: 40,
-                    //                             width: MediaQuery.of(context)
-                    //                                     .size
-                    //                                     .width *
-                    //                                 0.04,
-                    //                             child: ElevatedButton(
-                    //                                 style: ButtonStyle(
-                    //                                   shape: MaterialStateProperty
-                    //                                       .all<
-                    //                                           RoundedRectangleBorder>(
-                    //                                     RoundedRectangleBorder(
-                    //                                       borderRadius:
-                    //                                           BorderRadius
-                    //                                               .circular(
-                    //                                                   20.0),
-                    //                                       side: BorderSide(
-                    //                                           color: Colors
-                    //                                               .transparent),
-                    //                                     ),
-                    //                                   ),
-                    //                                   backgroundColor:
-                    //                                       MaterialStateProperty
-                    //                                           .resolveWith<
-                    //                                               Color>(
-                    //                                     (Set<MaterialState>
-                    //                                         states) {
-                    //                                       if (states.contains(
-                    //                                           MaterialState
-                    //                                               .pressed))
-                    //                                         return Colors
-                    //                                             .green[200];
-                    //                                       return Colors.red[
-                    //                                           500]; // Use the component's default.
-                    //                                     },
-                    //                                   ),
-                    //                                 ),
-                    //                                 onPressed: () {
-                    //                                   setState(() {
-                    //                                     rightside = "bundle";
-                    //                                   });
-                    //                                 },
-                    //                                 child: Text(
-                    //                                   bundlePrint.length
-                    //                                       .toString(),
-                    //                                   style: TextStyle(
-                    //                                       fontSize: 11),
-                    //                                 )),
-                    //                           ),
-                    //                         )
-                    //                       ],
-                    //                     ),
-                    //                   ),
-                    //                 ],
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       ],
-                    //     )),
                   ],
                 ),
               ]);
@@ -688,7 +531,6 @@ class _DetailState extends State<Detail> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          height: 480,
                           width: MediaQuery.of(context).size.width,
                           child: SingleChildScrollView(
                             child: (() {
@@ -886,114 +728,6 @@ class _DetailState extends State<Detail> {
   }
 
   //Material Sheet for qty
-
-  Widget rejectioncase() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('WireCutting & Crimping Rejection Cases',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                    ))
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          quantitycell("Nick mark", 10),
-                          quantitycell("Blade mark", 10),
-                          quantitycell("strip length", 10),
-                          quantitycell(" length variation", 10),
-                          quantitycell("end wire", 10),
-                          quantitycell("cable damage", 10),
-                          quantitycell("roller mark", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage / Bend", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Window Gap	", 10),
-                          quantitycell("Crimp On Insulation", 10),
-                          quantitycell("Bellmouth Less / More", 10),
-                          quantitycell("Cut-off Burr	", 10),
-                        ],
-                      ),
-                      Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            quantitycell(" Strands Cut", 10),
-                            quantitycell("Brush Length Less / More", 10),
-                            quantitycell(" Half Curling", 10),
-                            quantitycell("End terminal", 10),
-                            quantitycell("Setups Rejections", 10),
-                            quantitycell("Exposure Strands", 10),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 40,
-              child: Center(
-                child: Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    side:
-                                        BorderSide(color: Colors.transparent))),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.green[200];
-                            return Colors
-                                .green[500]; // Use the component's default.
-                          },
-                        ),
-                      ),
-                      child: Text("Save & Generate Label"),
-                      onPressed: () {
-                        setState(() {
-                          _print();
-                          bundlePrint.add(BundlePrint(
-                              bundelId: "0123456789", bundleQty: "100"));
-                          rightside = null;
-                        });
-                      }),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget terminal() {
     return Padding(
@@ -1489,7 +1223,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+   Widget buildDataRow({Schedule1 schedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {
@@ -1500,7 +1234,7 @@ class _DetailState extends State<Detail> {
             name,
             style: TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -1515,9 +1249,9 @@ class _DetailState extends State<Detail> {
         decoration: BoxDecoration(
           border: Border(
               left: BorderSide(
-            color: schedule.status == "Completed"
+            color: schedule.scheduledStatus == "Completed"
                 ? Colors.green
-                : schedule.status == "Pending"
+                : schedule.scheduledStatus == "Pending"
                     ? Colors.red
                     : Colors.green[100],
             width: 5,
@@ -1529,20 +1263,20 @@ class _DetailState extends State<Detail> {
             // orderId
             cell(schedule.orderId, 0.1),
             //Fg Part
-            cell(schedule.fgpart, 0.1),
+            cell(schedule.finishedGoodsNumber, 0.1),
             //Schudule ID
-            cell(schedule.scheudleId, 0.1),
+            cell(schedule.scheduledId, 0.1),
 
             //Cable Part
-            cell(schedule.cablePart, 0.1),
+            cell(schedule.cablePartNumber, 0.1),
             //Process
             cell(schedule.process, 0.1),
             // Cut length
-            cell(schedule.cutLength, 0.1),
+            cell(schedule.length, 0.1),
             //Color
             cell(schedule.color, 0.1),
             //Scheduled Qty
-            cell(schedule.scheduledQty, 0.1),
+            cell(schedule.scheduledQuantity, 0.1),
             //Schudule
             Container(
               width: width * 0.1,

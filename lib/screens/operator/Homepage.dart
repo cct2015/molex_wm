@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/screens/navigation.dart';
@@ -19,7 +20,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   Schedule schedule;
   int type = 0;
-  ApiService apiService ;
+  ApiService apiService;
 
   @override
   void initState() {
@@ -261,25 +262,6 @@ class _HomepageState extends State<Homepage> {
             ),
             search(),
             SchudleTable(userId: widget.userId, machineId: widget.machineId),
-            FutureBuilder(
-              future: apiService.getScheduelarData(widget.machineId),
-              builder: (context,snapshot){
-                if(snapshot.hasData){
-                  return Container(
-                    height:100,
-                    width:200,
-                    color: Colors.red,
-                  );
-                }else{
-                  return Container(
-                    height:100,
-                    width:200,
-                    color: Colors.blue,
-                  );
-
-                }
-
-              })
           ],
         ),
       ),
@@ -385,10 +367,13 @@ class SchudleTable extends StatefulWidget {
 
 class _SchudleTableState extends State<SchudleTable> {
   List<Schedule> rowList = [];
+  List<Schedule> schedualrList = [];
 
   List<DataRow> datarows = [];
+  ApiService apiService;
   @override
   void initState() {
+    apiService = new ApiService();
     rowList.add(
       Schedule(
           orderId: "846478041",
@@ -451,16 +436,37 @@ class _SchudleTableState extends State<SchudleTable> {
           children: [
             tableHeading(),
             Container(
-            
-              // height: double.parse("${rowList.length*60}"),
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: rowList.length,
-                  itemBuilder: (context, index) {
-                    return buildDataRow(schedule: rowList[index]);
-                  }),
-            ),
+
+                // height: double.parse("${rowList.length*60}"),
+                child: FutureBuilder(
+              future: apiService.getScheduelarData('EMU-m/c-006C'),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Schedule1> schedulelist = snapshot.data;
+                  return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: rowList.length,
+                      itemBuilder: (context, index) {
+                        return buildDataRow(schedule: schedulelist[index]);
+                      });
+                } else {
+                  return Container(
+                    height: 100,
+                    width: 100,
+                    color: Colors.red,
+                  );
+                }
+              },
+            )
+                //  ListView.builder(
+                //     physics: NeverScrollableScrollPhysics(),
+                //     shrinkWrap: true,
+                //     itemCount: rowList.length,
+                //     itemBuilder: (context, index) {
+                //       return buildDataRow(schedule: rowList[index]);
+                //     }),
+                ),
           ],
         ),
       ),
@@ -507,7 +513,7 @@ class _SchudleTableState extends State<SchudleTable> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({Schedule1 schedule, int c}) {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
@@ -529,9 +535,9 @@ class _SchudleTableState extends State<SchudleTable> {
         decoration: BoxDecoration(
           border: Border(
               left: BorderSide(
-            color: schedule.status == "Completed"
+            color: schedule.scheduledStatus == "Completed"
                 ? Colors.green
-                : schedule.status == "Pending"
+                : schedule.scheduledStatus == "Pending"
                     ? Colors.red
                     : Colors.green[100],
             width: 5,
@@ -543,29 +549,29 @@ class _SchudleTableState extends State<SchudleTable> {
             // orderId
             cell(schedule.orderId, 0.08),
             //Fg Part
-            cell(schedule.fgpart, 0.08),
+            cell(schedule.finishedGoodsNumber, 0.08),
 
             //Schudule ID
-            cell(schedule.scheudleId, 0.08),
+            cell(schedule.scheduledId, 0.08),
             //Cable Part
-            cell(schedule.cablePart, 0.1),
+            cell(schedule.cablePartNumber, 0.1),
 
             //Process
             cell(schedule.process, 0.08),
             // Cut length
-            cell(schedule.cutLength, 0.12),
+            cell(schedule.length, 0.12),
             //Color
             cell(schedule.color, 0.07),
             //Scheduled Qty
-            cell(schedule.scheduledQty, 0.1),
+            cell(schedule.scheduledQuantity, 0.1),
 
             //Status
-            cell(schedule.status, 0.1),
+            cell(schedule.scheduledStatus, 0.1),
             //Action
             Container(
               width: 100,
               child: Center(
-                child: schedule.status == "Completed"
+                child: schedule.scheduledStatus == "Completed"
                     ? Text("-")
                     : ElevatedButton(
                         style: ButtonStyle(
@@ -574,7 +580,7 @@ class _SchudleTableState extends State<SchudleTable> {
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed))
                                 return Colors.green;
-                              return schedule.status == "Pending"
+                              return schedule.scheduledStatus == "Pending"
                                   ? Colors.red
                                   : Colors
                                       .green; // Use the component's default.
@@ -593,9 +599,9 @@ class _SchudleTableState extends State<SchudleTable> {
                           );
                         },
                         child: Container(
-                            child: schedule.status == "Not Completed"
+                            child: schedule.scheduledStatus == "Not Completed"
                                 ? Text("Accept")
-                                : schedule.status == "Pending"
+                                : schedule.scheduledStatus == "Pending"
                                     ? Text('Continue')
                                     : Text('')),
                       ),

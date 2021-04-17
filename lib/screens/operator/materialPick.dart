@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/operator/process/process.dart';
 
 class MaterialPick extends StatefulWidget {
-  Schedule schedule;
+  Schedule1 schedule;
   String userId;
   String machineId;
   MaterialPick({this.userId, this.machineId, this.schedule});
@@ -895,7 +896,7 @@ class _MaterialPickState extends State<MaterialPick> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({Schedule1 schedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {
@@ -921,9 +922,9 @@ class _MaterialPickState extends State<MaterialPick> {
         decoration: BoxDecoration(
           border: Border(
               left: BorderSide(
-            color: schedule.status == "Completed"
+            color: schedule.scheduledStatus == "Completed"
                 ? Colors.green
-                : schedule.status == "Pending"
+                : schedule.scheduledStatus == "Pending"
                     ? Colors.red
                     : Colors.green[100],
             width: 5,
@@ -935,20 +936,20 @@ class _MaterialPickState extends State<MaterialPick> {
             // orderId
             cell(schedule.orderId, 0.1),
             //Fg Part
-            cell(schedule.fgpart, 0.1),
+            cell(schedule.finishedGoodsNumber, 0.1),
             //Schudule ID
-            cell(schedule.scheudleId, 0.1),
+            cell(schedule.scheduledId, 0.1),
 
             //Cable Part
-            cell(schedule.cablePart, 0.1),
+            cell(schedule.cablePartNumber, 0.1),
             //Process
             cell(schedule.process, 0.1),
             // Cut length
-            cell(schedule.cutLength, 0.1),
+            cell(schedule.length, 0.1),
             //Color
             cell(schedule.color, 0.1),
             //Scheduled Qty
-            cell(schedule.scheduledQty, 0.1),
+            cell(schedule.scheduledQuantity, 0.1),
             //Schudule
             Container(
               width: width * 0.1,

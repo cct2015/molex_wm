@@ -339,7 +339,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProcessPage(
+                  builder: (context) => ProcessPage2(
                         schedule: widget.schedule,
                         userId: widget.userId,
                         machineId: widget.machineId,
