@@ -451,11 +451,7 @@ class _SchudleTableState extends State<SchudleTable> {
                         return buildDataRow(schedule: schedulelist[index]);
                       });
                 } else {
-                  return Container(
-                    height: 100,
-                    width: 100,
-                    color: Colors.red,
-                  );
+                  return Center(child:SingleChildScrollView());
                 }
               },
             )

@@ -7,7 +7,6 @@ import 'package:molex/model_api/login_model.dart';
 // import 'package:lottie/lottie.dart';
 import 'package:molex/screens/operator/Machine_Id.dart';
 import 'package:molex/service/apiService.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScan extends StatefulWidget {
   @override

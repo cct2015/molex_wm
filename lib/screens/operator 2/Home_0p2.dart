@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/models/Schudule.dart';
-import 'package:intl/intl.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator%202/materialPick2.dart';
-import 'package:molex/screens/operator/materialPick.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class HomePageOp2 extends StatefulWidget {
-  String userId;
-  String machineId;
+  final  String userId;
+  final String machineId;
   HomePageOp2({this.userId, this.machineId});
   @override
   _HomePageOp2State createState() => _HomePageOp2State();
@@ -372,9 +370,9 @@ class _HomePageOp2State extends State<HomePageOp2> {
 }
 
 class SchudleTable extends StatefulWidget {
-  Schedule schedule;
-  String userId;
-  String machineId;
+  final Schedule schedule;
+  final String userId;
+  final String machineId;
   SchudleTable({Key key, this.schedule, this.userId, this.machineId})
       : super(key: key);
 

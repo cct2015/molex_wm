@@ -1165,7 +1165,6 @@ class _DetailState extends State<Detail> {
   }
 
   Widget box() {
-    double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
@@ -1283,7 +1282,7 @@ class _DetailState extends State<Detail> {
 }
 
 class Process extends StatefulWidget {
-  String type;
+ final String type;
   Process({this.type});
   @override
   _ProcessState createState() => _ProcessState();

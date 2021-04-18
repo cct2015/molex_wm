@@ -22,7 +22,6 @@ import 'package:molex/model_api/schedular_model.dart';
 class ApiService {
   // String baseUrl = 'http://192.168.1.19:8080/molaxapi/';
   String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
-
   Future<Employee> empIdlogin(String empId) async {
     String url = baseUrl + "molex/employee/get-employee-list?empId=$empId";
     var response = await http.get(url);

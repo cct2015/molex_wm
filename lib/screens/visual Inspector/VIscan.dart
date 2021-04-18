@@ -11,9 +11,9 @@ import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/operator/bin.dart';
 
 class Viscan extends StatefulWidget {
-  String userId;
-  String machineId;
-  Schedule schedule;
+ final String userId;
+ final String machineId;
+ final Schedule schedule;
 
   Viscan({this.userId, this.schedule, this.machineId});
   @override
@@ -248,7 +248,6 @@ class Detail extends StatefulWidget {
 
 class _DetailState extends State<Detail> {
   bool orderDetailExpanded = true;
-  String _chosenValue;
   bool scanTap = false;
   TextEditingController scanBundleController = new TextEditingController();
   FocusNode scanFocus = new FocusNode();
@@ -530,7 +529,6 @@ class _DetailState extends State<Detail> {
   }
 
   Widget box() {
-    double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(

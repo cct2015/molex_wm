@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/materialSchedule.dart';
-import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/bin.dart';
 
 class HomeMaterialCoordinator extends StatefulWidget {
-  String userId;
-  String machineId;
+  final  String userId;
+  final String machineId;
   HomeMaterialCoordinator({this.userId, this.machineId});
   @override
   _HomeMaterialCoordinatorState createState() =>
@@ -410,7 +409,7 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
 }
 
 class MaterialcordSchedule extends StatefulWidget {
-  List<MaterialSchedule> materialScheduleList;
+ final  List<MaterialSchedule> materialScheduleList;
   MaterialcordSchedule({this.materialScheduleList});
   @override
   _MaterialcordScheduleState createState() => _MaterialcordScheduleState();

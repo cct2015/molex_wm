@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/RequiredRawMaterialSave_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
-import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/materialItem.dart';
-import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/operator/process/process.dart';
 import 'package:molex/service/apiService.dart';
 
 class MaterialPick extends StatefulWidget {
-  Schedule1 schedule;
-  String userId;
-  String machineId;
+  final Schedule1 schedule;
+  final String userId;
+  final String machineId;
   MaterialPick({this.userId, this.machineId, this.schedule});
   @override
   _MaterialPickState createState() => _MaterialPickState();
@@ -114,8 +111,6 @@ class _MaterialPickState extends State<MaterialPick> {
 
   @override
   Widget build(BuildContext context) {
-        SystemChannels.textInput.invokeMethod('TextInput.show');
-    final node = FocusScope.of(context);
     if (!_qty.hasFocus && partNumber != null) {
       checkPartNumber(partNumber);
       checkTrackNumber(trackingNumber);
@@ -364,7 +359,7 @@ class _MaterialPickState extends State<MaterialPick> {
   }
 
   Widget scannerInput() {
-    final node = FocusScope.of(context);
+    
     double width = MediaQuery.of(context).size.width * 0.8;
     return Row(
       children: [
@@ -388,7 +383,7 @@ class _MaterialPickState extends State<MaterialPick> {
                       focusNode: _textNode,
                       onSubmitted: (value) {
                         for (RawMaterial ip in rawMaterial) {
-                          if (ip.partNunber == value) {
+                          if (ip.partNunber.toString() == value) {
                             if (!rawMaterial.contains(ip)) {
                               _trackingNumber.requestFocus();
                               Future.delayed(
@@ -552,7 +547,7 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                     ),
                     onPressed: () {
-                      print('rawmaterial = ${rawMaterial}');
+                      print('rawmaterial = $rawMaterial');
                       setState(() {
                         PostRawmaterial postRawmaterial = new PostRawmaterial();
                         for (RawMaterial ip in rawMaterial) {

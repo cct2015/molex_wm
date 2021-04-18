@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
-import 'package:molex/screens/operator/process/process.dart';
 
 class MaterialPickOp2 extends StatefulWidget {
-  Schedule schedule;
-  String userId;
-  String machineId;
+ final Schedule schedule;
+ final String userId;
+ final String machineId;
   MaterialPickOp2({this.userId, this.machineId, this.schedule});
   @override
   _MaterialPickOp2State createState() => _MaterialPickOp2State();
@@ -106,7 +104,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
   @override
   Widget build(BuildContext context) {
-    final node = FocusScope.of(context);
     if (!_qty.hasFocus && partNumber != null) {
       checkPartNumber(partNumber);
       checkTrackNumber(trackingNumber);
@@ -358,7 +355,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
   }
 
   Widget scannerInput() {
-    final node = FocusScope.of(context);
     double width = MediaQuery.of(context).size.width * 0.8;
     return Row(
       children: [

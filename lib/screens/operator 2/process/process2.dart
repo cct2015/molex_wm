@@ -4,13 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
-import 'package:molex/screens/operator%202/scanbundle.dart';
 import 'package:molex/screens/operator/bin.dart';
 
 class ProcessPage2 extends StatefulWidget {
-  String userId;
-  String machineId;
-  Schedule schedule;
+  final String userId;
+  final String machineId;
+ final Schedule schedule;
   ProcessPage2({this.machineId, this.userId, this.schedule});
   @override
   _ProcessPage2State createState() => _ProcessPage2State();
@@ -1353,7 +1352,6 @@ class _DetailState extends State<Detail> {
   }
 
   Widget box() {
-    double width = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(

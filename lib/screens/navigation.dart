@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:molex/login.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/screens/keyboardTest.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
-import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/operator%203/Home_0p3.dart';
-import 'package:molex/screens/operator%203/process/process3.dart';
 import 'package:molex/screens/Matrial_Cordinator/Home_material_coordinator.dart';
 import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavPage extends StatefulWidget {
-  String userId;
-  String machineId;
-  Schedule schedule;
+  final String userId;
+  final String machineId;
+  final Schedule schedule;
   NavPage({this.machineId, this.userId, this.schedule});
   @override
   _NavPageState createState() => _NavPageState();
