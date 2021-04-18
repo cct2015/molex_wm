@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/RequiredRawMaterialSave_model.dart';
+import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/operator/process/process.dart';
+import 'package:molex/service/apiService.dart';
 
 class MaterialPick extends StatefulWidget {
   Schedule1 schedule;
@@ -29,11 +32,15 @@ class _MaterialPickState extends State<MaterialPick> {
   String qty;
   List<ItemPart> items = [];
   List<ItemPart> selectditems = [];
+  List<PostRawmaterial> selectdItems = [];
+  List<RawMaterial> rawMaterial = [];
   bool isCollapsedRawMaterial = false;
   bool isCollapsedScannedMaterial = false;
   DateTime selectedDate = DateTime.now();
+  ApiService apiService;
   @override
   void initState() {
+    apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     _textNode.requestFocus();
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -64,34 +71,7 @@ class _MaterialPickState extends State<MaterialPick> {
       oty: "2.5",
       schQty: "1.7",
     ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538507",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538508",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538509",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538510",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
+
     super.initState();
   }
 
@@ -134,6 +114,7 @@ class _MaterialPickState extends State<MaterialPick> {
 
   @override
   Widget build(BuildContext context) {
+        SystemChannels.textInput.invokeMethod('TextInput.show');
     final node = FocusScope.of(context);
     if (!_qty.hasFocus && partNumber != null) {
       checkPartNumber(partNumber);
@@ -359,6 +340,8 @@ class _MaterialPickState extends State<MaterialPick> {
             onPrimary: Colors.white,
           ),
           onPressed: () {
+            //TODO ; post to api the scanneddItems in a loop
+
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -403,11 +386,10 @@ class _MaterialPickState extends State<MaterialPick> {
                       controller: _partNumberController,
                       autofocus: true,
                       focusNode: _textNode,
-                      
                       onSubmitted: (value) {
-                        for (ItemPart ip in items) {
-                          if (ip.partNo == value) {
-                            if (!selectditems.contains(ip)) {
+                        for (RawMaterial ip in rawMaterial) {
+                          if (ip.partNunber == value) {
+                            if (!rawMaterial.contains(ip)) {
                               _trackingNumber.requestFocus();
                               Future.delayed(
                                 const Duration(milliseconds: 100),
@@ -538,7 +520,10 @@ class _MaterialPickState extends State<MaterialPick> {
                     focusNode: _qty,
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
-                      qty = value;
+                      setState(() {
+                      qty = value;  
+                      });
+                      
                     },
                     decoration: new InputDecoration(
                       labelText: "Qty",
@@ -567,13 +552,30 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                     ),
                     onPressed: () {
+                      print('rawmaterial = ${rawMaterial}');
                       setState(() {
-                        for (ItemPart ip in items) {
-                          if (ip.partNo == partNumber) {
-                            if (!selectditems.contains(ip)) {
-                              ip.date =
-                                  "${selectedDate.toLocal()}".split(' ')[0];
-                              selectditems.add(ip);
+                        PostRawmaterial postRawmaterial = new PostRawmaterial();
+                        for (RawMaterial ip in rawMaterial) {
+                            // print(rawMaterial.contains(ip).toString());
+                          // print('loop ${ip.partNunber.toString()}');
+                          if (ip.partNunber == null) {
+                          
+                            if (!selectdItems.contains(ip)) {
+                               print('loop ${ip.partNunber.toString()}');
+                              postRawmaterial.date = selectedDate;
+                              postRawmaterial.description = ip.description;
+                              print('qty $qty');
+                              postRawmaterial.existQuantity = qty;
+                              postRawmaterial.orderId = widget.schedule.orderId;
+                              postRawmaterial.scheduledQuantity = int.parse(widget.schedule.scheduledQuantity);
+                              postRawmaterial.uom = ip.uom;
+                              postRawmaterial.cablePartNumber = partNumber!= null? int.parse(partNumber??'0'):null;
+                              postRawmaterial.machineNumber = "mac";//TODO machine number
+                              postRawmaterial.finishedGoodsNumber = int.parse(widget.schedule.finishedGoodsNumber);
+                              postRawmaterial.scheduledId = widget.schedule.scheduledId!=''?int.parse(widget.schedule.scheduledId):0;
+                              // "${selectedDate.toLocal()}".split(' ')[0];
+                              print(postRawmaterial);
+                              selectdItems.add(postRawmaterial);
                               _partNumberController.clear();
                               _trackingNumberController.clear();
                               _qtyController.clear();
@@ -606,116 +608,128 @@ class _MaterialPickState extends State<MaterialPick> {
     setState(() {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
-    
   }
 
   // to Show the raw material required
   Widget buildDataRawMaterial() {
-    return Container(
-      child: Column(
-        children: [
-          // heading
-          SizedBox(height: 0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(width: 20),
-              GestureDetector(
-                onTap: () {
-                  triggerCollapseRawMaterial();
-                },
-                child: Text(
-                  'Raw material Scan',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Row(
+    return FutureBuilder(
+        future: apiService.rawMaterial(
+            'EMU-m/c-006C', '367760913', '367870011', '1223445'),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<RawMaterial> rawmaterial = snapshot.data;
+
+            rawMaterial = snapshot.data;
+
+            return Container(
+              child: Column(
                 children: [
-                  IconButton(
-                      icon: isCollapsedRawMaterial
-                          ? Icon(Icons.keyboard_arrow_down)
-                          : Icon(Icons.keyboard_arrow_up),
-                      onPressed: () {
-                        triggerCollapseRawMaterial();
-                      })
-                ],
-              )
-            ],
-          ),
-          // scrollView
-          (() {
-            if (!isCollapsedRawMaterial) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(2),
-                child: DataTable(
-                    columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Part No.',
-                          style: TextStyle(fontSize: 12),
+                  // heading
+                  SizedBox(height: 0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 20),
+                      GestureDetector(
+                        onTap: () {
+                          triggerCollapseRawMaterial();
+                        },
+                        child: Text(
+                          'Raw material Scan',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                      DataColumn(
-                        label: Text(
-                          'Description',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'UOM',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'REQ Qty/PC',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Total SCh Qty',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                              icon: isCollapsedRawMaterial
+                                  ? Icon(Icons.keyboard_arrow_down)
+                                  : Icon(Icons.keyboard_arrow_up),
+                              onPressed: () {
+                                triggerCollapseRawMaterial();
+                              })
+                        ],
+                      )
                     ],
-                    rows: items
-                        .map((e) => DataRow(cells: <DataCell>[
-                              DataCell(Text(
-                                e.partNo,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.description,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.uom,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.oty,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.schQty,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                            ]))
-                        .toList()),
-              );
-            } else {
-              return Container();
-            }
-          }()),
-        ],
-      ),
-    );
+                  ),
+                  // scrollView
+                  (() {
+                    if (!isCollapsedRawMaterial) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.all(2),
+                        child: DataTable(
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                label: Text(
+                                  'Part No.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Description',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'UOM',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'REQ Qty/PC',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Total SCh Qty',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ],
+                            rows: rawmaterial
+                                .map((e) => DataRow(cells: <DataCell>[
+                                      DataCell(Text(
+                                        e.partNunber.toString(),
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.description,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.uom,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.requireQuantity.toString(),
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.toatalScheduleQuantity.toString(),
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                    ]))
+                                .toList()),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }()),
+                ],
+              ),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
 
   // To Show the scanned products with quantity
@@ -814,10 +828,10 @@ class _MaterialPickState extends State<MaterialPick> {
                         ),
                       ),
                     ],
-                    rows: selectditems
+                    rows: selectdItems
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
-                                e.partNo,
+                                e.cablePartNumber.toString(),
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
@@ -825,23 +839,26 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.partNo,
+                                e.cablePartNumber.toString(),
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.date,
+                                "${e.date.toLocal()}".split(' ')[0],
                                 style: TextStyle(fontSize: 12),
                               )),
-                              DataCell(Text(e.uom)),
-                              DataCell(Text("25.5")),
-                              DataCell(Text("30")),
+                              DataCell(Text(e.uom.toString())),
+                              DataCell(Text(e.existQuantity.toString())),
+                              DataCell(Text(e.scheduledQuantity.toString())),
                               DataCell(IconButton(
                                 icon: Icon(
                                   Icons.delete,
                                   color: Colors.red,
                                 ),
                                 onPressed: () {
-                                  selectditems.remove(e);
+                                  setState(() {
+                                           selectdItems.remove(e);
+                                  });
+                           
                                 },
                               )),
                             ]))

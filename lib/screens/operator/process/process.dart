@@ -6,7 +6,9 @@ import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_print.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/operator/process/100complete.dart';
 import 'package:molex/screens/operator/process/generateLabel.dart';
+import 'package:molex/screens/operator/process/partiallyComplete.dart';
 
 class ProcessPage extends StatefulWidget {
   String userId;
@@ -344,7 +346,7 @@ class _DetailState extends State<Detail> {
                       padding: const EdgeInsets.all(1.0),
                       child: Container(
                         width: 300,
-                        height: 100,
+                        height: 96,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -354,7 +356,7 @@ class _DetailState extends State<Detail> {
                               children: [
                                 //Label
                                 Container(
-                                  height: 40,
+                                  // height: 40,
                                   width: 145,
                                   child: ElevatedButton(
                                     style: ButtonStyle(
@@ -384,7 +386,7 @@ class _DetailState extends State<Detail> {
                                     child: Text(
                                       "Label",
                                       style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -393,7 +395,7 @@ class _DetailState extends State<Detail> {
 
                                 //100% complete
                                 Container(
-                                  height: 40,
+                                  // height: 40,
                                   width: 145,
                                   child: ElevatedButton(
                                     style: ButtonStyle(
@@ -423,7 +425,7 @@ class _DetailState extends State<Detail> {
                                     child: Text(
                                       "100% complete",
                                       style: TextStyle(
-                                        fontSize: 15,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -436,7 +438,7 @@ class _DetailState extends State<Detail> {
                               children: [
                                 //partially complete
                                 Container(
-                                  height: 40,
+                                  // height: 40,
                                   width: 145,
                                   child: ElevatedButton(
                                     style: ButtonStyle(
@@ -444,7 +446,7 @@ class _DetailState extends State<Detail> {
                                               RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(10.0),
+                                                  BorderRadius.circular(13.0),
                                               side: BorderSide(
                                                   color: Colors.transparent))),
                                       backgroundColor: MaterialStateProperty
@@ -464,9 +466,9 @@ class _DetailState extends State<Detail> {
                                       });
                                     },
                                     child: Text(
-                                      "Partially  complete",
+                                      "Partially  Complete",
                                       style: TextStyle(
-                                        fontSize: 10,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -474,7 +476,7 @@ class _DetailState extends State<Detail> {
                                 ),
                                 //Reload material
                                 Container(
-                                  height: 40,
+                                  // height: 40,
                                   width: 145,
                                   child: ElevatedButton(
                                       style: ButtonStyle(
@@ -500,7 +502,7 @@ class _DetailState extends State<Detail> {
                                       child: Text(
                                         'Reload Material',
                                         style: TextStyle(
-                                          fontSize: 10,
+                                          fontSize: 13,
                                           fontWeight: FontWeight.normal,
                                         ),
                                       ),
@@ -539,9 +541,9 @@ class _DetailState extends State<Detail> {
                               } else if (rightside == "label") {
                                 return GenerateLabel();
                               } else if (rightside == "complete") {
-                                return productionReport();
+                                return FullyComplete();
                               } else if (rightside == "partial") {
-                                return partialCompletion();
+                                return PartiallyComplete();
                               } else if (rightside == "bundle") {
                                 return bundleTable();
                               }
@@ -828,142 +830,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget productionReport() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Production Report',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
-                    ))
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          quantitycell("First Piece & Patrol", 10),
-                          quantitycell("Spare Changeover", 10),
-                          quantitycell("Crimp Height Setting	", 10),
-                          quantitycell("Resetting CFM Program	", 10),
-                          quantitycell("New Program Setting CVM/CFM	", 10),
-                          quantitycell("Air Pressure Low", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Applicator Changeover	", 10),
-                          quantitycell("Sink Height Adjustment", 10),
-                          quantitycell("Feeding Adjustment", 10),
-                          quantitycell("Applicator Position Setting", 10),
-                          quantitycell("Validation", 10),
-                          quantitycell("Cable Entangle	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Length Changeover", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Cut Off Burr Issue	", 10),
-                          quantitycell("CVM Error Correction	", 10),
-                          quantitycell("Cable Feeding Front Unit Problem	", 10),
-                          quantitycell("Drift Limit Reached", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Changeover", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Extrusion Burr Issue", 10),
-                          quantitycell("CFM Error", 10),
-                          quantitycell("Supplier Taken for Maintenance", 10),
-                          quantitycell("Roller Changeover	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Coil Changeover", 10),
-                          quantitycell("Bellmouth Adjustment", 10),
-                          quantitycell("Camera Setting", 10),
-                          quantitycell("CVM Error", 10),
-                          quantitycell("Length Variations	", 10),
-                          quantitycell("Power Failure	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Last Piece", 10),
-                          quantitycell("Curling Adjustment	", 10),
-                          quantitycell("Wire Feeding Adjustment	", 10),
-                          quantitycell("CVM Program Reloading	", 10),
-                          quantitycell("Sensor Not Working", 10),
-                          quantitycell("Preventive Maintenance", 10),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 50,
-              child: Center(
-                child: Container(
-                  height: 45,
-                  width: 250,
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    side:
-                                        BorderSide(color: Colors.transparent))),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.green[200];
-                            return Colors
-                                .green[500]; // Use the component's default.
-                          },
-                        ),
-                      ),
-                      child: Text("Save & Complete Process"),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Bin(
-                                    userId: widget.userId,
-                                    machineId: widget.machineId,
-                                  )),
-                        );
-                      }),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
+ 
   Widget partialCompletion() {
     return Container(
       decoration: BoxDecoration(

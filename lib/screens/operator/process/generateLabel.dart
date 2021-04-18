@@ -16,7 +16,8 @@ class GenerateLabel extends StatefulWidget {
 
 class _GenerateLabelState extends State<GenerateLabel> {
   // Text Editing Controller for all rejection cases
-
+  
+  // All Quantity Contolle
   TextEditingController endWireController = new TextEditingController();
   FocusNode endWireFocus = new FocusNode();
   TextEditingController cableDamageController = new TextEditingController();
