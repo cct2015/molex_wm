@@ -336,16 +336,25 @@ class _MaterialPickState extends State<MaterialPick> {
           ),
           onPressed: () {
             //TODO ; post to api the scanneddItems in a loop
+            // for(PostRawmaterial postRawmaterial in selectdItems){
+            //   apiService.postRawmaterial(postRawmaterial);
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProcessPage(
-                        schedule: widget.schedule,
-                        userId: widget.userId,
-                        machineId: widget.machineId,
-                      )),
-            );
+            // }
+            apiService.postRawmaterial(selectdItems).then((value) {
+              if (value) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProcessPage(
+                            schedule: widget.schedule,
+                            userId: widget.userId,
+                            machineId: widget.machineId,
+                          )),
+                );
+              } else {
+                
+              }
+            });
           },
           child: Text(
             'Proceed to Process',
@@ -359,7 +368,6 @@ class _MaterialPickState extends State<MaterialPick> {
   }
 
   Widget scannerInput() {
-    
     double width = MediaQuery.of(context).size.width * 0.8;
     return Row(
       children: [
@@ -516,9 +524,8 @@ class _MaterialPickState extends State<MaterialPick> {
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       setState(() {
-                      qty = value;  
+                        qty = value;
                       });
-                      
                     },
                     decoration: new InputDecoration(
                       labelText: "Qty",
@@ -551,23 +558,31 @@ class _MaterialPickState extends State<MaterialPick> {
                       setState(() {
                         PostRawmaterial postRawmaterial = new PostRawmaterial();
                         for (RawMaterial ip in rawMaterial) {
-                            // print(rawMaterial.contains(ip).toString());
+                          // print(rawMaterial.contains(ip).toString());
                           // print('loop ${ip.partNunber.toString()}');
                           if (ip.partNunber == null) {
-                          
                             if (!selectdItems.contains(ip)) {
-                               print('loop ${ip.partNunber.toString()}');
+                              print('loop ${ip.partNunber.toString()}');
                               postRawmaterial.date = selectedDate;
                               postRawmaterial.description = ip.description;
                               print('qty $qty');
                               postRawmaterial.existQuantity = qty;
                               postRawmaterial.orderId = widget.schedule.orderId;
-                              postRawmaterial.scheduledQuantity = int.parse(widget.schedule.scheduledQuantity);
+                              postRawmaterial.scheduledQuantity =
+                                  int.parse(widget.schedule.scheduledQuantity);
                               postRawmaterial.uom = ip.uom;
-                              postRawmaterial.cablePartNumber = partNumber!= null? int.parse(partNumber??'0'):null;
-                              postRawmaterial.machineNumber = "mac";//TODO machine number
-                              postRawmaterial.finishedGoodsNumber = int.parse(widget.schedule.finishedGoodsNumber);
-                              postRawmaterial.scheduledId = widget.schedule.scheduledId!=''?int.parse(widget.schedule.scheduledId):0;
+                              postRawmaterial.cablePartNumber =
+                                  partNumber != null
+                                      ? int.parse(partNumber ?? '0')
+                                      : null;
+                              postRawmaterial.machineNumber =
+                                  "mac"; //TODO machine number
+                              postRawmaterial.finishedGoodsNumber = int.parse(
+                                  widget.schedule.finishedGoodsNumber);
+                              postRawmaterial.scheduledId =
+                                  widget.schedule.scheduledId != ''
+                                      ? int.parse(widget.schedule.scheduledId)
+                                      : 0;
                               // "${selectedDate.toLocal()}".split(' ')[0];
                               print(postRawmaterial);
                               selectdItems.add(postRawmaterial);
@@ -851,9 +866,8 @@ class _MaterialPickState extends State<MaterialPick> {
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                           selectdItems.remove(e);
+                                    selectdItems.remove(e);
                                   });
-                           
                                 },
                               )),
                             ]))

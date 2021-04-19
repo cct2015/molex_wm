@@ -31,13 +31,12 @@ dependencies:
   flutter_barcode_scanner: ^1.0.2
   fluttertoast: ^8.0.3
   intl: ^0.17.0
-  pda_scanner: ^0.2.9
   lottie: ^1.0.0
   path_provider: ^2.0.1
   flutter_speed_dial: ^3.0.5
   shared_preferences: ^2.0.5
   toggle_switch: ^0.1.9
-  http: ^0.12.2
+  http: ^0.13.1
   
 
 

@@ -25,6 +25,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     apiService = new ApiService();
+    apiService.getScheduelarData('EMU-m/c-006C');
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
     schedule = Schedule(
@@ -366,7 +367,6 @@ class SchudleTable extends StatefulWidget {
 }
 
 class _SchudleTableState extends State<SchudleTable> {
-  List<Schedule> rowList = [];
   List<Schedule> schedualrList = [];
 
   List<DataRow> datarows = [];
@@ -374,54 +374,6 @@ class _SchudleTableState extends State<SchudleTable> {
   @override
   void initState() {
     apiService = new ApiService();
-    rowList.add(
-      Schedule(
-          orderId: "846478041",
-          fgpart: "367810109",
-          scheudleId: "945810107",
-          cablePart: "824923001",
-          process: "Wirecutting",
-          cutLength: "2060",
-          color: "RED",
-          scheduledQty: "500 Pcs",
-          status: "Not Completed"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "846478042",
-          fgpart: "367810110",
-          scheudleId: "945810108",
-          cablePart: "824923002",
-          process: "Wirecutting",
-          cutLength: "2060",
-          color: "Green",
-          scheduledQty: "500 Pcs",
-          status: "Completed"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "846478043",
-          fgpart: "367810111",
-          scheudleId: "945810109",
-          cablePart: "824923003",
-          process: "Wirecutting",
-          cutLength: "2060",
-          color: "Black",
-          scheduledQty: "500 Pcs",
-          status: "Pending"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "846478043",
-          fgpart: "367810111",
-          scheudleId: "945810109",
-          cablePart: "824923003",
-          process: "Wirecutting",
-          cutLength: "2060",
-          color: "Black",
-          scheduledQty: "500 Pcs",
-          status: "Completed"),
-    );
 
     super.initState();
   }
@@ -446,7 +398,7 @@ class _SchudleTableState extends State<SchudleTable> {
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: rowList.length,
+                      itemCount: schedulelist.length,
                       itemBuilder: (context, index) {
                         return buildDataRow(schedule: schedulelist[index]);
                       });

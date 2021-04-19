@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/model_api/RequiredRawMaterialSave_model.dart';
@@ -20,10 +19,20 @@ import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
 
 class ApiService {
-  // String baseUrl = 'http://192.168.1.19:8080/molaxapi/';
+  // String baseUrl="http://justerp.in:8080/wipts/";
+    //  String baseUrl = "http://192.168.1.252:8080/wipts/";
+
   String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
+  Map<String, String> headerList = {
+    "Content-Type": "application/json",
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Connection": "keep-alive",
+    "Keep-Alive": "timeout=0",
+  };
+
   Future<Employee> empIdlogin(String empId) async {
-    String url = baseUrl + "molex/employee/get-employee-list?empId=$empId";
+    var url = Uri.parse(baseUrl + "molex/employee/get-employee-list/empid=$empId");
     var response = await http.get(url);
     print('Login  status Code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -40,7 +49,10 @@ class ApiService {
   }
 
   Future<List<Schedule1>> getScheduelarData(String machId) async {
-    String url = baseUrl + "molex/scheduler/get-scheduler-data?mchNo=$machId";
+    print("called api");
+    // var url = Uri.parse(baseUrl +
+    //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
+         var url = Uri.parse(baseUrl+"molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=EMU-m/c-006C&sameMachine=true");
     var response = await http.get(url);
     print('schedular data status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -55,8 +67,8 @@ class ApiService {
   //Update Schedular Tracker information data POST method
 
   Future<List<MachineDetails>> getmachinedetails(String machineid) async {
-    String url =
-        baseUrl + "molex/machine/get-by-machine-number?machNo=$machineid";
+    var url = Uri.parse(
+        baseUrl + "molex/machine/get-by-machine-number?machNo=$machineid");
     var response = await http.get(url);
     print('Machine details status code ${response.statusCode}');
     Fluttertoast.showToast(
@@ -84,8 +96,8 @@ class ApiService {
 
   Future<List<RawMaterial>> rawMaterial(
       String machineId, String partNo, String fgNo, String scheduleId) async {
-    String url = baseUrl +
-        "molex/materialldg/get-req-material-detail?machId=$machineId&partNo=$partNo&fgNo=$fgNo&schdId=$scheduleId";
+    var url = Uri.parse(baseUrl +
+        "molex/materialldg/get-req-material-detail?machId=$machineId&partNo=$partNo&fgNo=$fgNo&schdId=$scheduleId");
     var response = await http.get(url);
     print('Raw Material status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -104,8 +116,8 @@ class ApiService {
   // Get Raw material detail
   // check where this goes
   Future<RawMaterialDetail> getRawmaterialDetail(String partNo) async {
-    String url = baseUrl =
-        "molex/ejobticketmaster/get-raw=material-for-add?PartNo=$partNo";
+    var url = Uri.parse(baseUrl =
+        "molex/ejobticketmaster/get-raw=material-for-add?PartNo=$partNo");
     var response = await http.get(url);
     print('Raw Material details status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -120,19 +132,26 @@ class ApiService {
   }
 
   // Reqired raw material detail save data POST Method
-  Future<bool>postRawmaterial(PostRawmaterial postRawmaterial)async{
-    String url = baseUrl+"";
-    final response = await http.post(url,body:postRawmaterialToJson(postRawmaterial));
-    if(response.statusCode==200){
-      return true;
-    }else{
-      return false;
+  Future<bool> postRawmaterial(List<PostRawmaterial> postRawmaterial) async {
+    var url = Uri.parse(baseUrl + "molex/materialldg/post-req-material");
+    for (PostRawmaterial p in postRawmaterial) {
+      print(postRawmaterialToJson(p));
+      final response = await http.post(url,
+          body: postRawmaterialToJson(p), headers: headerList);
+      print('post raw material ${response.statusCode}');
+      if (response.statusCode == 200) {
+        continue;
+      } else {
+        return false;
+      }
     }
+    return true;
   }
+
   // TODO:
   Future<FgDetails> getFgDetails(String partNo) async {
-    String url =
-        baseUrl + 'molex/ejobticketmaster/fgDetails-byfgNo?fgPartNo=$partNo';
+    var url = Uri.parse(
+        baseUrl + 'molex/ejobticketmaster/fgDetails-byfgNo?fgPartNo=$partNo');
     var response = await http.get(url);
     print('Fg  details status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -147,8 +166,8 @@ class ApiService {
   //Get Cable Details
   Future<CableDetails> getCableDetails(
       String fgpartNo, String cablepartno) async {
-    String url = baseUrl +
-        "molex/ejobticketmaster/get-cable-Details-bycableNo?fgPartNo=$fgpartNo & cblPartNo=$cablepartno";
+    var url = Uri.parse(baseUrl +
+        "/molex/ejobticketmaster/get-cable-Details-bycableNo?fgPartNo=367870011&cblPartNo=884503103");
     var response = await http.get(url);
     print('Cable details status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -162,8 +181,9 @@ class ApiService {
 
   //cableTerminalA
   Future<CableTerminalA> getCableTerminalA(String cablepartno) async {
-    String url = baseUrl +
-        "molex/ejobticketmaster/get-cable-terminalA-bycableNo?cblPartNo=$cablepartno";
+    //TODO variable in url
+    var url = Uri.parse(baseUrl +
+        "/molex/ejobticketmaster/get-cable-terminalA-bycableNo?cblPartNo=884503103");
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -179,8 +199,9 @@ class ApiService {
 
   //CableTerminalB
   Future<CableTerminalB> getCableTerminalB(String cablepartno) async {
-    String url = baseUrl +
-        'molex/material-tracking/tracking-cable-terminalB?partNo=$cablepartno';
+    //TODO variable in url
+    var url = Uri.parse(baseUrl +
+        'molex/ejobticketmaster/get-cable-terminalB-bycableNo?cblPartNo=884503103');
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -197,8 +218,8 @@ class ApiService {
   //MaterialTrackingCableDetails
   Future<List<MaterialTrackingCableDetails>> getMaterialtrackingcableDetails(
       String partNo) async {
-    String url =
-        baseUrl + 'molex/material-tracking/tracking-cable?partNo=$partNo';
+    var url = Uri.parse(
+        baseUrl + 'molex/material-tracking/tracking-cable?partNo=$partNo');
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -215,8 +236,8 @@ class ApiService {
   //MaterialTrackingTerminalA
   Future<List<MaterialTrackingTerminalA>> getMaterialtrackingterminalA(
       String partNo) async {
-    String url = baseUrl +
-        'molex/material-tracking/tracking-cable-terminalA?partNo=$partNo';
+    var url = Uri.parse(baseUrl +
+        'molex/material-tracking/tracking-cable-terminalA?partNo=$partNo');
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -233,8 +254,8 @@ class ApiService {
   //MaterialTrackingTerminalB
   Future<List<MaterialTrackingTerminalB>> getMaterialtrackingterminalB(
       String partNo) async {
-    String url = baseUrl +
-        'molex/material-tracking/tracking-cable-terminalB?partNo=$partNo';
+    var url = Uri.parse(baseUrl +
+        'molex/material-tracking/tracking-cable-terminalB?partNo=$partNo');
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -252,7 +273,7 @@ class ApiService {
   //TODO
   // Generate label request model POst method
   Future<bool> postGeneratelabel(PostGenerateLabel generateLabel) async {
-    String url = baseUrl + 'molex/wccr/generate-label';
+    var url = Uri.parse(baseUrl + 'molex/wccr/generate-label');
     var response =
         await http.post(url, body: getGenerateLabelToJson(generateLabel));
     if (response.statusCode == 200) {
@@ -267,7 +288,8 @@ class ApiService {
   // Click on 9999 return value bndle id List api Json missing
   // 100% complete  post method
   Future<bool> post100Complete(PostFullyComplete postFullyComplete) async {
-    String url = baseUrl + 'molex/production-report/save-production-report ';
+    var url =
+        Uri.parse(baseUrl + 'molex/production-report/save-production-report');
     var response =
         await http.post(url, body: postFullyCompleteToJson(postFullyComplete));
     if (response.statusCode == 200) {
@@ -280,8 +302,8 @@ class ApiService {
   // partially complete post method
   Future<bool> postpartialComplete(
       PostpartiallyComplete postpartiallyComplete) async {
-    String url = baseUrl +
-        'molex/partial-completion-reason/save-in-partial-completion-reason';
+    var url = Uri.parse(baseUrl +
+        'molex/partial-completion-reason/save-in-partial-completion-reason');
     var response = await http.post(url,
         body: postpartiallyCompleteToJson(postpartiallyComplete));
     if (response.statusCode == 200) {

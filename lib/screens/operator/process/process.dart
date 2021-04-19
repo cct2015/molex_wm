@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/cableDetails_model.dart';
+import 'package:molex/model_api/cableTerminalA_model.dart';
+import 'package:molex/model_api/cableTerminalB_model.dart';
+import 'package:molex/model_api/fgDetail_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_print.dart';
@@ -9,6 +13,7 @@ import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/operator/process/100complete.dart';
 import 'package:molex/screens/operator/process/generateLabel.dart';
 import 'package:molex/screens/operator/process/partiallyComplete.dart';
+import 'package:molex/service/apiService.dart';
 
 class ProcessPage extends StatefulWidget {
   String userId;
@@ -253,6 +258,14 @@ class _DetailState extends State<Detail> {
   String _printerStatus = 'Waiting';
   bool orderDetailExpanded = true;
   String rightside = 'label';
+  ApiService apiService;
+  @override
+  void initState() {
+    apiService = new ApiService();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    super.initState();
+  }
+
   Future<void> _print() async {
     String printerStatus;
 
@@ -321,7 +334,7 @@ class _DetailState extends State<Detail> {
               return Column(children: [
                 tableHeading(),
                 buildDataRow(schedule: widget.schedule),
-                box(),
+                fgDetails(),
               ]);
             } else {
               return Container();
@@ -345,174 +358,198 @@ class _DetailState extends State<Detail> {
                     Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: Container(
-                        width: 300,
+                        width: 350,
                         height: 96,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            //100% complete
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                //Label
-                                Container(
-                                  // height: 40,
-                                  width: 145,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              side: BorderSide(
-                                                  color: Colors.transparent))),
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states
-                                              .contains(MaterialState.pressed))
-                                            return Colors.green[200];
-                                          return Colors.green[
-                                              500]; // Use the component's default.
-                                        },
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        rightside = "label";
-                                      });
-                                    },
-                                    child: Text(
-                                      "Label",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
                                 //100% complete
                                 Container(
-                                  // height: 40,
-                                  width: 145,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              side: BorderSide(
-                                                  color: Colors.transparent))),
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states
-                                              .contains(MaterialState.pressed))
-                                            return Colors.green[200];
-                                          return Colors.green[
-                                              500]; // Use the component's default.
-                                        },
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        rightside = 'complete';
-                                      });
-                                    },
-                                    child: Text(
-                                      "100% complete",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                //partially complete
-                                Container(
-                                  // height: 40,
-                                  width: 145,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(13.0),
-                                              side: BorderSide(
-                                                  color: Colors.transparent))),
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states
-                                              .contains(MaterialState.pressed))
-                                            return Colors.green[200];
-                                          return Colors.red[
-                                              500]; // Use the component's default.
-                                        },
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        rightside = "partial";
-                                      });
-                                    },
-                                    child: Text(
-                                      "Partially  Complete",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                //Reload material
-                                Container(
-                                  // height: 40,
-                                  width: 145,
-                                  child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                side: BorderSide(
-                                                    color:
-                                                        Colors.transparent))),
-                                        backgroundColor: MaterialStateProperty
-                                            .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                            if (states.contains(
-                                                MaterialState.pressed))
-                                              return Colors.green[200];
-                                            return Colors.blue[
-                                                500]; // Use the component's default.
+                                  width: 330,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      //Label
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    side: BorderSide(
+                                                        color: Colors
+                                                            .transparent))),
+                                            backgroundColor:
+                                                MaterialStateProperty
+                                                    .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.pressed))
+                                                  return Colors.green[200];
+                                                return Colors.green[
+                                                    500]; // Use the component's default.
+                                              },
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              rightside = "label";
+                                            });
                                           },
+                                          child: Text(
+                                            "Label",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      child: Text(
-                                        'Reload Material',
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.normal,
+
+                                      //100% complete
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    side: BorderSide(
+                                                        color: Colors
+                                                            .transparent))),
+                                            backgroundColor:
+                                                MaterialStateProperty
+                                                    .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.pressed))
+                                                  return Colors.green[200];
+                                                return Colors.green[
+                                                    500]; // Use the component's default.
+                                              },
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              rightside = 'complete';
+                                            });
+                                          },
+                                          child: Text(
+                                            "100% complete",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      }),
+                                    ],
+                                  ),
                                 ),
+                                Container(
+                                  width: 330,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      //partially complete
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    side: BorderSide(
+                                                        color: Colors
+                                                            .transparent))),
+                                            backgroundColor:
+                                                MaterialStateProperty
+                                                    .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.pressed))
+                                                  return Colors.green[200];
+                                                return Colors.red[
+                                                    500]; // Use the component's default.
+                                              },
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              rightside = "partial";
+                                            });
+                                          },
+                                          child: Text(
+                                            "Partially  Complete",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      //Reload material
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      side: BorderSide(
+                                                          color: Colors
+                                                              .transparent))),
+                                              backgroundColor:
+                                                  MaterialStateProperty
+                                                      .resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                                  if (states.contains(
+                                                      MaterialState.pressed))
+                                                    return Colors.green[200];
+                                                  return Colors.blue[
+                                                      500]; // Use the component's default.
+                                                },
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'Reload Material',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                //Relaod Material
                               ],
                             ),
-                            //Relaod Material
                           ],
                         ),
                       ),
@@ -735,35 +772,76 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0),
       child: Container(
-        height: 70,
+        height: 80,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            process(
-                'Terminal A',
-                'From Strip Length Spec(mm) - 40',
-                'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
-                'From Unsheathing Length (mm) - 40'),
-            process(
-                'Cable',
-                'Cut Length Spec(mm) - 2060',
-                'Cable Part Number(Description)',
-                '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
-                ''),
-            process(
-                'Terminal B',
-                'To Strip Length Spec(mm) - 60',
-                'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',
-                'To Unsheathing Length (mm) - 60'),
+            // terminal A
+            Container(
+              height: 80,
+              child: FutureBuilder(
+                  future: apiService.getCableTerminalA('884503103'),
+                  builder: (context, snapshot) {
+                    CableTerminalA terminalA = snapshot.data;
+                    if (snapshot.hasData) {
+                      return process(
+                          'Terminal A',
+                          'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
+                          'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                          '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
+                          'From Unsheathing Length (mm) - 40');
+                    } else {
+                      return Container(
+                        height: 100,
+                        width: 100,
+                        color: Colors.amber,
+                      );
+                    }
+                  }),
+            ),
+            FutureBuilder(
+                future: apiService.getCableDetails(
+                    widget.schedule.finishedGoodsNumber,
+                    widget.schedule.cablePartNumber),
+                builder: (context, snapshot) {
+                  CableDetails cableDetail = snapshot.data;
+                  if (snapshot.hasData) {
+                    return process(
+                        'Cable',
+                        'Cut Length Spec(mm) -${cableDetail.cutLengthSpec}',
+                        'Cable Part Number(Description)',
+                        '${cableDetail.cablePartNumber}(${cableDetail.description})',
+                        '');
+                  } else {
+                    return Container();
+                  }
+                }),
+            FutureBuilder(
+                future: apiService
+                    .getCableTerminalB(widget.schedule.cablePartNumber),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    CableTerminalB cableTerminalB = snapshot.data;
+                    return process(
+                        'Terminal B',
+                        'To Strip Length Spec(mm) - ${cableTerminalB.stripLength}',
+                        'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                        '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
+                        'To Unsheathing Length (mm) - 60');
+                  } else {
+                    return Container();
+                  }
+                })
           ],
         ),
       ),
     );
   }
+  // "localhost:9090//molex/scheduler/get-req-material-detail?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445
+  //       localhost:9090//molex/scheduler/get-req-material-detail-from?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445
+  //       localhost:9090//molex/scheduler/get-req-material-detail-to?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445"
 
   Widget process(String p1, String p2, String p3, String p4, String p5) {
     return Padding(
@@ -830,7 +908,6 @@ class _DetailState extends State<Detail> {
     );
   }
 
- 
   Widget partialCompletion() {
     return Container(
       decoration: BoxDecoration(
@@ -1090,7 +1167,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-   Widget buildDataRow({Schedule1 schedule, int c}) {
+  Widget buildDataRow({Schedule1 schedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {
@@ -1164,40 +1241,50 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget box() {
+  Widget fgDetails() {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(.5),
-              blurRadius: 20.0, // soften the shadow
-              spreadRadius: 0.0, //extend the shadow
-              offset: Offset(
-                3.0, // Move to right 10  horizontally
-                3.0, // Move to bottom 10 Vertically
-              ),
-            )
-          ],
-        ),
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 40,
-            color: Colors.white,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  boxes("FG Description",
-                      'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
-                  boxes("FG Scheduled", '29/03/2021'),
-                  boxes("Customer", 'APC COOLING'),
-                  boxes("Drg Rev", 'D'),
-                  boxes("Cable #", '1'),
-                  boxes('Tolerance ', '± 5 / ± 5'),
-                ])),
-      ),
-    );
+        padding: const EdgeInsets.all(5.0),
+        child: FutureBuilder(
+          future: apiService.getFgDetails(widget.schedule.finishedGoodsNumber),
+          builder: (context, snapshot) {
+            print('fg number ${widget.schedule.finishedGoodsNumber}');
+            if (snapshot.hasData) {
+              FgDetails fgDetail = snapshot.data;
+              return Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(.5),
+                      blurRadius: 20.0, // soften the shadow
+                      spreadRadius: 0.0, //extend the shadow
+                      offset: Offset(
+                        3.0, // Move to right 10  horizontally
+                        3.0, // Move to bottom 10 Vertically
+                      ),
+                    )
+                  ],
+                ),
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 40,
+                    color: Colors.white,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          boxes("FG Description", fgDetail.fgDescription ?? ''),
+                          boxes("FG Scheduled", fgDetail.fgScheduleDate ?? ''),
+                          boxes("Customer", fgDetail.customer ?? ''),
+                          boxes("Drg Rev", fgDetail.drgRev ?? ''),
+                          boxes("Cable #", fgDetail.cableSerialNo ?? ''),
+                          boxes('Tolerance ',
+                              '± ${fgDetail.tolrance} / ±${fgDetail.tolrance}'),
+                        ])),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ));
   }
 
   Widget boxes(
@@ -1282,7 +1369,7 @@ class _DetailState extends State<Detail> {
 }
 
 class Process extends StatefulWidget {
- final String type;
+  final String type;
   Process({this.type});
   @override
   _ProcessState createState() => _ProcessState();
@@ -1299,7 +1386,7 @@ class _ProcessState extends State<Process> {
           Row(
             children: [
               Container(
-                height: 30,
+                width: 140,
                 padding: const EdgeInsets.all(0.0),
                 child: GestureDetector(
                   onTap: () {
@@ -1309,14 +1396,14 @@ class _ProcessState extends State<Process> {
                   },
                   child: Row(
                     children: [
-                      SizedBox(width: 8),
+                      SizedBox(width: 10),
                       Padding(
                           padding: const EdgeInsets.all(0.0),
                           child: Text(
-                            "Process Type : \nTerminal A,Cutlength,Terminal B",
+                            "Process Type : \nTerminal A,\nCutlength,\nTerminal B",
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 12,
+                              fontSize: 13,
                             ),
                           )),
                     ],

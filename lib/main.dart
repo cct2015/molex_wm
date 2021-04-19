@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
-
+import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/service/apiService.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginScan());
+        home: LoginScan(
+        ));
   }
 }

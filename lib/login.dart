@@ -92,6 +92,7 @@ class _LoginScanState extends State<LoginScan> {
                             ),
                             ElevatedButton(
                                 onPressed: () {
+                                  print('pressed');
                                   apiService.empIdlogin(userId).then((value) {
                                     if (value != null) {
                                       Fluttertoast.showToast(
