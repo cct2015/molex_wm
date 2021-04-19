@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:molex/login.dart';
-import 'package:molex/models/Schudule.dart';
-import 'package:molex/screens/keyboardTest.dart';
+import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/operator%203/Home_0p3.dart';
 import 'package:molex/screens/Matrial_Cordinator/Home_material_coordinator.dart';

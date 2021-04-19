@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/model_api/schedular_model.dart';
-import 'package:molex/models/Schudule.dart';
-import 'package:intl/intl.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/materialPick.dart';
 import 'package:molex/screens/widgets/time.dart';

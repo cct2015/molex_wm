@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:molex/models/Schudule.dart';
+import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator%202/materialPick2.dart';
 import 'package:molex/screens/widgets/time.dart';
@@ -27,14 +27,14 @@ class _HomePageOp2State extends State<HomePageOp2> {
     super.initState();
     schedule = Schedule(
         orderId: "100",
-        fgpart: "300",
-        scheudleId: "300",
-        cablePart: "200",
+        finishedGoodsNumber: "300",
+        scheduledId: "300",
+        cablePartNumber: "200",
         process: "Wirecutting",
-        cutLength: "100",
+        length: "100",
         color: "Red",
-        scheduledQty: "50",
-        status: "Not Completed");
+        scheduledQuantity: "50",
+        scheduledStatus: "Not Completed");
   }
 
   @override
@@ -389,50 +389,14 @@ class _SchudleTableState extends State<SchudleTable> {
     rowList.add(
       Schedule(
           orderId: "846478041",
-          fgpart: "367810109",
-          scheudleId: "945810107",
-          cablePart: "824923001",
+          finishedGoodsNumber: "367810109",
+          scheduledId: "945810107",
+          cablePartNumber: "824923001",
           process: "Wirecutting",
-          cutLength: "2060",
+          length: "2060",
           color: "RED",
-          scheduledQty: "500 Pcs",
-          status: "Not Completed"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "846478042",
-          fgpart: "367810110",
-          scheudleId: "945810108",
-          cablePart: "824923002",
-          process: "Wirecutting",
-          cutLength: "2060",
-          color: "Green",
-          scheduledQty: "500 Pcs",
-          status: "Completed"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "846478043",
-          fgpart: "367810111",
-          scheudleId: "945810109",
-          cablePart: "824923003",
-          process: "Wirecutting",
-          cutLength: "2060",
-          color: "Black",
-          scheduledQty: "500 Pcs",
-          status: "Pending"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "846478043",
-          fgpart: "367810111",
-          scheudleId: "945810109",
-          cablePart: "824923003",
-          process: "Wirecutting",
-          cutLength: "2060",
-          color: "Black",
-          scheduledQty: "500 Pcs",
-          status: "Completed"),
+          scheduledQuantity: "500 Pcs",
+          scheduledStatus: "Not Completed"),
     );
 
     super.initState();
@@ -528,9 +492,9 @@ class _SchudleTableState extends State<SchudleTable> {
         decoration: BoxDecoration(
           border: Border(
               left: BorderSide(
-            color: schedule.status == "Completed"
+            color: schedule.scheduledStatus == "Completed"
                 ? Colors.green
-                : schedule.status == "Pending"
+                : schedule.scheduledStatus == "Pending"
                     ? Colors.red
                     : Colors.green[100],
             width: 5,
@@ -542,15 +506,15 @@ class _SchudleTableState extends State<SchudleTable> {
             // orderId
             cell(schedule.orderId, 0.1),
             //Fg Part
-            cell(schedule.fgpart, 0.1),
+            cell(schedule.finishedGoodsNumber, 0.1),
             //Schudule ID
-            cell(schedule.scheudleId, 0.1),
+            cell(schedule.scheduledId, 0.1),
             //Cable Part
-            cell(schedule.cablePart, 0.1),
+            cell(schedule.cablePartNumber, 0.1),
             //Process
             cell(schedule.process, 0.07),
             // Cut length
-            cell(schedule.cutLength, 0.07),
+            cell(schedule.length, 0.07),
             //Color
             cell(schedule.color, 0.04),
             //Bin Id
@@ -561,12 +525,12 @@ class _SchudleTableState extends State<SchudleTable> {
             cell("100", 0.07),
 
             //Status
-            cell(schedule.status, 0.09),
+            cell(schedule.scheduledStatus, 0.09),
             //Action
             Container(
               width:  MediaQuery.of(context).size.width * 0.10,
               child: Center(
-                child: schedule.status == "Completed"
+                child: schedule.scheduledStatus == "Completed"
                     ? Text("-")
                     : ElevatedButton(
                         style: ButtonStyle(
@@ -575,7 +539,7 @@ class _SchudleTableState extends State<SchudleTable> {
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed))
                                 return Colors.green;
-                              return schedule.status == "Pending"
+                              return schedule.scheduledStatus == "Pending"
                                   ? Colors.red
                                   : Colors
                                       .green; // Use the component's default.
@@ -594,9 +558,9 @@ class _SchudleTableState extends State<SchudleTable> {
                           );
                         },
                         child: Container(
-                            child: schedule.status == "Not Completed"
+                            child: schedule.scheduledStatus == "Not Completed"
                                 ? Text("Accept")
-                                : schedule.status == "Pending"
+                                : schedule.scheduledStatus == "Pending"
                                     ? Text('Continue')
                                     : Text('')),
                       ),

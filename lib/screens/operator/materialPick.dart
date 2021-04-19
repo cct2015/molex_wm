@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
@@ -10,7 +9,7 @@ import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
 class MaterialPick extends StatefulWidget {
-  final Schedule1 schedule;
+  final Schedule schedule;
   final String userId;
   final String machineId;
   MaterialPick({this.userId, this.machineId, this.schedule});
@@ -901,7 +900,7 @@ class _MaterialPickState extends State<MaterialPick> {
     );
   }
 
-  Widget buildDataRow({Schedule1 schedule, int c}) {
+  Widget buildDataRow({Schedule schedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {

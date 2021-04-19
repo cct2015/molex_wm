@@ -41,10 +41,10 @@ class Data {
         this.employeeList,
     });
 
-    List<Schedule1> employeeList;
+    List<Schedule> employeeList;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        employeeList: List<Schedule1>.from(json["Employee List "].map((x) => Schedule1.fromJson(x))),
+        employeeList: List<Schedule>.from(json["Employee List "].map((x) => Schedule.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -52,8 +52,8 @@ class Data {
     };
 }
 
-class Schedule1 {
-    Schedule1({
+class Schedule {
+    Schedule({
         this.machineNumber,
         this.currentTime,
         this.shiftType,
@@ -85,7 +85,7 @@ class Schedule1 {
     String scheduledStatus;
     String process;
 
-    factory Schedule1.fromJson(Map<String, dynamic> json) => Schedule1(
+    factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
         machineNumber: json["machineNumber"],
         currentTime: json["currentTime"],
         shiftType: json["shiftType"],

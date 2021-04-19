@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:molex/models/Schudule.dart';
+import 'package:molex/model_api/schedular_model.dart';
+
 import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/visual%20Inspector/VIscan.dart';
@@ -18,49 +19,7 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
   List<ViSchedule> viScheduleList = [];
   @override
   void initState() {
-    schedule = Schedule(
-        orderId: "100",
-        fgpart: "300",
-        scheudleId: "300",
-        cablePart: "200",
-        process: "Wirecutting",
-        cutLength: "100",
-        color: "Red",
-        scheduledQty: "50",
-        status: "Not Completed");
-    super.initState();
-    viScheduleList.add(ViSchedule(
-      orderId: "846478041",
-      fgPart: "367810109",
-      scheduleId: "945810107",
-      binId: "BIN8712122",
-      totalBundles: "10",
-      totalbundleQty: "500 Pcs",
-    ));
-    viScheduleList.add(ViSchedule(
-      orderId: "846478042",
-      fgPart: "367810110",
-      scheduleId: "945810108",
-      binId: "BIN8712122",
-      totalBundles: "10",
-      totalbundleQty: "500 Pcs",
-    ));
-    viScheduleList.add(ViSchedule(
-      orderId: "846478043",
-      fgPart: "367810111",
-      scheduleId: "945810108",
-      binId: "BIN8712122",
-      totalBundles: "10",
-      totalbundleQty: "500 Pcs",
-    ));
-    viScheduleList.add(ViSchedule(
-      orderId: "846478043",
-      fgPart: "367810112",
-      scheduleId: "945810108",
-      binId: "BIN8712122",
-      totalBundles: "10",
-      totalbundleQty: "500 Pcs",
-    ));
+    
   }
 
   @override

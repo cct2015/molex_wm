@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
-import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%203/process/scanBundle.dart';
 import 'package:molex/screens/operator/bin.dart';

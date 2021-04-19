@@ -8,7 +8,6 @@ import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
-import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_print.dart';
 import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/operator/process/100complete.dart';
@@ -20,7 +19,7 @@ import 'package:molex/service/apiService.dart';
 class ProcessPage extends StatefulWidget {
   String userId;
   String machineId;
-  Schedule1 schedule;
+  Schedule schedule;
   ProcessPage({this.machineId, this.userId, this.schedule});
   @override
   _ProcessPageState createState() => _ProcessPageState();
@@ -211,7 +210,7 @@ class _ProcessPageState extends State<ProcessPage> {
 }
 
 class Detail extends StatefulWidget {
-  Schedule1 schedule;
+  Schedule schedule;
   String rightside;
   String userId;
   String machineId;
@@ -1144,7 +1143,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget buildDataRow({Schedule1 schedule, int c}) {
+  Widget buildDataRow({Schedule schedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {
@@ -1347,7 +1346,7 @@ class _DetailState extends State<Detail> {
 
 class Process extends StatefulWidget {
   final String type;
-  final Schedule1 schedule;
+  final Schedule schedule;
   final String machineId;
   Process({this.type, this.schedule, this.machineId});
   @override

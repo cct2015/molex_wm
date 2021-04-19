@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
-import 'package:molex/models/Schudule.dart';
-import 'package:molex/screens/operator%202/process/scanBundle.dart';
 
 enum Status {
   quantity,
@@ -13,7 +11,7 @@ enum Status {
 }
 
 class GenerateLabel extends StatefulWidget {
-  Schedule1 schedule;
+  Schedule schedule;
   String machineId;
   String userId;
   GenerateLabel({this.machineId,this.schedule,this.userId});
