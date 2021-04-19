@@ -552,13 +552,19 @@ class _DetailState extends State<Detail> {
                               if (rightside == null) {
                                 return Container();
                               } else if (rightside == "label") {
-                                return GenerateLabel();
+                                return GenerateLabel(
+                                  schedule: widget.schedule,
+                                  machineId: widget.machineId ?? "",
+                                  userId: widget.userId ?? "",
+                                );
                               } else if (rightside == "complete") {
                                 return FullyComplete();
                               } else if (rightside == "partial") {
                                 return PartiallyComplete();
                               } else if (rightside == "bundle") {
                                 return bundleTable();
+                              } else {
+                                return Container();
                               }
                             }()),
                           ),
@@ -780,7 +786,7 @@ class _DetailState extends State<Detail> {
             FutureBuilder(
                 future: apiService.getCableDetails(
                     widget.schedule.finishedGoodsNumber,
-                    widget.schedule.cablePartNumber),
+                    widget.schedule.cablePartNumber ?? "0"),
                 builder: (context, snapshot) {
                   CableDetails cableDetail = snapshot.data;
                   if (snapshot.hasData) {
@@ -823,9 +829,9 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-        height: 70,
-        // width: MediaQuery.of(context).size.width * 0.32,
+        padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
+        height: 80,
+        width: MediaQuery.of(context).size.width * 0.325,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white,
@@ -849,24 +855,40 @@ class _DetailState extends State<Detail> {
                 // width: MediaQuery.of(context).size.width * 0.31,
                 child: Column(
                   children: [
-                    Text(
-                      p2,
-                      style: TextStyle(
-                        fontSize: 11,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          p1,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(width:20),
+                        Text(
+                          p2,
+                          style: TextStyle(
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 5),
                     Text(
                       p3,
                       style: TextStyle(fontSize: 9),
                     ),
-                    Text(
-                      p4,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.red,
-                        fontWeight: FontWeight.w600,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.320,
+                      child: Text(
+                        p4,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     SizedBox(height: 5),

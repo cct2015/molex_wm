@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 class PartiallyComplete extends StatefulWidget {
   @override
   _PartiallyCompleteState createState() => _PartiallyCompleteState();
 }
 
 class _PartiallyCompleteState extends State<PartiallyComplete> {
-  String _output='';
+  String _output = '';
 
-  TextEditingController mainController=new TextEditingController();
+  TextEditingController mainController = new TextEditingController();
   TextEditingController firstPatrolController = new TextEditingController();
   TextEditingController spareChangeoverController = new TextEditingController();
   TextEditingController crimpHeightSettingController =
@@ -87,8 +88,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
-     
+    return Container(
       child: Row(
         children: [
           partialCompletion(),
@@ -97,7 +97,8 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
       ),
     );
   }
-   Widget keypad(TextEditingController controller) {
+
+  Widget keypad(TextEditingController controller) {
     // print('NickMark ${windowGapController.text}');
     // print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
@@ -169,27 +170,39 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
 
   Widget partialCompletion() {
     return Container(
-      width: MediaQuery.of(context).size.width*0.75,
+      width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
       ),
       child: SingleChildScrollView(
         child: Column(
           children: [
-           
             Row(
               children: [
-                 Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Partial Completion Reason',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 12,
-                    ))
-              ]),
-            ),
-                Container(height: 25, width: 300, child: TextField()),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('Partial Completion Reason',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 12,
+                            ))
+                      ]),
+                ),
+                SizedBox(width: 20),
+                Container(
+                    height: 25,
+                    width: 300,
+                    child: TextField(
+                      decoration: new InputDecoration(
+                        hintText: "reason",
+                        fillColor: Colors.white,
+
+                        //fillColor: Colors.green
+                      ),
+                    )),
               ],
             ),
             Padding(
@@ -493,7 +506,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                         ],
                       ),
                     ],
-                   ),
+                  ),
                 ),
               ),
             ),
@@ -507,26 +520,26 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                         height: 40,
                         width: 250,
                         child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green[200];
-                                  return Colors.green[
-                                      500]; // Use the component's default.
-                                },
-                              ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    side:
+                                        BorderSide(color: Colors.transparent))),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.green[200];
+                                return Colors
+                                    .green[500]; // Use the component's default.
+                              },
                             ),
-                            child: Text("Accept and Continue Process"),
-                            onPressed: () {},
-                            ),
+                          ),
+                          child: Text("Accept and Continue Process"),
+                          onPressed: () {},
+                        ),
                       ),
                     ),
                   ),
@@ -540,27 +553,26 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                         height: 40,
                         width: 250,
                         child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green[200];
-                                  return Colors.green[
-                                      500]; // Use the component's default.
-                                },
-                              ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    side:
+                                        BorderSide(color: Colors.transparent))),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.green[200];
+                                return Colors
+                                    .green[500]; // Use the component's default.
+                              },
                             ),
-                            child: Text("Save & End Process"),
-                            onPressed: () {
-                           
-                            },),
+                          ),
+                          child: Text("Save & End Process"),
+                          onPressed: () {},
+                        ),
                       ),
                     ),
                   ),
@@ -572,7 +584,8 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
       ),
     );
   }
-   Widget quantitycell(
+
+  Widget quantitycell(
       {String name,
       int quantity,
       TextEditingController textEditingController,
@@ -592,12 +605,12 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                   focusNode: focusNode,
                   onTap: () {
                     setState(() {
-                      if(textEditingController.text.length>0){
+                      if (textEditingController.text.length > 0) {
                         _output = textEditingController.text;
-                      }else{
+                      } else {
                         _output = '';
                       }
-                      
+
                       mainController = textEditingController;
                     });
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -619,5 +632,4 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
       ),
     );
   }
-
 }

@@ -14,7 +14,7 @@ class GenerateLabel extends StatefulWidget {
   Schedule schedule;
   String machineId;
   String userId;
-  GenerateLabel({this.machineId,this.schedule,this.userId});
+  GenerateLabel({this.machineId, this.schedule, this.userId});
   @override
   _GenerateLabelState createState() => _GenerateLabelState();
 }
@@ -102,12 +102,14 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
   @override
   void initState() {
+    transferBundle = new TransferBundle();
+
     transferBundle.cablePartDescription = widget.schedule.cablePartNumber;
-    transferBundle.scheduledQuantity = int.parse(widget.schedule.scheduledQuantity);
-    transferBundle.orderIdentification= int.parse(widget.schedule.orderId);
+    transferBundle.scheduledQuantity =
+        int.parse(widget.schedule.scheduledQuantity);
+    transferBundle.orderIdentification = int.parse(widget.schedule.orderId);
     transferBundle.machineIdentification = widget.machineId;
-    transferBundle.scheduledId = int.parse(widget.schedule.scheduledId);
-    
+    transferBundle.scheduledId = widget.schedule.scheduledId==''? 0:int.parse(widget.schedule.scheduledId);
     binState = "Scan Bin";
     super.initState();
   }
