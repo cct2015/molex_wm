@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:molex/model_api/RequiredRawMaterialSave_model.dart';
+import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
@@ -17,10 +17,11 @@ import 'package:molex/model_api/partiallyComplete_model.dart';
 import 'package:molex/model_api/rawMaterialDetail_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/model_api/startProcess_model.dart';
 
 class ApiService {
   // String baseUrl="http://justerp.in:8080/wipts/";
-    //  String baseUrl = "http://192.168.1.252:8080/wipts/";
+  //  String baseUrl = "http://192.168.1.252:8080/wipts/";
 
   String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
   Map<String, String> headerList = {
@@ -32,7 +33,8 @@ class ApiService {
   };
 
   Future<Employee> empIdlogin(String empId) async {
-    var url = Uri.parse(baseUrl + "molex/employee/get-employee-list/empid=$empId");
+    var url =
+        Uri.parse(baseUrl + "molex/employee/get-employee-list/empid=$empId");
     var response = await http.get(url);
     print('Login  status Code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -52,7 +54,8 @@ class ApiService {
     print("called api");
     // var url = Uri.parse(baseUrl +
     //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
-         var url = Uri.parse(baseUrl+"molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=EMU-m/c-006C&sameMachine=true");
+    var url = Uri.parse(baseUrl +
+        "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=EMU-m/c-006C&sameMachine=true");
     var response = await http.get(url);
     print('schedular data status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -132,20 +135,18 @@ class ApiService {
   }
 
   // Reqired raw material detail save data POST Method
-  Future<bool> postRawmaterial(List<PostRawmaterial> postRawmaterial) async {
+  Future<bool> postRawmaterial(
+      List<PostRawMaterial> postRawmaterialList) async {
     var url = Uri.parse(baseUrl + "molex/materialldg/post-req-material");
-    for (PostRawmaterial p in postRawmaterial) {
-      print(postRawmaterialToJson(p));
-      final response = await http.post(url,
-          body: postRawmaterialToJson(p), headers: headerList);
-      print('post raw material ${response.statusCode}');
-      if (response.statusCode == 200) {
-        continue;
-      } else {
-        return false;
-      }
+    final response = await http.post(url,
+        body: postRawMaterialListToJson(postRawmaterialList),
+        headers: headerList);
+    print('post raw material ${response.statusCode}');
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
-    return true;
   }
 
   // TODO:
@@ -212,6 +213,20 @@ class ApiService {
       return cableTerminalB;
     } else {
       return null;
+    }
+  }
+
+  //Start Process
+  Future<bool> startProcess1(StartProcess process) async {
+    var url = Uri.parse(baseUrl +
+        "molex/schedule-start-tracking/start-process-save-in-schedule-tracking");
+    var response = await http.post(url,
+        body: startProcessToJson(process), headers: headerList);
+    print("start proces response = ${response.statusCode}");
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -313,6 +328,7 @@ class ApiService {
     }
   }
   // Transfer bundle
+    // Future<bool> postpartialComplete(
   // Location Updation PUT method
 
 }

@@ -6,6 +6,7 @@ import 'package:molex/screens/keyboardTest.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/operator%203/Home_0p3.dart';
 import 'package:molex/screens/Matrial_Cordinator/Home_material_coordinator.dart';
+import 'package:molex/screens/print.dart';
 import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -80,11 +81,11 @@ class _NavPageState extends State<NavPage> {
             },
           ),
           ListTile(
-            title: Text("Keyboard Test"),
+            title: Text("Print Test"),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => KeyboardTest()),
+                MaterialPageRoute(builder: (context) => PrintTest()),
               );
             },
           ),

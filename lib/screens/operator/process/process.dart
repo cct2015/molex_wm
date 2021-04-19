@@ -7,12 +7,14 @@ import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/models/Schudule.dart';
 import 'package:molex/models/bundle_print.dart';
 import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/operator/process/100complete.dart';
 import 'package:molex/screens/operator/process/generateLabel.dart';
 import 'package:molex/screens/operator/process/partiallyComplete.dart';
+import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
 class ProcessPage extends StatefulWidget {
@@ -156,32 +158,7 @@ class _ProcessPageState extends State<ProcessPage> {
               ],
             ),
           ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
+          TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -217,21 +194,17 @@ class _ProcessPageState extends State<ProcessPage> {
         ],
       ),
       body: SingleChildScrollView(
-        child: StreamBuilder(
-            stream: Stream.periodic(const Duration(milliseconds: 2000)),
-            builder: (context, snapshot) {
-              return Container(
-                child: Column(
-                  children: [
-                    Detail(
-                      schedule: widget.schedule,
-                      userId: widget.userId,
-                      machineId: widget.machineId,
-                    ),
-                  ],
-                ),
-              );
-            }),
+        child: Container(
+          child: Column(
+            children: [
+              Detail(
+                schedule: widget.schedule,
+                userId: widget.userId,
+                machineId: widget.machineId,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -354,7 +327,11 @@ class _DetailState extends State<Detail> {
                 terminal(),
                 Row(
                   children: [
-                    Process(type: _chosenValue),
+                    Process(
+                      type: _chosenValue,
+                      schedule: widget.schedule,
+                      machineId: widget.machineId,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: Container(
@@ -847,7 +824,7 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(.0),
       child: Container(
-        padding: const EdgeInsets.all(0.0),
+        padding: const EdgeInsets.symmetric(horizontal: 6.0),
         height: 70,
         // width: MediaQuery.of(context).size.width * 0.32,
         decoration: BoxDecoration(
@@ -1370,65 +1347,80 @@ class _DetailState extends State<Detail> {
 
 class Process extends StatefulWidget {
   final String type;
-  Process({this.type});
+  final Schedule1 schedule;
+  final String machineId;
+  Process({this.type, this.schedule, this.machineId});
   @override
   _ProcessState createState() => _ProcessState();
 }
 
 class _ProcessState extends State<Process> {
   bool expanded = true;
+  StartProcess process;
+  ApiService apiService;
+  @override
+  void initState() {
+    process = new StartProcess();
+    print('check ${widget.schedule.scheduledId.toString()}');
+    process.cablePartNumber = int.parse(widget.schedule.cablePartNumber ?? "0");
+    process.color = widget.schedule.color;
+    process.finishedGoodsNumber =
+        int.parse(widget.schedule.finishedGoodsNumber ?? "0");
+    process.lengthSpecificationInmm = int.parse(widget.schedule.length ?? "0");
+    process.machineIdentification = widget.machineId;
+    process.orderIdentification = int.parse(widget.schedule.orderId ?? "0");
+    //TODO: schedule id is giving empt string and not null
+    // process.scheduledIdentification = int.parse(widget.schedule.scheduledId??"0");
+    process.scheduledIdentification = 10;
+    process.scheduledQuantity =
+        int.parse(widget.schedule.scheduledQuantity ?? "0");
+    apiService = new ApiService();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Terminal A,Cutlength,Terminal B
     if (widget.type == "Terminal A,Cutlength,Terminal B") {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 140,
-                padding: const EdgeInsets.all(0.0),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      expanded = !expanded;
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      SizedBox(width: 10),
-                      Padding(
+      return FutureBuilder(
+          future: apiService.startProcess1(process),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data) {
+                return Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 140,
                           padding: const EdgeInsets.all(0.0),
-                          child: Text(
-                            "Process Type : \nTerminal A,\nCutlength,\nTerminal B",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
-                            ),
-                          )),
-                    ],
-                  ),
-                ),
-              ),
-              tableRow('Terminal A,Cutlength,Terminal B'),
-            ],
-          ),
-          // table for Process
-          (() {
-            if (expanded) {
-              return Column(
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                ],
-              );
+                          child: Row(
+                            children: [
+                              SizedBox(width: 10),
+                              Padding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: Text(
+                                    "Process Type : \nTerminal A,\nCutlength,\nTerminal B",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                        tableRow('Terminal A,Cutlength,Terminal B'),
+                      ],
+                    ),
+                  ],
+                );
+              } else {
+                return Center(child: Text('Could not Start Process'));
+              }
             } else {
-              return Container();
+              return Center(child: CircularProgressIndicator());
             }
-          }()),
-        ],
-      );
+          });
     }
     // Terminal A
 

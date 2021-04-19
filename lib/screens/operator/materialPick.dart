@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:molex/model_api/RequiredRawMaterialSave_model.dart';
+import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator/process/process.dart';
+import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
 class MaterialPick extends StatefulWidget {
@@ -29,7 +30,7 @@ class _MaterialPickState extends State<MaterialPick> {
   String qty;
   List<ItemPart> items = [];
   List<ItemPart> selectditems = [];
-  List<PostRawmaterial> selectdItems = [];
+  List<PostRawMaterial> selectdItems = [];
   List<RawMaterial> rawMaterial = [];
   bool isCollapsedRawMaterial = false;
   bool isCollapsedScannedMaterial = false;
@@ -130,6 +131,7 @@ class _MaterialPickState extends State<MaterialPick> {
           Container(
             padding: EdgeInsets.all(5),
             width: 130,
+            //shift
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -168,6 +170,7 @@ class _MaterialPickState extends State<MaterialPick> {
               ],
             ),
           ),
+          //machineID
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
@@ -237,32 +240,8 @@ class _MaterialPickState extends State<MaterialPick> {
               ],
             ),
           ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
+
+          TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -297,33 +276,28 @@ class _MaterialPickState extends State<MaterialPick> {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: Stream.periodic(const Duration(milliseconds: 2000)),
-        builder: (context, snapshot) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                //Shift and machineId
-                Divider(
-                  color: Colors.redAccent,
-                  thickness: 2,
-                ),
-                tableHeading(),
-                buildDataRow(schedule: widget.schedule),
-                //Raw material
-                buildDataRawMaterial(),
-
-                //Selected material
-                showSelectedRawMaterial(),
-
-                //Proceed to Process Button
-                Container(
-                  height: 100,
-                ),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            //Shift and machineId
+            Divider(
+              color: Colors.redAccent,
+              thickness: 2,
             ),
-          );
-        },
+            tableHeading(),
+            buildDataRow(schedule: widget.schedule),
+            //Raw material
+            buildDataRawMaterial(),
+
+            //Selected material
+            showSelectedRawMaterial(),
+
+            //Proceed to Process Button
+            Container(
+              height: 100,
+            ),
+          ],
+        ),
       ),
       floatingActionButton: Container(
         height: 50,
@@ -351,9 +325,7 @@ class _MaterialPickState extends State<MaterialPick> {
                             machineId: widget.machineId,
                           )),
                 );
-              } else {
-                
-              }
+              } else {}
             });
           },
           child: Text(
@@ -554,56 +526,56 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                     ),
                     onPressed: () {
-                      print('rawmaterial = $rawMaterial');
-                      setState(() {
-                        PostRawmaterial postRawmaterial = new PostRawmaterial();
-                        for (RawMaterial ip in rawMaterial) {
-                          // print(rawMaterial.contains(ip).toString());
-                          // print('loop ${ip.partNunber.toString()}');
-                          if (ip.partNunber == null) {
-                            if (!selectdItems.contains(ip)) {
-                              print('loop ${ip.partNunber.toString()}');
-                              postRawmaterial.date = selectedDate;
-                              postRawmaterial.description = ip.description;
-                              print('qty $qty');
-                              postRawmaterial.existQuantity = qty;
-                              postRawmaterial.orderId = widget.schedule.orderId;
-                              postRawmaterial.scheduledQuantity =
-                                  int.parse(widget.schedule.scheduledQuantity);
-                              postRawmaterial.uom = ip.uom;
-                              postRawmaterial.cablePartNumber =
-                                  partNumber != null
-                                      ? int.parse(partNumber ?? '0')
-                                      : null;
-                              postRawmaterial.machineNumber =
-                                  "mac"; //TODO machine number
-                              postRawmaterial.finishedGoodsNumber = int.parse(
-                                  widget.schedule.finishedGoodsNumber);
-                              postRawmaterial.scheduledId =
-                                  widget.schedule.scheduledId != ''
-                                      ? int.parse(widget.schedule.scheduledId)
-                                      : 0;
-                              // "${selectedDate.toLocal()}".split(' ')[0];
-                              print(postRawmaterial);
-                              selectdItems.add(postRawmaterial);
-                              _partNumberController.clear();
-                              _trackingNumberController.clear();
-                              _qtyController.clear();
-                              partNumber = null;
-                              trackingNumber = null;
-                              qty = null;
-                              _textNode.requestFocus();
-                              Future.delayed(
-                                const Duration(milliseconds: 100),
-                                () {
-                                  SystemChannels.textInput
-                                      .invokeMethod('TextInput.hide');
-                                },
-                              );
-                            }
-                          }
-                        }
-                      });
+                      // print('rawmaterial = $rawMaterial');
+                      // setState(() {
+                      //   PostRawMaterial postRawmaterial = new PostRawMaterial();
+                      //   for (RawMaterial ip in rawMaterial) {
+                      //     // print(rawMaterial.contains(ip).toString());
+                      //     // print('loop ${ip.partNunber.toString()}');
+                      //     if (ip.partNunber == null) {
+                      //       if (!selectdItems.contains(ip)) {
+                      //         print('loop ${ip.partNunber.toString()}');
+                      //         postRawmaterial.date = selectedDate;
+                      //         postRawmaterial.description = ip.description;
+                      //         print('qty $qty');
+                      //         postRawmaterial.existQuantity = qty;
+                      //         postRawmaterial.orderId = widget.schedule.orderId;
+                      //         postRawmaterial.scheduledQuantity =
+                      //             int.parse(widget.schedule.scheduledQuantity);
+                      //         postRawmaterial.uom = ip.uom;
+                      //         postRawmaterial.cablePartNumber =
+                      //             partNumber != null
+                      //                 ? int.parse(partNumber ?? '0')
+                      //                 : null;
+                      //         postRawmaterial.machineNumber =
+                      //             "mac"; //TODO machine number
+                      //         postRawmaterial.finishedGoodsNumber = int.parse(
+                      //             widget.schedule.finishedGoodsNumber);
+                      //         postRawmaterial.scheduledId =
+                      //             widget.schedule.scheduledId != ''
+                      //                 ? int.parse(widget.schedule.scheduledId)
+                      //                 : 0;
+                      //         // "${selectedDate.toLocal()}".split(' ')[0];
+                      //         print(postRawmaterial);
+                      //         selectdItems.add(postRawmaterial);
+                      //         _partNumberController.clear();
+                      //         _trackingNumberController.clear();
+                      //         _qtyController.clear();
+                      //         partNumber = null;
+                      //         trackingNumber = null;
+                      //         qty = null;
+                      //         _textNode.requestFocus();
+                      //         Future.delayed(
+                      //           const Duration(milliseconds: 100),
+                      //           () {
+                      //             SystemChannels.textInput
+                      //                 .invokeMethod('TextInput.hide');
+                      //           },
+                      //         );
+                      //       }
+                      //     }
+                      //   }
+                      // });
                     },
                     child: Text('Add')),
               ),
@@ -845,7 +817,7 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.description,
+                                e.partDescription,
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
@@ -853,12 +825,13 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                "${e.date.toLocal()}".split(' ')[0],
+                                // "${e.date.toLocal()}".split(' ')[0],
+                                "",
                                 style: TextStyle(fontSize: 12),
                               )),
-                              DataCell(Text(e.uom.toString())),
-                              DataCell(Text(e.existQuantity.toString())),
-                              DataCell(Text(e.scheduledQuantity.toString())),
+                              DataCell(Text("e.uom".toString())),
+                              DataCell(Text("e.existQuantity".toString())),
+                              DataCell(Text("e.scheduledQuantity".toString())),
                               DataCell(IconButton(
                                 icon: Icon(
                                   Icons.delete,
