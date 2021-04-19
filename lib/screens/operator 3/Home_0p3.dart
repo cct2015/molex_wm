@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:molex/models/Schudule.dart';
+import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator%203/materialPick3.dart';
 import 'package:molex/screens/widgets/time.dart';
@@ -27,14 +27,14 @@ class _HomePageOp3State extends State<HomePageOp3> {
     super.initState();
     schedule = Schedule(
         orderId: "100",
-        fgpart: "300",
-        scheudleId: "300",
-        cablePart: "200",
+        finishedGoodsNumber: "300",
+        scheduledId: "300",
+        cablePartNumber: "200",
         process: "Wirecutting",
-        cutLength: "100",
+        length: "100",
         color: "Red",
-        scheduledQty: "50",
-        status: "Not Completed");
+        scheduledQuantity: "50",
+        scheduledStatus: "Not Completed");
   }
 
   @override
@@ -389,26 +389,26 @@ class _SchudleTableState extends State<SchudleTable> {
     rowList.add(
       Schedule(
           orderId: "846478041",
-          fgpart: "367810109",
-          scheudleId: "945810107",
-          cablePart: "824923001",
+          finishedGoodsNumber: "367810109",
+          scheduledId: "945810107",
+          cablePartNumber: "824923001",
           process: "Wirecutting",
-          cutLength: "2060",
+          length: "2060",
           color: "RED",
-          scheduledQty: "500 Pcs",
-          status: "Not Completed"),
+          scheduledQuantity: "500 Pcs",
+          scheduledStatus: "Not Completed"),
     );
     rowList.add(
       Schedule(
           orderId: "846478042",
-          fgpart: "367810110",
-          scheudleId: "945810108",
-          cablePart: "824923002",
+          finishedGoodsNumber: "367810110",
+          scheduledId: "945810108",
+          cablePartNumber: "824923002",
           process: "Wirecutting",
-          cutLength: "2060",
+          length: "2060",
           color: "Green",
-          scheduledQty: "500 Pcs",
-          status: "Completed"),
+          scheduledQuantity: "500 Pcs",
+          scheduledStatus: "Completed"),
     );
     rowList.add(
       Schedule(

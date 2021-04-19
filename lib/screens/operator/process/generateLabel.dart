@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/model_api/transferBundle_model.dart';
+import 'package:molex/models/Schudule.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
 
 enum Status {
@@ -10,13 +13,17 @@ enum Status {
 }
 
 class GenerateLabel extends StatefulWidget {
+  Schedule1 schedule;
+  String machineId;
+  String userId;
+  GenerateLabel({this.machineId,this.schedule,this.userId});
   @override
   _GenerateLabelState createState() => _GenerateLabelState();
 }
 
 class _GenerateLabelState extends State<GenerateLabel> {
   // Text Editing Controller for all rejection cases
-  
+
   // All Quantity Contolle
   TextEditingController endWireController = new TextEditingController();
   FocusNode endWireFocus = new FocusNode();
@@ -72,16 +79,20 @@ class _GenerateLabelState extends State<GenerateLabel> {
   TextEditingController cutoffBendController = new TextEditingController();
   TextEditingController terminalCopperMarkController =
       new TextEditingController();
-
   TextEditingController windowgapController = new TextEditingController();
   TextEditingController cablePositionController = new TextEditingController();
   TextEditingController cameraPositionOutController =
       new TextEditingController();
-
   TextEditingController bundleQty = new TextEditingController();
   TextEditingController bundleQtyFocus = new TextEditingController();
   TextEditingController _binController = new TextEditingController();
   TextEditingController maincontroller = new TextEditingController();
+  TextEditingController bladeMarkController = new TextEditingController();
+  FocusNode blademarkFocus = new FocusNode();
+  FocusNode striplengthFocus = new FocusNode();
+  TextEditingController stripLengthController = new TextEditingController();
+  TextEditingController lengthvariationController = new TextEditingController();
+  FocusNode lengthvariationFocus = new FocusNode();
   bool labelGenerated = false;
   String _output = '';
   String binState;
@@ -89,19 +100,16 @@ class _GenerateLabelState extends State<GenerateLabel> {
   String bundleId;
   bool hasBin = false;
   Status status = Status.quantity;
+  TransferBundle transferBundle = new TransferBundle();
 
-  TextEditingController bladeMarkController = new TextEditingController();
-
-  FocusNode blademarkFocus = new FocusNode();
-  FocusNode striplengthFocus = new FocusNode();
-
-  TextEditingController stripLengthController = new TextEditingController();
-
-  TextEditingController lengthvariationController = new TextEditingController();
-
-  FocusNode lengthvariationFocus = new FocusNode();
   @override
   void initState() {
+    transferBundle.cablePartDescription = widget.schedule.cablePartNumber;
+    transferBundle.scheduledQuantity = int.parse(widget.schedule.scheduledQuantity);
+    transferBundle.orderIdentification= int.parse(widget.schedule.orderId);
+    transferBundle.machineIdentification = widget.machineId;
+    transferBundle.scheduledId = int.parse(widget.schedule.scheduledId);
+    
     binState = "Scan Bin";
     super.initState();
   }

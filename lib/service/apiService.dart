@@ -18,6 +18,7 @@ import 'package:molex/model_api/rawMaterialDetail_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
+import 'package:molex/model_api/transferBundle_model.dart';
 
 class ApiService {
   // String baseUrl="http://justerp.in:8080/wipts/";
@@ -99,15 +100,29 @@ class ApiService {
 
   Future<List<RawMaterial>> rawMaterial(
       String machineId, String partNo, String fgNo, String scheduleId) async {
-    var url = Uri.parse(baseUrl +
-        "molex/materialldg/get-req-material-detail?machId=$machineId&partNo=$partNo&fgNo=$fgNo&schdId=$scheduleId");
-    var response = await http.get(url);
-    print('Raw Material status code ${response.statusCode}');
-    if (response.statusCode == 200) {
+    var url1 = Uri.parse(baseUrl +
+        "molex/scheduler/get-req-material-detail?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445");
+    var url2 = Uri.parse(baseUrl +
+        "molex/scheduler/get-req-material-detail-from?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445");
+    var url3 = Uri.parse(baseUrl +
+        "molex/scheduler/get-req-material-detail-to?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445");
+    var response1 = await http.get(url1);
+    var response2 = await http.get(url2);
+    var response3 = await http.get(url3);
+    print('Raw Material1 status code ${response1.statusCode}');
+    print('Raw Material2 status code ${response1.statusCode}');
+    print('Raw Material3 status code ${response1.statusCode}');
+    if (response3.statusCode == 200) {
       try {
-        GetRawMaterial getrawMaterial = getRawMaterialFromJson(response.body);
-        List<RawMaterial> rawmaterialList = getrawMaterial.data.material;
-        return rawmaterialList;
+        GetRawMaterial getrawMaterial1 = getRawMaterialFromJson(response1.body);
+        GetRawMaterial getrawMaterial2 = getRawMaterialFromJson(response2.body);
+        GetRawMaterial getrawMaterial3 = getRawMaterialFromJson(response3.body);
+        List<RawMaterial> rawmaterialList1 = getrawMaterial1.data.material;
+        List<RawMaterial> rawmaterialList2 = getrawMaterial2.data.material;
+        List<RawMaterial> rawmaterialList3 = getrawMaterial3.data.material;
+        List<RawMaterial> rawMateriallist =
+            rawmaterialList1 + rawmaterialList2 + rawmaterialList3;
+        return rawMateriallist;
       } catch (e) {
         return [];
       }
@@ -327,8 +342,21 @@ class ApiService {
       return false;
     }
   }
+
   // Transfer bundle
-    // Future<bool> postpartialComplete(
+  Future<bool> transferBundle(TransferBundle transferBundle) async {
+    var url = Uri.parse(baseUrl + '');
+    var response = await http.post(url,
+        body: transferBundleToJson(transferBundle), headers: headerList);
+    print("response of transefer bundle ${response.statusCode}");
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Future<bool> postpartialComplete(
   // Location Updation PUT method
 
 }

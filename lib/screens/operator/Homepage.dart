@@ -30,14 +30,14 @@ class _HomepageState extends State<Homepage> {
     super.initState();
     schedule = Schedule(
         orderId: "100",
-        fgpart: "300",
-        scheudleId: "300",
-        cablePart: "200",
+        finishedGoodsNumber: "300",
+        scheduledId: "300",
+        cablePartNumber: "200",
         process: "Wirecutting",
-        cutLength: "100",
+        length: "100",
         color: "Red",
-        scheduledQty: "50",
-        status: "Not Completed");
+        scheduledQuantity: "50",
+        scheduledStatus: "Not Completed");
   }
 
   @override
@@ -394,7 +394,7 @@ class _SchudleTableState extends State<SchudleTable> {
               future: apiService.getScheduelarData('EMU-m/c-006C'),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  List<Schedule1> schedulelist = snapshot.data;
+                  List<Schedule> schedulelist = snapshot.data;
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -461,7 +461,7 @@ class _SchudleTableState extends State<SchudleTable> {
     );
   }
 
-  Widget buildDataRow({Schedule1 schedule, int c}) {
+  Widget buildDataRow({Schedule schedule, int c}) {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,

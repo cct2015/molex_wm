@@ -112,10 +112,10 @@ class _MaterialPickState extends State<MaterialPick> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_qty.hasFocus && partNumber != null) {
-      checkPartNumber(partNumber);
-      checkTrackNumber(trackingNumber);
-    }
+    // if (!_qty.hasFocus && partNumber != null) {
+    //   checkPartNumber(partNumber);
+    //   checkTrackNumber(trackingNumber);
+    // }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -526,56 +526,62 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                     ),
                     onPressed: () {
-                      // print('rawmaterial = $rawMaterial');
-                      // setState(() {
-                      //   PostRawMaterial postRawmaterial = new PostRawMaterial();
-                      //   for (RawMaterial ip in rawMaterial) {
-                      //     // print(rawMaterial.contains(ip).toString());
-                      //     // print('loop ${ip.partNunber.toString()}');
-                      //     if (ip.partNunber == null) {
-                      //       if (!selectdItems.contains(ip)) {
-                      //         print('loop ${ip.partNunber.toString()}');
-                      //         postRawmaterial.date = selectedDate;
-                      //         postRawmaterial.description = ip.description;
-                      //         print('qty $qty');
-                      //         postRawmaterial.existQuantity = qty;
-                      //         postRawmaterial.orderId = widget.schedule.orderId;
-                      //         postRawmaterial.scheduledQuantity =
-                      //             int.parse(widget.schedule.scheduledQuantity);
-                      //         postRawmaterial.uom = ip.uom;
-                      //         postRawmaterial.cablePartNumber =
-                      //             partNumber != null
-                      //                 ? int.parse(partNumber ?? '0')
-                      //                 : null;
-                      //         postRawmaterial.machineNumber =
-                      //             "mac"; //TODO machine number
-                      //         postRawmaterial.finishedGoodsNumber = int.parse(
-                      //             widget.schedule.finishedGoodsNumber);
-                      //         postRawmaterial.scheduledId =
-                      //             widget.schedule.scheduledId != ''
-                      //                 ? int.parse(widget.schedule.scheduledId)
-                      //                 : 0;
-                      //         // "${selectedDate.toLocal()}".split(' ')[0];
-                      //         print(postRawmaterial);
-                      //         selectdItems.add(postRawmaterial);
-                      //         _partNumberController.clear();
-                      //         _trackingNumberController.clear();
-                      //         _qtyController.clear();
-                      //         partNumber = null;
-                      //         trackingNumber = null;
-                      //         qty = null;
-                      //         _textNode.requestFocus();
-                      //         Future.delayed(
-                      //           const Duration(milliseconds: 100),
-                      //           () {
-                      //             SystemChannels.textInput
-                      //                 .invokeMethod('TextInput.hide');
-                      //           },
-                      //         );
-                      //       }
-                      //     }
-                      //   }
-                      // });
+                      print('rawmaterial = $rawMaterial');
+                      setState(() {
+                        PostRawMaterial postRawmaterial = new PostRawMaterial();
+                        for (RawMaterial ip in rawMaterial) {
+                          // print(rawMaterial.contains(ip).toString());
+                          // print('loop ${ip.partNunber.toString()}');
+                          if (ip.partNunber == null) {
+                            if (!selectdItems.contains(ip)) {
+                              print('loop ${ip.partNunber.toString()}');
+                              // postRawmaterial.date = selectedDate;
+                              postRawmaterial.partDescription = ip.description;
+                              print('qty $qty');
+                              postRawmaterial.existingQuantity = int.parse(qty);
+                              postRawmaterial.orderidentification =
+                                  int.parse(widget.schedule.orderId);
+                              postRawmaterial.totalScheduledQuantity =
+                                  int.parse(widget.schedule.scheduledQuantity);
+                              postRawmaterial.unitOfMeasurement = ip.uom;
+                              postRawmaterial.cablePartNumber =
+                                  partNumber != null
+                                      ? int.parse(partNumber ?? '0')
+                                      : null;
+                              postRawmaterial.machineIdentification =
+                                  "mac"; //TODO machine number
+                              postRawmaterial.finishedGoodsNumber = int.parse(
+                                  widget.schedule.finishedGoodsNumber);
+                              postRawmaterial.schedulerIdentification =
+                                  widget.schedule.scheduledId;
+                              // ? int.parse(widget.schedule.scheduledId)
+                              // : 0;
+                              // "${selectedDate.toLocal()}".split(' ')[0];
+                              postRawmaterial.color = widget.schedule.color;
+                              postRawmaterial.process=widget.schedule.process;
+                              postRawmaterial.status = "SUCCESS";
+                              postRawmaterial.length=int.parse(widget.schedule.length);
+                              postRawmaterial.traceabilityNumber = int.parse(trackingNumber);
+                              print(postRawmaterial);
+                              selectdItems.add(postRawmaterial);
+                              _partNumberController.clear();
+                              _trackingNumberController.clear();
+                              _qtyController.clear();
+                              partNumber = null;
+                              trackingNumber = null;
+                              qty = null;
+                              _textNode.requestFocus();
+                              Future.delayed(
+                                const Duration(milliseconds: 100),
+                                () {
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                },
+                              );
+                            }
+                          }
+                        }
+                      });
                     },
                     child: Text('Add')),
               ),
