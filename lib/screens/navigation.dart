@@ -53,19 +53,19 @@ class _NavPageState extends State<NavPage> {
               );
             },
           ),
-          ListTile(
-            title: Text("Visual Inspector"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HomeVisualInspector(
-                          machineId: widget.machineId,
-                          userId: widget.userId,
-                        )),
-              );
-            },
-          ),
+          // ListTile(
+          //   title: Text("Visual Inspector"),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => HomeVisualInspector(
+          //                 machineId: widget.machineId,
+          //                 userId: widget.userId,
+          //               )),
+          //     );
+          //   },
+          // ),
           ListTile(
             title: Text("Material Coordinator"),
             onTap: () {

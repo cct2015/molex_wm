@@ -59,7 +59,6 @@ class _LocationState extends State<Location> {
           actions: [
             Container(
               padding: EdgeInsets.all(5),
-              width: 130,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -102,7 +101,7 @@ class _LocationState extends State<Location> {
             Container(
               padding: EdgeInsets.all(1),
               height: 40,
-              width: 130,
+             
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

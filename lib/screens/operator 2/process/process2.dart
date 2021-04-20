@@ -76,7 +76,6 @@ class _ProcessPage2State extends State<ProcessPage2> {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -529,6 +528,7 @@ class _DetailState extends State<Detail> {
                   ],
                 ),
               ),
+              mainBox(mainb),
             ]);
           } else {
             return Container();
@@ -538,7 +538,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget mianBox(String main) {
+  Widget mainBox(String main) {
     if (main == "scanBundle") {
       return ScanBundle();
     }

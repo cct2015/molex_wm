@@ -71,7 +71,6 @@ class _BinState extends State<Bin> {
         actions: [
           Container(
             padding: EdgeInsets.all(5),
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -113,7 +112,6 @@ class _BinState extends State<Bin> {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -272,18 +270,7 @@ class _BinState extends State<Bin> {
                                   child: TextField(
                                       autofocus: true,
                                       controller: _binController,
-                                      onSubmitted: (value) {
-                                        hasBin = true;
-                                        binState = "Scan Next bin";
-                                        _bundleFocus.requestFocus();
-                                        Future.delayed(
-                                          const Duration(milliseconds: 50),
-                                          () {
-                                            SystemChannels.textInput
-                                                .invokeMethod('TextInput.hide');
-                                          },
-                                        );
-                                      },
+                                      onSubmitted: (value) {},
                                       onTap: () {
                                         SystemChannels.textInput
                                             .invokeMethod('TextInput.hide');
@@ -331,7 +318,18 @@ class _BinState extends State<Bin> {
                                 child: Text(
                                   binState,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  hasBin = true;
+                                  binState = "Scan Next bin";
+                                  _bundleFocus.requestFocus();
+                                  Future.delayed(
+                                    const Duration(milliseconds: 50),
+                                    () {
+                                      SystemChannels.textInput
+                                          .invokeMethod('TextInput.hide');
+                                    },
+                                  );
+                                },
                               )),
                             ),
                           ],
@@ -356,18 +354,7 @@ class _BinState extends State<Bin> {
                                       child: TextField(
                                           focusNode: _bundleFocus,
                                           controller: _bundleController,
-                                          onSubmitted: (value) {
-                                            setState(() {
-                                              hasBin = true;
-                                              bundleList.add(Bundle(
-                                                binId: binId,
-                                                bundleId: value,
-                                              ));
-                                              print(bundleList);
-                                              _bundleController.clear();
-                                              bundleId = null;
-                                            });
-                                          },
+                                          onSubmitted: (value) {},
                                           onTap: () {
                                             SystemChannels.textInput
                                                 .invokeMethod('TextInput.hide');
@@ -407,7 +394,18 @@ class _BinState extends State<Bin> {
                                     child: Text(
                                       'Scan Bundle',
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      setState(() {
+                                        hasBin = true;
+                                        bundleList.add(Bundle(
+                                          binId: binId,
+                                          bundleId: bundleId,
+                                        ));
+                                        print(bundleList);
+                                        _bundleController.clear();
+                                        bundleId = null;
+                                      });
+                                    },
                                   )),
                                 ),
                               ],

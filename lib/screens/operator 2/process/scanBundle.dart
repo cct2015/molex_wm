@@ -38,146 +38,153 @@ class _ScanBundleState extends State<ScanBundle> {
 
   Widget rejectioncase() {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Crimping Rejection Cases',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 12,
-                    ))
-              ]),
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
             ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage", 10),
-                          quantitycell("Window Gap	", 10),
-                          quantitycell("Cut-off Burr", 10),
-                          quantitycell("Terminal Copper Mark", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Crimp On Insulation	", 10),
-                          quantitycell("Cut-off Bend	", 10),
-                          quantitycell("Setup Rejections", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Conductor Curling Up & Down", 10),
-                          quantitycell("Tab Bend / Tap Open	", 10),
-                          quantitycell("Exposure Strands		", 10),
-                          quantitycell("Insulation Curling Up & Down", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Improper Crimping", 10),
-                          quantitycell("Insulation Damage	", 10),
-                          quantitycell("Terminal Back Out", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Bellmouth Less / More", 10),
-                          quantitycell("Strands Cut", 10),
-                          quantitycell("Terminal Changeover", 10),
-                          quantitycell("Terminal Twist", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("CFM Error", 10),
-                          quantitycell("Supplier Taken for Maintenance", 10),
-                          quantitycell("Roller Changeover	", 10),
-                          quantitycell("Conductor Burr	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Cut-Off Less / More	", 10),
-                          quantitycell("Brush Length Less / More", 10),
-                          quantitycell("Roller Changeover	", 10),
-                          quantitycell("Strands Cut", 10),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  quantity("Bundle Qty", 10),
-                  quantity("Passed Qty", 10),
-                  quantity("Rejected Qty", 10),
-                  Container(
-                    height: 50,
-                    child: Center(
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    side:
-                                        BorderSide(color: Colors.transparent))),
-                            backgroundColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.pressed))
-                                  return Colors.green[200];
-                                return Colors
-                                    .green[500]; // Use the component's default.
-                              },
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      Text('Crimping Rejection Cases',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 12,
+                          ))
+                    ]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                quantitycell("Terminal Damage", 10),
+                                quantitycell("Window Gap	", 10),
+                                quantitycell("Cut-off Burr", 10),
+                                quantitycell("Terminal Copper Mark", 10),
+                              ],
                             ),
+                            Column(
+                              children: [
+                                quantitycell("Terminal Bend	", 10),
+                                quantitycell("Crimp On Insulation	", 10),
+                                quantitycell("Cut-off Bend	", 10),
+                                quantitycell("Setup Rejections", 10),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                quantitycell("Conductor Curling Up & Down", 10),
+                                quantitycell("Tab Bend / Tap Open	", 10),
+                                quantitycell("Exposure Strands		", 10),
+                                quantitycell("Insulation Curling Up & Down", 10),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                quantitycell("Terminal Twist", 10),
+                                quantitycell("Improper Crimping", 10),
+                                quantitycell("Insulation Damage	", 10),
+                                quantitycell("Terminal Back Out", 10),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                quantitycell("Bellmouth Less / More", 10),
+                                quantitycell("Strands Cut", 10),
+                                quantitycell("Terminal Changeover", 10),
+                                quantitycell("Terminal Twist", 10),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                quantitycell("CFM Error", 10),
+                                quantitycell("Supplier Taken for Maintenance", 10),
+                                quantitycell("Roller Changeover	", 10),
+                                quantitycell("Conductor Burr	", 10),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                quantitycell("Cut-Off Less / More	", 10),
+                                quantitycell("Brush Length Less / More", 10),
+                                quantitycell("Roller Changeover	", 10),
+                                quantitycell("Strands Cut", 10),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        quantity("Bundle Qty", 10),
+                        quantity("Passed Qty", 10),
+                        quantity("Rejected Qty", 10),
+                        Container(
+                          height: 50,
+                          child: Center(
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20.0),
+                                          side:
+                                              BorderSide(color: Colors.transparent))),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      if (states.contains(MaterialState.pressed))
+                                        return Colors.green[200];
+                                      return Colors
+                                          .green[500]; // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: Text("Save & Scan Next"),
+                                onPressed: () {
+                                  next = !next;
+                                    setState(() {
+                                                bundleScan.add(BundleScan(
+                                                    bundleId: _scanIdController.text,
+                                                    bundleProcessQty: "30",
+                                                    bundleQty: "100"));
+                                                _scanIdController.clear();
+                                              });
+                                  Future.delayed(
+                                    const Duration(milliseconds: 10),
+                                    () {
+                                      SystemChannels.textInput
+                                          .invokeMethod('TextInput.hide');
+                                    },
+                                  );
+                                }),
                           ),
-                          child: Text("Save & Scan Next"),
-                          onPressed: () {
-                            next = !next;
-                              setState(() {
-                                          bundleScan.add(BundleScan(
-                                              bundleId: _scanIdController.text,
-                                              bundleProcessQty: "30",
-                                              bundleQty: "100"));
-                                          _scanIdController.clear();
-                                        });
-                            Future.delayed(
-                              const Duration(milliseconds: 10),
-                              () {
-                                SystemChannels.textInput
-                                    .invokeMethod('TextInput.hide');
-                              },
-                            );
-                          }),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

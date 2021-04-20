@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/materialSchedule.dart';
 import 'package:molex/screens/operator/bin.dart';
 
 class HomeMaterialCoordinator extends StatefulWidget {
-  final  String userId;
+  final String userId;
   final String machineId;
   HomeMaterialCoordinator({this.userId, this.machineId});
   @override
@@ -17,6 +18,7 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
 
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     materialSchedule.add(MaterialSchedule(
         orderId: "846478041",
         fgPart: "367810109",
@@ -75,7 +77,6 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
           actions: [
             Container(
               padding: EdgeInsets.all(5),
-              width: 130,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -118,7 +119,6 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
             Container(
               padding: EdgeInsets.all(1),
               height: 40,
-              width: 130,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -249,134 +249,132 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
             )
           ],
         ),
-        body: StreamBuilder(
-            stream: Stream.periodic(const Duration(milliseconds: 2000)),
-            builder: (context, snapshot) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 7),
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 7),
+                  height: 70,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //Select
+                          Container(
+                            child: Row(
                               children: [
-                                //Select
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select Order Id"),
-                                      SizedBox(width: 10),
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select  FG Part"),
-                                      SizedBox(width: 10),
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select Schedule Id"),
-                                      SizedBox(width: 10),
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                        'dawsadweqdfgvbcx'
-                                      ], name: "Select Location"),
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select Route"),
-                                    ],
-                                  ),
-                                ),
-                                //Scan
-                                Container(
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              side: BorderSide(
-                                                  color: Colors.transparent))),
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states
-                                              .contains(MaterialState.pressed))
-                                            return Colors.green[200];
-                                          return Colors.green[
-                                              500]; // Use the component's default.
-                                        },
-                                      ),
-                                    ),
-                                    child: Container(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            height: 28,
-                                            width: 28,
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        "assets/image/scan.png"))),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            'Scan',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      MaterialPageRoute(
-                                          builder: (context) => Bin(
-                                                userId: widget.userId,
-                                                machineId: widget.machineId,
-                                              ));
-                                    },
-                                  ),
-                                ),
-                                //Date
+                                dropdown(options: [
+                                  "846478041",
+                                  "846478041",
+                                  "846478041",
+                                ], name: "Select Order Id"),
+                                SizedBox(width: 10),
+                                dropdown(options: [
+                                  "846478041",
+                                  "846478041",
+                                  "846478041",
+                                ], name: "Select  FG Part"),
+                                SizedBox(width: 10),
+                                dropdown(options: [
+                                  "846478041",
+                                  "846478041",
+                                  "846478041",
+                                ], name: "Select Schedule Id"),
+                                SizedBox(width: 10),
+                                dropdown(options: [
+                                  "846478041",
+                                  "846478041",
+                                  "846478041",
+                                  'dawsadweqdfgvbcx'
+                                ], name: "Select Location"),
+                                dropdown(options: [
+                                  "846478041",
+                                  "846478041",
+                                  "846478041",
+                                ], name: "Select Route"),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          //Scan
+                          Container(
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        side: BorderSide(
+                                            color: Colors.transparent))),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith<Color>(
+                                  (Set<MaterialState> states) {
+                                    if (states.contains(MaterialState.pressed))
+                                      return Colors.green[200];
+                                    return Colors.green[
+                                        500]; // Use the component's default.
+                                  },
+                                ),
+                              ),
+                              child: Container(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      height: 28,
+                                      width: 28,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: AssetImage(
+                                                  "assets/image/scan.png"))),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      'Scan',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Bin(
+                                            userId: widget.userId,
+                                            machineId: widget.machineId,
+                                          )),
+                                );
+                              },
+                            ),
+                          ),
+                          //Date
+                        ],
                       ),
-                    ),
-                    Divider(
-                      color: Colors.redAccent,
-                      thickness: 2,
-                    ),
-                    MaterialcordSchedule(
-                      materialScheduleList: materialSchedule,
-                    )
-                  ],
+                    ],
+                  ),
                 ),
-              );
-            }));
+              ),
+              Divider(
+                color: Colors.redAccent,
+                thickness: 2,
+              ),
+              MaterialcordSchedule(
+                materialScheduleList: materialSchedule,
+              )
+            ],
+          ),
+        ));
   }
 
   Widget dropdown({List<String> options, String name}) {
@@ -409,7 +407,7 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
 }
 
 class MaterialcordSchedule extends StatefulWidget {
- final  List<MaterialSchedule> materialScheduleList;
+  final List<MaterialSchedule> materialScheduleList;
   MaterialcordSchedule({this.materialScheduleList});
   @override
   _MaterialcordScheduleState createState() => _MaterialcordScheduleState();
@@ -460,7 +458,7 @@ class _MaterialcordScheduleState extends State<MaterialcordSchedule> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 50,
+      height: 40,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -484,7 +482,7 @@ class _MaterialcordScheduleState extends State<MaterialcordSchedule> {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
-        height: 40,
+        height: 30,
         child: Center(
           child: Text(
             name,
@@ -511,7 +509,7 @@ class _MaterialcordScheduleState extends State<MaterialcordSchedule> {
             //Schudule ID
             cell(materialSchedule.scheduleId, 0.08),
             //Cable Part
-            cell(materialSchedule.locationId, 0.1),
+            cell(materialSchedule.locationId, 0.12),
 
             //Process
             cell(materialSchedule.totalBin, 0.08),

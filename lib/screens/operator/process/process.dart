@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
@@ -90,7 +89,6 @@ class _ProcessPageState extends State<ProcessPage> {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-       
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -266,47 +264,57 @@ class _DetailState extends State<Detail> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                orderDetailExpanded = !orderDetailExpanded;
-              });
-            },
-            child: Container(
-              height: 20,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 4),
-                    child: Text(
-                      "Order Detail",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ),
-                  IconButton(
-                      iconSize: 15,
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(0),
-                      icon: orderDetailExpanded
-                          ? Icon(Icons.keyboard_arrow_down)
-                          : Icon(Icons.keyboard_arrow_right),
-                      onPressed: () {
-                        setState(() {
-                          orderDetailExpanded = !orderDetailExpanded;
-                        });
-                      })
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       orderDetailExpanded = !orderDetailExpanded;
+          //     });
+          //   },
+          //   child: Container(
+          //     height: 20,
+          //     child: Row(
+          //       children: [
+          //         Padding(
+          //           padding: const EdgeInsets.symmetric(
+          //               horizontal: 10.0, vertical: 4),
+          //           child: Text(
+          //             "Order Detail",
+          //             style: TextStyle(color: Colors.black, fontSize: 12),
+          //           ),
+          //         ),
+          //         IconButton(
+          //             iconSize: 15,
+          //             alignment: Alignment.centerLeft,
+          //             padding: EdgeInsets.all(0),
+          //             icon: orderDetailExpanded
+          //                 ? Icon(Icons.keyboard_arrow_down)
+          //                 : Icon(Icons.keyboard_arrow_right),
+          //             onPressed: () {
+          //               setState(() {
+          //                 orderDetailExpanded = !orderDetailExpanded;
+          //               });
+          //             })
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          
           (() {
             if (orderDetailExpanded) {
-              return Column(children: [
-                tableHeading(),
-                buildDataRow(schedule: widget.schedule),
-                fgDetails(),
-              ]);
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Material(
+                  elevation: 5,
+                  shadowColor: Colors.grey[100],
+                  child: Container(
+                    child: Column(children: [
+                      tableHeading(),
+                      buildDataRow(schedule: widget.schedule),
+                      fgDetails(),
+                    ]),
+                  ),
+                ),
+              );
             } else {
               return Container();
             }
@@ -558,7 +566,10 @@ class _DetailState extends State<Detail> {
                                   userId: widget.userId ?? "",
                                 );
                               } else if (rightside == "complete") {
-                                return FullyComplete();
+                                return FullyComplete(
+                                  userId: widget.userId,
+                                  machineId: widget.machineId,
+                                );
                               } else if (rightside == "partial") {
                                 return PartiallyComplete();
                               } else if (rightside == "bundle") {
@@ -709,7 +720,7 @@ class _DetailState extends State<Detail> {
                           'From Unsheathing Length (mm) - 40');
                     } else {
                       return Center(
-                       child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(),
                       );
                     }
                   }),
@@ -746,7 +757,7 @@ class _DetailState extends State<Detail> {
                         '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
                         'To Unsheathing Length (mm) - 60');
                   } else {
-                     return Center(
+                    return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
@@ -762,11 +773,10 @@ class _DetailState extends State<Detail> {
 
   Widget process(String p1, String p2, String p3, String p4, String p5) {
     return Material(
-       elevation: 10,
-       shadowColor: Colors.grey[100],
-       child: Container(
-
-        padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
+      elevation: 10,
+      shadowColor: Colors.grey[100],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
         height: 80,
         width: MediaQuery.of(context).size.width * 0.325,
         decoration: BoxDecoration(
@@ -802,7 +812,7 @@ class _DetailState extends State<Detail> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width:20),
+                        SizedBox(width: 20),
                         Text(
                           p2,
                           style: TextStyle(
@@ -1066,6 +1076,7 @@ class _DetailState extends State<Detail> {
     double width = MediaQuery.of(context).size.width;
     Widget cell(String name, double d) {
       return Container(
+        color: Colors.white,
         width: width * d,
         height: 15,
         child: Center(
@@ -1078,7 +1089,6 @@ class _DetailState extends State<Detail> {
     }
 
     return Container(
-      width: MediaQuery.of(context).size.width,
       height: 15,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1132,7 +1142,7 @@ class _DetailState extends State<Detail> {
                 ? Colors.green
                 : schedule.scheduledStatus == "Pending"
                     ? Colors.red
-                    : Colors.green[100],
+                    : Colors.green,
             width: 5,
           )),
         ),
@@ -1187,18 +1197,18 @@ class _DetailState extends State<Detail> {
               FgDetails fgDetail = snapshot.data;
               return Container(
                 decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(.5),
-                      blurRadius: 20.0, // soften the shadow
-                      spreadRadius: 0.0, //extend the shadow
-                      offset: Offset(
-                        3.0, // Move to right 10  horizontally
-                        3.0, // Move to bottom 10 Vertically
-                      ),
-                    )
-                  ],
-                ),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.grey.withOpacity(.5),
+                    //     blurRadius: 20.0, // soften the shadow
+                    //     spreadRadius: 0.0, //extend the shadow
+                    //     offset: Offset(
+                    //       3.0, // Move to right 10  horizontally
+                    //       3.0, // Move to bottom 10 Vertically
+                    //     ),
+                    //   )
+                    // ],
+                    ),
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 40,
@@ -1589,17 +1599,20 @@ class _ProcessState extends State<Process> {
   Widget table(String type, String pn, String r, String l, String a, String p) {
     return Container(
         width: MediaQuery.of(context).size.width * 0.47,
-
         child: Column(children: [
-          row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE', 'PENDING',Colors.blue[100]),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',Colors.grey[100]),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',Colors.grey[100]),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',Colors.grey[100]),
+          row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE', 'PENDING',
+              Colors.blue[100]),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
+              Colors.grey[100]),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
+              Colors.grey[100]),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
+              Colors.grey[100]),
         ]));
   }
 
   Widget row(String partno, String uom, String require, String loaded,
-      String available, String pending,Color color) {
+      String available, String pending, Color color) {
     return Container(
       color: color,
       child: Row(children: [
@@ -1611,8 +1624,8 @@ class _ProcessState extends State<Process> {
                     border: Border.all(width: 0.5, color: Colors.grey[100])),
                 height: 20,
                 width: MediaQuery.of(context).size.width * 0.1,
-                child:
-                    Center(child: Text(partno, style: TextStyle(fontSize: 12)))),
+                child: Center(
+                    child: Text(partno, style: TextStyle(fontSize: 12)))),
             Container(
               decoration: BoxDecoration(
                   border: Border.all(width: 0.5, color: Colors.grey[100])),

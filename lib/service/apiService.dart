@@ -22,9 +22,9 @@ import 'package:molex/model_api/transferBundle_model.dart';
 
 class ApiService {
   // String baseUrl="http://justerp.in:8080/wipts/";
-  //  String baseUrl = "http://192.168.1.252:8080/wipts/";
+   String baseUrl = "http://192.168.1.252:8080/wipts/";
 
-  String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
+  // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
   Map<String, String> headerList = {
     "Content-Type": "application/json",
     "Accept": "*/*",

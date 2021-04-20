@@ -4,11 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
+import 'package:molex/screens/widgets/time.dart';
 
 class MaterialPickOp2 extends StatefulWidget {
- final Schedule schedule;
- final String userId;
- final String machineId;
+  final Schedule schedule;
+  final String userId;
+  final String machineId;
   MaterialPickOp2({this.userId, this.machineId, this.schedule});
   @override
   _MaterialPickOp2State createState() => _MaterialPickOp2State();
@@ -122,7 +123,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
         actions: [
           Container(
             padding: EdgeInsets.all(5),
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -164,7 +164,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -230,32 +229,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               ],
             ),
           ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
+          TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -290,38 +264,33 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: Stream.periodic(const Duration(milliseconds: 2000)),
-        builder: (context, snapshot) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                //Shift and machineId
-                Divider(
-                  color: Colors.redAccent,
-                  thickness: 2,
-                ),
-                tableHeading(),
-                buildDataRow(schedule: widget.schedule),
-
-                //Raw material
-                buildDataRawMaterial(),
-                Divider(
-                  color: Colors.red[100],
-                  thickness: 2,
-                ),
-
-                //Selected material
-                showSelectedRawMaterial(),
-
-                //Proceed to Process Button
-                Container(
-                  height: 100,
-                ),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            //Shift and machineId
+            Divider(
+              color: Colors.redAccent,
+              thickness: 2,
             ),
-          );
-        },
+            tableHeading(),
+            buildDataRow(schedule: widget.schedule),
+
+            //Raw material
+            buildDataRawMaterial(),
+            Divider(
+              color: Colors.red[100],
+              thickness: 2,
+            ),
+
+            //Selected material
+            showSelectedRawMaterial(),
+
+            //Proceed to Process Button
+            Container(
+              height: 100,
+            ),
+          ],
+        ),
       ),
       floatingActionButton: Container(
         height: 50,

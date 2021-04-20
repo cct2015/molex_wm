@@ -653,43 +653,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           ),
                         ],
                       ),
-                      // Column(
-                      //   children: [
-                      //     quantitycell("end wire", 10),
-                      //     quantitycell("cable damage", 10),
-                      //     quantitycell("roller mark", 10),
-                      //     quantitycell("Terminal Damage / Bend", 10),
-                      //   ],
-                      // ),
-                      // Column(
-                      //   children: [
-                      //     quantitycell("Terminal Twist", 10),
-                      //     quantitycell("Window Gap	", 10),
-                      //     quantitycell("Crimp On Insulation", 10),
-                      //     quantitycell("Bellmouth Less / More", 10),
-                      //   ],
-                      // ),
-                      // Container(
-                      //   child: Column(
-                      //     mainAxisAlignment: MainAxisAlignment.start,
-                      //     children: [
-                      //       quantitycell("Cut-off Burr	", 10),
-                      //       quantitycell(" Strands Cut", 10),
-                      //       quantitycell("Brush Length Less / More", 10),
-                      //       quantitycell(" Half Curling", 10),
-                      //     ],
-                      //   ),
-                      // ),
-                      // Container(
-                      //   child: Column(
-                      //     mainAxisAlignment: MainAxisAlignment.start,
-                      //     children: [
-                      //       quantitycell("End terminal", 10),
-                      //       quantitycell("Setups Rejections", 10),
-                      //       quantitycell("Exposure Strands", 10),
-                      //     ],
-                      //   ),
-                      // ),
+                  
                     ],
                   ),
                 ),

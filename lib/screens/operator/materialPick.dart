@@ -115,6 +115,9 @@ class _MaterialPickState extends State<MaterialPick> {
     //   checkPartNumber(partNumber);
     //   checkTrackNumber(trackingNumber);
     // }
+    if(!_qty.hasFocus){
+         SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -173,7 +176,7 @@ class _MaterialPickState extends State<MaterialPick> {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-            width: 130,
+           
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -388,6 +391,12 @@ class _MaterialPickState extends State<MaterialPick> {
                           });
                         _qty.requestFocus();
                       },
+                      onTap: (){
+                        setState(() {
+                            SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        });
+                         
+                      },
                       onChanged: (value) {
                         trackingNumber = value;
                       },
@@ -452,7 +461,10 @@ class _MaterialPickState extends State<MaterialPick> {
                   child: TextField(
                     controller: _qtyController,
                     onTap: () {
-                      SystemChannels.textInput.invokeMethod('TextInput.show');
+                      setState(() {
+                        
+                      });
+                     
                     },
                     focusNode: _qty,
                     keyboardType: TextInputType.number,
