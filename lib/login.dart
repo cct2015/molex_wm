@@ -25,6 +25,8 @@ class _LoginScanState extends State<LoginScan> {
     apiService = new ApiService();
     employee = new Employee();
     _textNode.requestFocus();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+     SystemChannels.textInput.invokeMethod('TextInput.hide');
     Future.delayed(
       const Duration(milliseconds: 10),
       () {
@@ -48,6 +50,8 @@ class _LoginScanState extends State<LoginScan> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -86,48 +90,65 @@ class _LoginScanState extends State<LoginScan> {
                             Lottie.asset('assets/lottie/scan-barcode.json',
                                 width: 350, fit: BoxFit.cover),
                             Text(
-                              'Scan Id card to Login $userId ',
+                              'Scan Id card to Login ${userId ?? ''} ',
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 20),
                             ),
-                            ElevatedButton(
-                                onPressed: () {
-                                  print('pressed');
-                                  apiService.empIdlogin(userId).then((value) {
-                                    if (value != null) {
-                                      Fluttertoast.showToast(
-                                          msg: "logged In",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                      print("userId:$userId");
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MachineId(
-                                                  userId: value.empId,
-                                                )),
-                                      );
-                                    } else {
-                                      Fluttertoast.showToast(
-                                          msg: "login Failed",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                      setState(() {
-                                        userId = null;
-                                        _textController.clear();
-                                      });
-                                    }
-                                  });
-                                },
-                                child: Text('Login')),
+                            SizedBox(height: 20),
+                            Container(
+                              height: 40,
+                              width: 180,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color>(
+                                      (Set<MaterialState> states) {
+                                        if (states
+                                            .contains(MaterialState.pressed))
+                                          return Colors.green;
+                                        return Colors
+                                            .red; // Use the component's default.
+                                      },
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    print('pressed');
+                                    apiService.empIdlogin(userId).then((value) {
+                                      if (value != null) {
+                                        Fluttertoast.showToast(
+                                            msg: "logged In",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                        print("userId:$userId");
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => MachineId(
+                                                    userId: value.empId,
+                                                  )),
+                                        );
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: "login Failed",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                        setState(() {
+                                          userId = null;
+                                          _textController.clear();
+                                        });
+                                      }
+                                    });
+                                  },
+                                  child: Text('Login')),
+                            ),
                             Container(
                                 alignment: Alignment.center,
                                 width: 0,

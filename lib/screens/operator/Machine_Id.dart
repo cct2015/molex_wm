@@ -84,73 +84,69 @@ class _MachineIdState extends State<MachineId> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(children: [
                       Lottie.asset('assets/lottie/scan-barcode.json',
-                          width: 350, fit: BoxFit.cover),
+                          width: 320, fit: BoxFit.cover),
                       Text(
-                        'Scan Machine ',
+                        'Scan Machine ${machineId ?? ""}',
                         style: TextStyle(color: Colors.grey, fontSize: 20),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              apiService
-                                  .getmachinedetails(machineId)
-                                  .then((value) {
-                                if (value != null) {
-                                  Fluttertoast.showToast(
-                                      msg: machineId,
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-
-                                  print("machineID:$machineId");
-
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Homepage(
-                                              userId: widget.userId,
-                                              machineId: machineId,
-                                            )),
-                                  );
-                                }else{
-                                  Fluttertoast.showToast(
-                                          msg: "Machine not Found",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                      setState(() {
-                                        machineId = null;
-                                        _textController.clear();
-                                      });
-
-                                }
-                              });
-                            },
-                            child: Text('Next'),
+                        SizedBox(height: 20),
+                      Container(
+                        height: 40,
+                        width: 180,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.green;
+                                return Colors
+                                    .red; // Use the component's default.
+                              },
+                            ),
                           ),
-                          SizedBox(width:10),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Homepage(
-                                          userId: widget.userId,
-                                          machineId: machineId,
-                                        )),
-                              );
-                            },
-                            child: Text('Skip'),
-                          ),
-                        ],
+                          onPressed: () {
+                            apiService
+                                .getmachinedetails(machineId)
+                                .then((value) {
+                              if (value != null) {
+                                Fluttertoast.showToast(
+                                    msg: machineId,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+
+                                print("machineID:$machineId");
+
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Homepage(
+                                            userId: widget.userId,
+                                            machineId: machineId,
+                                          )),
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Machine not Found",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                setState(() {
+                                  machineId = null;
+                                  _textController.clear();
+                                });
+                              }
+                            });
+                          },
+                          child: Text('Next'),
+                        ),
                       ),
                       Container(
                         child: RawKeyboardListener(

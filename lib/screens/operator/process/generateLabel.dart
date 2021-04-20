@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
 
@@ -109,7 +110,9 @@ class _GenerateLabelState extends State<GenerateLabel> {
         int.parse(widget.schedule.scheduledQuantity);
     transferBundle.orderIdentification = int.parse(widget.schedule.orderId);
     transferBundle.machineIdentification = widget.machineId;
-    transferBundle.scheduledId = widget.schedule.scheduledId==''? 0:int.parse(widget.schedule.scheduledId);
+    transferBundle.scheduledId = widget.schedule.scheduledId == ''
+        ? 0
+        : int.parse(widget.schedule.scheduledId);
     binState = "Scan Bin";
     super.initState();
   }
@@ -164,53 +167,90 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
     Widget buildbutton(String buttonText) {
       return new Expanded(
-          child: new OutlineButton(
-        padding: EdgeInsets.all(12.0),
-        child: new Text(
-          buttonText,
-          style: TextStyle(
-            fontSize: 20.0,
+          child: Container(
+        decoration: new BoxDecoration(),
+        width: 27,
+        height: 50,
+        child: new ElevatedButton(
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                    side: BorderSide(color: Colors.grey[50]))),
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.pressed))
+                  return Colors.grey[100];
+
+                return Colors.white; // Use the component's default.
+              },
+            ),
           ),
+          child: new Text(
+            buttonText,
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+          onPressed: () => {buttonPressed(buttonText)},
         ),
-        onPressed: () => {buttonPressed(buttonText)},
-        textColor: Colors.black,
       ));
     }
 
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.24,
-      height: 193,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              buildbutton("7"),
-              buildbutton('8'),
-              buildbutton('9'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('4'),
-              buildbutton('5'),
-              buildbutton('6'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('1'),
-              buildbutton('2'),
-              buildbutton('3'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('00'),
-              buildbutton('0'),
-              buildbutton('clear'),
-            ],
-          ),
-        ],
+    return Material(
+      elevation: 2,
+      shadowColor: Colors.grey[200],
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.24,
+        decoration: new BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.red.withOpacity(0.1),
+          //     spreadRadius: 2,
+          //     blurRadius: 2,
+          //     offset: Offset(0, 0), // changes position of shadow
+          //   ),
+          // ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                buildbutton("7"),
+                buildbutton('8'),
+                buildbutton('9'),
+              ],
+            ),
+            Row(
+              children: [
+                buildbutton('4'),
+                buildbutton('5'),
+                buildbutton('6'),
+              ],
+            ),
+            Row(
+              children: [
+                buildbutton('1'),
+                buildbutton('2'),
+                buildbutton('3'),
+              ],
+            ),
+            Row(
+              children: [
+                buildbutton('00'),
+                buildbutton('0'),
+                buildbutton('Clear'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -227,6 +267,20 @@ class _GenerateLabelState extends State<GenerateLabel> {
             child: TextField(
               textAlign: TextAlign.center,
               controller: bundleQty,
+              onEditingComplete: () {
+                setState(() {
+                  labelGenerated = !labelGenerated;
+                  status = Status.generateLabel;
+                });
+              },
+              onTap: () {
+                setState(() {
+                  _output = '';
+                  maincontroller = bundleQty;
+                });
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
+              },
+              showCursor: false,
               keyboardType: TextInputType.number,
               textAlignVertical: TextAlignVertical.center,
               style: TextStyle(fontSize: 12),
@@ -701,6 +755,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 height: 30,
                 width: 140,
                 child: TextField(
+                  showCursor: false,
                   controller: textEditingController,
                   focusNode: focusNode,
                   onTap: () {

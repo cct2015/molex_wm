@@ -49,7 +49,6 @@ class _ProcessPageState extends State<ProcessPage> {
         actions: [
           Container(
             padding: EdgeInsets.all(5),
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -91,7 +90,7 @@ class _ProcessPageState extends State<ProcessPage> {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-            width: 130,
+       
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -325,6 +324,7 @@ class _DetailState extends State<Detail> {
               return Column(children: [
                 terminal(),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Process(
                       type: _chosenValue,
@@ -585,73 +585,6 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget keypad() {
-    buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
-        _output = '';
-      } else {
-        _output = _output + buttonText;
-      }
-
-      print(_output);
-      setState(() {
-        _qtyController.text = _output;
-        output = int.parse(_output).toStringAsFixed(2);
-      });
-    }
-
-    Widget buildbutton(String buttonText) {
-      return new Expanded(
-          child: new OutlineButton(
-        padding: EdgeInsets.all(12.0),
-        child: new Text(
-          buttonText,
-          style: TextStyle(
-            fontSize: 20.0,
-          ),
-        ),
-        onPressed: () => {buttonPressed(buttonText)},
-        textColor: Colors.black,
-      ));
-    }
-
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.24,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              buildbutton("7"),
-              buildbutton('8'),
-              buildbutton('9'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('4'),
-              buildbutton('5'),
-              buildbutton('6'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('1'),
-              buildbutton('2'),
-              buildbutton('3'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('00'),
-              buildbutton('0'),
-              buildbutton('clear'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   //Bundle table
   Widget bundleTable() {
     return DataTable(
@@ -775,10 +708,8 @@ class _DetailState extends State<Detail> {
                           '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
                           'From Unsheathing Length (mm) - 40');
                     } else {
-                      return Container(
-                        height: 100,
-                        width: 100,
-                        color: Colors.amber,
+                      return Center(
+                       child: CircularProgressIndicator(),
                       );
                     }
                   }),
@@ -797,7 +728,9 @@ class _DetailState extends State<Detail> {
                         '${cableDetail.cablePartNumber}(${cableDetail.description})',
                         '');
                   } else {
-                    return Container();
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
                 }),
             FutureBuilder(
@@ -813,7 +746,9 @@ class _DetailState extends State<Detail> {
                         '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
                         'To Unsheathing Length (mm) - 60');
                   } else {
-                    return Container();
+                     return Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
                 })
           ],
@@ -826,26 +761,28 @@ class _DetailState extends State<Detail> {
   //       localhost:9090//molex/scheduler/get-req-material-detail-to?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445"
 
   Widget process(String p1, String p2, String p3, String p4, String p5) {
-    return Padding(
-      padding: const EdgeInsets.all(.0),
-      child: Container(
+    return Material(
+       elevation: 10,
+       shadowColor: Colors.grey[100],
+       child: Container(
+
         padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
         height: 80,
         width: MediaQuery.of(context).size.width * 0.325,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(.5),
-              blurRadius: 20.0, // soften the shadow
-              spreadRadius: 0.0, //extend the shadow
-              offset: Offset(
-                3.0, // Move to right 10  horizontally
-                3.0, // Move to bottom 10 Vertically
-              ),
-            )
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(.3),
+          //     blurRadius: 20.0, // soften the shadow
+          //     spreadRadius: 0.0, //extend the shadow
+          //     offset: Offset(
+          //       3.0, // Move to right 10  horizontally
+          //       3.0, // Move to bottom 10 Vertically
+          //     ),
+          //   )
+          // ],
         ),
         child: Row(
           children: [
@@ -1531,7 +1468,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Process Type :\n Terminal A,Cutlength",
+                      "Process Type :\n Terminal A,\nCutlength",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -1572,7 +1509,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Text(
-                      "Process Type : \nCutlenght, Terminal B",
+                      "Process Type : \nCutlenght,\nTerminal B",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -1651,92 +1588,95 @@ class _ProcessState extends State<Process> {
 
   Widget table(String type, String pn, String r, String l, String a, String p) {
     return Container(
-        width: MediaQuery.of(context).size.width * 0.48,
-        color: Colors.grey[200],
+        width: MediaQuery.of(context).size.width * 0.47,
+
         child: Column(children: [
-          row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE', 'PENDING'),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
+          row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE', 'PENDING',Colors.blue[100]),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',Colors.grey[100]),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',Colors.grey[100]),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',Colors.grey[100]),
         ]));
   }
 
   Widget row(String partno, String uom, String require, String loaded,
-      String available, String pending) {
-    return Row(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
+      String available, String pending,Color color) {
+    return Container(
+      color: color,
+      child: Row(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                    border: Border.all(width: 0.5, color: Colors.grey[100])),
+                height: 20,
+                width: MediaQuery.of(context).size.width * 0.1,
+                child:
+                    Center(child: Text(partno, style: TextStyle(fontSize: 12)))),
+            Container(
               decoration: BoxDecoration(
                   border: Border.all(width: 0.5, color: Colors.grey[100])),
               height: 20,
-              width: MediaQuery.of(context).size.width * 0.1,
-              child:
-                  Center(child: Text(partno, style: TextStyle(fontSize: 12)))),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.05,
-            child: Center(
-              child: Text(
-                uom,
-                style: TextStyle(fontSize: 10),
+              width: MediaQuery.of(context).size.width * 0.05,
+              child: Center(
+                child: Text(
+                  uom,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                require,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  require,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                loaded,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  loaded,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                available,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  available,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                pending,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  pending,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-        ],
-      )
-    ]);
+          ],
+        )
+      ]),
+    );
   }
 
   Widget tableRow(String name) {

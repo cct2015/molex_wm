@@ -261,7 +261,7 @@ class _HomePageOp3State extends State<HomePageOp3> {
             search(),
             SchudleTable(userId: widget.userId, machineId: widget.machineId),
             FutureBuilder(
-                future: apiService.getScheduelarData(widget.machineId),
+                future: apiService.getScheduelarData(machId: widget.machineId,type: "A" ),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Container(

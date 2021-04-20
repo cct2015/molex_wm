@@ -893,7 +893,7 @@ class _MaterialPickState extends State<MaterialPick> {
                   onPressed: () {
                     apiService.postRawmaterial(selectdItems).then((value) {
                 if (value) {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProcessPage(

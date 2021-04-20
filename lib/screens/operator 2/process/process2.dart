@@ -9,7 +9,7 @@ import 'package:molex/screens/operator/bin.dart';
 class ProcessPage2 extends StatefulWidget {
   final String userId;
   final String machineId;
- final Schedule schedule;
+  final Schedule schedule;
   ProcessPage2({this.machineId, this.userId, this.schedule});
   @override
   _ProcessPage2State createState() => _ProcessPage2State();
@@ -291,7 +291,7 @@ class _DetailState extends State<Detail> {
             return Column(children: [
               tableHeading(),
               buildDataRow(schedule: widget.schedule),
-              box(),
+              fgDetails(),
             ]);
           } else {
             return Container();
@@ -310,146 +310,217 @@ class _DetailState extends State<Detail> {
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.76,
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Process(type: _chosenValue),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.5,
-                            width: MediaQuery.of(context).size.width * 0.75,
-                            child: Center(child: mianBox(mainb)),
-                          )
-                        ],
-                      ),
-                    ),
+                        color: Colors.transparent, child: Process(type: _chosenValue)),
+
                     //buttons and num pad
                     Container(
-                        width: MediaQuery.of(context).size.width * 0.24,
-                        height: MediaQuery.of(context).size.height * 0.5,
+                        width: 350,
+                        height: 96,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                //Scan Bundle Button
                                 Container(
-                                  height: 30,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  padding: const EdgeInsets.all(0.0),
-                                  child: Container(
-                                    color: Colors.transparent,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.purple, // background
-                                          onPrimary: Colors.white,
-                                        ),
-                                        child: Text(
-                                          'Scan Bundle',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.normal,
+                                  width: 330,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      //Scan Bundle Button
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      side: BorderSide(
+                                                          color: Colors
+                                                              .transparent))),
+                                              backgroundColor:
+                                                  MaterialStateProperty
+                                                      .resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                                  if (states.contains(
+                                                      MaterialState.pressed))
+                                                    return Colors.green[200];
+                                                  return Colors.green[
+                                                      500]; // Use the component's default.
+                                                },
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'Scan Bundle',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                mainb = "scanBundle";
+                                                Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 50),
+                                                  () {
+                                                    SystemChannels.textInput
+                                                        .invokeMethod(
+                                                            'TextInput.hide');
+                                                  },
+                                                );
+                                              });
+                                            }),
+                                      ),
+
+                                      //100% complete
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    side: BorderSide(
+                                                        color: Colors
+                                                            .transparent))),
+                                            backgroundColor:
+                                                MaterialStateProperty
+                                                    .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.pressed))
+                                                  return Colors.green[200];
+                                                return Colors.green[
+                                                    500]; // Use the component's default.
+                                              },
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              mainb = "100";
+                                            });
+                                          },
+                                          child: Text(
+                                            "100% complete",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
                                           ),
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            mainb = "scanBundle";
-                                            Future.delayed(
-                                              const Duration(milliseconds: 50),
-                                              () {
-                                                SystemChannels.textInput
-                                                    .invokeMethod(
-                                                        'TextInput.hide');
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 330,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      //Partially complete
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    side: BorderSide(
+                                                        color: Colors
+                                                            .transparent))),
+                                            backgroundColor:
+                                                MaterialStateProperty
+                                                    .resolveWith<Color>(
+                                              (Set<MaterialState> states) {
+                                                if (states.contains(
+                                                    MaterialState.pressed))
+                                                  return Colors.green[200];
+                                                return Colors.red[
+                                                    500]; // Use the component's default.
                                               },
-                                            );
-                                          });
-                                        }),
-                                  ),
-                                ),
-                                //100% complete
-                                Container(
-                                  height: 30,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.green, // background
-                                      onPrimary: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        mainb = "100";
-                                      });
-                                    },
-                                    child: Text(
-                                      "100% complete",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                //Partially complete
-                                Container(
-                                  height: 30,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.red, // background
-                                      onPrimary: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        mainb = "partial";
-                                      });
-                                    },
-                                    child: Text(
-                                      "Partially  complete",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                //Reload Material
-                                Container(
-                                  height: 30,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.2,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.blue, // background
-                                        onPrimary: Colors.white,
-                                      ),
-                                      child: Text(
-                                        'Reload Material',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              mainb = "partial";
+                                            });
+                                          },
+                                          child: Text(
+                                            "Partially  complete",
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Future.delayed(
-                                          const Duration(milliseconds: 10),
-                                          () {
-                                            SystemChannels.textInput
-                                                .invokeMethod('TextInput.hide');
-                                          },
-                                        );
-                                      }),
-                                ),
-                                Container(
-                                  height: 165,
-                                  child: Center(child: keypad()),
+                                      //Reload Material
+                                      Container(
+                                        height: 40,
+                                        width: 160,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<
+                                                      RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      side: BorderSide(
+                                                          color: Colors
+                                                              .transparent))),
+                                              backgroundColor:
+                                                  MaterialStateProperty
+                                                      .resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                                  if (states.contains(
+                                                      MaterialState.pressed))
+                                                    return Colors.green[200];
+                                                  return Colors.blue[
+                                                      500]; // Use the component's default.
+                                                },
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'Reload Material',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              Future.delayed(
+                                                const Duration(
+                                                    milliseconds: 10),
+                                                () {
+                                                  SystemChannels.textInput
+                                                      .invokeMethod(
+                                                          'TextInput.hide');
+                                                },
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -1351,22 +1422,42 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget box() {
+  Widget fgDetails() {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(.5),
+                blurRadius: 20.0, // soften the shadow
+                spreadRadius: 0.0, //extend the shadow
+                offset: Offset(
+                  3.0, // Move to right 10  horizontally
+                  3.0, // Move to bottom 10 Vertically
+                ),
+              )
+            ],
+          ),
           width: MediaQuery.of(context).size.width,
           height: 30,
           // color: Colors.grey[200],
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            boxes("FG Description", 'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
-            boxes("FG Scheduled", '29/03/2021'),
-            boxes("Customer", 'APC COOLING'),
-            boxes("Drg Rev", 'D'),
-            boxes("Cable #", '1'),
-            boxes('Tolerance ', '± 5 / ± 5'),
-          ])),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 40,
+            color: Colors.white,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  boxes("FG Description",
+                      'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
+                  boxes("FG Scheduled", '29/03/2021'),
+                  boxes("Customer", 'APC COOLING'),
+                  boxes("Drg Rev", 'D'),
+                  boxes("Cable #", '1'),
+                  boxes('Tolerance ', '± 5 / ± 5'),
+                ]),
+          )),
     );
   }
 
@@ -1378,7 +1469,7 @@ class _DetailState extends State<Detail> {
       padding: EdgeInsets.symmetric(horizontal: 30),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(5)),
-        color: Colors.grey[200],
+        color: Colors.white,
       ),
       child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -1400,7 +1491,7 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0),
       child: Container(
-        height: 70,
+        height: 80,
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: Row(
@@ -1434,61 +1525,66 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(.0),
       child: Container(
-        padding: const EdgeInsets.all(0.0),
-        height: 70,
-        // width: MediaQuery.of(context).size.width * 0.32,
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
+        height: 80,
+        width: MediaQuery.of(context).size.width * 0.325,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.grey[200],
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(.5),
+              blurRadius: 20.0, // soften the shadow
+              spreadRadius: 0.0, //extend the shadow
+              offset: Offset(
+                3.0, // Move to right 10  horizontally
+                3.0, // Move to bottom 10 Vertically
+              ),
+            )
+          ],
         ),
         child: Row(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.all(0.0),
-            //   child: Container(
-            //     height: 80.0,
-            //     width: 85,
-            //     decoration: BoxDecoration(
-            //       image: DecorationImage(
-            //         image: AssetImage('assets/image/terminal_a.jpg'),
-            //         fit: BoxFit.fill,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // Container(
-            //   width: 8,
-            // ),
             Padding(
               padding: const EdgeInsets.all(1.0),
               child: Container(
                 // width: MediaQuery.of(context).size.width * 0.31,
                 child: Column(
                   children: [
-                    // Text(
-                    //   p1,
-                    //   style: TextStyle(
-                    //     fontSize: 10,
-                    //   ),
-                    // ),
-                    Text(
-                      p2,
-                      style: TextStyle(
-                        fontSize: 11,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          p1,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        Text(
+                          p2,
+                          style: TextStyle(
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 5),
                     Text(
                       p3,
                       style: TextStyle(fontSize: 9),
                     ),
-                    Text(
-                      p4,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.red,
-                        fontWeight: FontWeight.w600,
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.320,
+                      child: Text(
+                        p4,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     SizedBox(height: 5),
@@ -1575,7 +1671,8 @@ class _ProcessState extends State<Process> {
           Row(
             children: [
               Container(
-                height: 30,
+                width: 140,
+                height: 70,
                 padding: const EdgeInsets.all(0.0),
                 child: GestureDetector(
                   onTap: () {
@@ -1585,14 +1682,14 @@ class _ProcessState extends State<Process> {
                   },
                   child: Row(
                     children: [
-                      SizedBox(width: 8),
+                      SizedBox(width: 10),
                       Padding(
                           padding: const EdgeInsets.all(0.0),
                           child: Text(
-                            "Process Type : \nTerminal A,Cutlength,Terminal B",
+                            "Process Type : \nTerminal A,\nCutlength,\nTerminal B",
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 12,
+                              fontSize: 13,
                             ),
                           )),
                     ],
@@ -1936,310 +2033,92 @@ class _ProcessState extends State<Process> {
 
   Widget table(String type, String pn, String r, String l, String a, String p) {
     return Container(
-        width: MediaQuery.of(context).size.width * 0.57,
+        width: MediaQuery.of(context).size.width * 0.48,
         color: Colors.grey[200],
         child: Column(children: [
-          Row(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      height: 20,
-                      width: MediaQuery.of(context).size.width * 0.1,
-                      child: Center(
-                          child: Text(
-                        "PART NO.",
-                        style: TextStyle(fontSize: 12),
-                      ))),
-                  Container(
-                      height: 20,
-                      color: Colors.grey[300],
-                      width: MediaQuery.of(context).size.width * 0.07,
-                      child: Center(
-                          child: Text("UOM", style: TextStyle(fontSize: 12)))),
-                  Container(
-                      height: 20,
-                      color: Colors.grey[300],
-                      width: MediaQuery.of(context).size.width * 0.10,
-                      child: Center(
-                          child: Text("REQUIRED",
-                              style: TextStyle(fontSize: 12)))),
-                  Container(
-                      height: 20,
-                      color: Colors.grey[300],
-                      width: MediaQuery.of(context).size.width * 0.10,
-                      child: Center(
-                          child:
-                              Text("LOADED", style: TextStyle(fontSize: 12)))),
-                  Container(
-                      height: 20,
-                      color: Colors.grey[300],
-                      width: MediaQuery.of(context).size.width * 0.10,
-                      child: Center(
-                          child: Text("AVAILABLE",
-                              style: TextStyle(fontSize: 12)))),
-                  Container(
-                      height: 20,
-                      color: Colors.grey[300],
-                      width: MediaQuery.of(context).size.width * 0.10,
-                      child: Center(
-                          child:
-                              Text("PENDING", style: TextStyle(fontSize: 12)))),
-                ],
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 20,
-                      width: MediaQuery.of(context).size.width * 0.1,
-                      child: Center(
-                          child: Text('884538504',
-                              style: TextStyle(fontSize: 12)))),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.07,
-                    child: Center(
-                      child: Text(
-                        'pcs',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '5000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '25000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '1000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.10,
-                    child: Center(
-                      child: Text(
-                        '25000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 2.0, color: Colors.grey[100])),
-                      height: 20,
-                      width: MediaQuery.of(context).size.width * 0.1,
-                      child: Center(
-                          child: Text('884538504',
-                              style: TextStyle(fontSize: 12)))),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.07,
-                    child: Center(
-                      child: Text(
-                        'pcs',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '5000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '25000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '1000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.10,
-                    child: Center(
-                      child: Text(
-                        '25000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          Row(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 0.5, color: Colors.grey[100])),
-                      height: 20,
-                      width: MediaQuery.of(context).size.width * 0.1,
-                      child: Center(
-                          child: Text('884538504',
-                              style: TextStyle(fontSize: 12)))),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.5, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.07,
-                    child: Center(
-                      child: Text(
-                        'pcs',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.5, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '5000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.5, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '25000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.5, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.1,
-                    child: Center(
-                      child: Text(
-                        '1000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.5, color: Colors.grey[100])),
-                    height: 20,
-                    width: MediaQuery.of(context).size.width * 0.10,
-                    child: Center(
-                      child: Text(
-                        '25000m',
-                        style: TextStyle(fontSize: 10),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+          row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE', 'PENDING'),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
+          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
         ]));
+  }
+
+  Widget row(String partno, String uom, String require, String loaded,
+      String available, String pending) {
+    return Row(children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.1,
+              child:
+                  Center(child: Text(partno, style: TextStyle(fontSize: 12)))),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(width: 0.5, color: Colors.grey[100])),
+            height: 20,
+            width: MediaQuery.of(context).size.width * 0.05,
+            child: Center(
+              child: Text(
+                uom,
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(width: 0.5, color: Colors.grey[100])),
+            height: 20,
+            width: MediaQuery.of(context).size.width * 0.08,
+            child: Center(
+              child: Text(
+                require,
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(width: 0.5, color: Colors.grey[100])),
+            height: 20,
+            width: MediaQuery.of(context).size.width * 0.08,
+            child: Center(
+              child: Text(
+                loaded,
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(width: 0.5, color: Colors.grey[100])),
+            height: 20,
+            width: MediaQuery.of(context).size.width * 0.08,
+            child: Center(
+              child: Text(
+                available,
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(width: 0.5, color: Colors.grey[100])),
+            height: 20,
+            width: MediaQuery.of(context).size.width * 0.08,
+            child: Center(
+              child: Text(
+                pending,
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+          ),
+        ],
+      )
+    ]);
   }
 
   Widget tableRow(String name) {

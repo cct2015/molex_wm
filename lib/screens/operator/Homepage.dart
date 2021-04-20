@@ -30,7 +30,8 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     apiService = new ApiService();
-    apiService.getScheduelarData('EMU-m/c-006C');
+    apiService.getScheduelarData(
+        machId: widget.machineId, type: type == 0 ? "A" : "B");
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
     schedule = Schedule(
@@ -268,7 +269,11 @@ class _HomepageState extends State<Homepage> {
               thickness: 2,
             ),
             search(),
-            SchudleTable(userId: widget.userId, machineId: widget.machineId),
+            SchudleTable(
+              userId: widget.userId,
+              machineId: widget.machineId,
+              type: type == 0 ? "A" : "B",
+            ),
           ],
         ),
       ),
@@ -430,9 +435,7 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
             ),
-            SizedBox(
-              width:10
-            ),
+            SizedBox(width: 10),
           ],
         ),
       );
@@ -446,7 +449,8 @@ class SchudleTable extends StatefulWidget {
   Schedule schedule;
   String userId;
   String machineId;
-  SchudleTable({Key key, this.schedule, this.userId, this.machineId})
+  String type;
+  SchudleTable({Key key, this.schedule, this.userId, this.type, this.machineId})
       : super(key: key);
 
   @override
@@ -479,7 +483,8 @@ class _SchudleTableState extends State<SchudleTable> {
 
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
-              future: apiService.getScheduelarData('EMU-M/C-038B'),
+              future: apiService.getScheduelarData(
+                  machId: widget.machineId, type: widget.type),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<Schedule> schedulelist = snapshot.data + snapshot.data;
@@ -684,8 +689,8 @@ class _SchudleTableState extends State<SchudleTable> {
                                 return Colors.green;
                               return schedule.scheduledStatus == "Pending"
                                   ? Colors.red
-                                  : Colors
-                                      .green; // Use the component's default.
+                                  : Colors.green[
+                                      500]; // Use the component's default.
                             },
                           ),
                         ),

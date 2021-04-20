@@ -51,12 +51,12 @@ class ApiService {
     }
   }
 
-  Future<List<Schedule>> getScheduelarData(String machId) async {
+  Future<List<Schedule>> getScheduelarData({String machId,String type}) async {
     print("called api");
     // var url = Uri.parse(baseUrl +
     //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
     var url = Uri.parse(baseUrl +
-        "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=EMU-M/C-038I&sameMachine=true");
+        "molex/scheduler/get-scheduler-same-machine-data?schdTyp=$type&mchNo=$machId&sameMachine=true");
     var response = await http.get(url);
     print('schedular data status code ${response.statusCode}');
     if (response.statusCode == 200) {
