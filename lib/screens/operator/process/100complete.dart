@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
 import 'package:molex/main.dart';
 import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/screens/operator/location.dart';
 
 class FullyComplete extends StatefulWidget {
   @override
@@ -525,7 +526,10 @@ class _FullyCompleteState extends State<FullyComplete> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Homepage()),
+                        MaterialPageRoute(builder: (context) => Location(
+                          userId: "",
+                          machineId: "",
+                        )),
                       );
                     },
                   ),

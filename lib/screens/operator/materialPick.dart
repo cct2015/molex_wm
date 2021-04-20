@@ -298,43 +298,6 @@ class _MaterialPickState extends State<MaterialPick> {
           ],
         ),
       ),
-      floatingActionButton: Container(
-        height: 50,
-        width: 200,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 4,
-            primary: Colors.green, // background
-            onPrimary: Colors.white,
-          ),
-          onPressed: () {
-            //TODO ; post to api the scanneddItems in a loop
-            // for(PostRawmaterial postRawmaterial in selectdItems){
-            //   apiService.postRawmaterial(postRawmaterial);
-
-            // }
-            apiService.postRawmaterial(selectdItems).then((value) {
-              if (value) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProcessPage(
-                            schedule: widget.schedule,
-                            userId: widget.userId,
-                            machineId: widget.machineId,
-                          )),
-                );
-              } else {}
-            });
-          },
-          child: Text(
-            'Proceed to Process',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -512,15 +475,14 @@ class _MaterialPickState extends State<MaterialPick> {
               ),
               Container(
                 height: 40,
-                width: width * 0.18,
+                width: width * 0.12,
                 child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
                         (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed))
                             return Colors.green[200];
-                          return Colors
-                              .green[500]; // Use the component's default.
+                          return Colors.blue; // Use the component's default.
                         },
                       ),
                     ),
@@ -557,10 +519,12 @@ class _MaterialPickState extends State<MaterialPick> {
                               // : 0;
                               // "${selectedDate.toLocal()}".split(' ')[0];
                               postRawmaterial.color = widget.schedule.color;
-                              postRawmaterial.process=widget.schedule.process;
+                              postRawmaterial.process = widget.schedule.process;
                               postRawmaterial.status = "SUCCESS";
-                              postRawmaterial.length=int.parse(widget.schedule.length);
-                              postRawmaterial.traceabilityNumber = int.parse(trackingNumber);
+                              postRawmaterial.length =
+                                  int.parse(widget.schedule.length);
+                              postRawmaterial.traceabilityNumber =
+                                  int.parse(trackingNumber);
                               print(postRawmaterial);
                               selectdItems.add(postRawmaterial);
                               _partNumberController.clear();
@@ -587,6 +551,27 @@ class _MaterialPickState extends State<MaterialPick> {
             ],
           ),
         ),
+        Container(
+          height: 40,
+          width: width * 0.22,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 4,
+              primary: Colors.green, // background
+              onPrimary: Colors.white,
+            ),
+            onPressed: () {
+              _showConfirmationDialog();
+            },
+            child: Text(
+              'Proceed to Process',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -601,7 +586,10 @@ class _MaterialPickState extends State<MaterialPick> {
   Widget buildDataRawMaterial() {
     return FutureBuilder(
         future: apiService.rawMaterial(
-            'EMU-m/c-006C', '367760913', '367870011', '1223445'),
+            machineId: "EMU-M/C-038B",
+            fgNo: widget.schedule.finishedGoodsNumber,
+            scheduleId: widget.schedule.scheduledId),
+        // 'EMU-M/C-038B', '367760913', '367870011', '1223445'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<RawMaterial> rawmaterial = snapshot.data;
@@ -857,6 +845,71 @@ class _MaterialPickState extends State<MaterialPick> {
           }())
         ],
       ),
+    );
+  }
+
+  Future<void> _showConfirmationDialog() async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return Center(
+          child: AlertDialog(
+            title: Center(child: Text('Confirm Selected Material')),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Center(child: Text('Proceed to Process'))
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.redAccent),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Future.delayed(
+                      const Duration(milliseconds: 50),
+                      () {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      },
+                    );
+                  },
+                  child: Text('    Cancel   ')),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.green),
+                  ),
+                  onPressed: () {
+                    apiService.postRawmaterial(selectdItems).then((value) {
+                if (value) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProcessPage(
+                              schedule: widget.schedule,
+                              userId: widget.userId,
+                              machineId: widget.machineId,
+                            )),
+                  );
+                } else {}
+              });
+                  },
+                  child: Text('Proceed to Process')),
+            ],
+          ),
+        );
+      },
     );
   }
 

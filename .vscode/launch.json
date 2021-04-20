@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Launch FileTextWrite",
+            "request": "launch",
+            "mainClass": "FileTextWrite",
+            "projectName": ""
+        },
+        {
             "name": "molex",
             "request": "launch",
             "type": "dart"

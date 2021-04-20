@@ -44,11 +44,11 @@ class Data {
     List<RawMaterial> material;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        material: List<RawMaterial>.from(json["Material "].map((x) => RawMaterial.fromJson(x))),
+        material: List<RawMaterial>.from(json["Raw Material Details "].map((x) => RawMaterial.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "Material ": List<dynamic>.from(material.map((x) => x.toJson())),
+        "Raw Material Details ": List<dynamic>.from(material.map((x) => x.toJson())),
     };
 }
 

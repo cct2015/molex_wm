@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/materialPick.dart';
@@ -19,6 +20,12 @@ class _HomepageState extends State<Homepage> {
   Schedule schedule;
   int type = 0;
   ApiService apiService;
+
+  bool _secValue = false;
+
+  bool _firstValue = true;
+  bool _thirdValue = false;
+  String dropdownName = "FG part";
 
   @override
   void initState() {
@@ -41,6 +48,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(
@@ -225,7 +233,7 @@ class _HomepageState extends State<Homepage> {
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.redAccent[100],
+                        color: Colors.redAccent[400],
                         offset: const Offset(
                           2.0,
                           2.0,
@@ -276,74 +284,155 @@ class _HomepageState extends State<Homepage> {
           children: [
             SizedBox(width: 10),
             Container(
-                width: 130,
-                height: 40,
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  },
-                  decoration: new InputDecoration(
-                    labelText: "FG Part No.",
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
-                )),
-            SizedBox(width: 10),
-            Container(
-                width: 120,
-                height: 40,
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  },
-                  decoration: new InputDecoration(
-                    labelText: "Order Id.",
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
-                )),
-            SizedBox(width: 10),
-            Container(
-                width: 150,
-                height: 40,
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  },
-                  decoration: new InputDecoration(
-                    labelText: "Cable Part No.",
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
-                )),
-            SizedBox(width: 10),
-            Container(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Search'),
+              height: 38,
+              width: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Colors.grey[100],
               ),
-            )
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.search,
+                      size: 20,
+                      color: Colors.red[400],
+                    ),
+                    SizedBox(width: 5),
+                    Container(
+                      width: 130,
+                      height: 30,
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        onTap: () {},
+                        decoration: new InputDecoration(
+                          hintText: "FG Part No.",
+                          hintStyle: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                              left: 15, bottom: 11, top: 11, right: 15),
+                          fillColor: Colors.white,
+                        ),
+                        //fillColor: Colors.green
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Container(
+              height: 38,
+              width: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Colors.grey[100],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.search,
+                      size: 20,
+                      color: Colors.red[400],
+                    ),
+                    SizedBox(width: 5),
+                    Container(
+                      width: 130,
+                      height: 30,
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        onTap: () {},
+                        decoration: new InputDecoration(
+                          hintText: "Order Id",
+                          hintStyle: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                              left: 15, bottom: 11, top: 11, right: 15),
+                          fillColor: Colors.white,
+                        ),
+                        //fillColor: Colors.green
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Container(
+              height: 38,
+              width: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Colors.grey[100],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.search,
+                      size: 20,
+                      color: Colors.red[400],
+                    ),
+                    SizedBox(width: 5),
+                    Container(
+                      width: 130,
+                      height: 30,
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: TextField(
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        onTap: () {},
+                        decoration: new InputDecoration(
+                          hintText: "Cable Part No.",
+                          hintStyle: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                              left: 15, bottom: 11, top: 11, right: 15),
+                          fillColor: Colors.white,
+                        ),
+                        //fillColor: Colors.green
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              width:10
+            ),
           ],
         ),
       );
@@ -381,6 +470,7 @@ class _SchudleTableState extends State<SchudleTable> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -389,19 +479,20 @@ class _SchudleTableState extends State<SchudleTable> {
 
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
-              future: apiService.getScheduelarData('EMU-m/c-006C'),
+              future: apiService.getScheduelarData('EMU-M/C-038B'),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  List<Schedule> schedulelist = snapshot.data;
+                  List<Schedule> schedulelist = snapshot.data + snapshot.data;
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: schedulelist.length,
                       itemBuilder: (context, index) {
-                        return buildDataRow(schedule: schedulelist[index]);
+                        return buildDataRow(
+                            schedule: schedulelist[index], c: index + 1);
                       });
                 } else {
-                  return Center(child:SingleChildScrollView());
+                  return Center(child: SingleChildScrollView());
                 }
               },
             )
@@ -419,15 +510,51 @@ class _SchudleTableState extends State<SchudleTable> {
     );
   }
 
+  // no data
+  // empty list
+
   Widget tableHeading() {
-    Widget cell(String name, double width) {
+    Widget cell(String name, double width, bool sort) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
-        height: 40,
+        height: 25,
         child: Center(
-          child: Text(
-            name,
-            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                name,
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+              (() {
+                if (sort) {
+                  return Container(
+                    height: 22,
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        Container(
+                            color: Colors.transparent,
+                            height: 8,
+                            child: Icon(
+                              Icons.arrow_drop_up_sharp,
+                              size: 16,
+                            )),
+                        Container(
+                            color: Colors.transparent,
+                            height: 8,
+                            child: Icon(
+                              Icons.arrow_drop_down_sharp,
+                              size: 16,
+                            )),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }())
+            ],
           ),
         ),
       );
@@ -435,23 +562,23 @@ class _SchudleTableState extends State<SchudleTable> {
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 50,
+      height: 35,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              cell("Order Id", 0.08),
-              cell("FG Part", 0.08),
-              cell("Schedule ID", 0.08),
-              cell("Cable Part No.", 0.1),
-              cell("Process", 0.08),
-              cell("Cut Length(mm)", 0.12),
-              cell("Color", 0.07),
-              cell("Scheduled Qty", 0.1),
-              cell("Status", 0.1),
-              cell("Action", 0.1),
+              cell("Order Id", 0.08, true),
+              cell("FG Part", 0.08, true),
+              cell("Schedule ID", 0.08, false),
+              cell("Cable Part No.", 0.1, true),
+              cell("Process", 0.11, false),
+              cell("Cut Length(mm)", 0.12, true),
+              cell("Color", 0.07, false),
+              cell("Scheduled Qty", 0.1, true),
+              cell("Status", 0.1, true),
+              cell("Action", 0.08, true),
             ],
           ),
         ],
@@ -467,7 +594,9 @@ class _SchudleTableState extends State<SchudleTable> {
         child: Center(
           child: Text(
             name,
-            style: TextStyle(fontSize: 12),
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       );
@@ -476,7 +605,7 @@ class _SchudleTableState extends State<SchudleTable> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 50,
-      color: Colors.grey[100],
+      color: c % 2 == 0 ? Colors.white : Colors.grey[100],
       child: Container(
         decoration: BoxDecoration(
           border: Border(
@@ -503,7 +632,7 @@ class _SchudleTableState extends State<SchudleTable> {
             cell(schedule.cablePartNumber, 0.1),
 
             //Process
-            cell(schedule.process, 0.08),
+            cell(schedule.process, 0.11),
             // Cut length
             cell(schedule.length, 0.12),
             //Color
@@ -512,10 +641,37 @@ class _SchudleTableState extends State<SchudleTable> {
             cell(schedule.scheduledQuantity, 0.1),
 
             //Status
-            cell(schedule.scheduledStatus, 0.1),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.1,
+              height: 30,
+              padding: EdgeInsets.all(5),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: schedule.scheduledStatus == 'Allocated'
+                      ? Colors.green[50]
+                      : Colors.red[100],
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Center(
+                  child: Text(
+                    schedule.scheduledStatus,
+                    style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: schedule.scheduledStatus == 'Allocated'
+                            ? Colors.green
+                            : Colors.red,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             //Action
             Container(
-              width: 100,
+              width: 80,
+              height: 35,
               child: Center(
                 child: schedule.scheduledStatus == "Completed"
                     ? Text("-")
@@ -545,10 +701,24 @@ class _SchudleTableState extends State<SchudleTable> {
                           );
                         },
                         child: Container(
-                            child: schedule.scheduledStatus == "Not Completed"
-                                ? Text("Accept")
+                            child: schedule.scheduledStatus == "Allocated"
+                                ? Text(
+                                    "Accept",
+                                    style: GoogleFonts.openSans(
+                                      textStyle: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  )
                                 : schedule.scheduledStatus == "Pending"
-                                    ? Text('Continue')
+                                    ? Text(
+                                        'Continue',
+                                        style: GoogleFonts.openSans(
+                                          textStyle: TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      )
                                     : Text('')),
                       ),
               ),

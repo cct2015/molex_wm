@@ -56,7 +56,7 @@ class ApiService {
     // var url = Uri.parse(baseUrl +
     //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
     var url = Uri.parse(baseUrl +
-        "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=EMU-m/c-006C&sameMachine=true");
+        "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=EMU-M/C-038I&sameMachine=true");
     var response = await http.get(url);
     print('schedular data status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -98,14 +98,18 @@ class ApiService {
     }
   }
 
-  Future<List<RawMaterial>> rawMaterial(
-      String machineId, String partNo, String fgNo, String scheduleId) async {
+  Future<List<RawMaterial>> rawMaterial({
+      String machineId, String partNo, String fgNo, String scheduleId}) async {
+        print('fgpart : ${fgNo}');
+        print('schedule: ${scheduleId}');
+         print('machineID: ${machineId}');
+        //TODO : variables in api
     var url1 = Uri.parse(baseUrl +
-        "molex/scheduler/get-req-material-detail?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445");
+        "molex/scheduler/get-req-material-detail?machId=$machineId&fgNo=${fgNo}&schdId=${scheduleId}");
     var url2 = Uri.parse(baseUrl +
-        "molex/scheduler/get-req-material-detail-from?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445");
+        "molex/scheduler/get-req-material-detail-from?machId=$machineId&fgNo=$fgNo&schdId=$scheduleId");
     var url3 = Uri.parse(baseUrl +
-        "molex/scheduler/get-req-material-detail-to?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445");
+        "molex/scheduler/get-req-material-detail-to?machId=$machineId&fgNo=$fgNo&schdId=$scheduleId");
     var response1 = await http.get(url1);
     var response2 = await http.get(url2);
     var response3 = await http.get(url3);
@@ -114,7 +118,9 @@ class ApiService {
     print('Raw Material3 status code ${response1.statusCode}');
     if (response3.statusCode == 200) {
       try {
+        print(response1.body);
         GetRawMaterial getrawMaterial1 = getRawMaterialFromJson(response1.body);
+
         GetRawMaterial getrawMaterial2 = getRawMaterialFromJson(response2.body);
         GetRawMaterial getrawMaterial3 = getRawMaterialFromJson(response3.body);
         List<RawMaterial> rawmaterialList1 = getrawMaterial1.data.material;
@@ -122,8 +128,10 @@ class ApiService {
         List<RawMaterial> rawmaterialList3 = getrawMaterial3.data.material;
         List<RawMaterial> rawMateriallist =
             rawmaterialList1 + rawmaterialList2 + rawmaterialList3;
+            print(rawMateriallist);
         return rawMateriallist;
       } catch (e) {
+        print('error');
         return [];
       }
     } else {
