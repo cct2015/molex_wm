@@ -22,9 +22,9 @@ import 'package:molex/model_api/transferBundle_model.dart';
 
 class ApiService {
   // String baseUrl="http://justerp.in:8080/wipts/";
-   String baseUrl = "http://192.168.1.252:8080/wipts/";
+  //  String baseUrl = "http://192.168.1.252:8080/wipts/";
 
-  // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
+  String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
   Map<String, String> headerList = {
     "Content-Type": "application/json",
     "Accept": "*/*",
@@ -51,7 +51,7 @@ class ApiService {
     }
   }
 
-  Future<List<Schedule>> getScheduelarData({String machId,String type}) async {
+  Future<List<Schedule>> getScheduelarData({String machId, String type}) async {
     print("called api");
     // var url = Uri.parse(baseUrl +
     //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
@@ -98,12 +98,12 @@ class ApiService {
     }
   }
 
-  Future<List<RawMaterial>> rawMaterial({
-      String machineId, String partNo, String fgNo, String scheduleId}) async {
-        print('fgpart : ${fgNo}');
-        print('schedule: ${scheduleId}');
-         print('machineID: ${machineId}');
-        //TODO : variables in api
+  Future<List<RawMaterial>> rawMaterial(
+      {String machineId, String partNo, String fgNo, String scheduleId}) async {
+    print('fgpart : ${fgNo}');
+    print('schedule: ${scheduleId}');
+    print('machineID: ${machineId}');
+    //TODO : variables in api
     var url1 = Uri.parse(baseUrl +
         "molex/scheduler/get-req-material-detail?machId=$machineId&fgNo=${fgNo}&schdId=${scheduleId}");
     var url2 = Uri.parse(baseUrl +
@@ -128,7 +128,7 @@ class ApiService {
         List<RawMaterial> rawmaterialList3 = getrawMaterial3.data.material;
         List<RawMaterial> rawMateriallist =
             rawmaterialList1 + rawmaterialList2 + rawmaterialList3;
-            print(rawMateriallist);
+        print(rawMateriallist);
         return rawMateriallist;
       } catch (e) {
         print('error');
