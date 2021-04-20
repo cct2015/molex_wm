@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../operator/bin.dart';
 
 class PartialCompletionP2 extends StatefulWidget {
   String userId;
@@ -89,6 +92,8 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
   String _output = '';
   @override
   Widget build(BuildContext context) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Row(
       children: [
         partialCompletion(),
@@ -239,94 +244,301 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                     children: [
                       Column(
                         children: [
-                          quantitycell("First Piece & Patrol", 10),
-                          quantitycell("Spare Changeover", 10),
-                          quantitycell("Crimp Height Setting", 10),
-                          quantitycell("Resetting CFM Program	", 10),
-                          quantitycell("New Program Setting CVM/CFM", 10),
+                          quantitycell(
+                            name: "First Piece & Patrol",
+                            quantity: 10,
+                            textEditingController: firstPatrolController,
+                          ),
+                          quantitycell(
+                            name: "Spare Changeover",
+                            quantity: 10,
+                            textEditingController: spareChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Crimp Height Setting",
+                            quantity: 10,
+                            textEditingController: crimpHeightSettingController,
+                          ),
+                          quantitycell(
+                            name: "Resetting CFM Program",
+                            quantity: 10,
+                            textEditingController:
+                                resettingCFMProgramController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Air Pressure Low", 10),
-                          quantitycell("Machine Taken for Removing CVM", 10),
-                          quantitycell("No Material	", 10),
-                          quantitycell("Applicator Changeover	", 10),
-                          quantitycell("Sink Height Adjustment", 10),
+                          quantitycell(
+                            name: "New Program Setting CVM/CFM	",
+                            quantity: 10,
+                            textEditingController:
+                                newProgramSettingCVMCFMController,
+                          ),
+                          quantitycell(
+                            name: "Air Pressure Low",
+                            quantity: 10,
+                            textEditingController: airPressureLowController,
+                          ),
+                          quantitycell(
+                            name: "Machine Taken for Removing CVM	",
+                            quantity: 10,
+                            textEditingController: machineCleaningController,
+                          ),
+                          quantitycell(
+                            name: "No Material",
+                            quantity: 10,
+                            textEditingController: noMaterialController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Feeding Adjustment	", 10),
-                          quantitycell("Applicator Position Setting	", 10),
-                          quantitycell("Validation", 10),
-                          quantitycell("CFA Crimping Fault", 10),
-                          quantitycell("Cable Entangle", 10),
+                          quantitycell(
+                            name: "Applicator Changeover	",
+                            quantity: 10,
+                            textEditingController:
+                                applicatorChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Sink Height Adjustment",
+                            quantity: 10,
+                            textEditingController:
+                                sinkHeightAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "Feeding Adjustment	",
+                            quantity: 10,
+                            textEditingController: feedingAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "Applicator Position Setting		",
+                            quantity: 10,
+                            textEditingController:
+                                applicatorChangeoverController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Job Ticket Issue", 10),
-                          quantitycell("Length Changeover", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Cut Off Burr Issue", 10),
-                          quantitycell("CVM Error Correction", 10),
+                          quantitycell(
+                            name: "Validation",
+                            quantity: 10,
+                            textEditingController: validationController,
+                          ),
+                          quantitycell(
+                            name: "CFA Crimping Fault",
+                            quantity: 10,
+                            textEditingController: cFACrimpingFaultController,
+                          ),
+                          quantitycell(
+                            name: "Cable Entangle",
+                            quantity: 10,
+                            textEditingController: cableEntangleController,
+                          ),
+                          quantitycell(
+                            name: "Job Ticket Issue	",
+                            quantity: 10,
+                            textEditingController: jobTicketIssueController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Cable Feeding Front Unit Problem", 10),
-                          quantitycell("Drift Limit Reached	", 10),
-                          quantitycell("Machine Slow", 10),
-                          quantitycell("No Plan for Machine", 10),
-                          quantitycell("Terminal Changeover", 10),
+                          quantitycell(
+                            name: "Length Changeover",
+                            quantity: 10,
+                            textEditingController: lengthChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Terminal Bend",
+                            quantity: 10,
+                            textEditingController: terminalBendController,
+                          ),
+                          quantitycell(
+                            name: "Cut Off Burr Issue",
+                            quantity: 10,
+                            textEditingController: cutOffBurrIssueController,
+                          ),
+                          quantitycell(
+                            name: "CVM Error Correction",
+                            quantity: 10,
+                            textEditingController: cVMErrorController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Extrusion Burr Issue", 10),
-                          quantitycell("CFM Error", 10),
-                          quantitycell("Supplier Taken for Maintenance", 10),
-                          quantitycell("Roller Changeover", 10),
-                          quantitycell("Gripen Unit Problem", 10),
-                          quantitycell("Technician Not Available", 10),
+                          quantitycell(
+                            name: "Cable Feeding Front Unit Problem",
+                            quantity: 10,
+                            textEditingController:
+                                cableFeedingFrontUnitProblemController,
+                          ),
+                          quantitycell(
+                            name: "Drift Limit Reached	",
+                            quantity: 10,
+                            textEditingController: driftLimitReachedController,
+                          ),
+                          quantitycell(
+                            name: "Machine Slow	",
+                            quantity: 10,
+                            textEditingController: machineSlowController,
+                          ),
+                          quantitycell(
+                            name: "No Plan for Machine	",
+                            quantity: 10,
+                            textEditingController: noPlanforMachineController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Coil Changeover	", 10),
-                          quantitycell("Bellmouth Adjustment	", 10),
-                          quantitycell("Camera Setting", 10),
-                          quantitycell("CVM Error	", 10),
-                          quantitycell("Length Variations		", 10),
-                          quantitycell("Power Failure", 10),
+                          quantitycell(
+                            name: "Terminal Changeover",
+                            quantity: 10,
+                            textEditingController: terminalChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Terminal Twist",
+                            quantity: 10,
+                            textEditingController: terminalTwistController,
+                          ),
+                          quantitycell(
+                            name: "Extrusion Burr Issue",
+                            quantity: 10,
+                            textEditingController: extrusionBurrIssueController,
+                          ),
+                          quantitycell(
+                            name: "CFM Error",
+                            quantity: 10,
+                            textEditingController: cFMErrorController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Last Piece", 10),
-                          quantitycell("Curling Adjustment	", 10),
-                          quantitycell("Wire Feeding Adjustment", 10),
-                          quantitycell("CVM Program Reloading	", 10),
-                          quantitycell("Sensor Not Working", 10),
+                          quantitycell(
+                            name: "Supplier Taken for Maintenance	",
+                            quantity: 10,
+                            textEditingController:
+                                supplierTakenforMaintenanceController,
+                          ),
+                          quantitycell(
+                            name: "Roller Changeover",
+                            quantity: 10,
+                            textEditingController: rollerChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Gripen Unit Problem",
+                            quantity: 10,
+                            textEditingController: gripenUnitProblemController,
+                          ),
+                          quantitycell(
+                            name: "Technician Not Available	",
+                            quantity: 10,
+                            textEditingController:
+                                technicianNotAvailableController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Machine Cleaning", 10),
-                          quantitycell("No Operator", 10),
-                          quantitycell("Preventive Maintenance", 10),
-                          quantitycell("Meeting", 10),
-                          quantitycell("System Fault", 10),
+                          quantitycell(
+                            name: "Coil Changeover	",
+                            quantity: 10,
+                            textEditingController: coilChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Bellmouth Adjustment",
+                            quantity: 10,
+                            textEditingController:
+                                bellmouthAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "Camera Setting	",
+                            quantity: 10,
+                            textEditingController: cameraSettingController,
+                          ),
+                          quantitycell(
+                            name: "CVM Error",
+                            quantity: 10,
+                            textEditingController: cVMErrorController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Machine Cleaning", 10),
-                          quantitycell("No Operator", 10),
-                          quantitycell("Preventive Maintenance", 10),
-                          quantitycell("Meeting", 10),
-                          quantitycell("System Fault", 10),
+                          quantitycell(
+                            name: "Length Variations	",
+                            quantity: 10,
+                            textEditingController: lengthVariationsController,
+                          ),
+                          quantitycell(
+                            name: "Power Failure",
+                            quantity: 10,
+                            textEditingController: powerFailureController,
+                          ),
+                          quantitycell(
+                            name: "Machine Cleaning",
+                            quantity: 10,
+                            textEditingController: machineCleaningController,
+                          ),
+                          quantitycell(
+                            name: "No Operator",
+                            quantity: 10,
+                            textEditingController: noOperatorController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Last Piece	",
+                            quantity: 10,
+                            textEditingController: lastPieceController,
+                          ),
+                          quantitycell(
+                            name: "Curling Adjustment",
+                            quantity: 10,
+                            textEditingController: curlingAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "Wire Feeding Adjustment",
+                            quantity: 10,
+                            textEditingController:
+                                wireFeedingAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "CVM Program Reloading",
+                            quantity: 10,
+                            textEditingController: cVMErrorController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Sensor Not Working",
+                            quantity: 10,
+                            textEditingController: sensorNotWorkingController,
+                          ),
+                          quantitycell(
+                            name: "Preventive Maintenance	",
+                            quantity: 10,
+                            textEditingController:
+                                preventiveMaintenanceController,
+                          ),
+                          quantitycell(
+                            name: "Meeting	",
+                            quantity: 10,
+                            textEditingController: meetingController,
+                          ),
+                          quantitycell(
+                            name: "System Fault	",
+                            quantity: 10,
+                            textEditingController: systemFaultController,
+                          ),
                         ],
                       ),
                     ],
@@ -440,14 +652,13 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                   controller: textEditingController,
                   focusNode: focusNode,
                   onTap: () {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
                     setState(() {
                       _output = '';
                       maincontroller = textEditingController;
                     });
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
                   },
                   style: TextStyle(fontSize: 12),
-                  keyboardType: TextInputType.textscan,
                   decoration: new InputDecoration(
                     labelText: name,
                     fillColor: Colors.white,

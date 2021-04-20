@@ -505,7 +505,7 @@ class _MaterialPickState extends State<MaterialPick> {
                         for (RawMaterial ip in rawMaterial) {
                           // print(rawMaterial.contains(ip).toString());
                           // print('loop ${ip.partNunber.toString()}');
-                          if (ip.partNunber == null) {
+                          if (ip.partNunber == partNumber) {
                             if (!selectdItems.contains(ip)) {
                               print('loop ${ip.partNunber.toString()}');
                               // postRawmaterial.date = selectedDate;
@@ -598,7 +598,7 @@ class _MaterialPickState extends State<MaterialPick> {
   Widget buildDataRawMaterial() {
     return FutureBuilder(
         future: apiService.rawMaterial(
-            machineId: "EMU-M/C-038B",
+            machineId: widget.machineId,
             fgNo: widget.schedule.finishedGoodsNumber,
             scheduleId: widget.schedule.scheduledId),
         // 'EMU-M/C-038B', '367760913', '367870011', '1223445'),
@@ -790,12 +790,12 @@ class _MaterialPickState extends State<MaterialPick> {
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
-                      DataColumn(
-                        label: Text(
-                          'UOM',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
+                      // DataColumn(
+                      //   label: Text(
+                      //     'UOM',
+                      //     style: TextStyle(fontSize: 12),
+                      //   ),
+                      // ),
                       DataColumn(
                         label: Text(
                           'EXIST QTY	',
@@ -834,9 +834,9 @@ class _MaterialPickState extends State<MaterialPick> {
                                 "",
                                 style: TextStyle(fontSize: 12),
                               )),
-                              DataCell(Text("e.uom".toString())),
-                              DataCell(Text("e.existQuantity".toString())),
-                              DataCell(Text("e.scheduledQuantity".toString())),
+                              // DataCell(Text(e.n.toString())),
+                              DataCell(Text(e.existingQuantity .toString())),
+                              DataCell(Text(e.schedulerIdentification.toString())),
                               DataCell(IconButton(
                                 icon: Icon(
                                   Icons.delete,

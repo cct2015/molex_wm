@@ -7,6 +7,7 @@ import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/operator%203/process/process3.dart';
 import 'package:molex/screens/operator/process/process.dart';
+import 'package:molex/screens/widgets/time.dart';
 
 class MaterialPickOp3 extends StatefulWidget {
   Schedule schedule;
@@ -126,7 +127,6 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
         actions: [
           Container(
             padding: EdgeInsets.all(5),
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -168,7 +168,6 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -234,32 +233,7 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
               ],
             ),
           ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
+          TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -294,65 +268,32 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: Stream.periodic(const Duration(milliseconds: 2000)),
-        builder: (context, snapshot) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                //Shift and machineId
-                Divider(
-                  color: Colors.redAccent,
-                  thickness: 2,
-                ),
-                tableHeading(),
-                buildDataRow(schedule: widget.schedule),
-
-                //Raw material
-                buildDataRawMaterial(),
-                Divider(
-                  color: Colors.red[100],
-                  thickness: 2,
-                ),
-
-                //Selected material
-                showSelectedRawMaterial(),
-
-                //Proceed to Process Button
-                Container(
-                  height: 100,
-                ),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            //Shift and machineId
+            Divider(
+              color: Colors.redAccent,
+              thickness: 2,
             ),
-          );
-        },
-      ),
-      floatingActionButton: Container(
-        height: 50,
-        width: 200,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 4,
-            primary: Colors.green, // background
-            onPrimary: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Processpage3(
-                        schedule: widget.schedule,
-                        userId: widget.userId,
-                        machineId: widget.machineId,
-                      )),
-            );
-          },
-          child: Text(
-            'Proceed to Process',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
+            tableHeading(),
+            buildDataRow(schedule: widget.schedule),
+
+            //Raw material
+            buildDataRawMaterial(),
+            Divider(
+              color: Colors.red[100],
+              thickness: 2,
             ),
-          ),
+
+            //Selected material
+            showSelectedRawMaterial(),
+
+            //Proceed to Process Button
+            Container(
+              height: 100,
+            ),
+          ],
         ),
       ),
     );
@@ -539,7 +480,7 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
                           if (states.contains(MaterialState.pressed))
                             return Colors.green[200];
                           return Colors
-                              .green[500]; // Use the component's default.
+                              .blue[500]; // Use the component's default.
                         },
                       ),
                     ),
@@ -573,6 +514,34 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
                     child: Text('Add')),
               ),
             ],
+          ),
+        ),
+        Container(
+          height: 40,
+          width: 180,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 4,
+              primary: Colors.green, // background
+              onPrimary: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Processpage3(
+                          schedule: widget.schedule,
+                          userId: widget.userId,
+                          machineId: widget.machineId,
+                        )),
+              );
+            },
+            child: Text(
+              'Proceed to Process',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ],

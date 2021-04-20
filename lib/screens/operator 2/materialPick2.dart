@@ -105,9 +105,12 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_qty.hasFocus && partNumber != null) {
-      checkPartNumber(partNumber);
-      checkTrackNumber(trackingNumber);
+    // if (!_qty.hasFocus && partNumber != null) {
+    //   checkPartNumber(partNumber);
+    //   checkTrackNumber(trackingNumber);
+    // }
+    if(!_qty.hasFocus){
+         SystemChannels.textInput.invokeMethod('TextInput.hide');
     }
     return Scaffold(
       appBar: AppBar(
@@ -290,34 +293,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               height: 100,
             ),
           ],
-        ),
-      ),
-      floatingActionButton: Container(
-        height: 50,
-        width: 200,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 4,
-            primary: Colors.green, // background
-            onPrimary: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProcessPage2(
-                        schedule: widget.schedule,
-                        userId: widget.userId,
-                        machineId: widget.machineId,
-                      )),
-            );
-          },
-          child: Text(
-            'Proceed to Process',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
         ),
       ),
     );
@@ -503,7 +478,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                           if (states.contains(MaterialState.pressed))
                             return Colors.green[200];
                           return Colors
-                              .green[500]; // Use the component's default.
+                              .blue[500]; // Use the component's default.
                         },
                       ),
                     ),
@@ -537,6 +512,33 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                     child: Text('Add')),
               ),
             ],
+          ),
+        ),
+        Container(
+        height: 43,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 4,
+              primary: Colors.green, // background
+              onPrimary: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProcessPage2(
+                          schedule: widget.schedule,
+                          userId: widget.userId,
+                          machineId: widget.machineId,
+                        )),
+              );
+            },
+            child: Text(
+              'Proceed to Process',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ],

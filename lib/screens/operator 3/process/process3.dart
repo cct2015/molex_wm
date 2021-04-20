@@ -5,6 +5,7 @@ import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%203/process/scanBundle.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/widgets/time.dart';
 
 class Processpage3 extends StatefulWidget {
   String userId;
@@ -20,11 +21,11 @@ class _Processpage3State extends State<Processpage3> {
   void initState() {
     // TODO: implement initState
     super.initState();
-      SystemChrome.setEnabledSystemUIOverlays([]);
-
+    SystemChrome.setEnabledSystemUIOverlays([]);
   }
+
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -40,7 +41,6 @@ Widget build(BuildContext context) {
         actions: [
           Container(
             padding: EdgeInsets.all(5),
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -82,7 +82,6 @@ Widget build(BuildContext context) {
           Container(
             padding: EdgeInsets.all(1),
             height: 40,
-            width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -148,32 +147,7 @@ Widget build(BuildContext context) {
               ],
             ),
           ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
+          TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -244,7 +218,7 @@ class _DetailState extends State<Detail> {
   bool userTap = false;
   bool orderDetailExpanded = true;
   String rightside;
-    String output = '';
+  String output = '';
   String _output = '';
   TextEditingController scanBundleController = new TextEditingController();
   FocusNode scanFocus = new FocusNode();
@@ -316,40 +290,225 @@ class _DetailState extends State<Detail> {
                 terminal(),
                 Row(
                   children: [
+                    Process(type: _chosenValue),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.76,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Process(type: _chosenValue),
                           Container(
-                            height: MediaQuery.of(context).size.height*0.45,
-                            width: MediaQuery.of(context).size.width * 0.76,
-                           child:  mainbox(mainb)
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              
+                            color: Colors.red,
+                            width: 300,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                //Scan Bundle
                                 Container(
-                                  width: 330,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                            
-                              Row(
-                                children: [
-                                 
+                                  // height: 40,
+                                  // width: 160,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.green, // background
+                                        onPrimary: Colors.white,
+                                      ),
+                                      child: Text(
+                                        'Scan Bundle',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          mainb = "scanBundle";
+                                          Future.delayed(
+                                            const Duration(milliseconds: 50),
+                                            () {
+                                              SystemChannels.textInput
+                                                  .invokeMethod(
+                                                      'TextInput.hide');
+                                            },
+                                          );
+                                        });
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //       builder: (context) => Bundle()),
+                                        // );
+                                      }),
+                                ),
+
+                                // 100 % Button
+                                Container(
+                                  // height: 40,
+                                  // width: 160,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.green, // background
+                                      onPrimary: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        mainb = "100";
+                                      });
+                                    },
+                                    child: Text(
+                                      "100% complete",
+                                      style: TextStyle(
+                                     
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              
+                              ],
+                            ),
+                          ),
+                          Container(
+                            // width: 330,
+                            // height: 60,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                //Partially complete
+                                Row(
+                                  children: [
                                     Container(
-                                      height: 40,
-                                        width: 160,
+                                      // height: 40,
+                                      // width: 160,
                                       child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                        primary: Colors.green, // background
+                                        onPrimary: Colors.white,
+                                      ),
+                                        onPressed: () {
+                                          mainb = "partial";
+                                        },
+                                        child: Text(
+                                          "Partially  complete",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                //Reaload Material
+                                Row(
+                                  children: [
+                                    Container(
+                                      // height: 40,
+                                      // width: 160,
+                                      child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                        primary: Colors.green, // background
+                                        onPrimary: Colors.white,
+                                      ),
+                                          child: Text(
+                                            'Reload Material',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          //Load user
+                          Row(
+                            children: [
+                              Container(
+                                // height: 40,
+                                // width: 160,
+                                child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              side: BorderSide(
+                                                  color: Colors.transparent))),
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states
+                                              .contains(MaterialState.pressed))
+                                            return Colors.green[200];
+                                          return Colors.green[
+                                              500]; // Use the component's default.
+                                        },
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Load User',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        mainb = "user";
+                                      });
+                                    }),
+                              ),
+                              (() {
+                                if (userTap) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      SizedBox(width: 10),
+                                      Container(
+                                        // height: 50,
+                                        // width: 200,
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: Container(
+                                          color: Colors.transparent,
+                                          child: RawKeyboardListener(
+                                            focusNode: FocusNode(),
+                                            onKey: (event) =>
+                                                handleKey(event.data),
+                                            child: Container(
+                                                child: TextField(
+                                              controller: userScanController,
+                                              focusNode: userScanFocus,
+                                              autofocus: false,
+                                              onTap: () {
+                                                SystemChannels.textInput
+                                                    .invokeMethod(
+                                                        'TextInput.hide');
+                                              },
+                                              decoration: new InputDecoration(
+                                                labelText: "Scan Bundle",
+                                                fillColor: Colors.white,
+                                                border: new OutlineInputBorder(
+                                                  borderRadius:
+                                                      new BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: new BorderSide(),
+                                                ),
+                                                //fillColor: Colors.green
+                                              ),
+                                            )),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Container(
+                                        // height: 50,
+                                        // width: 150,
+                                        child: ElevatedButton(
                                           style: ButtonStyle(
                                             shape: MaterialStateProperty.all<
                                                     RoundedRectangleBorder>(
@@ -372,325 +531,49 @@ class _DetailState extends State<Detail> {
                                               },
                                             ),
                                           ),
-                                          child: Text(
-                                            'Scan Bundle',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal,
+                                          child: Container(
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  height: 30,
+                                                  width: 30,
+                                                  decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: AssetImage(
+                                                              "assets/image/scan.png"))),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  'Add',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                           onPressed: () {
                                             setState(() {
-                                             mainb="scanBundle";
-                                              Future.delayed(
-                                                const Duration(milliseconds: 50),
-                                                () {
-                                                  SystemChannels.textInput
-                                                      .invokeMethod(
-                                                          'TextInput.hide');
-                                                },
-                                              );
+                                              if (userScanController
+                                                      .text.length >
+                                                  0) {
+                                                userId.add(
+                                                    userScanController.text);
+                                                userScanController.clear();
+                                              }
                                             });
-                                            // Navigator.push(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //       builder: (context) => Bundle()),
-                                            // );
-                                          }),
-                                    ),
-                                  
-                                ],
-                              ),
-                              // 100 % Button
-                              Row(
-                                children: [
-                                  Container(
-                                     height: 40,
-                                        width: 160,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.green, // background
-                                        onPrimary: Colors.white,
-                                      ),
-                                      onPressed: () {
-                                       setState(() {
-                                         mainb = "100";
-                                       });
-                                      },
-                                      child: Text(
-                                        "100% complete",
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
+                                          },
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              ],
-                                  ),
-                                ),
-                                Container(
-                                  width: 330,
-                                  height: 60,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                              
-                              //Partially complete
-                              Row(
-                                children: [
-                                  Container(
-                                       height: 40,
-                                        width: 160,
-                                    child: ElevatedButton(
-                                            style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    side: BorderSide(
-                                                        color: Colors
-                                                            .transparent))),
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                                if (states.contains(
-                                                    MaterialState.pressed))
-                                                  return Colors.green[200];
-                                                return Colors.green[
-                                                    500]; // Use the component's default.
-                                              },
-                                            ),
-                                          ),
-                                      onPressed: () {
-                                        mainb="partial";
-                                      },
-                                      child: Text(
-                                        "Partially  complete",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              
-                           
-                              //Reaload Material
-                              Row(
-                                children: [
-                                  Container(
-                                     height: 40,
-                                        width: 160,
-                                    child: ElevatedButton(
-                                         style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    side: BorderSide(
-                                                        color: Colors
-                                                            .transparent))),
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                                if (states.contains(
-                                                    MaterialState.pressed))
-                                                  return Colors.green[200];
-                                                return Colors.green[
-                                                    500]; // Use the component's default.
-                                              },
-                                            ),
-                                          ),
-                                        child: Text(
-                                          'Reload Material',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        }),
-                                  ),
-                                ],
-                              ),
-                               ],
-                                  ),
-                                ),
-                              //Load user
-                                 Row(
-                                children: [
-                                  Container(
-                                 height: 40,
-                                        width: 160,
-                                    child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    side: BorderSide(
-                                                        color: Colors
-                                                            .transparent))),
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                                if (states.contains(
-                                                    MaterialState.pressed))
-                                                  return Colors.green[200];
-                                                return Colors.green[
-                                                    500]; // Use the component's default.
-                                              },
-                                            ),
-                                          ),
-                                        child: Text(
-                                          'Load User',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            mainb ="user";
-                                          });
-                                        }),
-                                  ),
-                                  (() {
-                                    if (userTap) {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          SizedBox(width: 10),
-                                          Container(
-                                            height: 50,
-                                            width: 200,
-                                            padding: const EdgeInsets.all(0.0),
-                                            child: Container(
-                                              color: Colors.transparent,
-                                              child: RawKeyboardListener(
-                                                focusNode: FocusNode(),
-                                                onKey: (event) =>
-                                                    handleKey(event.data),
-                                                child: Container(
-                                                    child: TextField(
-                                                  controller: userScanController,
-                                                  focusNode: userScanFocus,
-                                                  autofocus: false,
-                                                  onTap: () {
-                                                    SystemChannels.textInput
-                                                        .invokeMethod(
-                                                            'TextInput.hide');
-                                                  },
-                                                  decoration: new InputDecoration(
-                                                    labelText: "Scan Bundle",
-                                                    fillColor: Colors.white,
-                                                    border: new OutlineInputBorder(
-                                                      borderRadius:
-                                                          new BorderRadius.circular(
-                                                              5.0),
-                                                      borderSide: new BorderSide(),
-                                                    ),
-                                                    //fillColor: Colors.green
-                                                  ),
-                                                )),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          Container(
-                                            height: 50,
-                                            width: 150,
-                                            child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                shape: MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10.0),
-                                                        side: BorderSide(
-                                                            color: Colors
-                                                                .transparent))),
-                                                backgroundColor:
-                                                    MaterialStateProperty
-                                                        .resolveWith<Color>(
-                                                  (Set<MaterialState> states) {
-                                                    if (states.contains(
-                                                        MaterialState.pressed))
-                                                      return Colors.green[200];
-                                                    return Colors.green[
-                                                        500]; // Use the component's default.
-                                                  },
-                                                ),
-                                              ),
-                                              child: Container(
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Container(
-                                                      height: 30,
-                                                      width: 30,
-                                                      decoration: BoxDecoration(
-                                                          image: DecorationImage(
-                                                              image: AssetImage(
-                                                                  "assets/image/scan.png"))),
-                                                    ),
-                                                    SizedBox(width: 5),
-                                                    Text(
-                                                      'Add',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  if (userScanController
-                                                          .text.length >
-                                                      0) {
-                                                    userId.add(
-                                                        userScanController.text);
-                                                    userScanController.clear();
-                                                  }
-                                                });
-                                              },
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    } else {
-                                      return Container();
-                                    }
-                                  }())
-                                ],
-                              ),
-                            
+                                      )
+                                    ],
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }())
                             ],
                           ),
-                            Container(
-                                      height: 165,
-                                      child: Center(child: keypad()),
-                                    ),
-                           
                         ],
                       ),
                     )
@@ -701,30 +584,26 @@ class _DetailState extends State<Detail> {
               return Container();
             }
           }()),
-      
-         
-         
+          mainbox(mainb)
         ]));
   }
-  Widget mainbox(String mainbr){
-    if(mainbr=="scanBundle"){
+
+  Widget mainbox(String mainbr) {
+    if (mainbr == "scanBundle") {
       return ScanBundleP3();
     }
-    if(mainbr=="100"){
+    if (mainbr == "100") {
       return rejectionCase();
-
     }
-    if(mainbr=="partial"){
+    if (mainbr == "partial") {
       return partialcompletepop();
     }
-    if(mainb == "user"){
-      return  loaduserpop();
-    }
-    else{
+    if (mainb == "user") {
+      return loaduserpop();
+    } else {
       return Container();
     }
   }
-
 
   Widget keypad() {
     buttonPressed(String buttonText) {
@@ -797,8 +676,6 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-
- 
 
   Widget scanTable() {
     int i = 1;
@@ -1022,115 +899,6 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget tab2() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('WireCutting & Crimping Rejection Cases',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
-                    ))
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage	", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage	", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage	", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage	", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage	", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                          quantitycell("Conductor Curling Up & Down	", 10),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 100,
-              child: Center(
-                child: Container(
-                  height: 45,
-                  width: 250,
-                  child: ElevatedButton(
-                      child: Text("Save & Generate Label"),
-                      onPressed: () {
-                        Navigator.pop(
-                          context,
-                        );
-                      }),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget quantitycell(String title, int quantity) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 6.0),
@@ -1288,36 +1056,38 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-         decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(.5),
-                      blurRadius: 20.0, // soften the shadow
-                      spreadRadius: 0.0, //extend the shadow
-                      offset: Offset(
-                        3.0, // Move to right 10  horizontally
-                        3.0, // Move to bottom 10 Vertically
-                      ),
-                    )
-                  ],
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(.5),
+                blurRadius: 20.0, // soften the shadow
+                spreadRadius: 0.0, //extend the shadow
+                offset: Offset(
+                  3.0, // Move to right 10  horizontally
+                  3.0, // Move to bottom 10 Vertically
                 ),
+              )
+            ],
+          ),
           width: MediaQuery.of(context).size.width,
           height: 30,
           // color: Colors.grey[200],
-          child:
-              Container(
-                width: MediaQuery.of(context).size.width,
-                    height: 40,
-                    color: Colors.white,
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            boxes("FG Description", 'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
-            boxes("FG Scheduled Date", '29/03/2021'),
-            boxes("Customer", 'APC COOLING'),
-            boxes("Drg Rev", 'D'),
-            boxes("Cable Serial No", '1'),
-            boxes('Tolerance ', '± 5 / ± 5'),
-          ]),
-              )),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 40,
+            color: Colors.white,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  boxes("FG Description",
+                      'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
+                  boxes("FG Scheduled Date", '29/03/2021'),
+                  boxes("Customer", 'APC COOLING'),
+                  boxes("Drg Rev", 'D'),
+                  boxes("Cable Serial No", '1'),
+                  boxes('Tolerance ', '± 5 / ± 5'),
+                ]),
+          )),
     );
   }
 
@@ -1491,7 +1261,7 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.all(.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
         height: 80,
         width: MediaQuery.of(context).size.width * 0.325,
         decoration: BoxDecoration(
@@ -1527,7 +1297,7 @@ class _DetailState extends State<Detail> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width:20),
+                        SizedBox(width: 20),
                         Text(
                           p2,
                           style: TextStyle(
@@ -1567,7 +1337,6 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-
 
   Widget partialcompletepop() {
     return Padding(
@@ -1658,7 +1427,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget loaduserpop() {  
+  Widget loaduserpop() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.3,
       height: 150,
@@ -1735,7 +1504,7 @@ class _ProcessState extends State<Process> {
   Widget build(BuildContext context) {
     // Terminal A,Cutlength,Terminal B
     if (widget.type == "Terminal A,Cutlength,Terminal B") {
-      return Column(
+      return Row(
         children: [
           Row(
             children: [
@@ -1768,19 +1537,6 @@ class _ProcessState extends State<Process> {
             ],
           ),
           // table for Process
-          (() {
-            if (expanded) {
-              return Column(
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }()),
         ],
       );
     }
@@ -1909,50 +1665,8 @@ class _ProcessState extends State<Process> {
       );
     }
 
-    if (widget.type == "Cutlenght, Terminal B") {
-      return Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                expanded = !expanded;
-              });
-            },
-            child: Row(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Text(
-                      "Process Type : \nCutlenght, Terminal B",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-          (() {
-            if (expanded) {
-              return Column(
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                  tableRow('Terminal A,Cutlength,Terminal B'),
-                ],
-              );
-            } else {
-              return Container(
-
-              );
-            }
-          }()),
-        ],
-      );
-    }
     if (widget.type == "Preparation") {
-      return Column(
+      return Row(
         children: [
           GestureDetector(
             onTap: () {
@@ -2109,7 +1823,7 @@ class _ProcessState extends State<Process> {
   }
 
   Widget table(String type, String pn, String r, String l, String a, String p) {
-   return Container(
+    return Container(
         width: MediaQuery.of(context).size.width * 0.48,
         color: Colors.grey[200],
         child: Column(children: [
@@ -2119,6 +1833,7 @@ class _ProcessState extends State<Process> {
           row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
         ]));
   }
+
   Widget row(String partno, String uom, String require, String loaded,
       String available, String pending) {
     return Row(children: [

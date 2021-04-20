@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
+import 'package:molex/screens/operator%202/process/FullyCompleteP2.dart';
+import 'package:molex/screens/operator%202/process/partialCompletion.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
 import 'package:molex/screens/operator/bin.dart';
 
@@ -204,8 +206,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
       body: StreamBuilder(
           stream: Stream.periodic(const Duration(milliseconds: 2000)),
           builder: (context, snapshot) {
-            return SingleChildScrollView(
-              child: Column(
+            return Column(
                 children: [
                   Detail(
                     schedule: widget.schedule,
@@ -213,7 +214,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
                     machineId: widget.machineId,
                   ),
                 ],
-              ),
+              
             );
           }),
     );
@@ -543,10 +544,10 @@ class _DetailState extends State<Detail> {
       return ScanBundle();
     }
     if (main == "100") {
-      return rejectioncase();
+      return FullCompleteP2();
     }
     if (main == "partial") {
-      return partialCompletion();
+      return PartialCompletionP2();
     } else {
       return Container();
     }

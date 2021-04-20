@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator/bin.dart';
+
+enum Status {
+  scan,
+  rejection,
+  showbundle,
+}
 
 class ScanBundle extends StatefulWidget {
   int length;
@@ -13,11 +20,44 @@ class ScanBundle extends StatefulWidget {
 }
 
 class _ScanBundleState extends State<ScanBundle> {
-    FocusNode _scanfocus = new FocusNode();
-    TextEditingController _scanIdController = new TextEditingController();
+  TextEditingController mainController = new TextEditingController();
+  TextEditingController terminalDamageController = new TextEditingController();
+  TextEditingController windowGapController = new TextEditingController();
+  TextEditingController cutoffBurrController = new TextEditingController();
+  TextEditingController terminalCopperMarkController =
+      new TextEditingController();
+  TextEditingController terminalBendController = new TextEditingController();
+  TextEditingController crimpOnInsulationController =
+      new TextEditingController();
+  TextEditingController cutoffBendController = new TextEditingController();
+  TextEditingController setupRejectionsController = new TextEditingController();
+  TextEditingController terminalTwistController = new TextEditingController();
+  TextEditingController improperCrimpingController =
+      new TextEditingController();
+  TextEditingController insulationDamageController =
+      new TextEditingController();
+  TextEditingController terminalBackOutController = new TextEditingController();
+  TextEditingController conductorCurlingUpDownController =
+      new TextEditingController();
+  TextEditingController tabBendTapOpenController = new TextEditingController();
+  TextEditingController exposureStrandsController = new TextEditingController();
+  TextEditingController insulationCurlingUpDownController =
+      new TextEditingController();
+  TextEditingController bellmouthLessMoreController =
+      new TextEditingController();
+  TextEditingController strandsCutController = new TextEditingController();
+  TextEditingController conductorBurrController = new TextEditingController();
+  TextEditingController cutOffLessMoreController = new TextEditingController();
+  TextEditingController brushLengthLessMoreController =
+      new TextEditingController();
+  FocusNode _scanfocus = new FocusNode();
+  TextEditingController _scanIdController = new TextEditingController();
   bool next = false;
   bool showTable = false;
-    List<BundleScan> bundleScan = [];
+  List<BundleScan> bundleScan = [];
+  Status status = Status.scan;
+
+  String _output = '';
   @override
   void initState() {
     Future.delayed(
@@ -31,281 +71,508 @@ class _ScanBundleState extends State<ScanBundle> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChannels.textInput
-                                    .invokeMethod('TextInput.hide');
-    return !next ? scanBundlePop() : rejectioncase();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    return Row(
+      children: [
+        main(status),
+        keypad(mainController),
+      ],
+    );
   }
 
-  Widget rejectioncase() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+  Widget main(Status status) {
+    switch (status) {
+      case Status.scan:
+        return scanBundlePop();
+        break;
+      case Status.rejection:
+        return rejectioncase();
+        break;
+      default:
+        return Container();
+    }
+  }
+
+  Widget keypad(TextEditingController controller) {
+    // print('NickMark ${windowGapController.text}');
+    // print('End wire ${endWireController.text}');
+    buttonPressed(String buttonText) {
+      if (buttonText == 'clear') {
+        _output = '';
+      } else {
+        _output = _output + buttonText;
+      }
+
+      print(_output);
+      setState(() {
+        controller.text = _output;
+        // output = int.parse(_output).toStringAsFixed(2);
+      });
+    }
+
+    Widget buildbutton(String buttonText) {
+      return new Expanded(
+          child: Container(
+        decoration: new BoxDecoration(),
+        width: 27,
+        height: 50,
+        child: new ElevatedButton(
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                    side: BorderSide(color: Colors.grey[50]))),
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.pressed))
+                  return Colors.grey[100];
+
+                return Colors.white; // Use the component's default.
+              },
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                      Text('Crimping Rejection Cases',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 12,
-                          ))
-                    ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                quantitycell("Terminal Damage", 10),
-                                quantitycell("Window Gap	", 10),
-                                quantitycell("Cut-off Burr", 10),
-                                quantitycell("Terminal Copper Mark", 10),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                quantitycell("Terminal Bend	", 10),
-                                quantitycell("Crimp On Insulation	", 10),
-                                quantitycell("Cut-off Bend	", 10),
-                                quantitycell("Setup Rejections", 10),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                quantitycell("Conductor Curling Up & Down", 10),
-                                quantitycell("Tab Bend / Tap Open	", 10),
-                                quantitycell("Exposure Strands		", 10),
-                                quantitycell("Insulation Curling Up & Down", 10),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                quantitycell("Terminal Twist", 10),
-                                quantitycell("Improper Crimping", 10),
-                                quantitycell("Insulation Damage	", 10),
-                                quantitycell("Terminal Back Out", 10),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                quantitycell("Bellmouth Less / More", 10),
-                                quantitycell("Strands Cut", 10),
-                                quantitycell("Terminal Changeover", 10),
-                                quantitycell("Terminal Twist", 10),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                quantitycell("CFM Error", 10),
-                                quantitycell("Supplier Taken for Maintenance", 10),
-                                quantitycell("Roller Changeover	", 10),
-                                quantitycell("Conductor Burr	", 10),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                quantitycell("Cut-Off Less / More	", 10),
-                                quantitycell("Brush Length Less / More", 10),
-                                quantitycell("Roller Changeover	", 10),
-                                quantitycell("Strands Cut", 10),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        quantity("Bundle Qty", 10),
-                        quantity("Passed Qty", 10),
-                        quantity("Rejected Qty", 10),
-                        Container(
-                          height: 50,
-                          child: Center(
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                          side:
-                                              BorderSide(color: Colors.transparent))),
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      if (states.contains(MaterialState.pressed))
-                                        return Colors.green[200];
-                                      return Colors
-                                          .green[500]; // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                child: Text("Save & Scan Next"),
-                                onPressed: () {
-                                  next = !next;
-                                    setState(() {
-                                                bundleScan.add(BundleScan(
-                                                    bundleId: _scanIdController.text,
-                                                    bundleProcessQty: "30",
-                                                    bundleQty: "100"));
-                                                _scanIdController.clear();
-                                              });
-                                  Future.delayed(
-                                    const Duration(milliseconds: 10),
-                                    () {
-                                      SystemChannels.textInput
-                                          .invokeMethod('TextInput.hide');
-                                    },
-                                  );
-                                }),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+          ),
+          child: new Text(
+            buttonText,
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: 16.0,
               ),
             ),
           ),
-        ],
+          onPressed: () => {buttonPressed(buttonText)},
+        ),
+      ));
+    }
+
+    return Material(
+      elevation: 2,
+      shadowColor: Colors.grey[200],
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.24,
+        decoration: new BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.red.withOpacity(0.1),
+          //     spreadRadius: 2,
+          //     blurRadius: 2,
+          //     offset: Offset(0, 0), // changes position of shadow
+          //   ),
+          // ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                buildbutton("7"),
+                buildbutton('8'),
+                buildbutton('9'),
+              ],
+            ),
+            Row(
+              children: [
+                buildbutton('4'),
+                buildbutton('5'),
+                buildbutton('6'),
+              ],
+            ),
+            Row(
+              children: [
+                buildbutton('1'),
+                buildbutton('2'),
+                buildbutton('3'),
+              ],
+            ),
+            Row(
+              children: [
+                buildbutton('00'),
+                buildbutton('0'),
+                buildbutton('Clear'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
-   Widget scanedTable() {
+
+  Widget scanedTable() {
     if (showTable) {
-      return DataTable(
-          columnSpacing: 10,
-          columns: const <DataColumn>[
-            DataColumn(
-              label: Text('S No.'),
-            ),
-            DataColumn(
-              label: Text('Bundle Id'),
-            ),
-            DataColumn(
-              label: Text('Bundle Qty'),
-            ),
-            DataColumn(
-              label: Text('Process Qty'),
-            ),
-            DataColumn(
-              label: Text('Remove'),
-            ),
-          ],
-          rows: bundleScan
-              .map((e) => DataRow(cells: <DataCell>[
-                    DataCell(Text("1")),
-                    DataCell(Text(
-                      e.bundleId,
-                    )),
-                    DataCell(Text(
-                      e.bundleQty,
-                    )),
-                    DataCell(Text(
-                      e.bundleProcessQty,
-                    )),
-                    DataCell(IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onPressed: () {
-                        bundleScan.remove(e);
-                      },
-                    )),
-                  ]))
-              .toList());
+      return Container(
+        height: 270,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              DataTable(
+                  columnSpacing: 30,
+                  columns: const <DataColumn>[
+                    DataColumn(
+                      label: Text('S No.'),
+                    ),
+                    DataColumn(
+                      label: Text('Bundle Id'),
+                    ),
+                    DataColumn(
+                      label: Text('Bundle Qty'),
+                    ),
+                    DataColumn(
+                      label: Text('Process Qty'),
+                    ),
+                    DataColumn(
+                      label: Text('Remove'),
+                    ),
+                  ],
+                  rows: bundleScan
+                      .map((e) => DataRow(cells: <DataCell>[
+                            DataCell(Text("1")),
+                            DataCell(Text(
+                              e.bundleId,
+                            )),
+                            DataCell(Text(
+                              e.bundleQty,
+                            )),
+                            DataCell(Text(
+                              e.bundleProcessQty,
+                            )),
+                            DataCell(IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  bundleScan.remove(e);
+                                });
+                              },
+                            )),
+                          ]))
+                      .toList()),
+            ],
+          ),
+        ),
+      );
     } else {
       return Container();
     }
   }
 
-
   Widget scanBundlePop() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-            width: 300,
-            height: 100,
-            child: Column(
-              children: [
-                Container(
-                  height: 40,
-                  width: 200,
-                  child: RawKeyboardListener(
-                    focusNode: FocusNode(),
-                    onKey: (event) => handleKey(event.data),
-                    child: TextField(
-                      controller: _scanIdController,
-                      autofocus: true,
-                      textAlign: TextAlign.center,
-                      textAlignVertical: TextAlignVertical.center,
-                      style: TextStyle(fontSize: 14),
-                      decoration: new InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 3),
-                        labelText: "Scan Bundle",
-                        fillColor: Colors.white,
-                        border: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(5.0),
-                          borderSide: new BorderSide(),
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+              height: 100,
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    width: 200,
+                    child: RawKeyboardListener(
+                      focusNode: FocusNode(),
+                      onKey: (event) => handleKey(event.data),
+                      child: TextField(
+                        onTap: () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+                        },
+                        controller: _scanIdController,
+                        autofocus: true,
+                        textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(fontSize: 14),
+                        decoration: new InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 3),
+                          labelText: "Scan Bundle",
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          //fillColor: Colors.green
                         ),
-                        //fillColor: Colors.green
                       ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.redAccent),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            next = !next;
-                          });
-                        },
-                        child: Text('Scan Bundle  ')),
-                    SizedBox(width: 5),
-                    ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.green),
-                        ),
-                        onPressed: () {
-                          showTable =!showTable;
-                        },
-                        child: Text("${bundleScan.length}") ),
-                  ],
-                ),
-              ],
-            )),
-            scanedTable(),
-      ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.redAccent),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              next = !next;
+                              status = Status.rejection;
+                            });
+                          },
+                          child: Text('Scan Bundle  ')),
+                      SizedBox(width: 5),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.green),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              showTable = !showTable;
+                            });
+                          },
+                          child: Text("${bundleScan.length}")),
+                    ],
+                  ),
+                ],
+              )),
+          scanedTable(),
+        ],
+      ),
     );
   }
 
-  Widget quantitycell(String title, int quantity) {
+  handleKey(RawKeyEventDataAndroid key) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
+  Widget rejectioncase() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text('Crimping Rejection Cases',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                    ))
+              ]),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Terminal Damage	",
+                            quantity: 10,
+                            textEditingController: terminalDamageController,
+                          ),
+                          quantitycell(
+                            name: "Window Gap	",
+                            quantity: 10,
+                            textEditingController: windowGapController,
+                          ),
+                          quantitycell(
+                            name: "Cut-off Burr	",
+                            quantity: 10,
+                            textEditingController: cutoffBurrController,
+                          ),
+                          quantitycell(
+                            name: "Terminal Copper Mark	",
+                            quantity: 10,
+                            textEditingController: terminalDamageController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Terminal Bend",
+                            quantity: 10,
+                            textEditingController: terminalBendController,
+                          ),
+                          quantitycell(
+                            name: "Crimp On Insulation	",
+                            quantity: 10,
+                            textEditingController: crimpOnInsulationController,
+                          ),
+                          quantitycell(
+                            name: "Cut-off Bend	",
+                            quantity: 10,
+                            textEditingController: cutoffBendController,
+                          ),
+                          quantitycell(
+                            name: "Setup Rejections	",
+                            quantity: 10,
+                            textEditingController: setupRejectionsController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Terminal Twist	",
+                            quantity: 10,
+                            textEditingController: terminalTwistController,
+                          ),
+                          quantitycell(
+                            name: "Improper Crimping	",
+                            quantity: 10,
+                            textEditingController: improperCrimpingController,
+                          ),
+                          quantitycell(
+                            name: "Insulation Damage	",
+                            quantity: 10,
+                            textEditingController: insulationDamageController,
+                          ),
+                          quantitycell(
+                            name: "Terminal Back Out	",
+                            quantity: 10,
+                            textEditingController: terminalBackOutController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Conductor Curling Up & Down	",
+                            quantity: 10,
+                            textEditingController:
+                                conductorCurlingUpDownController,
+                          ),
+                          quantitycell(
+                            name: "Tab Bend / Tap Open	",
+                            quantity: 10,
+                            textEditingController: tabBendTapOpenController,
+                          ),
+                          quantitycell(
+                            name: "Exposure Strands",
+                            quantity: 10,
+                            textEditingController: exposureStrandsController,
+                          ),
+                          quantitycell(
+                            name: "Insulation Curling Up & Down",
+                            quantity: 10,
+                            textEditingController:
+                                insulationCurlingUpDownController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Bellmouth Less / More",
+                            quantity: 10,
+                            textEditingController: bellmouthLessMoreController,
+                          ),
+                          quantitycell(
+                            name: "Strands Cut	",
+                            quantity: 10,
+                            textEditingController: strandsCutController,
+                          ),
+                          quantitycell(
+                            name: "Conductor Burr	",
+                            quantity: 10,
+                            textEditingController: conductorBurrController,
+                          ),
+                          quantitycell(
+                            name: "Cut-Off Less / More	",
+                            quantity: 10,
+                            textEditingController: cutoffBurrController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Brush Length Less / More	",
+                            quantity: 10,
+                            textEditingController:
+                                brushLengthLessMoreController,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.75,
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  quantity("Bundle Qty", 10),
+                  quantity("Passed Qty", 10),
+                  quantity("Rejected Qty", 10),
+                  Container(
+                    height: 50,
+                    child: Center(
+                      child: Container(
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      side: BorderSide(
+                                          color: Colors.transparent))),
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed))
+                                    return Colors.green[200];
+                                  return Colors.green[
+                                      500]; // Use the component's default.
+                                },
+                              ),
+                            ),
+                            child: Text("Save & Scan Next"),
+                            onPressed: () {
+                              setState(() {
+                                bundleScan.add(BundleScan(
+                                    bundleId: _scanIdController.text,
+                                    bundleProcessQty: "30",
+                                    bundleQty: "100"));
+                                _scanIdController.clear();
+                                Future.delayed(const Duration(milliseconds: 10),
+                                    () {
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                });
+
+                                status = Status.scan;
+                              });
+                            }),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget quantitycell(
+      {String name,
+      int quantity,
+      TextEditingController textEditingController,
+      FocusNode focusNode}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 3.0),
       child: Container(
@@ -313,25 +580,21 @@ class _ScanBundleState extends State<ScanBundle> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Container(
-            //   width: MediaQuery.of(context).size.width * 0.25 * 0.6,
-            //   child: Text(title,
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.w400,
-            //         fontSize: 10,
-            //       )),
-            // ),
             Container(
-                height: 30,
-                width: 150,
+                height: 33,
+                width: 140,
                 child: TextField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
                   onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    setState(() {
+                      _output = '';
+                      mainController = textEditingController;
+                    });
                   },
                   style: TextStyle(fontSize: 12),
-                  keyboardType: TextInputType.textscan,
                   decoration: new InputDecoration(
-                    labelText: title,
+                    labelText: name,
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(5.0),
@@ -348,7 +611,7 @@ class _ScanBundleState extends State<ScanBundle> {
 
   Widget quantity(String title, int quantity) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 6.0),
       child: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -363,7 +626,7 @@ class _ScanBundleState extends State<ScanBundle> {
             // ),
             Container(
               height: 35,
-              width: 150,
+              width: 130,
               child: TextField(
                 style: TextStyle(fontSize: 12),
                 keyboardType: TextInputType.number,
@@ -385,9 +648,5 @@ class _ScanBundleState extends State<ScanBundle> {
         ),
       ),
     );
-  }
-
-  handleKey(RawKeyEventDataAndroid key) {
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 }

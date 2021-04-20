@@ -261,20 +261,13 @@ class _HomePageOp3State extends State<HomePageOp3> {
             search(),
             SchudleTable(userId: widget.userId, machineId: widget.machineId),
             FutureBuilder(
-                future: apiService.getScheduelarData(machId: widget.machineId,type: "A" ),
+                future: apiService.getScheduelarData(
+                    machId: widget.machineId, type: "A"),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Container(
-                      height: 100,
-                      width: 200,
-                      color: Colors.red,
-                    );
+                    return Container();
                   } else {
-                    return Container(
-                      height: 100,
-                      width: 200,
-                      color: Colors.blue,
-                    );
+                    return Container();
                   }
                 })
           ],
@@ -410,7 +403,6 @@ class _SchudleTableState extends State<SchudleTable> {
           scheduledQuantity: "500 Pcs",
           scheduledStatus: "Completed"),
     );
-  
 
     super.initState();
   }
@@ -431,7 +423,7 @@ class _SchudleTableState extends State<SchudleTable> {
                   shrinkWrap: true,
                   itemCount: rowList.length,
                   itemBuilder: (context, index) {
-                    return buildDataRow(schedule: rowList[index],c: index);
+                    return buildDataRow(schedule: rowList[index], c: index);
                   }),
             ),
           ],
@@ -485,7 +477,6 @@ class _SchudleTableState extends State<SchudleTable> {
   Widget buildDataRow({Schedule schedule, int c}) {
     Widget cell(String name, double width) {
       return Container(
-       
         width: MediaQuery.of(context).size.width * width,
         height: 30,
         child: Center(
@@ -500,7 +491,7 @@ class _SchudleTableState extends State<SchudleTable> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 50,
-      color: c%2==0?Colors.grey[50]:Colors.white,
+      color: c % 2 == 0 ? Colors.grey[50] : Colors.white,
       child: Container(
         decoration: BoxDecoration(
           border: Border(
@@ -543,7 +534,7 @@ class _SchudleTableState extends State<SchudleTable> {
             cell(schedule.scheduledStatus, 0.09),
             //Action
             Container(
-              width:  MediaQuery.of(context).size.width * 0.10,
+              width: MediaQuery.of(context).size.width * 0.10,
               child: Center(
                 child: schedule.scheduledStatus == "Completed"
                     ? Text("-")

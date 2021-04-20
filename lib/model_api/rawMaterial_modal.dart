@@ -1,6 +1,7 @@
+
 // To parse this JSON data, do
 //
-//     final getRawRawMaterial = getRawRawMaterialFromJson(jsonString);
+//     final getRawMaterial = getRawMaterialFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -38,17 +39,17 @@ class GetRawMaterial {
 
 class Data {
     Data({
-        this.material,
+        this.rawMaterialDetails,
     });
 
-    List<RawMaterial> material;
+    List<RawMaterial> rawMaterialDetails;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        material: List<RawMaterial>.from(json["Raw Material Details "].map((x) => RawMaterial.fromJson(x))),
+        rawMaterialDetails: List<RawMaterial>.from(json["Raw Material Details "].map((x) => RawMaterial.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "Raw Material Details ": List<dynamic>.from(material.map((x) => x.toJson())),
+        "Raw Material Details ": List<dynamic>.from(rawMaterialDetails.map((x) => x.toJson())),
     };
 }
 
@@ -61,10 +62,10 @@ class RawMaterial {
         this.description,
     });
 
-    int partNunber;
+    String partNunber;
     String uom;
-    int requireQuantity;
-    int toatalScheduleQuantity;
+    String requireQuantity;
+    String toatalScheduleQuantity;
     String description;
 
     factory RawMaterial.fromJson(Map<String, dynamic> json) => RawMaterial(

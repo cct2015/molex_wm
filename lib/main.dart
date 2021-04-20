@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
+import 'package:molex/screens/operator%202/Home_0p2.dart';
+import 'package:molex/screens/operator%203/Home_0p3.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -36,7 +38,11 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginScan(
-        ));
+        home:LoginScan()
+        //  HomePageOp3(
+        //   userId: "10000",
+        //   machineId: "12000",
+        // )
+        );
   }
 }

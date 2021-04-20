@@ -1,28 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/screens/operator/bin.dart';
 
 class FullCompleteP2 extends StatefulWidget {
   String userId;
   String machineId;
-  FullCompleteP2({this.userId,this.machineId});
+  FullCompleteP2({this.userId, this.machineId});
   @override
   _FullCompleteP2State createState() => _FullCompleteP2State();
 }
 
 class _FullCompleteP2State extends State<FullCompleteP2> {
-    TextEditingController mainController = new TextEditingController();
-   String _output = '';
+  TextEditingController mainController = new TextEditingController();
+  TextEditingController terminalDamageController = new TextEditingController();
+  TextEditingController windowGapController = new TextEditingController();
+  TextEditingController cutoffBurrController = new TextEditingController();
+  TextEditingController terminalCopperMarkController =
+      new TextEditingController();
+  TextEditingController terminalBendController = new TextEditingController();
+  TextEditingController crimpOnInsulationController =
+      new TextEditingController();
+  TextEditingController cutoffBendController = new TextEditingController();
+  TextEditingController setupRejectionsController = new TextEditingController();
+  TextEditingController terminalTwistController = new TextEditingController();
+  TextEditingController improperCrimpingController =
+      new TextEditingController();
+  TextEditingController insulationDamageController =
+      new TextEditingController();
+  TextEditingController terminalBackOutController = new TextEditingController();
+  TextEditingController conductorCurlingUpDownController =
+      new TextEditingController();
+  TextEditingController tabBendTapOpenController = new TextEditingController();
+  TextEditingController exposureStrandsController = new TextEditingController();
+  TextEditingController insulationCurlingUpDownController =
+      new TextEditingController();
+  TextEditingController bellmouthLessMoreController =
+      new TextEditingController();
+  TextEditingController strandsCutController = new TextEditingController();
+  TextEditingController conductorBurrController = new TextEditingController();
+  TextEditingController cutOffLessMoreController = new TextEditingController();
+  TextEditingController brushLengthLessMoreController =
+      new TextEditingController();
+      TextEditingController bundleQuantityController =
+      new TextEditingController();
+      TextEditingController passedQuantityController =
+      new TextEditingController();
+      TextEditingController rejectedQuantityController =
+      new TextEditingController();
+  String _output = '';
   @override
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
+     SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
-      
+      child: Row(
+        children: [rejectioncase(), keypad(mainController)],
+      ),
     );
   }
+
   Widget keypad(TextEditingController controller) {
     // print('NickMark ${windowGapController.text}');
     // print('End wire ${endWireController.text}');
@@ -132,10 +174,12 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
 
   Widget rejectioncase() {
     return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
       ),
       child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: Column(
           children: [
             Padding(
@@ -159,57 +203,134 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                     children: [
                       Column(
                         children: [
-                          quantitycell("Terminal Damage", 10),
-                          quantitycell("Window Gap	", 10),
-                          quantitycell("Cut-off Burr", 10),
-                          quantitycell("Terminal Copper Mark", 10),
+                          quantitycell(
+                            name: "Terminal Damage	",
+                            quantity: 10,
+                            textEditingController: terminalDamageController,
+                          ),
+                          quantitycell(
+                            name: "Window Gap	",
+                            quantity: 10,
+                            textEditingController: windowGapController,
+                          ),
+                          quantitycell(
+                            name: "Cut-off Burr	",
+                            quantity: 10,
+                            textEditingController: cutoffBurrController,
+                          ),
+                          quantitycell(
+                            name: "Terminal Copper Mark	",
+                            quantity: 10,
+                            textEditingController: terminalDamageController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Crimp On Insulation	", 10),
-                          quantitycell("Cut-off Bend	", 10),
-                          quantitycell("Setup Rejections", 10),
+                          quantitycell(
+                            name: "Terminal Bend",
+                            quantity: 10,
+                            textEditingController: terminalBendController,
+                          ),
+                          quantitycell(
+                            name: "Crimp On Insulation	",
+                            quantity: 10,
+                            textEditingController: crimpOnInsulationController,
+                          ),
+                          quantitycell(
+                            name: "Cut-off Bend	",
+                            quantity: 10,
+                            textEditingController: cutoffBendController,
+                          ),
+                          quantitycell(
+                            name: "Setup Rejections	",
+                            quantity: 10,
+                            textEditingController: setupRejectionsController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Improper Crimping", 10),
-                          quantitycell("Insulation Damage	", 10),
-                          quantitycell("Terminal Back Out", 10),
+                          quantitycell(
+                            name: "Terminal Twist	",
+                            quantity: 10,
+                            textEditingController: terminalTwistController,
+                          ),
+                          quantitycell(
+                            name: "Improper Crimping	",
+                            quantity: 10,
+                            textEditingController: improperCrimpingController,
+                          ),
+                          quantitycell(
+                            name: "Insulation Damage	",
+                            quantity: 10,
+                            textEditingController: insulationDamageController,
+                          ),
+                          quantitycell(
+                            name: "Terminal Back Out	",
+                            quantity: 10,
+                            textEditingController: terminalBackOutController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Exposure Strands		", 10),
-                          quantitycell("Insulation Curling Up & Down", 10),
-                          quantitycell("Bellmouth Less / More", 10),
-                          quantitycell("Strands Cut", 10),
+                          quantitycell(
+                            name: "Conductor Curling Up & Down	",
+                            quantity: 10,
+                            textEditingController:
+                                conductorCurlingUpDownController,
+                          ),
+                          quantitycell(
+                            name: "Tab Bend / Tap Open	",
+                            quantity: 10,
+                            textEditingController: tabBendTapOpenController,
+                          ),
+                          quantitycell(
+                            name: "Exposure Strands",
+                            quantity: 10,
+                            textEditingController: exposureStrandsController,
+                          ),
+                          quantitycell(
+                            name: "Insulation Curling Up & Down",
+                            quantity: 10,
+                            textEditingController:
+                                insulationCurlingUpDownController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Conductor Curling Up & Down", 10),
-                          quantitycell("Tab Bend / Tap Open	", 10),
-                          quantitycell("Terminal Changeover", 10),
-                          quantitycell("Terminal Twist", 10),
+                          quantitycell(
+                            name: "Bellmouth Less / More",
+                            quantity: 10,
+                            textEditingController: bellmouthLessMoreController,
+                          ),
+                          quantitycell(
+                            name: "Strands Cut	",
+                            quantity: 10,
+                            textEditingController: strandsCutController,
+                          ),
+                          quantitycell(
+                            name: "Conductor Burr	",
+                            quantity: 10,
+                            textEditingController: conductorBurrController,
+                          ),
+                          quantitycell(
+                            name: "Cut-Off Less / More	",
+                            quantity: 10,
+                            textEditingController: cutoffBurrController,
+                          ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell("Extrusion Burr Issue", 10),
-                          quantitycell("CFM Error", 10),
-                          quantitycell("Supplier Taken for Maintenance", 10),
-                          quantitycell("Roller Changeover	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Conductor Burr	", 10),
-                          quantitycell("Cut-Off Less / More	", 10),
-                          quantitycell("Brush Length Less / More", 10),
+                          quantitycell(
+                            name: "Brush Length Less / More	",
+                            quantity: 10,
+                            textEditingController:
+                                brushLengthLessMoreController,
+                          ),
                         ],
                       ),
                     ],
@@ -217,13 +338,16 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                 ),
               ),
             ),
-            Padding(
+            Container(
+               width: MediaQuery.of(context).size.width * 0.75,
               padding: const EdgeInsets.all(8.0),
               child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  quantity("Bundle Qty", 10),
-                  quantity("Passed Qty", 10),
-                  quantity("Rejected Qty", 10),
+                  quantity("Bundle Qty", 10,bundleQuantityController),
+                  quantity("Passed Qty", 10,passedQuantityController),
+                  quantity("Rejected Qty", 10,rejectedQuantityController),
                   Container(
                     height: 50,
                     child: Center(
@@ -268,7 +392,8 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
       ),
     );
   }
-   Widget quantitycell(
+
+  Widget quantitycell(
       {String name,
       int quantity,
       TextEditingController textEditingController,
@@ -284,6 +409,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                 height: 33,
                 width: 140,
                 child: TextField(
+                  showCursor: false,
                   controller: textEditingController,
                   focusNode: focusNode,
                   onTap: () {
@@ -291,10 +417,8 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                       _output = '';
                       mainController = textEditingController;
                     });
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
                   },
                   style: TextStyle(fontSize: 12),
-                  keyboardType: TextInputType.textscan,
                   decoration: new InputDecoration(
                     labelText: name,
                     fillColor: Colors.white,
@@ -311,8 +435,53 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
     );
   }
 
+  Widget quantity(String title, int quantity,TextEditingController textEditingController) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 6.0),
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // Container(
+            //   width: MediaQuery.of(context).size.width * 0.25 * 0.4,
+            //   child: Text(title,
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.w600,
+            //         fontSize: 15,
+            //       )),
+            // ),
+            Container(
+              height: 35,
+              width: 130,
+              child: TextField(
+                onTap: (){
+                  setState(() {
+                     _output = '';
+                      mainController = textEditingController;
+                  });
+                    
+                },
+                style: TextStyle(fontSize: 12),
+                controller: textEditingController,
+                keyboardType: TextInputType.number,
+                showCursor: false,
+                decoration: new InputDecoration(
+                  labelText: title,
+                  fillColor: Colors.white,
+                  labelStyle: TextStyle(fontSize: 15),
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(5.0),
+                    borderSide: new BorderSide(),
+                  ),
+                  //fillColor: Colors.green
+                ),
 
-
-
-
+                //fillColor: Colors.green
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

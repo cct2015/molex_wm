@@ -298,7 +298,7 @@ class _DetailState extends State<Detail> {
           //     ),
           //   ),
           // ),
-          
+
           (() {
             if (orderDetailExpanded) {
               return Padding(
@@ -708,7 +708,8 @@ class _DetailState extends State<Detail> {
             Container(
               height: 80,
               child: FutureBuilder(
-                  future: apiService.getCableTerminalA('884503103'),
+                  future: apiService.getCableTerminalA(
+                      cablepartno: widget.schedule.cablePartNumber),
                   builder: (context, snapshot) {
                     CableTerminalA terminalA = snapshot.data;
                     if (snapshot.hasData) {
@@ -727,8 +728,8 @@ class _DetailState extends State<Detail> {
             ),
             FutureBuilder(
                 future: apiService.getCableDetails(
-                    widget.schedule.finishedGoodsNumber,
-                    widget.schedule.cablePartNumber ?? "0"),
+                    fgpartNo: widget.schedule.finishedGoodsNumber,
+                    cablepartno: widget.schedule.cablePartNumber ?? "0"),
                 builder: (context, snapshot) {
                   CableDetails cableDetail = snapshot.data;
                   if (snapshot.hasData) {
@@ -745,8 +746,8 @@ class _DetailState extends State<Detail> {
                   }
                 }),
             FutureBuilder(
-                future: apiService
-                    .getCableTerminalB(widget.schedule.cablePartNumber),
+                future: apiService.getCableTerminalB(
+                    cablepartno: widget.schedule.cablePartNumber),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     CableTerminalB cableTerminalB = snapshot.data;

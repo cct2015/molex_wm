@@ -123,9 +123,9 @@ class ApiService {
 
         GetRawMaterial getrawMaterial2 = getRawMaterialFromJson(response2.body);
         GetRawMaterial getrawMaterial3 = getRawMaterialFromJson(response3.body);
-        List<RawMaterial> rawmaterialList1 = getrawMaterial1.data.material;
-        List<RawMaterial> rawmaterialList2 = getrawMaterial2.data.material;
-        List<RawMaterial> rawmaterialList3 = getrawMaterial3.data.material;
+        List<RawMaterial> rawmaterialList1 = getrawMaterial1.data.rawMaterialDetails;
+        List<RawMaterial> rawmaterialList2 = getrawMaterial2.data.rawMaterialDetails;
+        List<RawMaterial> rawmaterialList3 = getrawMaterial3.data.rawMaterialDetails;
         List<RawMaterial> rawMateriallist =
             rawmaterialList1 + rawmaterialList2 + rawmaterialList3;
         print(rawMateriallist);
@@ -188,10 +188,10 @@ class ApiService {
   }
 
   //Get Cable Details
-  Future<CableDetails> getCableDetails(
-      String fgpartNo, String cablepartno) async {
+  Future<CableDetails> getCableDetails({
+      String fgpartNo, String cablepartno}) async {
     var url = Uri.parse(baseUrl +
-        "/molex/ejobticketmaster/get-cable-Details-bycableNo?fgPartNo=367870011&cblPartNo=884503103");
+        "/molex/ejobticketmaster/get-cable-Details-bycableNo?fgPartNo=$fgpartNo&cblPartNo=$cablepartno");
     var response = await http.get(url);
     print('Cable details status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -204,10 +204,10 @@ class ApiService {
   }
 
   //cableTerminalA
-  Future<CableTerminalA> getCableTerminalA(String cablepartno) async {
+  Future<CableTerminalA> getCableTerminalA({String cablepartno}) async {
     //TODO variable in url
     var url = Uri.parse(baseUrl +
-        "/molex/ejobticketmaster/get-cable-terminalA-bycableNo?cblPartNo=884503103");
+        "/molex/ejobticketmaster/get-cable-terminalA-bycableNo?cblPartNo=$cablepartno");
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -222,10 +222,10 @@ class ApiService {
   }
 
   //CableTerminalB
-  Future<CableTerminalB> getCableTerminalB(String cablepartno) async {
+  Future<CableTerminalB> getCableTerminalB({String cablepartno}) async {
     //TODO variable in url
     var url = Uri.parse(baseUrl +
-        'molex/ejobticketmaster/get-cable-terminalB-bycableNo?cblPartNo=884503103');
+        'molex/ejobticketmaster/get-cable-terminalB-bycableNo?cblPartNo=$cablepartno');
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
