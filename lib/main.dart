@@ -38,7 +38,12 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home:LoginScan()
+        home:
+        LoginScan()
+        // Homepage(
+        //   userId: "",
+        //   machineId: "EMU-M/C-038K",
+        // )
         //  HomePageOp3(
         //   userId: "10000",
         //   machineId: "12000",

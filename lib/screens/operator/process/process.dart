@@ -235,11 +235,55 @@ class _DetailState extends State<Detail> {
     super.initState();
   }
 
-  Future<void> _print() async {
+  // Future<void> _print() async {
+  //   String printerStatus;
+
+  //   try {
+  //     final String result = await platform.invokeMethod('Print');
+  //     printerStatus = 'Printer status : $result % .';
+  //   } on PlatformException catch (e) {
+  //     printerStatus = "Failed to get printer: '${e.message}'.";
+  //   }
+  //   Fluttertoast.showToast(
+  //       msg: "$printerStatus",
+  //       toastLength: Toast.LENGTH_LONG,
+  //       gravity: ToastGravity.CENTER,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.red,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0);
+
+  //   setState(() {
+  //     _printerStatus = printerStatus;
+  //   });
+  // }
+  Future<void> _print({
+    String ipaddress,
+    String bq,
+    String qr,
+    String routenumber1,
+    String fgPartNumber,
+    String cutlength,
+    String cablepart,
+    String wireGauge,
+    String terminalfrom,
+    String terminalto,
+  }) async {
     String printerStatus;
 
     try {
-      final String result = await platform.invokeMethod('Print');
+      final String result = await platform.invokeMethod('Print', {
+        "ipaddress": ipaddress,
+        "bundleQty": bq,
+        "qr": qr,
+        "routenumber1": routenumber1,
+        "fgPartNumber": fgPartNumber,
+        "cutlength": cutlength,
+        "cutpart": cablepart,
+        "wireGauge": wireGauge,
+        "terminalfrom": terminalfrom,
+        "terminalto": terminalto,
+      });
       printerStatus = 'Printer status : $result % .';
     } on PlatformException catch (e) {
       printerStatus = "Failed to get printer: '${e.message}'.";
@@ -709,7 +753,8 @@ class _DetailState extends State<Detail> {
               height: 80,
               child: FutureBuilder(
                   future: apiService.getCableTerminalA(
-                      cablepartno: widget.schedule.cablePartNumber),
+                      cablepartno: widget.schedule.cablePartNumber ??
+                          widget.schedule.finishedGoodsNumber),
                   builder: (context, snapshot) {
                     CableTerminalA terminalA = snapshot.data;
                     if (snapshot.hasData) {
@@ -720,9 +765,12 @@ class _DetailState extends State<Detail> {
                           '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
                           'From Unsheathing Length (mm) - 40');
                     } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return process(
+                          'Terminal A',
+                          'From Strip Length Spec(mm) - 40}',
+                          'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                          '(-)()(-)(-)(-)',
+                          'From Unsheathing Length (mm) - 40');
                     }
                   }),
             ),
@@ -747,7 +795,8 @@ class _DetailState extends State<Detail> {
                 }),
             FutureBuilder(
                 future: apiService.getCableTerminalB(
-                    cablepartno: widget.schedule.cablePartNumber),
+                    cablepartno: widget.schedule.cablePartNumber ??
+                        widget.schedule.finishedGoodsNumber),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     CableTerminalB cableTerminalB = snapshot.data;
@@ -758,9 +807,12 @@ class _DetailState extends State<Detail> {
                         '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
                         'To Unsheathing Length (mm) - 60');
                   } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return process(
+                        'Terminal B',
+                        'From Strip Length Spec(mm) - 40}',
+                        'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                        '(-)()(-)(-)(-)',
+                        'From Unsheathing Length (mm) - 40');
                   }
                 })
           ],

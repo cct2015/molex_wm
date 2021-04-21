@@ -454,7 +454,10 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                     focusNode: _qty,
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
-                      qty = value;
+                      setState(() {
+                      qty = value;  
+                      });
+                      
                     },
                     decoration: new InputDecoration(
                       labelText: "Qty",

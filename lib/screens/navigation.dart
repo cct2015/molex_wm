@@ -53,32 +53,32 @@ class _NavPageState extends State<NavPage> {
               );
             },
           ),
-          // ListTile(
-          //   title: Text("Visual Inspector"),
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //           builder: (context) => HomeVisualInspector(
-          //                 machineId: widget.machineId,
-          //                 userId: widget.userId,
-          //               )),
-          //     );
-          //   },
-          // ),
           ListTile(
-            title: Text("Material Coordinator"),
+            title: Text("Visual Inspector"),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => HomeMaterialCoordinator(
+                    builder: (context) => HomeVisualInspector(
                           machineId: widget.machineId,
                           userId: widget.userId,
                         )),
               );
             },
           ),
+          // ListTile(
+          //   title: Text("Material Coordinator"),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => HomeMaterialCoordinator(
+          //                 machineId: widget.machineId,
+          //                 userId: widget.userId,
+          //               )),
+          //     );
+          //   },
+          // ),
           ListTile(
             title: Text("Print Test"),
             onTap: () {

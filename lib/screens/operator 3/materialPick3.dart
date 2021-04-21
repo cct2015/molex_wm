@@ -99,19 +99,19 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
 
   void checkTrackNumber(String trackNumber) {
     setState(() {
-      if (trackNumber?.length == 9) {
-        trackingNumber = trackNumber;
-        _qty.requestFocus();
-      }
+     
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final node = FocusScope.of(context);
-    if (!_qty.hasFocus && partNumber != null) {
-      checkPartNumber(partNumber);
-      checkTrackNumber(trackingNumber);
+    // if (!_qty.hasFocus && partNumber != null) {
+    //   checkPartNumber(partNumber);
+    //   checkTrackNumber(trackingNumber);
+    // }
+    if(!_qty.hasFocus){
+         SystemChannels.textInput.invokeMethod('TextInput.hide');
     }
     return Scaffold(
       appBar: AppBar(

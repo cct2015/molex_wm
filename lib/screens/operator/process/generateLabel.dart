@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
@@ -100,7 +101,52 @@ class _GenerateLabelState extends State<GenerateLabel> {
   bool hasBin = false;
   Status status = Status.quantity;
   TransferBundle transferBundle = new TransferBundle();
+   static const platform = const MethodChannel('com.impereal.dev/tsc');
+  String _printerStatus = 'Waiting';
+Future<void> _print({
+    String ipaddress,
+    String bq,
+    String qr,
+    String routenumber1,
+    String fgPartNumber,
+    String cutlength,
+    String cablepart,
+    String wireGauge,
+    String terminalfrom,
+    String terminalto,
+  }) async {
+    String printerStatus;
 
+    try {
+      final String result = await platform.invokeMethod('Print', {
+        "ipaddress": ipaddress,
+        "bundleQty": bq,
+        "qr": qr,
+        "routenumber1": routenumber1,
+        "fgPartNumber": fgPartNumber,
+        "cutlength": cutlength,
+        "cutpart": cablepart,
+        "wireGauge": wireGauge,
+        "terminalfrom": terminalfrom,
+        "terminalto": terminalto,
+      });
+      printerStatus = 'Printer status : $result % .';
+    } on PlatformException catch (e) {
+      printerStatus = "Failed to get printer: '${e.message}'.";
+    }
+    Fluttertoast.showToast(
+        msg: "$printerStatus",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    setState(() {
+      _printerStatus = printerStatus;
+    });
+  }
   @override
   void initState() {
     transferBundle = new TransferBundle();
@@ -152,7 +198,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
     print('NickMark ${windowGapController.text}');
     print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
+      if (buttonText == 'Clear') {
         _output = '';
       } else {
         _output = _output + buttonText;
@@ -686,6 +732,18 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       child: Text("Save & Generate Label"),
                       onPressed: () {
                         setState(() {
+                          _print(
+                            ipaddress: "192.168.1.130",
+                            bq: bundleQty.text,
+                            qr: "123456",
+                            routenumber1: "12345",
+                            fgPartNumber: widget.schedule.finishedGoodsNumber,
+                            cutlength: widget.schedule.length,
+                            cablepart: widget.schedule.cablePartNumber,
+                            wireGauge: widget.schedule.finishedGoodsNumber,
+                            terminalfrom: widget.schedule.finishedGoodsNumber,
+                            terminalto: widget.schedule.finishedGoodsNumber
+                          );
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;
                           // _print();

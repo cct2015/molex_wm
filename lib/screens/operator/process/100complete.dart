@@ -160,7 +160,7 @@ class _FullyCompleteState extends State<FullyComplete> {
     // print('NickMark ${windowGapController.text}');
     // print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
+      if (buttonText == 'Clear') {
         _output = '';
       } else {
         _output = _output + buttonText;

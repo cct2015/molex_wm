@@ -271,6 +271,7 @@ class _HomepageState extends State<Homepage> {
             ),
             search(),
             SchudleTable(
+              schedule: schedule,
               userId: widget.userId,
               machineId: widget.machineId,
               type: type == 0 ? "A" : "B",
@@ -488,7 +489,8 @@ class _SchudleTableState extends State<SchudleTable> {
                   machId: widget.machineId, type: widget.type),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  List<Schedule> schedulelist = snapshot.data + snapshot.data;
+                  // return  buildDataRow(schedule:widget.schedule,c:2);
+                  List<Schedule> schedulelist = snapshot.data;
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,

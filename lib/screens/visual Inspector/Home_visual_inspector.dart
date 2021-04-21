@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
 
 import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/visual%20Inspector/VIscan.dart';
+import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 
 class HomeVisualInspector extends StatefulWidget {
   String userId;
@@ -17,9 +21,61 @@ class HomeVisualInspector extends StatefulWidget {
 class _HomeVisualInspectorState extends State<HomeVisualInspector> {
   Schedule schedule;
   List<ViSchedule> viScheduleList = [];
+  String _chosenValue;
+  ApiService apiService;
   @override
   void initState() {
-    
+    apiService = new ApiService();
+    schedule = Schedule(
+        orderId: "100",
+        finishedGoodsNumber: "300",
+        scheduledId: "300",
+        cablePartNumber: "200",
+        process: "Wirecutting",
+        length: "100",
+        color: "Red",
+        scheduledQuantity: "50",
+        scheduledStatus: "Not Completed");
+    viScheduleList.add(ViSchedule(
+      binId: "1234567",
+      totalBundles: "100",
+      fgPart: "123456789",
+      orderId: "0123456789",
+      scheduleId: "123456789",
+      totalbundleQty: "100",
+    ));
+    viScheduleList.add(ViSchedule(
+      binId: "1234567",
+      totalBundles: "100",
+      fgPart: "123456789",
+      orderId: "0123456789",
+      scheduleId: "123456789",
+      totalbundleQty: "100",
+    ));
+    viScheduleList.add(ViSchedule(
+      binId: "1234567",
+      totalBundles: "100",
+      fgPart: "123456789",
+      orderId: "0123456789",
+      scheduleId: "123456789",
+      totalbundleQty: "100",
+    ));
+    viScheduleList.add(ViSchedule(
+      binId: "1234567",
+      totalBundles: "100",
+      fgPart: "123456789",
+      orderId: "0123456789",
+      scheduleId: "123456789",
+      totalbundleQty: "100",
+    ));
+    viScheduleList.add(ViSchedule(
+      binId: "1234567",
+      totalBundles: "100",
+      fgPart: "123456789",
+      orderId: "0123456789",
+      scheduleId: "123456789",
+      totalbundleQty: "100",
+    ));
   }
 
   @override
@@ -38,191 +94,138 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
           ),
           elevation: 0,
           automaticallyImplyLeading: false,
-       actions: [
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(1),
-            height: 40,
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.person,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            widget.userId,
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.settings,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            widget.machineId ?? "",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NavPage(
-                      schedule: schedule,
-                      userId: widget.userId,
-                      machineId: widget.machineId,
-                    )),
-                  );
-
-            },
-                      child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.redAccent[100],
-                        offset: const Offset(
-                          2.0,
-                          2.0,
+          actions: [
+            Container(
+              padding: EdgeInsets.all(1),
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
                         ),
-                        blurRadius: 3.0,
-                        spreadRadius: 1.0,
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.schedule,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              "Shift A",
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
                       ),
-                      BoxShadow(
-                        color: Colors.white,
-                        offset: const Offset(0.0, 0.0),
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0,
-                      ), //Bo
                     ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                    image: DecorationImage(
-                        image: AssetImage(
-                          'assets/image/profile.jpg',
-                        ),
-                        fit: BoxFit.fill)),
+                  )
+                ],
               ),
             ),
-          )
-        ],
-       
-        
+            Container(
+              padding: EdgeInsets.all(1),
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.person,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              widget.userId,
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            TimeDisplay(),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NavPage(
+                            schedule: schedule,
+                            userId: widget.userId,
+                            machineId: widget.machineId,
+                          )),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.redAccent[100],
+                          offset: const Offset(
+                            2.0,
+                            2.0,
+                          ),
+                          blurRadius: 3.0,
+                          spreadRadius: 1.0,
+                        ),
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: const Offset(0.0, 0.0),
+                          blurRadius: 0.0,
+                          spreadRadius: 0.0,
+                        ), //Bo
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      image: DecorationImage(
+                          image: AssetImage(
+                            'assets/image/profile.jpg',
+                          ),
+                          fit: BoxFit.fill)),
+                ),
+              ),
+            )
+          ],
         ),
         body: StreamBuilder(
             stream: Stream.periodic(const Duration(milliseconds: 2000)),
@@ -245,91 +248,85 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                             
-                           
                                 //Select
                                 Container(
                                   child: Row(
                                     children: [
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select Order Id"),
+                                      Container(
+                                        height: 38,
+                                        width: 180,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(5)),
+                                          color: Colors.grey[100],
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.search,
+                                                size: 20,
+                                                color: Colors.red[400],
+                                              ),
+                                              SizedBox(width: 5),
+                                              Container(
+                                                width: 130,
+                                                height: 30,
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 5),
+                                                child: TextField(
+                                                  onChanged: (value) {
+                                                    setState(() {});
+                                                  },
+                                                  style:
+                                                      TextStyle(fontSize: 13),
+                                                  onTap: () {},
+                                                  decoration:
+                                                      new InputDecoration(
+                                                    hintText: _chosenValue,
+                                                    hintStyle:
+                                                        GoogleFonts.openSans(
+                                                      textStyle: TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    focusedBorder:
+                                                        InputBorder.none,
+                                                    enabledBorder:
+                                                        InputBorder.none,
+                                                    errorBorder:
+                                                        InputBorder.none,
+                                                    disabledBorder:
+                                                        InputBorder.none,
+                                                    contentPadding:
+                                                        EdgeInsets.only(
+                                                            left: 15,
+                                                            bottom: 11,
+                                                            top: 11,
+                                                            right: 15),
+                                                    fillColor: Colors.white,
+                                                  ),
+                                                  //fillColor: Colors.green
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                       SizedBox(width: 10),
                                       dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select  FG Part"),
-                                      SizedBox(width: 10),
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select Schedule Id"),
-                                      SizedBox(width: 10),
-                                      dropdown(options: [
-                                        "846478041",
-                                        "846478041",
-                                        "846478041",
-                                      ], name: "Select Bin"),
+                                        "Order ID",
+                                        "FG No.",
+                                        "Schedule Id",
+                                      ], name: "Order Id"),
                                     ],
                                   ),
                                 ),
                                 //Scan
-                                Container(
-                                  child: ElevatedButton(
-                                       style: ButtonStyle(
-                                        shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                side: BorderSide(
-                                                    color:
-                                                        Colors.transparent))),
-                                        backgroundColor: MaterialStateProperty
-                                            .resolveWith<Color>(
-                                          (Set<MaterialState> states) {
-                                            if (states.contains(
-                                                MaterialState.pressed))
-                                              return Colors.green[200];
-                                            return Colors.green[
-                                                500]; // Use the component's default.
-                                          },
-                                        ),
-                                      ),
-                                    child: Container(
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              height: 28,
-                                              width: 28,
-                                              decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: AssetImage(
-                                                          "assets/image/scan.png"))),
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              'Scan',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    onPressed: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Viscan( userId:'45642313',machineId:'45642313',schedule:schedule)),
-                                  );
-                                    },
-                                  ),
-                                ),
                                 //Date
-                             
                               ],
                             ),
                           ],
@@ -341,8 +338,7 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                       thickness: 2,
                     ),
                     ViScheduleTable(
-                      viScheduleList: viScheduleList,
-                    )
+                        viScheduleList: viScheduleList, schedule: schedule)
                   ],
                 ),
               );
@@ -350,7 +346,6 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
   }
 
   Widget dropdown({List<String> options, String name}) {
-    String _chosenValue;
     return Container(
         child: DropdownButton<String>(
       focusColor: Colors.white,
@@ -372,7 +367,9 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
             color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
       ),
       onChanged: (String value) {
-        _chosenValue = value;
+        setState(() {
+          _chosenValue = value;
+        });
       },
     ));
   }
@@ -380,12 +377,19 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
 
 class ViScheduleTable extends StatefulWidget {
   List<ViSchedule> viScheduleList;
-  ViScheduleTable({this.viScheduleList});
+  Schedule schedule;
+  ViScheduleTable({this.viScheduleList, this.schedule});
   @override
   _ViScheduleTableState createState() => _ViScheduleTableState();
 }
 
 class _ViScheduleTableState extends State<ViScheduleTable> {
+   ApiService apiService;
+   @override
+  void initState() {
+        apiService = new ApiService();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -398,15 +402,26 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
             Container(
               height: double.maxFinite,
               // height: double.parse("${rowList.length*60}"),
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: widget.viScheduleList.length,
-                  itemBuilder: (context, index) {
-                    return buildDataRow(
-                        viSchedule: widget.viScheduleList[index]);
-                  }),
+              child: FutureBuilder(
+                    future: apiService.getviSchedule(),
+                    builder: (context,snapshot){
+                      if(snapshot.hasData){
+                        List<ViScheduler> vischedule = snapshot.data;
+                  return     ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: vischedule.length,
+                    itemBuilder: (context, index) {
+                      return buildDataRow(
+                          viSchedule: vischedule[index], c: index + 1);
+                    });
+                      }else{
+                        return Container();
+                      }
+                    }
+              
             ),
+            )
           ],
         ),
       ),
@@ -414,14 +429,86 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
   }
 
   Widget tableHeading() {
+    Widget cell(String name, double width, bool sort) {
+      return Container(
+        width: MediaQuery.of(context).size.width * width,
+        height: 25,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                name,
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+              (() {
+                if (sort) {
+                  return Container(
+                    height: 22,
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        Container(
+                            color: Colors.transparent,
+                            height: 8,
+                            child: Icon(
+                              Icons.arrow_drop_up_sharp,
+                              size: 16,
+                            )),
+                        Container(
+                            color: Colors.transparent,
+                            height: 8,
+                            child: Icon(
+                              Icons.arrow_drop_down_sharp,
+                              size: 16,
+                            )),
+                      ],
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              }())
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 35,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              cell("Order Id", 0.08, true),
+              cell("FG Part", 0.08, true),
+              cell("Schedule ID", 0.08, false),
+              cell("Bin ID", 0.1, true),
+              cell("Total Bundles", 0.11, false),
+              cell("Total BundleQty", 0.12, true),
+              cell("Action", 0.08, true),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildDataRow({ViScheduler viSchedule, int c}) {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
-        height: 40,
+        height: 30,
         child: Center(
           child: Text(
             name,
-            style: TextStyle(color: Colors.grey[600], fontSize: 16),
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+            ),
           ),
         ),
       );
@@ -430,51 +517,26 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 50,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              cell("Order Id", 0.08),
-              cell("FG Part", 0.08),
-              cell("Schedule ID", 0.08),
-              cell("Bin Id", 0.1),
-              cell("Total Bundles", 0.10),
-              cell("Total Bundle Qty", 0.12),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildDataRow({ViSchedule viSchedule, int c}) {
-    Widget cell(String name, double width) {
-      return Container(
-        width: MediaQuery.of(context).size.width * width,
-        height: 40,
-        child: Center(
-          child: Text(
-            name,
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 60,
-      color: Colors.grey[100],
+      color: c % 2 == 0 ? Colors.white : Colors.grey[100],
       child: Container(
-        decoration: BoxDecoration(),
+        decoration: BoxDecoration(
+            // border: Border(
+            //     left: BorderSide(
+            //   color: schedule.scheduledStatus == "Completed"
+            //       ? Colors.green
+            //       : schedule.scheduledStatus == "Pending"
+            //           ? Colors.red
+            //           : Colors.green[100],
+            //   width: 5,
+            // )),
+            ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
             cell(viSchedule.orderId, 0.08),
             //Fg Part
-            cell(viSchedule.fgPart, 0.08),
+            cell(viSchedule.fgNo, 0.08),
 
             //Schudule ID
             cell(viSchedule.scheduleId, 0.08),
@@ -482,10 +544,59 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
             cell(viSchedule.binId, 0.1),
 
             //Process
-            cell(viSchedule.totalBundles, 0.08),
+            cell(viSchedule.totalBundles, 0.11),
             // Cut length
-            cell(viSchedule.totalbundleQty, 0.12),
-            //Action
+            cell(viSchedule.totalBundles, 0.12),
+            //Color
+            Container(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: Colors.transparent))),
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.pressed))
+                        return Colors.green[200];
+                      return Colors.green[500]; // Use the component's default.
+                    },
+                  ),
+                ),
+                child: Container(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("assets/image/scan.png"))),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        'Scan',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Viscan(
+                              userId: '45642313',
+                              machineId: '45642313',
+                              schedule: widget.schedule,
+                            )),
+                  );
+                },
+              ),
+            ),
+
+        
           ],
         ),
       ),

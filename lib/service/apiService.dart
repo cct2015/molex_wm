@@ -19,12 +19,18 @@ import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
+import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
+import 'package:molex/model_api/visualInspection/postViSchedule_model.dart';
+import 'package:molex/model_api/visualInspection/saveVIBundleQty.dart';
+import 'package:molex/model_api/visualInspection/updateBundleStatus_model.dart';
+import 'package:molex/model_api/visualInspection/updatebundleStsScheStartTracking_mode.dart';
+import 'package:molex/models/vi_schedule.dart';
 
 class ApiService {
-  // String baseUrl="http://justerp.in:8080/wipts/";
-  //  String baseUrl = "http://192.168.1.252:8080/wipts/";
+  String baseUrl = "http://justerp.in:8080/wipts/";
+  // String baseUrl = "http://192.168.1.252:8080/wipts/";
 
-  String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
+  // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
   Map<String, String> headerList = {
     "Content-Type": "application/json",
     "Accept": "*/*",
@@ -32,6 +38,7 @@ class ApiService {
     "Connection": "keep-alive",
     "Keep-Alive": "timeout=0",
   };
+  //open null empty
 
   Future<Employee> empIdlogin(String empId) async {
     var url =
@@ -123,9 +130,12 @@ class ApiService {
 
         GetRawMaterial getrawMaterial2 = getRawMaterialFromJson(response2.body);
         GetRawMaterial getrawMaterial3 = getRawMaterialFromJson(response3.body);
-        List<RawMaterial> rawmaterialList1 = getrawMaterial1.data.rawMaterialDetails;
-        List<RawMaterial> rawmaterialList2 = getrawMaterial2.data.rawMaterialDetails;
-        List<RawMaterial> rawmaterialList3 = getrawMaterial3.data.rawMaterialDetails;
+        List<RawMaterial> rawmaterialList1 =
+            getrawMaterial1.data.rawMaterialDetails;
+        List<RawMaterial> rawmaterialList2 =
+            getrawMaterial2.data.rawMaterialDetails;
+        List<RawMaterial> rawmaterialList3 =
+            getrawMaterial3.data.rawMaterialDetails;
         List<RawMaterial> rawMateriallist =
             rawmaterialList1 + rawmaterialList2 + rawmaterialList3;
         print(rawMateriallist);
@@ -188,8 +198,8 @@ class ApiService {
   }
 
   //Get Cable Details
-  Future<CableDetails> getCableDetails({
-      String fgpartNo, String cablepartno}) async {
+  Future<CableDetails> getCableDetails(
+      {String fgpartNo, String cablepartno}) async {
     var url = Uri.parse(baseUrl +
         "/molex/ejobticketmaster/get-cable-Details-bycableNo?fgPartNo=$fgpartNo&cblPartNo=$cablepartno");
     var response = await http.get(url);
@@ -206,6 +216,7 @@ class ApiService {
   //cableTerminalA
   Future<CableTerminalA> getCableTerminalA({String cablepartno}) async {
     //TODO variable in url
+    print("cable No TA : $cablepartno");
     var url = Uri.parse(baseUrl +
         "/molex/ejobticketmaster/get-cable-terminalA-bycableNo?cblPartNo=$cablepartno");
     var response = await http.get(url);
@@ -367,4 +378,83 @@ class ApiService {
   // Future<bool> postpartialComplete(
   // Location Updation PUT method
 
+//Visual Inspection
+//
+//get Visual inspection Data
+//TODO VISUAL INSPECTION
+  Future<List<ViScheduler>> getviSchedule() async {
+    var url = Uri.parse(
+        baseUrl + 'molex/visual-inspection/get-visual-inspection-data');
+    var response = await http.get(url);
+    print('ViScheduler status Code: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      GetViSchedule getViSchedule = getViScheduleFromJson(response.body);
+      List<ViScheduler> viScheduleList =
+          getViSchedule.data.visualInspectionScheduler;
+      return viScheduleList;
+    } else {
+      return [];
+    }
+  }
+
+  //pOST Accept viual inspection schedular data
+  Future<bool> postVisualInspectionSchedular(
+      PostViSchedule postViSchedule) async {
+    var url = Uri.parse(baseUrl +
+        'molex/visual-inspection/accept-visual-inspection-scheduler-data');
+    var response = await http.post(url,
+        body: postViScheduleToJson(postViSchedule), headers: headerList);
+    print('Post ViSchedular status code:${response.statusCode}');
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //Save Visual Inspected bundle quantity
+  Future<bool> postVisualInspectedBundleQuantity(
+      PostSaveViBundleQty postSaveViBundleQty) async {
+    var url = Uri.parse(baseUrl +
+        'molex/visual-inspection/accept-visual-inspection-scheduler-data');
+    var response = await http.post(url,
+        body: postSaveViBundleQtyToJson(postSaveViBundleQty),
+        headers: headerList);
+    print("Post Save Visual Inspected Bundle Quality :${response.statusCode}");
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Update Bundle Status in Schedule Master
+  Future<bool> updateBundleStatus(
+      ViUpdateBundleStatus viUpdateBundleStatus) async {
+    var url = Uri.parse(
+        baseUrl + 'molex/scheduler/update-bundle-status-in-schedule-master');
+    var response = await http.post(url,
+        body: viUpdateBundleStatusToJson(viUpdateBundleStatus),
+        headers: headerList);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  //Update bundle Status in Schedule Start Track
+  Future<bool> viUpdateBundleStartTracking(
+      ViUpdateBundleStatusScheduleStartTracking viUpdateBundleStatusScheduleStartTracking) async {
+    var url = Uri.parse(
+        baseUrl + 'molex/scheduler/update-bundle-status-in-schedule-master');
+    var response = await http.post(url,
+        body: viUpdateBundleStatusScheduleStartTrackingToJson(viUpdateBundleStatusScheduleStartTracking),
+        headers: headerList);
+        print("post update bundle status in track: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

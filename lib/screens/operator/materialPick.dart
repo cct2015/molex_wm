@@ -826,7 +826,7 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.cablePartNumber.toString(),
+                                e.traceabilityNumber.toString(),
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
