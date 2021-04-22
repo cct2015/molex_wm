@@ -8,6 +8,7 @@ enum Status {
   scan,
   rejection,
   showbundle,
+  scanBin,
 }
 
 class ScanBundle extends StatefulWidget {
@@ -58,6 +59,12 @@ class _ScanBundleState extends State<ScanBundle> {
   Status status = Status.scan;
 
   String _output = '';
+
+  TextEditingController _binController = new TextEditingController();
+
+  bool hasBin;
+
+  String binId;
   @override
   void initState() {
     Future.delayed(
@@ -88,6 +95,9 @@ class _ScanBundleState extends State<ScanBundle> {
         break;
       case Status.rejection:
         return rejectioncase();
+        break;
+          case Status.scanBin:
+        return binScan();
         break;
       default:
         return Container();
@@ -133,27 +143,27 @@ class _ScanBundleState extends State<ScanBundle> {
               },
             ),
           ),
-          child:buttonText=='X'?Container(
-            width: 50,
-            height: 50,
-            child: IconButton(
-              icon:Icon(Icons.backspace,
-              color: Colors.red[400],
-            ),
-            onPressed: ()=>{buttonPressed(buttonText)},
-            )
-            
-          )
-          : new Text(
-            buttonText,
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                color:buttonText=="X"?Colors.red: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
+          child: buttonText == 'X'
+              ? Container(
+                  width: 50,
+                  height: 50,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.red[400],
+                    ),
+                    onPressed: () => {buttonPressed(buttonText)},
+                  ))
+              : new Text(
+                  buttonText,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      color: buttonText == "X" ? Colors.red : Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
           onPressed: () => {buttonPressed(buttonText)},
         ),
       ));
@@ -204,7 +214,6 @@ class _ScanBundleState extends State<ScanBundle> {
                 buildbutton('00'),
                 buildbutton('0'),
                 buildbutton('X'),
-                
               ],
             ),
           ],
@@ -565,7 +574,7 @@ class _ScanBundleState extends State<ScanBundle> {
                                       .invokeMethod('TextInput.hide');
                                 });
 
-                                status = Status.scan;
+                                status = Status.scanBin;
                               });
                             }),
                       ),
@@ -658,6 +667,83 @@ class _ScanBundleState extends State<ScanBundle> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget binScan() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        children: [
+          Container(
+            width: 250,
+            height: 50,
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: RawKeyboardListener(
+                focusNode: FocusNode(),
+                onKey: (event) => handleKey(event.data),
+                child: TextField(
+                    controller: _binController,
+                    onSubmitted: (value) {
+                      hasBin = true;
+
+                      // _bundleFocus.requestFocus();
+                      Future.delayed(
+                        const Duration(milliseconds: 50),
+                        () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+                        },
+                      );
+                    },
+                    onTap: () {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        binId = value;
+                      });
+                    },
+                    decoration: new InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.redAccent, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey[400], width: 2.0),
+                        ),
+                        labelText: 'Scan bin',
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 5.0))),
+              ),
+            ),
+          ),
+          //Scan Bin Button
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+                child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 4,
+                primary: Colors.red, // background
+                onPrimary: Colors.white,
+              ),
+              child: Text(
+                'Save  & Scan Next',
+              ),
+              onPressed: () {
+                setState(() {
+                  status = Status.scan;
+                });
+              },
+            )),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/transferLocation_model.dart';
+import 'package:molex/screens/operator/location.dart';
 
 import '../../operator/bin.dart';
 
@@ -139,26 +141,27 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
               },
             ),
           ),
-          child:buttonText=="X"?Container(
-            width: 50,
-            height: 50,
-            child: IconButton(
-              icon:Icon(Icons.backspace,
-              color: Colors.red[400],
-            ),
-            onPressed: ()=>{buttonPressed(buttonText)},
-            )
-            
-          ): new Text(
-            buttonText,
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
+          child: buttonText == "X"
+              ? Container(
+                  width: 50,
+                  height: 50,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.red[400],
+                    ),
+                    onPressed: () => {buttonPressed(buttonText)},
+                  ))
+              : new Text(
+                  buttonText,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
           onPressed: () => {buttonPressed(buttonText)},
         ),
       ));
@@ -570,7 +573,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      borderRadius: BorderRadius.circular(15.0),
                                       side: BorderSide(
                                           color: Colors.transparent))),
                               backgroundColor:
@@ -585,9 +588,6 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                             ),
                             child: Text("Accept and Continue Process"),
                             onPressed: () {
-                              Navigator.pop(
-                                context,
-                              );
                             }),
                       ),
                     ),
@@ -596,7 +596,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    height: 50,
+                    height: 40,
                     child: Center(
                       child: Container(
                         height: 45,
@@ -606,7 +606,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      borderRadius: BorderRadius.circular(15.0),
                                       side: BorderSide(
                                           color: Colors.transparent))),
                               backgroundColor:
@@ -624,7 +624,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Bin(
+                                    builder: (context) => Location(
                                           userId: widget.userId,
                                           machineId: widget.machineId,
                                         )),

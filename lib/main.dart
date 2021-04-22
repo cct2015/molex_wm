@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/login.dart';
-import 'package:molex/screens/operator%202/Home_0p2.dart';
-import 'package:molex/screens/operator%203/Home_0p3.dart';
-import 'package:molex/screens/operator/Homepage.dart';
-import 'package:molex/service/apiService.dart';
-
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
   // SharedPreferences preferences =

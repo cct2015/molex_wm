@@ -4,6 +4,7 @@ import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%203/process/scanBundle.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/operator/location.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class Processpage3 extends StatefulWidget {
@@ -25,7 +26,6 @@ class _Processpage3State extends State<Processpage3> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -34,7 +34,7 @@ class _Processpage3State extends State<Processpage3> {
           color: Colors.red,
         ),
         title: const Text(
-          'Process 3',
+          'Preparation',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,
@@ -181,6 +181,8 @@ class _Processpage3State extends State<Processpage3> {
                 child: Column(
                   children: [
                     Detail(
+                      userId: widget.userId,
+                      machineId: widget.machineId,
                       schedule: widget.schedule,
                     ),
                   ],
@@ -218,9 +220,14 @@ class _DetailState extends State<Detail> {
   List<BundleScan> bundleScan = [];
   List<String> userId = [];
   String mainb;
+
+  FocusNode reasonFocus = new FocusNode();
   @override
   Widget build(BuildContext context) {
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    if (!reasonFocus.hasFocus) {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
+
     return Container(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       GestureDetector(
@@ -277,165 +284,144 @@ class _DetailState extends State<Detail> {
       (() {
         if (_chosenValue != null) {
           return Column(children: [
-            terminal(),
+            // terminal(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  color: Colors.black,
-                  // height: MediaQuery.of(context).size.height * 0.5,
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Process(type: _chosenValue),
-                      // SizedBox(height: 20),
-                      // mainbox(mainb)
-                    ],
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  color: Colors.red,
-                  child: Column(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                   
-                          //Scan Bundle
-                          Container(
-                            width: 140,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.green, // background
-                                  onPrimary: Colors.white,
-                                ),
-                                child: Text(
-                                  'Scan Bundle',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    mainb = "scanBundle";
-                                    Future.delayed(
-                                      const Duration(milliseconds: 50),
-                                      () {
-                                        SystemChannels.textInput
-                                            .invokeMethod('TextInput.hide');
-                                      },
-                                    );
-                                  });
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => Bundle()),
-                                  // );
-                                }),
-                          ),
-                          // 100 % Button
-                          Container(
-                            width: 140,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.green, // background
-                                onPrimary: Colors.white,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Bin(
-                                              userId: '',
-                                              machineId: "",
-                                            )));
-                              },
-                              child: Text(
-                                "100% complete",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                      //Scan Bundle
+                      Container(
+                        width: 140,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green, // background
+                              onPrimary: Colors.white,
+                            ),
+                            child: Text(
+                              'Scan Bundle',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
-                          ),
-                    
-
-                   
-                          //Partially complete
-                          Container(
-                            width: 140,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
-                                        side: BorderSide(
-                                            color: Colors.transparent))),
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith<Color>(
-                                  (Set<MaterialState> states) {
-                                    if (states.contains(MaterialState.pressed))
-                                      return Colors.green[200];
-                                    return Colors.green[
-                                        500]; // Use the component's default.
+                            onPressed: () {
+                              setState(() {
+                                mainb = "scanBundle";
+                                Future.delayed(
+                                  const Duration(milliseconds: 50),
+                                  () {
+                                    SystemChannels.textInput
+                                        .invokeMethod('TextInput.hide');
                                   },
-                                ),
-                              ),
-                              onPressed: () {
-                                mainb = "partial";
-                              },
-                              child: Text(
-                                "Partially  complete",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
+                                );
+                              });
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => Bundle()),
+                              // );
+                            }),
+                      ),
+                      // 100 % Button
+                      Container(
+                        width: 140,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green, // background
+                            onPrimary: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Location(
+                                          userId: widget.userId,
+                                          machineId: widget.machineId,
+                                        )));
+                          },
+                          child: Text(
+                            "100% complete",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.normal,
                             ),
                           ),
-                          //Reaload Material
-                          Container(
-                            width: 140,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2.0),
-                                          side: BorderSide(
-                                              color: Colors.transparent))),
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                      if (states
-                                          .contains(MaterialState.pressed))
-                                        return Colors.green[200];
-                                      return Colors.green[
-                                          500]; // Use the component's default.
-                                    },
-                                  ),
-                                ),
-                                child: Text(
-                                  'Reload Material',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
+                        ),
+                      ),
+
+                      //Partially complete
+                      Container(
+                        width: 140,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(2.0),
+                                    side:
+                                        BorderSide(color: Colors.transparent))),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.green[200];
+                                return Colors
+                                    .green[500]; // Use the component's default.
+                              },
+                            ),
                           ),
-                     
+                          onPressed: () {
+                            mainb = "partial";
+                          },
+                          child: Text(
+                            "Partially  complete",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                      //Reaload Material
+                      Container(
+                        width: 140,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2.0),
+                                      side: BorderSide(
+                                          color: Colors.transparent))),
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed))
+                                    return Colors.green[200];
+                                  return Colors.green[
+                                      500]; // Use the component's default.
+                                },
+                              ),
+                            ),
+                            child: Text(
+                              'Reload Material',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                      ),
 
                       //Load user
                       Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
                             // height: 40,
@@ -473,7 +459,6 @@ class _DetailState extends State<Detail> {
                                   });
                                 }),
                           ),
-                         
                         ],
                       ),
                     ],
@@ -481,6 +466,16 @@ class _DetailState extends State<Detail> {
                 )
               ],
             ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  mainbox(mainb),
+                ],
+              ),
+            )
           ]);
         } else {
           return Container();
@@ -502,7 +497,6 @@ class _DetailState extends State<Detail> {
       return Container();
     }
   }
-
 
   Widget scanTable() {
     int i = 1;
@@ -1034,14 +1028,15 @@ class _DetailState extends State<Detail> {
                 width: MediaQuery.of(context).size.width * 0.4 * 0.9,
                 child: TextField(
                   controller: scanBundleController,
-                  focusNode: scanFocus,
+                  focusNode: reasonFocus,
                   autofocus: true,
                   onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  
                   },
                   decoration: new InputDecoration(
-                    hintText: "Type the Reason",
+                    labelText: "Type the Reason",
                     fillColor: Colors.white,
+
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(7.0),
                       borderSide: new BorderSide(),

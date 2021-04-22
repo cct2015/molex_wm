@@ -35,6 +35,8 @@ class _MaterialPickState extends State<MaterialPick> {
   bool isCollapsedScannedMaterial = false;
   DateTime selectedDate = DateTime.now();
   ApiService apiService;
+  bool keyBoard = false;
+
   @override
   void initState() {
     apiService = new ApiService();
@@ -115,8 +117,14 @@ class _MaterialPickState extends State<MaterialPick> {
     //   checkPartNumber(partNumber);
     //   checkTrackNumber(trackingNumber);
     // }
-    if (!_qty.hasFocus) {
+    if (!_qty.hasFocus && !keyBoard) {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
+    print("key $keyBoard");
+    if (!keyBoard) {
+      if (!_qty.hasFocus) {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      }
     }
     return Scaffold(
       appBar: AppBar(
@@ -310,6 +318,7 @@ class _MaterialPickState extends State<MaterialPick> {
                     child: TextField(
                       textInputAction: TextInputAction.newline,
                       controller: _partNumberController,
+                      keyboardType: TextInputType.number,
                       autofocus: true,
                       focusNode: _textNode,
                       onSubmitted: (value) {
@@ -334,9 +343,24 @@ class _MaterialPickState extends State<MaterialPick> {
                         });
                       },
                       onTap: () {
-                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        setState(() {
+                          keyBoard
+                              ? SystemChannels.textInput
+                                  .invokeMethod('TextInput.show')
+                              : SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                        });
                       },
                       decoration: new InputDecoration(
+                        suffix: _partNumberController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _partNumberController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear, size: 18))
+                            : Container(),
                         labelText: "Part No.",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
@@ -355,6 +379,7 @@ class _MaterialPickState extends State<MaterialPick> {
                     height: 40,
                     width: width * 0.25,
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       controller: _trackingNumberController,
                       onSubmitted: (value) async {
                         trackingNumber = value;
@@ -379,8 +404,11 @@ class _MaterialPickState extends State<MaterialPick> {
                       },
                       onTap: () {
                         setState(() {
-                          SystemChannels.textInput
-                              .invokeMethod('TextInput.hide');
+                          keyBoard
+                              ? SystemChannels.textInput
+                                  .invokeMethod('TextInput.show')
+                              : SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
                         });
                       },
                       onChanged: (value) {
@@ -388,6 +416,15 @@ class _MaterialPickState extends State<MaterialPick> {
                       },
                       focusNode: _trackingNumber,
                       decoration: new InputDecoration(
+                        suffix: _trackingNumberController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _trackingNumberController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear, size: 18))
+                            : Container(),
                         labelText: "Tracebility Number",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
@@ -398,6 +435,14 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                     )),
               ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      keyBoard = !keyBoard;
+                    });
+                  },
+                  child: Icon(Icons.keyboard,
+                      color: keyBoard ? Colors.green : Colors.grey)),
               GestureDetector(
                 onTap: () async {
                   final DateTime picked = await showDatePicker(
@@ -561,7 +606,7 @@ class _MaterialPickState extends State<MaterialPick> {
               _showConfirmationDialog();
             },
             child: Text(
-              'Proceed to Process',
+              'Start Process',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
@@ -575,7 +620,9 @@ class _MaterialPickState extends State<MaterialPick> {
 
   handleKey(RawKeyEventDataAndroid key) {
     setState(() {
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      keyBoard
+          ? SystemChannels.textInput.invokeMethod('TextInput.show')
+          : SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
   }
 
@@ -858,7 +905,7 @@ class _MaterialPickState extends State<MaterialPick> {
       builder: (BuildContext context) {
         return Center(
           child: AlertDialog(
-            title: Center(child: Text('Confirm Selected Material')),
+            title: Center(child: Text('Start Process')),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[Center(child: Text('Proceed to Process'))],
@@ -879,7 +926,7 @@ class _MaterialPickState extends State<MaterialPick> {
                       },
                     );
                   },
-                  child: Text('    Cancel   ')),
+                  child: Text('       Cancel      ')),
               ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
@@ -900,7 +947,7 @@ class _MaterialPickState extends State<MaterialPick> {
                       } else {}
                     });
                   },
-                  child: Text('Proceed to Process')),
+                  child: Text('       Confirm      ')),
             ],
           ),
         );

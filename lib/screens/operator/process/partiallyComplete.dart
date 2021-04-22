@@ -594,7 +594,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
                     height: 40,
                     child: Center(
@@ -620,7 +620,9 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                             ),
                           ),
                           child: Text("Save & End Process"),
-                          onPressed: () {},
+                          onPressed: () {
+                            
+                          },
                         ),
                       ),
                     ),

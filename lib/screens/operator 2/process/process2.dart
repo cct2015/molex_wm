@@ -26,7 +26,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          'Process 2',
+          'Crimping',
           style: TextStyle(
             color: Colors.red,
           ),
@@ -513,7 +513,10 @@ class _DetailState extends State<Detail> {
       return FullCompleteP2();
     }
     if (main == "partial") {
-      return PartialCompletionP2();
+      return PartialCompletionP2(
+        machineId: widget.machineId,
+        userId: widget.userId,
+      );
     } else {
       return Container();
     }
@@ -1465,7 +1468,7 @@ class _DetailState extends State<Detail> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             process(
-                'Terminal A',
+                'From Process',
                 'From Strip Length Spec(mm) - 40',
                 'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                 '(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
@@ -1477,7 +1480,7 @@ class _DetailState extends State<Detail> {
                 '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
                 ''),
             process(
-                'Terminal B',
+                'To Process',
                 'To Strip Length Spec(mm) - 60',
                 'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                 '(SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',

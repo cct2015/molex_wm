@@ -30,6 +30,8 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
   bool isCollapsedRawMaterial = false;
   bool isCollapsedScannedMaterial = false;
   DateTime selectedDate = DateTime.now();
+
+  bool keyBoard = false;
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -109,8 +111,11 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
     //   checkPartNumber(partNumber);
     //   checkTrackNumber(trackingNumber);
     // }
-    if(!_qty.hasFocus){
-         SystemChannels.textInput.invokeMethod('TextInput.hide');
+    print("key $keyBoard");
+    if (!keyBoard) {
+      if (!_qty.hasFocus) {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      }
     }
     return Scaffold(
       appBar: AppBar(
@@ -257,7 +262,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
             ),
           )
         ],
-       ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -309,33 +314,34 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                     child: TextField(
                       textInputAction: TextInputAction.newline,
                       controller: _partNumberController,
+                      keyboardType: TextInputType.number,
                       autofocus: true,
                       focusNode: _textNode,
-                      onSubmitted: (value) {
-                        for (ItemPart ip in items) {
-                          if (ip.partNo == value) {
-                            if (!selectditems.contains(ip)) {
-                              _trackingNumber.requestFocus();
-                              Future.delayed(
-                                const Duration(milliseconds: 100),
-                                () {
-                                  SystemChannels.textInput
-                                      .invokeMethod('TextInput.hide');
-                                },
-                              );
-                            }
-                          }
-                        }
-                      },
+                      onSubmitted: (value) {},
                       onChanged: (value) {
                         setState(() {
                           partNumber = value;
                         });
                       },
                       onTap: () {
-                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        setState(() {
+                          keyBoard
+                              ? SystemChannels.textInput
+                                  .invokeMethod('TextInput.show')
+                              : SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                        });
                       },
                       decoration: new InputDecoration(
+                        suffix: _partNumberController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _partNumberController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear, size: 18))
+                            : Container(),
                         labelText: "Part No.",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
@@ -354,6 +360,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                     height: 40,
                     width: width * 0.25,
                     child: TextField(
+                      keyboardType: TextInputType.number,
                       controller: _trackingNumberController,
                       onSubmitted: (value) async {
                         trackingNumber = value;
@@ -376,11 +383,29 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                           });
                         _qty.requestFocus();
                       },
+                      onTap: () {
+                        setState(() {
+                          keyBoard
+                              ? SystemChannels.textInput
+                                  .invokeMethod('TextInput.show')
+                              : SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                        });
+                      },
                       onChanged: (value) {
                         trackingNumber = value;
                       },
                       focusNode: _trackingNumber,
                       decoration: new InputDecoration(
+                        suffix: _trackingNumberController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _trackingNumberController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear, size: 18))
+                            : Container(),
                         labelText: "Tracebility Number",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
@@ -391,6 +416,14 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                       ),
                     )),
               ),
+              GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      keyBoard = !keyBoard;
+                    });
+                  },
+                  child: Icon(Icons.keyboard,
+                      color: keyBoard ? Colors.green : Colors.grey)),
               GestureDetector(
                 onTap: () async {
                   final DateTime picked = await showDatePicker(
@@ -440,15 +473,14 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                   child: TextField(
                     controller: _qtyController,
                     onTap: () {
-                      SystemChannels.textInput.invokeMethod('TextInput.show');
+                      setState(() {});
                     },
                     focusNode: _qty,
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       setState(() {
-                      qty = value;  
+                        qty = value;
                       });
-                      
                     },
                     decoration: new InputDecoration(
                       labelText: "Qty",
@@ -464,43 +496,33 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               ),
               Container(
                 height: 40,
-                width: width * 0.18,
+                width: width * 0.12,
                 child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith<Color>(
                         (Set<MaterialState> states) {
                           if (states.contains(MaterialState.pressed))
                             return Colors.green[200];
-                          return Colors
-                              .blue[500]; // Use the component's default.
+                          return Colors.blue; // Use the component's default.
                         },
                       ),
                     ),
                     onPressed: () {
                       setState(() {
-                        for (ItemPart ip in items) {
-                          if (ip.partNo == partNumber) {
-                            if (!selectditems.contains(ip)) {
-                              ip.date =
-                                  "${selectedDate.toLocal()}".split(' ')[0];
-                              selectditems.add(ip);
-                              _partNumberController.clear();
-                              _trackingNumberController.clear();
-                              _qtyController.clear();
-                              partNumber = null;
-                              trackingNumber = null;
-                              qty = null;
-                              _textNode.requestFocus();
-                              Future.delayed(
-                                const Duration(milliseconds: 100),
-                                () {
-                                  SystemChannels.textInput
-                                      .invokeMethod('TextInput.hide');
-                                },
-                              );
-                            }
-                          }
-                        }
+                        _partNumberController.clear();
+                        _trackingNumberController.clear();
+                        _qtyController.clear();
+                        partNumber = null;
+                        trackingNumber = null;
+                        qty = null;
+                        _textNode.requestFocus();
+                        Future.delayed(
+                          const Duration(milliseconds: 100),
+                          () {
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
+                          },
+                        );
                       });
                     },
                     child: Text('Add')),
@@ -509,7 +531,8 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
           ),
         ),
         Container(
-        height: 43,
+          height: 40,
+          width: width * 0.22,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               elevation: 4,
@@ -517,19 +540,12 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               onPrimary: Colors.white,
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProcessPage2(
-                          schedule: widget.schedule,
-                          userId: widget.userId,
-                          machineId: widget.machineId,
-                        )),
-              );
+              _showConfirmationDialog();
             },
             child: Text(
-              'Proceed to Process',
+              'Start Process',
               style: TextStyle(
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -541,7 +557,9 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
   handleKey(RawKeyEventDataAndroid key) {
     setState(() {
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      keyBoard
+          ? SystemChannels.textInput.invokeMethod('TextInput.show')
+          : SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
   }
 
@@ -903,6 +921,69 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showConfirmationDialog() async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return Center(
+          child: AlertDialog(
+            title: Center(child: Text('Start Process')),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[Center(child: Text('Proceed to Process'))],
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.redAccent),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Future.delayed(
+                      const Duration(milliseconds: 50),
+                      () {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      },
+                    );
+                  },
+                  child: Text('       Cancel      ')),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.green),
+                  ),
+                  onPressed: () {
+                    // apiService.postRawmaterial(selectdItems).then((value) {
+                    //   if (value) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProcessPage2(
+                                schedule: widget.schedule,
+                                userId: widget.userId,
+                                machineId: widget.machineId,
+                              )),
+                    );
+                    // } else {}
+                    // });
+                  },
+                  child: Text('       Confirm      ')),
+            ],
+          ),
+        );
+      },
     );
   }
 }

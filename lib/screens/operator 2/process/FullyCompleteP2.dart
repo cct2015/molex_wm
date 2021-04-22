@@ -366,7 +366,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      borderRadius: BorderRadius.circular(15.0),
                                       side: BorderSide(
                                           color: Colors.transparent))),
                               backgroundColor:

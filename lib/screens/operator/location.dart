@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/models/location_bin.dart';
 import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/screens/widgets/time.dart';
 
 class Location extends StatefulWidget {
   String userId;
@@ -42,8 +43,9 @@ class _LocationState extends State<Location> {
 
   @override
   Widget build(BuildContext context) {
-    checkLocation(locationId);
-    checkBin(binId);
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+          SystemChrome.setEnabledSystemUIOverlays([]);
+    
     return Scaffold(
         key: _scaffoldKey1,
         appBar: AppBar(
@@ -57,55 +59,44 @@ class _LocationState extends State<Location> {
           ),
           elevation: 0,
           actions: [
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  child: Center(
+                      child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Icon(
+                          Icons.schedule,
+                          size: 18,
+                          color: Colors.redAccent,
                         ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.schedule,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            Text(
-                              "Shift A",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
+                      ),
+                      Text(
+                        "Shift A",
+                        style: TextStyle(fontSize: 13, color: Colors.black),
                       ),
                     ],
-                  )
-                ],
-              ),
+                  )),
+                ),
+              ],
             ),
+
+            //machineID
             Container(
               padding: EdgeInsets.all(1),
-              height: 40,
-             
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Column(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
@@ -169,36 +160,11 @@ class _LocationState extends State<Location> {
                 ],
               ),
             ),
-            Container(
-              width: 80,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                      Text(
-                        DateFormat('hh:mm').format(DateTime.now()),
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 23,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 10)
-                ],
-              ),
-            ),
+
+            TimeDisplay(),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
-                height: 40,
                 width: 40,
                 decoration: BoxDecoration(
                     boxShadow: [
@@ -279,22 +245,7 @@ class _LocationState extends State<Location> {
                                                         .invokeMethod(
                                                             'TextInput.hide');
                                                   },
-                                                  onSubmitted: (value) {
-                                                    setState(() {
-                                                      hasLocation = true;
-                                                      _binFocus.requestFocus();
-                                                      Future.delayed(
-                                                        const Duration(
-                                                            milliseconds: 50),
-                                                        () {
-                                                          SystemChannels
-                                                              .textInput
-                                                              .invokeMethod(
-                                                                  'TextInput.hide');
-                                                        },
-                                                      );
-                                                    });
-                                                  },
+                                                  onSubmitted: (value) {},
                                                   onChanged: (value) {
                                                     setState(() {
                                                       locationId = value;
@@ -337,7 +288,21 @@ class _LocationState extends State<Location> {
                                             child: Text(
                                               'Scan Location',
                                             ),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              setState(() {
+                                                hasLocation = true;
+                                                _binFocus.requestFocus();
+                                                Future.delayed(
+                                                  const Duration(
+                                                      milliseconds: 50),
+                                                  () {
+                                                    SystemChannels.textInput
+                                                        .invokeMethod(
+                                                            'TextInput.hide');
+                                                  },
+                                                );
+                                              });
+                                            },
                                           )),
                                     ],
                                   ),
@@ -451,10 +416,6 @@ class _LocationState extends State<Location> {
   // }
 
   handleKey(RawKeyEventDataAndroid key) {
-    String _keyCode;
-    _keyCode = key.keyCode.toString(); //keyCode of key event(66 is return )
-    print("why does this run twice $_keyCode");
-
     setState(() {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
@@ -489,13 +450,8 @@ class _LocationState extends State<Location> {
                             SystemChannels.textInput
                                 .invokeMethod('TextInput.hide');
                           },
-                          onSubmitted: (value){
-                             setState(() {
-                                  listLocation.add(LocationBin(
-                                      locationId: locationId, binId: binId));
-                                  _binController.clear();
-                                  binId = null;
-                                });
+                          onSubmitted: (value) {
+                           
                           },
                           onChanged: (value) {
                             setState(() {
@@ -529,7 +485,14 @@ class _LocationState extends State<Location> {
                     child: Text(
                       'Scan Bin',
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                       setState(() {
+                              listLocation.add(LocationBin(
+                                  locationId: locationId, binId: binId));
+                              _binController.clear();
+                              binId = null;
+                            });
+                    },
                   )),
             ],
           ),
@@ -588,7 +551,7 @@ class _LocationState extends State<Location> {
       child: Column(
         children: [
           DataTable(
-            columnSpacing: 30,
+              columnSpacing: 30,
               columns: const <DataColumn>[
                 DataColumn(
                   label: Text('No.'),

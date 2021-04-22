@@ -591,7 +591,7 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
                             builder: (context) => Viscan(
                                   userId: '45642313',
                                   machineId: '45642313',
-                                  schedule: widget.schedule,
+                                  viSchedule: viSchedule,
                                 )),
                       );
                     } else {

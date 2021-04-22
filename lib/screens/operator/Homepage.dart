@@ -67,47 +67,7 @@ class _HomepageState extends State<Homepage> {
         automaticallyImplyLeading: false,
         actions: [
           //typeselect
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(
-              children: [
-                Container(
-                  height: 25,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      //BoxShadow
-                      BoxShadow(
-                        color: Colors.grey[100],
-                        offset: const Offset(0.0, 0.0),
-                        blurRadius: 3.0,
-                        spreadRadius: 2.0,
-                      ), //BoxShadow
-                    ],
-                  ),
-                  child: ToggleSwitch(
-                    minWidth: 80.0,
-                    cornerRadius: 10.0,
-                    activeBgColor: Colors.green,
-                    activeFgColor: Colors.white,
-                    initialLabelIndex: scheduleType,
-                    inactiveBgColor: Colors.grey[200],
-                    inactiveFgColor: Colors.black,
-                    labels: ['Auto Shdl', 'Others'],
-                    fontSize: 12,
-                    onToggle: (index) {
-                      print('switched to: $index');
-                      scheduleType = index;
-                      setState(() {
-                        scheduleType = index;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-
+         
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3),
             child: Row(
@@ -149,6 +109,47 @@ class _HomepageState extends State<Homepage> {
               ],
             ),
           ),
+           Container(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(
+              children: [
+                Container(
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      //BoxShadow
+                      BoxShadow(
+                        color: Colors.grey[100],
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 3.0,
+                        spreadRadius: 2.0,
+                      ), //BoxShadow
+                    ],
+                  ),
+                  child: ToggleSwitch(
+                    minWidth: 80.0,
+                    cornerRadius: 10.0,
+                    activeBgColor: Colors.green,
+                    activeFgColor: Colors.white,
+                    initialLabelIndex: scheduleType,
+                    inactiveBgColor: Colors.grey[200],
+                    inactiveFgColor: Colors.black,
+                    labels: ['Auto Shdl', 'Others'],
+                    fontSize: 12,
+                    onToggle: (index) {
+                      print('switched to: $index');
+                      scheduleType = index;
+                      setState(() {
+                        scheduleType = index;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           //shift
           Container(
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),

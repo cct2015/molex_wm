@@ -403,33 +403,34 @@ class _GenerateLabelState extends State<GenerateLabel> {
                     height: 50,
                     width: MediaQuery.of(context).size.width * 0.05,
                     child: ElevatedButton(
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Colors.transparent),
-                            ),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.pressed))
-                                return Colors.green[200];
-                              return Colors
-                                  .red[500]; // Use the component's default.
-                            },
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(color: Colors.transparent),
                           ),
                         ),
-                        onPressed: () {
-                          setState(() {});
-                        },
-                        child: Text(
-                          '30',
-                          // bundlePrint.length.toString(),
-                          style: TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.bold),
-                        )),
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed))
+                              return Colors.green[200];
+                            return Colors
+                                .red[500]; // Use the component's default.
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: Text(
+                        '1',
+                        // bundlePrint.length.toString(),
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 )
               ],
@@ -771,10 +772,6 @@ class _GenerateLabelState extends State<GenerateLabel> {
     );
   }
 
-
-
-
-
   Widget quantitycell(
       {String name,
       int quantity,
@@ -872,7 +869,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           borderSide:
                               BorderSide(color: Colors.grey[400], width: 2.0),
                         ),
-                        hintText: 'Scan bin',
+                        labelText: 'Scan bin',
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 5.0))),
               ),
@@ -889,7 +886,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 onPrimary: Colors.white,
               ),
               child: Text(
-                binState,
+                'Scan Bundle',
               ),
               onPressed: () {
                 setState(() {
@@ -948,7 +945,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           borderSide:
                               BorderSide(color: Colors.grey[400], width: 2.0),
                         ),
-                        hintText: 'Scan Bundle',
+                        labelText: 'Scan Bundle',
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 5.0))),
               ),
@@ -964,7 +961,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 onPrimary: Colors.white,
               ),
               child: Text(
-                'Scan Bundle',
+                'Save & Scan Next',
               ),
               onPressed: () {
                 setState(() {

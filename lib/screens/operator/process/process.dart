@@ -41,7 +41,7 @@ class _ProcessPageState extends State<ProcessPage> {
           color: Colors.red,
         ),
         title: const Text(
-          'Process',
+          'Auto Cut & Crimp',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,
@@ -393,46 +393,46 @@ class _DetailState extends State<Detail> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       //Label
-                                      Container(
-                                        height: 40,
-                                        width: 160,
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    side: BorderSide(
-                                                        color: Colors
-                                                            .transparent))),
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                                if (states.contains(
-                                                    MaterialState.pressed))
-                                                  return Colors.green[200];
-                                                return Colors.green[
-                                                    500]; // Use the component's default.
-                                              },
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              rightside = "label";
-                                            });
-                                          },
-                                          child: Text(
-                                            "Label",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                      // Container(
+                                      //   height: 40,
+                                      //   width: 160,
+                                      //   child: ElevatedButton(
+                                      //     style: ButtonStyle(
+                                      //       shape: MaterialStateProperty.all<
+                                      //               RoundedRectangleBorder>(
+                                      //           RoundedRectangleBorder(
+                                      //               borderRadius:
+                                      //                   BorderRadius.circular(
+                                      //                       10.0),
+                                      //               side: BorderSide(
+                                      //                   color: Colors
+                                      //                       .transparent))),
+                                      //       backgroundColor:
+                                      //           MaterialStateProperty
+                                      //               .resolveWith<Color>(
+                                      //         (Set<MaterialState> states) {
+                                      //           if (states.contains(
+                                      //               MaterialState.pressed))
+                                      //             return Colors.green[200];
+                                      //           return Colors.green[
+                                      //               500]; // Use the component's default.
+                                      //         },
+                                      //       ),
+                                      //     ),
+                                      //     onPressed: () {
+                                      //       setState(() {
+                                      //         rightside = "label";
+                                      //       });
+                                      //     },
+                                      //     child: Text(
+                                      //       "Label",
+                                      //       style: TextStyle(
+                                      //         fontSize: 15,
+                                      //         fontWeight: FontWeight.normal,
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
 
                                       //100% complete
                                       Container(
@@ -475,17 +475,8 @@ class _DetailState extends State<Detail> {
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  width: 330,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
                                       //partially complete
-                                      Container(
+                                       Container(
                                         height: 40,
                                         width: 160,
                                         child: ElevatedButton(
@@ -525,6 +516,17 @@ class _DetailState extends State<Detail> {
                                           ),
                                         ),
                                       ),
+                                     
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 330,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.end,
+                                    children: [
+                                      //partially complete
                                       //Reload material
                                       Container(
                                         height: 40,
@@ -750,14 +752,14 @@ class _DetailState extends State<Detail> {
                     CableTerminalA terminalA = snapshot.data;
                     if (snapshot.hasData) {
                       return process(
-                          'Terminal A',
+                          'From Process',
                           'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                           '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
                           'From Unsheathing Length (mm) - 40');
                     } else {
                       return process(
-                          'Terminal A',
+                          'From Process',
                           'From Strip Length Spec(mm) - 40}',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                           '(-)()(-)(-)(-)',
@@ -792,14 +794,14 @@ class _DetailState extends State<Detail> {
                   if (snapshot.hasData) {
                     CableTerminalB cableTerminalB = snapshot.data;
                     return process(
-                        'Terminal B',
+                        'To Process',
                         'To Strip Length Spec(mm) - ${cableTerminalB.stripLength}',
                         'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                         '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
                         'To Unsheathing Length (mm) - 60');
                   } else {
                     return process(
-                        'Terminal B',
+                        'To Process',
                         'From Strip Length Spec(mm) - 40}',
                         'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                         '(-)()(-)(-)(-)',

@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
+import 'package:molex/model_api/visualInspection/saveVIBundleQty.dart';
 import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class Viscan extends StatefulWidget {
   final String userId;
   final String machineId;
-  final Schedule schedule;
+  final ViScheduler viSchedule;
 
-  Viscan({this.userId, this.schedule, this.machineId});
+  Viscan({this.userId, this.viSchedule, this.machineId});
   @override
   _ViscanState createState() => _ViscanState();
 }
 
 class _ViscanState extends State<Viscan> {
-  Schedule schedule;
+  ViScheduler viSchedule;
+  PostSaveViBundleQty saveViBundleQty;
   @override
   void initState() {
-    schedule = widget.schedule;
+    saveViBundleQty = new PostSaveViBundleQty();
+    viSchedule= widget.viSchedule;
     super.initState();
   }
 
@@ -33,7 +37,7 @@ class _ViscanState extends State<Viscan> {
             color: Colors.red,
           ),
           title: const Text(
-            'Process',
+            'Visual Inspection',
             style: TextStyle(color: Colors.red),
           ),
           elevation: 0,
@@ -179,7 +183,7 @@ class _ViscanState extends State<Viscan> {
             child: Column(
               children: [
                 Detail(
-                  schedule: widget.schedule,
+                  viSchedule: widget.viSchedule,
                   userId: widget.userId,
                   machineId: widget.machineId,
                 ),
@@ -191,13 +195,13 @@ class _ViscanState extends State<Viscan> {
 }
 
 class Detail extends StatefulWidget {
-  Schedule schedule;
+  ViScheduler viSchedule;
   String rightside;
   String userId;
   String machineId;
 
   @override
-  Detail({this.schedule, this.rightside, this.machineId, this.userId});
+  Detail({this.viSchedule, this.rightside, this.machineId, this.userId});
   @override
   _DetailState createState() => _DetailState();
 }
@@ -211,7 +215,7 @@ class _DetailState extends State<Detail> {
   FocusNode userScanFocus = new FocusNode();
   @override
   void initState() {
-      Future.delayed(
+    Future.delayed(
       const Duration(milliseconds: 100),
       () {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -226,60 +230,26 @@ class _DetailState extends State<Detail> {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                orderDetailExpanded = !orderDetailExpanded;
-              });
-            },
-            child: Container(
-              height: 20,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 4),
-                    child: Text(
-                      "Order Detail",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ),
-                  IconButton(
-                      iconSize: 15,
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(0),
-                      icon: orderDetailExpanded
-                          ? Icon(Icons.keyboard_arrow_down)
-                          : Icon(Icons.keyboard_arrow_right),
-                      onPressed: () {
-                        setState(() {
-                          orderDetailExpanded = !orderDetailExpanded;
-                        });
-                      })
-                ],
-              ),
-            ),
-          ),
-          (() {
-            if (orderDetailExpanded) {
-              return Column(children: [
-                tableHeading(),
-                buildDataRow(schedule: widget.schedule),
-                box(),
-                terminal(),
-              ]);
-            } else {
-              return Container();
-            }
-          }()),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              scanTap ? Container() : viscanbundle(),
-              scanTap ? vitable() : Container(),
-            ],
-          ),
-        ]));
+      (() {
+        if (orderDetailExpanded) {
+          return Column(children: [
+            tableHeading(),
+            buildDataRow(viSchedule: widget.viSchedule),
+            box(),
+            terminal(),
+          ]);
+        } else {
+          return Container();
+        }
+      }()),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          scanTap ? Container() : viscanbundle(),
+          scanTap ? vitable() : Container(),
+        ],
+      ),
+    ]));
   }
 
   Widget tableHeading() {
@@ -311,9 +281,8 @@ class _DetailState extends State<Detail> {
               cell("Schedule ID", 0.1),
               cell("Cable Part No.", 0.1),
               cell("Process", 0.1),
-              cell("Cut Length(mm)", 0.1),
-              cell("Color", 0.1),
-              cell("Scheduled Qty", 0.1),
+              cell("bin Id", 0.1),
+              cell("Total Bundles", 0.1),
               cell("Schedule", 0.1)
             ],
           ),
@@ -322,7 +291,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({ViScheduler viSchedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {
@@ -350,22 +319,22 @@ class _DetailState extends State<Detail> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell(schedule.orderId, 0.1),
+            cell(viSchedule.orderId, 0.1),
             //Fg Part
-            cell(schedule.finishedGoodsNumber, 0.1),
+            cell(viSchedule.fgNo, 0.1),
             //Schudule ID
-            cell(schedule.scheduledId, 0.1),
+            cell(viSchedule.scheduleId, 0.1),
 
             //Cable Part
-            cell(schedule.cablePartNumber, 0.1),
+            cell(viSchedule.scheduleId, 0.1),
             //Process
-            cell(schedule.process, 0.1),
+            cell(viSchedule.scheduleType, 0.1),
             // Cut length
-            cell(schedule.length, 0.1),
+            cell(viSchedule.binId, 0.1),
             //Color
-            cell(schedule.color, 0.1),
+            cell(viSchedule.totalBundles, 0.1),
             //Scheduled Qty
-            cell(schedule.scheduledQuantity, 0.1),
+           
             //Schudule
             Container(
               width: width * 0.1,
@@ -553,31 +522,36 @@ class _DetailState extends State<Detail> {
       child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width * 0.3 * 0.7,
-              child: TextField(
-                controller: scanBundleController,
-                focusNode: scanFocus,
-                autofocus: true,
-                onTap: () {
-                  setState(() {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  });
-                },
-                decoration: new InputDecoration(
-                  labelText: "Scan Bundle",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(7.0),
-                    borderSide: new BorderSide(),
-                  ),
-                  //fillColor: Colors.green
-                ),
-              ),
-            ),
-          ),
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.3 * 0.7,
+                  child: RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (event) => handleKey(event.data),
+                    child: Container(
+                      child: TextField(
+                        controller: scanBundleController,
+                        focusNode: scanFocus,
+                        autofocus: true,
+                        onTap: () {
+                          setState(() {
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
+                          });
+                        },
+                        decoration: new InputDecoration(
+                          labelText: "Scan Bundle",
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(7.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          //fillColor: Colors.green
+                        ),
+                      ),
+                    ),
+                  ))),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -596,6 +570,7 @@ class _DetailState extends State<Detail> {
                       ),
                     ),
                     onPressed: () {
+                        PostSaveViBundleQty postSaveViBundleQty = PostSaveViBundleQty();
                       setState(() {
                         scanTap = !scanTap;
                       });

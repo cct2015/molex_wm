@@ -91,17 +91,17 @@ class _HomePageOp2State extends State<HomePageOp2> {
             ),
           ),
           //shift
+          //shift
           Container(
-            padding: EdgeInsets.all(5),
-            width: 100,
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 7),
                       height: 24,
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
@@ -135,12 +135,11 @@ class _HomePageOp2State extends State<HomePageOp2> {
           //machine Id
           Container(
             padding: EdgeInsets.all(1),
-            height: 40,
             // width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -219,12 +218,11 @@ class _HomePageOp2State extends State<HomePageOp2> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
-                height: 40,
                 width: 40,
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.redAccent[100],
+                        color: Colors.redAccent[400],
                         offset: const Offset(
                           2.0,
                           2.0,
