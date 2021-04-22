@@ -41,11 +41,11 @@ class _MyAppState extends State<MyApp> {
         home:
         LoginScan()
         // Homepage(
-        //   userId: "",
-        //   machineId: "EMU-M/C-038K",
+        //   userId: "21029493",
+        //   machineId: "EMU-M/C-038A",
         // )
         //  HomePageOp3(
-        //   userId: "10000",
+        //   userId: "10000",2
         //   machineId: "12000",
         // )
         );

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
+import 'package:molex/model_api/visualInspection/postViSchedule_model.dart';
 
 import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/navigation.dart';
@@ -95,55 +96,44 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
           elevation: 0,
           automaticallyImplyLeading: false,
           actions: [
-            Container(
-              padding: EdgeInsets.all(1),
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  child: Center(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Icon(
+                          Icons.schedule,
+                          size: 18,
+                          color: Colors.redAccent,
                         ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.schedule,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            Text(
-                              "Shift A",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
+                      ),
+                      Text(
+                        "Shift A",
+                        style: TextStyle(fontSize: 13, color: Colors.black),
                       ),
                     ],
-                  )
-                ],
-              ),
+                  )),
+                ),
+              ],
             ),
+
+            //machineID
             Container(
               padding: EdgeInsets.all(1),
-              height: 40,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Column(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
@@ -174,175 +164,178 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                           ],
                         )),
                       ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.settings,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              widget.machineId ?? "",
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
                     ],
                   )
                 ],
               ),
             ),
+
             TimeDisplay(),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NavPage(
-                            schedule: schedule,
-                            userId: widget.userId,
-                            machineId: widget.machineId,
-                          )),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.redAccent[100],
-                          offset: const Offset(
-                            2.0,
-                            2.0,
-                          ),
-                          blurRadius: 3.0,
-                          spreadRadius: 1.0,
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                width: 40,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.redAccent[100],
+                        offset: const Offset(
+                          2.0,
+                          2.0,
                         ),
-                        BoxShadow(
-                          color: Colors.white,
-                          offset: const Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0,
-                        ), //Bo
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/image/profile.jpg',
-                          ),
-                          fit: BoxFit.fill)),
-                ),
+                        blurRadius: 3.0,
+                        spreadRadius: 1.0,
+                      ),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0,
+                      ), //Bo
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/profile.jpg',
+                        ),
+                        fit: BoxFit.fill)),
               ),
             )
           ],
         ),
-        body: StreamBuilder(
-            stream: Stream.periodic(const Duration(milliseconds: 2000)),
-            builder: (context, snapshot) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 7),
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 7),
+                  height: 70,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //Select
+                          Container(
+                            child: Row(
                               children: [
-                                //Select
                                 Container(
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        height: 38,
-                                        width: 180,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5)),
-                                          color: Colors.grey[100],
+                                  height: 38,
+                                  width: 180,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    color: Colors.grey[100],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.search,
+                                          size: 20,
+                                          color: Colors.red[400],
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.search,
-                                                size: 20,
-                                                color: Colors.red[400],
+                                        SizedBox(width: 5),
+                                        Container(
+                                          width: 130,
+                                          height: 30,
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 5),
+                                          child: TextField(
+                                            onChanged: (value) {
+                                              setState(() {});
+                                            },
+                                            style: TextStyle(fontSize: 13),
+                                            onTap: () {},
+                                            decoration: new InputDecoration(
+                                              hintText: _chosenValue,
+                                              hintStyle: GoogleFonts.openSans(
+                                                textStyle: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
-                                              SizedBox(width: 5),
-                                              Container(
-                                                width: 130,
-                                                height: 30,
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 5),
-                                                child: TextField(
-                                                  onChanged: (value) {
-                                                    setState(() {});
-                                                  },
-                                                  style:
-                                                      TextStyle(fontSize: 13),
-                                                  onTap: () {},
-                                                  decoration:
-                                                      new InputDecoration(
-                                                    hintText: _chosenValue,
-                                                    hintStyle:
-                                                        GoogleFonts.openSans(
-                                                      textStyle: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                    focusedBorder:
-                                                        InputBorder.none,
-                                                    enabledBorder:
-                                                        InputBorder.none,
-                                                    errorBorder:
-                                                        InputBorder.none,
-                                                    disabledBorder:
-                                                        InputBorder.none,
-                                                    contentPadding:
-                                                        EdgeInsets.only(
-                                                            left: 15,
-                                                            bottom: 11,
-                                                            top: 11,
-                                                            right: 15),
-                                                    fillColor: Colors.white,
-                                                  ),
-                                                  //fillColor: Colors.green
-                                                ),
-                                              ),
-                                            ],
+                                              focusedBorder: InputBorder.none,
+                                              enabledBorder: InputBorder.none,
+                                              errorBorder: InputBorder.none,
+                                              disabledBorder: InputBorder.none,
+                                              contentPadding: EdgeInsets.only(
+                                                  left: 15,
+                                                  bottom: 11,
+                                                  top: 11,
+                                                  right: 15),
+                                              fillColor: Colors.white,
+                                            ),
+                                            //fillColor: Colors.green
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      dropdown(options: [
-                                        "Order ID",
-                                        "FG No.",
-                                        "Schedule Id",
-                                      ], name: "Order Id"),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                //Scan
-                                //Date
+                                SizedBox(width: 10),
+                                dropdown(options: [
+                                  "Order ID",
+                                  "FG No.",
+                                  "Schedule Id",
+                                ], name: "Order Id"),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          //Scan
+                          //Date
+                        ],
                       ),
-                    ),
-                    Divider(
-                      color: Colors.redAccent,
-                      thickness: 2,
-                    ),
-                    ViScheduleTable(
-                        viScheduleList: viScheduleList, schedule: schedule)
-                  ],
+                    ],
+                  ),
                 ),
-              );
-            }));
+              ),
+              Divider(
+                color: Colors.redAccent,
+                thickness: 2,
+              ),
+              ViScheduleTable(
+                  viScheduleList: viScheduleList, schedule: schedule)
+            ],
+          ),
+        ));
   }
 
   Widget dropdown({List<String> options, String name}) {
@@ -384,12 +377,15 @@ class ViScheduleTable extends StatefulWidget {
 }
 
 class _ViScheduleTableState extends State<ViScheduleTable> {
-   ApiService apiService;
-   @override
+  ApiService apiService;
+  PostViSchedule postViSchedule;
+  @override
   void initState() {
-        apiService = new ApiService();
+    postViSchedule = new PostViSchedule();
+    apiService = new ApiService();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -403,24 +399,22 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
               height: double.maxFinite,
               // height: double.parse("${rowList.length*60}"),
               child: FutureBuilder(
-                    future: apiService.getviSchedule(),
-                    builder: (context,snapshot){
-                      if(snapshot.hasData){
-                        List<ViScheduler> vischedule = snapshot.data;
-                  return     ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: vischedule.length,
-                    itemBuilder: (context, index) {
-                      return buildDataRow(
-                          viSchedule: vischedule[index], c: index + 1);
-                    });
-                      }else{
-                        return Container();
-                      }
+                  future: apiService.getviSchedule(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<ViScheduler> vischedule = snapshot.data;
+                      return ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: vischedule.length,
+                          itemBuilder: (context, index) {
+                            return buildDataRow(
+                                viSchedule: vischedule[index], c: index + 1);
+                          });
+                    } else {
+                      return Container();
                     }
-              
-            ),
+                  }),
             )
           ],
         ),
@@ -484,12 +478,13 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              cell("Order Id", 0.08, true),
-              cell("FG Part", 0.08, true),
+              cell("Order Id", 0.07, true),
+              cell("FG Part", 0.07, true),
               cell("Schedule ID", 0.08, false),
-              cell("Bin ID", 0.1, true),
-              cell("Total Bundles", 0.11, false),
-              cell("Total BundleQty", 0.12, true),
+              cell("Schedule Type", 0.12, false),
+              cell("Bin ID", 0.08, true),
+              cell("Total Bundles", 0.10, false),
+              cell("Total BundleQty", 0.11, true),
               cell("Action", 0.08, true),
             ],
           ),
@@ -534,19 +529,19 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell(viSchedule.orderId, 0.08),
+            cell(viSchedule.orderId, 0.07),
             //Fg Part
-            cell(viSchedule.fgNo, 0.08),
+            cell(viSchedule.fgNo, 0.07),
 
             //Schudule ID
             cell(viSchedule.scheduleId, 0.08),
+            cell(viSchedule.scheduleType, 0.12),
             //Cable Part
-            cell(viSchedule.binId, 0.1),
-
+            cell(viSchedule.binId, 0.08),
             //Process
-            cell(viSchedule.totalBundles, 0.11),
+            cell(viSchedule.totalBundles, 0.10),
             // Cut length
-            cell(viSchedule.totalBundles, 0.12),
+            cell(viSchedule.totalBundles, 0.11),
             //Color
             Container(
               child: ElevatedButton(
@@ -583,20 +578,29 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Viscan(
-                              userId: '45642313',
-                              machineId: '45642313',
-                              schedule: widget.schedule,
-                            )),
-                  );
+                  postViSchedule.orderId = int.parse(viSchedule.orderId);
+                  postViSchedule.scheduledId = int.parse(viSchedule.scheduleId);
+                  postViSchedule.process = viSchedule.scheduleType;
+                  apiService
+                      .postVisualInspectionSchedular(postViSchedule)
+                      .then((value) {
+                    if (value) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Viscan(
+                                  userId: '45642313',
+                                  machineId: '45642313',
+                                  schedule: widget.schedule,
+                                )),
+                      );
+                    } else {
+                      print('failed');
+                    }
+                  });
                 },
               ),
             ),
-
-        
           ],
         ),
       ),

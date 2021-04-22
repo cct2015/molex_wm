@@ -160,7 +160,7 @@ class _FullyCompleteState extends State<FullyComplete> {
     // print('NickMark ${windowGapController.text}');
     // print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
-      if (buttonText == 'Clear') {
+      if (buttonText == 'X') {
         _output = '';
       } else {
         _output = _output + buttonText;
@@ -195,7 +195,17 @@ class _FullyCompleteState extends State<FullyComplete> {
               },
             ),
           ),
-          child: new Text(
+          child:buttonText=="X"?Container(
+            width: 50,
+            height: 50,
+            child: IconButton(
+              icon:Icon(Icons.backspace,
+              color: Colors.red[400],
+            ),
+            onPressed: ()=>{buttonPressed(buttonText)},
+            )
+            
+          ):new Text(
             buttonText,
             style: GoogleFonts.openSans(
               textStyle: TextStyle(
@@ -254,7 +264,7 @@ class _FullyCompleteState extends State<FullyComplete> {
               children: [
                 buildbutton('00'),
                 buildbutton('0'),
-                buildbutton('Clear'),
+                buildbutton('X'),
               ],
             ),
           ],

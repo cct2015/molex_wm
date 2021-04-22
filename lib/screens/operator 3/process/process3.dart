@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%203/process/scanBundle.dart';
@@ -26,6 +25,7 @@ class _Processpage3State extends State<Processpage3> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -39,53 +39,44 @@ class _Processpage3State extends State<Processpage3> {
         ),
         elevation: 0,
         actions: [
-          Container(
-            padding: EdgeInsets.all(5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                child: Center(
+                    child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.schedule,
+                        size: 18,
+                        color: Colors.redAccent,
                       ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
+                    ),
+                    Text(
+                      "Shift A",
+                      style: TextStyle(fontSize: 13, color: Colors.black),
                     ),
                   ],
-                )
-              ],
-            ),
+                )),
+              ),
+            ],
           ),
+
+          //machineID
           Container(
             padding: EdgeInsets.all(1),
-            height: 40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -147,11 +138,11 @@ class _Processpage3State extends State<Processpage3> {
               ],
             ),
           ),
+
           TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              height: 40,
               width: 40,
               decoration: BoxDecoration(
                   boxShadow: [
@@ -232,81 +223,84 @@ class _DetailState extends State<Detail> {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                orderDetailExpanded = !orderDetailExpanded;
-              });
-            },
-            child: Container(
-              height: 20,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 4),
-                    child: Text(
-                      "Order Detail",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ),
-                  IconButton(
-                      iconSize: 15,
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(0),
-                      icon: orderDetailExpanded
-                          ? Icon(Icons.keyboard_arrow_down)
-                          : Icon(Icons.keyboard_arrow_right),
-                      onPressed: () {
-                        setState(() {
-                          orderDetailExpanded = !orderDetailExpanded;
-                        });
-                      })
-                ],
-              ),
-            ),
-          ),
-          (() {
-            if (orderDetailExpanded) {
-              return Column(children: [
-                tableHeading(),
-                buildDataRow(schedule: widget.schedule),
-                fgDetails(),
-              ]);
-            } else {
-              return Container();
-            }
-          }()),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      GestureDetector(
+        onTap: () {
+          setState(() {
+            orderDetailExpanded = !orderDetailExpanded;
+          });
+        },
+        child: Container(
+          height: 20,
+          child: Row(
             children: [
-              startProcess(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
+                child: Text(
+                  "Order Detail",
+                  style: TextStyle(color: Colors.black, fontSize: 12),
+                ),
+              ),
+              IconButton(
+                  iconSize: 15,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(0),
+                  icon: orderDetailExpanded
+                      ? Icon(Icons.keyboard_arrow_down)
+                      : Icon(Icons.keyboard_arrow_right),
+                  onPressed: () {
+                    setState(() {
+                      orderDetailExpanded = !orderDetailExpanded;
+                    });
+                  })
             ],
           ),
-          (() {
-            if (_chosenValue != null) {
-              return Column(children: [
-                terminal(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      width: MediaQuery.of(context).size.width * 0.75,
-                     
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Process(type: _chosenValue),
-                          SizedBox(height:20),
-                            mainbox(mainb)
-                        ],
-                      ),
-                    ),
-                    Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
+        ),
+      ),
+      (() {
+        if (orderDetailExpanded) {
+          return Column(children: [
+            tableHeading(),
+            buildDataRow(schedule: widget.schedule),
+            fgDetails(),
+          ]);
+        } else {
+          return Container();
+        }
+      }()),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          startProcess(),
+        ],
+      ),
+      (() {
+        if (_chosenValue != null) {
+          return Column(children: [
+            terminal(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  color: Colors.black,
+                  // height: MediaQuery.of(context).size.height * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.65,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Process(type: _chosenValue),
+                      // SizedBox(height: 20),
+                      // mainbox(mainb)
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  color: Colors.red,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                   
                           //Scan Bundle
                           Container(
                             width: 140,
@@ -340,7 +334,6 @@ class _DetailState extends State<Detail> {
                                   // );
                                 }),
                           ),
-
                           // 100 % Button
                           Container(
                             width: 140,
@@ -350,7 +343,13 @@ class _DetailState extends State<Detail> {
                                 onPrimary: Colors.white,
                               ),
                               onPressed: () {
-                               Navigator.push(context, MaterialPageRoute(builder: (context)=>Bin(userId: '',machineId: "",)));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Bin(
+                                              userId: '',
+                                              machineId: "",
+                                            )));
                               },
                               child: Text(
                                 "100% complete",
@@ -361,9 +360,10 @@ class _DetailState extends State<Detail> {
                               ),
                             ),
                           ),
+                    
 
+                   
                           //Partially complete
-
                           Container(
                             width: 140,
                             child: ElevatedButton(
@@ -397,9 +397,7 @@ class _DetailState extends State<Detail> {
                               ),
                             ),
                           ),
-
                           //Reaload Material
-
                           Container(
                             width: 140,
                             child: ElevatedButton(
@@ -433,177 +431,68 @@ class _DetailState extends State<Detail> {
                                   Navigator.pop(context);
                                 }),
                           ),
+                     
 
-                          //Load user
-                          Row(
-                            children: [
-                              Container(
-                                // height: 40,
-                                width: 100,
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2.0),
-                                              side: BorderSide(
-                                                  color: Colors.transparent))),
-                                      backgroundColor: MaterialStateProperty
-                                          .resolveWith<Color>(
-                                        (Set<MaterialState> states) {
-                                          if (states
-                                              .contains(MaterialState.pressed))
-                                            return Colors.green[200];
-                                          return Colors.green[
-                                              500]; // Use the component's default.
-                                        },
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'Load User',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        mainb = "user";
-                                      });
-                                    }),
-                              ),
-                              (() {
-                                if (userTap) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      SizedBox(width: 10),
-                                      Container(
-                                        height: 50,
-                                        width: 200,
-                                        padding: const EdgeInsets.all(0.0),
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          child: RawKeyboardListener(
-                                            focusNode: FocusNode(),
-                                            onKey: (event) =>
-                                                handleKey(event.data),
-                                            child: Container(
-                                                child: TextField(
-                                              controller: userScanController,
-                                              focusNode: userScanFocus,
-                                              autofocus: false,
-                                              onTap: () {
-                                                SystemChannels.textInput
-                                                    .invokeMethod(
-                                                        'TextInput.hide');
-                                              },
-                                              decoration: new InputDecoration(
-                                                labelText: "Scan Bundle",
-                                                fillColor: Colors.white,
-                                                border: new OutlineInputBorder(
-                                                  borderRadius:
-                                                      new BorderRadius.circular(
-                                                          5.0),
-                                                  borderSide: new BorderSide(),
-                                                ),
-                                                //fillColor: Colors.green
-                                              ),
-                                            )),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Container(
-                                        height: 50,
-                                        width: 150,
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2.0),
-                                                    side: BorderSide(
-                                                        color: Colors
-                                                            .transparent))),
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith<Color>(
-                                              (Set<MaterialState> states) {
-                                                if (states.contains(
-                                                    MaterialState.pressed))
-                                                  return Colors.green[200];
-                                                return Colors.red[
-                                                    500]; // Use the component's default.
-                                              },
-                                            ),
-                                          ),
-                                          child: Container(
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Container(
-                                                  height: 30,
-                                                  width: 30,
-                                                  decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                          image: AssetImage(
-                                                              "assets/image/scan.png"))),
-                                                ),
-                                                SizedBox(width: 5),
-                                                Text(
-                                                  'Add',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              if (userScanController
-                                                      .text.length >
-                                                  0) {
-                                                userId.add(
-                                                    userScanController.text);
-                                                userScanController.clear();
-                                              }
-                                            });
-                                          },
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              }())
-                            ],
+                      //Load user
+                      Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            // height: 40,
+                            width: 100,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(2.0),
+                                          side: BorderSide(
+                                              color: Colors.transparent))),
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                                      if (states
+                                          .contains(MaterialState.pressed))
+                                        return Colors.green[200];
+                                      return Colors.green[
+                                          500]; // Use the component's default.
+                                    },
+                                  ),
+                                ),
+                                child: Text(
+                                  'Load User',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    mainb = "user";
+                                  });
+                                }),
                           ),
+                         
                         ],
                       ),
-                    )
-                  ],
-                ),
-              ]);
-            } else {
-              return Container();
-            }
-          }()),
-        
-        ]));
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ]);
+        } else {
+          return Container();
+        }
+      }()),
+    ]));
   }
 
   Widget mainbox(String mainbr) {
     if (mainbr == "scanBundle") {
       return ScanBundleP3();
     }
-    
     if (mainbr == "partial") {
       return partialcompletepop();
     }
@@ -614,77 +503,6 @@ class _DetailState extends State<Detail> {
     }
   }
 
-  Widget keypad() {
-    buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
-        _output = '';
-      } else {
-        _output = _output + buttonText;
-      }
-
-      print(_output);
-      setState(() {
-        // _scanIdController.text = _output;
-        output = int.parse(_output).toStringAsFixed(2);
-      });
-    }
-
-    Widget buildbutton(String buttonText) {
-      return new Expanded(
-          child: Container(
-        width: 30,
-        height: 40,
-        child: new OutlineButton(
-          padding: EdgeInsets.all(10.0),
-          child: new Text(
-            buttonText,
-            style: TextStyle(
-              fontSize: 18.0,
-            ),
-          ),
-          onPressed: () => {buttonPressed(buttonText)},
-          textColor: Colors.black,
-        ),
-      ));
-    }
-
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.22,
-      height: MediaQuery.of(context).size.height * 0.27,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              buildbutton("7"),
-              buildbutton('8'),
-              buildbutton('9'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('4'),
-              buildbutton('5'),
-              buildbutton('6'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('1'),
-              buildbutton('2'),
-              buildbutton('3'),
-            ],
-          ),
-          Row(
-            children: [
-              buildbutton('00'),
-              buildbutton('0'),
-              buildbutton('clear'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget scanTable() {
     int i = 1;
@@ -792,6 +610,7 @@ class _DetailState extends State<Detail> {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
   }
+
   //Material Sheet for qty
   Widget tableHeading() {
     double width = MediaQuery.of(context).size.width;

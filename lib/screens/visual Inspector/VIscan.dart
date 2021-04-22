@@ -1,15 +1,14 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/widgets/time.dart';
 
 class Viscan extends StatefulWidget {
- final String userId;
- final String machineId;
- final Schedule schedule;
+  final String userId;
+  final String machineId;
+  final Schedule schedule;
 
   Viscan({this.userId, this.schedule, this.machineId});
   @override
@@ -27,206 +26,167 @@ class _ViscanState extends State<Viscan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.red,
-        ),
-        title: const Text(
-          'Process',
-          style: TextStyle(color: Colors.red),
-        ),
-        elevation: 0,
-        actions: [
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ],
-                )
-              ],
-            ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.red,
           ),
-          Container(
-            padding: EdgeInsets.all(1),
-            height: 40,
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.person,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            widget.userId,
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
-                      ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.settings,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            widget.machineId ?? "",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
-                    ),
-                  ],
-                )
-              ],
-            ),
+          title: const Text(
+            'Process',
+            style: TextStyle(color: Colors.red),
           ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          elevation: 0,
+          actions: [
+            Row(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  child: Center(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Icon(
+                          Icons.schedule,
+                          size: 18,
+                          color: Colors.redAccent,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        "Shift A",
+                        style: TextStyle(fontSize: 13, color: Colors.black),
+                      ),
+                    ],
+                  )),
                 ),
-                SizedBox(width: 10)
+              ],
+            ),
+
+            //machineID
+            Container(
+              padding: EdgeInsets.all(1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.person,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              widget.userId,
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                        ),
+                        child: Center(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(
+                                Icons.settings,
+                                size: 18,
+                                color: Colors.redAccent,
+                              ),
+                            ),
+                            Text(
+                              widget.machineId ?? "",
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
+                          ],
+                        )),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+
+            TimeDisplay(),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                width: 40,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.redAccent[100],
+                        offset: const Offset(
+                          2.0,
+                          2.0,
+                        ),
+                        blurRadius: 3.0,
+                        spreadRadius: 1.0,
+                      ),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0,
+                      ), //Bo
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/profile.jpg',
+                        ),
+                        fit: BoxFit.fill)),
+              ),
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Detail(
+                  schedule: widget.schedule,
+                  userId: widget.userId,
+                  machineId: widget.machineId,
+                ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.redAccent[100],
-                      offset: const Offset(
-                        2.0,
-                        2.0,
-                      ),
-                      blurRadius: 3.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: const Offset(0.0, 0.0),
-                      blurRadius: 0.0,
-                      spreadRadius: 0.0,
-                    ), //Bo
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                  image: DecorationImage(
-                      image: AssetImage(
-                        'assets/image/profile.jpg',
-                      ),
-                      fit: BoxFit.fill)),
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: StreamBuilder(
-            stream: Stream.periodic(const Duration(milliseconds: 2000)),
-            builder: (context, snapshot) {
-              return Container(
-                child: Column(
-                  children: [
-                    Detail(
-                      schedule: widget.schedule,
-                      userId: widget.userId,
-                      machineId: widget.machineId,
-                    ),
-                  ],
-                ),
-              );
-            }),
-      )
-    );
+        ));
   }
 }
 
@@ -250,9 +210,21 @@ class _DetailState extends State<Detail> {
   TextEditingController userScanController = new TextEditingController();
   FocusNode userScanFocus = new FocusNode();
   @override
+  void initState() {
+      Future.delayed(
+      const Duration(milliseconds: 100),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
-        height: double.maxFinite,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           GestureDetector(
             onTap: () {
@@ -303,8 +275,8 @@ class _DetailState extends State<Detail> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              scanTap?Container():viscanbundle(),
-              scanTap?vitable():Container(),
+              scanTap ? Container() : viscanbundle(),
+              scanTap ? vitable() : Container(),
             ],
           ),
         ]));
@@ -570,6 +542,7 @@ class _DetailState extends State<Detail> {
   }
 
   Widget viscanbundle() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Container(
       width: MediaQuery.of(context).size.width * 0.3,
       height: 150,
@@ -589,10 +562,12 @@ class _DetailState extends State<Detail> {
                 focusNode: scanFocus,
                 autofocus: true,
                 onTap: () {
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  setState(() {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  });
                 },
                 decoration: new InputDecoration(
-                  hintText: "Scan Bundle",
+                  labelText: "Scan Bundle",
                   fillColor: Colors.white,
                   border: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(7.0),
@@ -622,7 +597,7 @@ class _DetailState extends State<Detail> {
                     ),
                     onPressed: () {
                       setState(() {
-                        scanTap=!scanTap;
+                        scanTap = !scanTap;
                       });
                     },
                     child: Text('Scan Bundle'),
@@ -637,10 +612,6 @@ class _DetailState extends State<Detail> {
   }
 
   handleKey(RawKeyEventDataAndroid key) {
-    String _keyCode;
-    _keyCode = key.keyCode.toString(); //keyCode of key event(66 is return )
-    print("why does this run twice $_keyCode");
-
     setState(() {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
@@ -648,7 +619,6 @@ class _DetailState extends State<Detail> {
 
   Widget vitable() {
     return Container(
-      
       width: MediaQuery.of(context).size.width * 1,
       decoration: BoxDecoration(
         borderRadius: new BorderRadius.circular(20.0),
@@ -656,32 +626,30 @@ class _DetailState extends State<Detail> {
       ),
       child: Column(
         children: [
-       
-             Container(
-                height: 32,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        'Bundle ID',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+          Container(
+              height: 32,
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Center(
+                child: Column(
+                  children: [
+                    Text(
+                      'Bundle ID',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
                       ),
-                      Text(
-                        'BUN13241551',
-                        style: TextStyle(
-                          color: Colors.green[900],
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    ),
+                    Text(
+                      'BUN13241551',
+                      style: TextStyle(
+                        color: Colors.green[900],
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
                       ),
-                    ],
-                  ),
-                )),
-          
+                    ),
+                  ],
+                ),
+              )),
           Text('Reason For Rejection',
               style: TextStyle(
                 fontSize: 15,
@@ -690,129 +658,129 @@ class _DetailState extends State<Detail> {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      quantitycell("Crimp Insl", 10),
-                      quantitycell("Insulation Slug", 10),
-                      quantitycell("Window Gap", 10),
-                      quantitycell("Exposed Strands", 10),
-                     
-                     
-                    ],
-                  ),
-                  Column(
-                    children: [
-                       quantitycell("Burr / Cut Off", 10),
-                      quantitycell("Terminal Bend / Closed / Damage", 10),
-                       quantitycell("Insulation Curling / Half Curling", 10),
-                      quantitycell("Nick Mark / Strands Cut", 10),
-                     
-                     
-                    ],
-                  ),
-                   Column(
-                    children: [
-                       quantitycell("Seam Open", 10),
-                      quantitycell("Miss Crimp", 10),
-                      quantitycell("Front Bell Mouth", 10),
-                      quantitycell("Back Bell Mouth", 10),
-                      
-                    ],
-                  ),
-                   Column(
-                    children: [
-                      quantitycell("Extrusion on Burr", 10),
-                      quantitycell("Brush Length", 10),
-                      quantitycell("Cable Damage", 10),
-                      quantitycell("Terminal Twist", 10),
-                      
-                     
-                     
-                    ],
-                  ),
-                ],
-              ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    quantitycell("Crimp Insl", 10),
+                    quantitycell("Insulation Slug", 10),
+                    quantitycell("Window Gap", 10),
+                    quantitycell("Exposed Strands", 10),
+                  ],
+                ),
+                Column(
+                  children: [
+                    quantitycell("Burr / Cut Off", 10),
+                    quantitycell("Terminal Bend / Closed / Damage", 10),
+                    quantitycell("Insulation Curling / Half Curling", 10),
+                    quantitycell("Nick Mark / Strands Cut", 10),
+                  ],
+                ),
+                Column(
+                  children: [
+                    quantitycell("Seam Open", 10),
+                    quantitycell("Miss Crimp", 10),
+                    quantitycell("Front Bell Mouth", 10),
+                    quantitycell("Back Bell Mouth", 10),
+                  ],
+                ),
+                Column(
+                  children: [
+                    quantitycell("Extrusion on Burr", 10),
+                    quantitycell("Brush Length", 10),
+                    quantitycell("Cable Damage", 10),
+                    quantitycell("Terminal Twist", 10),
+                  ],
+                ),
+              ],
+            ),
           ),
-           Padding(
-                 padding: const EdgeInsets.all(4.0),
-                 child:  Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                             quantity("Bundle Qty", 10),
-                              quantity("Passed Qty", 10),
-                              quantity("Rejected Qty", 10),
-                             
-                            ],),
-                 ),
-                 Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: Column(children: [
-                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                       children: [
-                          ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.blue[500];
-                            return Colors
-                                .blue[900]; // Use the component's default.
-                          },
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                quantity("Bundle Qty", 10),
+                quantity("Passed Qty", 10),
+                quantity("Rejected Qty", 10),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return Colors.blue[500];
+                              return Colors
+                                  .blue[900]; // Use the component's default.
+                            },
+                          ),
                         ),
+                        onPressed: () {
+                          setState(() {
+                            scanTap = false;
+                          });
+                        },
+                        child: Text('Next Bundle'),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          scanTap = false;
-                        });
-                      },
-                      child: Text('Next Bundle'),
-                    ),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.green[500];
-                            return Colors
-                                .green[900]; // Use the component's default.
-                          },
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return Colors.green[500];
+                              return Colors
+                                  .green[900]; // Use the component's default.
+                            },
+                          ),
                         ),
+                        onPressed: () {},
+                        child: Text('Save & Submit'),
                       ),
-                      onPressed: () {},
-                      child: Text('Save & Submit'),
-                    ),
-                     ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.red[500];
-                            return Colors
-                                .red[900]; // Use the component's default.
-                          },
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return Colors.red[500];
+                              return Colors
+                                  .red[900]; // Use the component's default.
+                            },
+                          ),
                         ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Bin(userId: '121200', machineId: '6541531'),
+                            ),
+                          );
+                        },
+                        child: Text('Complete Inspection'),
                       ),
-                      onPressed: () {
-                        Navigator.push(context,  MaterialPageRoute(builder: (context) => Bin(userId:'121200',machineId: '6541531'),),);
-                      },
-                      child: Text('Complete Inspection'),
-                    ),
-                       ]
-                     ),
-                    
-                   ],),
-                 )
-               
-          
+                    ]),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
-   Widget quantity(String title, int quantity) {
+
+  Widget quantity(String title, int quantity) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 0.0),
       child: Container(
@@ -834,23 +802,20 @@ class _DetailState extends State<Detail> {
               child: TextField(
                 style: TextStyle(fontSize: 12),
                 keyboardType: TextInputType.number,
-               decoration: new InputDecoration(
-                      labelText: "Qty",
-                      fillColor: Colors.white,
-                       labelStyle: TextStyle(fontSize: 10),
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(5.0),
-                        borderSide: new BorderSide(),
-                      ),
-                      //fillColor: Colors.green
-                    ),
-                 
-                 
-
+                decoration: new InputDecoration(
+                  labelText: "Qty",
+                  fillColor: Colors.white,
+                  labelStyle: TextStyle(fontSize: 10),
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(5.0),
+                    borderSide: new BorderSide(),
+                  ),
                   //fillColor: Colors.green
                 ),
+
+                //fillColor: Colors.green
               ),
-            
+            ),
           ],
         ),
       ),
@@ -1609,8 +1574,6 @@ class VIProcess extends StatefulWidget {
 class _VIProcessState extends State<VIProcess> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Container();
   }
 }

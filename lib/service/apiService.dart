@@ -24,7 +24,7 @@ import 'package:molex/model_api/visualInspection/postViSchedule_model.dart';
 import 'package:molex/model_api/visualInspection/saveVIBundleQty.dart';
 import 'package:molex/model_api/visualInspection/updateBundleStatus_model.dart';
 import 'package:molex/model_api/visualInspection/updatebundleStsScheStartTracking_mode.dart';
-import 'package:molex/models/vi_schedule.dart';
+
 
 class ApiService {
   String baseUrl = "http://justerp.in:8080/wipts/";
@@ -60,6 +60,8 @@ class ApiService {
 
   Future<List<Schedule>> getScheduelarData({String machId, String type}) async {
     print("called api");
+      print("called $machId");
+        print("called $type");
     // var url = Uri.parse(baseUrl +
     //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
     var url = Uri.parse(baseUrl +
@@ -387,6 +389,7 @@ class ApiService {
         baseUrl + 'molex/visual-inspection/get-visual-inspection-data');
     var response = await http.get(url);
     print('ViScheduler status Code: ${response.statusCode}');
+    print(response.body);
     if (response.statusCode == 200) {
       GetViSchedule getViSchedule = getViScheduleFromJson(response.body);
       List<ViScheduler> viScheduleList =

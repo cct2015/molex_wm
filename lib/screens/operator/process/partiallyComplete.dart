@@ -103,7 +103,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
     // print('NickMark ${windowGapController.text}');
     // print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
+      if (buttonText == 'X') {
         _output = '';
       } else {
         _output = _output + buttonText;
@@ -116,7 +116,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
       });
     }
 
-   Widget buildbutton(String buttonText) {
+    Widget buildbutton(String buttonText) {
       return new Expanded(
           child: Container(
         decoration: new BoxDecoration(),
@@ -138,16 +138,27 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
               },
             ),
           ),
-          child: new Text(
-            buttonText,
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
+          child: buttonText == "X"
+              ? Container(
+                  width: 50,
+                  height: 50,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.red[400],
+                    ),
+                    onPressed: () => {buttonPressed(buttonText)},
+                  ))
+              : new Text(
+                  buttonText,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
           onPressed: () => {buttonPressed(buttonText)},
         ),
       ));
@@ -197,7 +208,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
               children: [
                 buildbutton('00'),
                 buildbutton('0'),
-                buildbutton('Clear'),
+                buildbutton('X'),
               ],
             ),
           ],

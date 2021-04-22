@@ -19,6 +19,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   Schedule schedule;
   int type = 0;
+  int scheduleType = 0;
   ApiService apiService;
 
   bool _secValue = false;
@@ -68,51 +69,97 @@ class _HomepageState extends State<Homepage> {
           //typeselect
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
-                  //BoxShadow
-                  BoxShadow(
-                    color: Colors.grey[100],
-                    offset: const Offset(0.0, 0.0),
-                    blurRadius: 3.0,
-                    spreadRadius: 2.0,
-                  ), //BoxShadow
-                ],
-              ),
-              child: ToggleSwitch(
-                minWidth: 80.0,
-                cornerRadius: 10.0,
-                activeBgColor: Colors.green,
-                activeFgColor: Colors.white,
-                initialLabelIndex: type,
-                inactiveBgColor: Colors.grey[200],
-                inactiveFgColor: Colors.black,
-                labels: ['Auto', 'Mannual'],
-                onToggle: (index) {
-                  print('switched to: $index');
-                  type = index;
+            child: Row(
+              children: [
+                Container(
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      //BoxShadow
+                      BoxShadow(
+                        color: Colors.grey[100],
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 3.0,
+                        spreadRadius: 2.0,
+                      ), //BoxShadow
+                    ],
+                  ),
+                  child: ToggleSwitch(
+                    minWidth: 80.0,
+                    cornerRadius: 10.0,
+                    activeBgColor: Colors.green,
+                    activeFgColor: Colors.white,
+                    initialLabelIndex: scheduleType,
+                    inactiveBgColor: Colors.grey[200],
+                    inactiveFgColor: Colors.black,
+                    labels: ['Auto Shdl', 'Others'],
+                    fontSize: 12,
+                    onToggle: (index) {
+                      print('switched to: $index');
+                      scheduleType = index;
+                      setState(() {
+                        scheduleType = index;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
 
-                  setState(() {
-                    type = index;
-                  });
-                },
-              ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3),
+            child: Row(
+              children: [
+                Container(
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      //BoxShadow
+                      BoxShadow(
+                        color: Colors.grey[100],
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 3.0,
+                        spreadRadius: 2.0,
+                      ), //BoxShadow
+                    ],
+                  ),
+                  child: ToggleSwitch(
+                    minWidth: 70.0,
+                    cornerRadius: 10.0,
+                    activeBgColor: Colors.green,
+                    activeFgColor: Colors.white,
+                    initialLabelIndex: type,
+                    inactiveBgColor: Colors.grey[200],
+                    inactiveFgColor: Colors.black,
+                    fontSize: 12,
+                    labels: ['Auto', 'Mannual'],
+                    onToggle: (index) {
+                      print('switched to: $index');
+                      type = index;
+
+                      setState(() {
+                        type = index;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           //shift
           Container(
-            padding: EdgeInsets.all(5),
-            width: 100,
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 7),
                       height: 24,
                       decoration: BoxDecoration(
                         color: Colors.grey[100],
@@ -146,12 +193,11 @@ class _HomepageState extends State<Homepage> {
           //machine Id
           Container(
             padding: EdgeInsets.all(1),
-            height: 40,
             // width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -230,7 +276,6 @@ class _HomepageState extends State<Homepage> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
-                height: 40,
                 width: 40,
                 decoration: BoxDecoration(
                     boxShadow: [

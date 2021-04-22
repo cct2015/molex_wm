@@ -98,7 +98,7 @@ class _ScanBundleState extends State<ScanBundle> {
     // print('NickMark ${windowGapController.text}');
     // print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
+      if (buttonText == 'X') {
         _output = '';
       } else {
         _output = _output + buttonText;
@@ -133,11 +133,22 @@ class _ScanBundleState extends State<ScanBundle> {
               },
             ),
           ),
-          child: new Text(
+          child:buttonText=='X'?Container(
+            width: 50,
+            height: 50,
+            child: IconButton(
+              icon:Icon(Icons.backspace,
+              color: Colors.red[400],
+            ),
+            onPressed: ()=>{buttonPressed(buttonText)},
+            )
+            
+          )
+          : new Text(
             buttonText,
             style: GoogleFonts.openSans(
               textStyle: TextStyle(
-                color: Colors.black,
+                color:buttonText=="X"?Colors.red: Colors.black,
                 fontWeight: FontWeight.w600,
                 fontSize: 16.0,
               ),
@@ -192,7 +203,8 @@ class _ScanBundleState extends State<ScanBundle> {
               children: [
                 buildbutton('00'),
                 buildbutton('0'),
-                buildbutton('Clear'),
+                buildbutton('X'),
+                
               ],
             ),
           ],

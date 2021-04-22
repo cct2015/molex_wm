@@ -104,7 +104,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
 
   Widget keypad(TextEditingController controller) {
     buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
+      if (buttonText == 'X') {
         _output = '';
       } else {
         _output = _output + buttonText;
@@ -139,7 +139,17 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
               },
             ),
           ),
-          child: new Text(
+          child:buttonText=="X"?Container(
+            width: 50,
+            height: 50,
+            child: IconButton(
+              icon:Icon(Icons.backspace,
+              color: Colors.red[400],
+            ),
+            onPressed: ()=>{buttonPressed(buttonText)},
+            )
+            
+          ): new Text(
             buttonText,
             style: GoogleFonts.openSans(
               textStyle: TextStyle(
@@ -198,7 +208,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
               children: [
                 buildbutton('00'),
                 buildbutton('0'),
-                buildbutton('Clear'),
+                buildbutton('X'),
               ],
             ),
           ],

@@ -115,8 +115,8 @@ class _MaterialPickState extends State<MaterialPick> {
     //   checkPartNumber(partNumber);
     //   checkTrackNumber(trackingNumber);
     // }
-    if(!_qty.hasFocus){
-         SystemChannels.textInput.invokeMethod('TextInput.hide');
+    if (!_qty.hasFocus) {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
     }
     return Scaffold(
       appBar: AppBar(
@@ -130,57 +130,44 @@ class _MaterialPickState extends State<MaterialPick> {
         ),
         elevation: 0,
         actions: [
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 130,
-            //shift
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                child: Center(
+                    child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.schedule,
+                        size: 18,
+                        color: Colors.redAccent,
                       ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
+                    ),
+                    Text(
+                      "Shift A",
+                      style: TextStyle(fontSize: 13, color: Colors.black),
                     ),
                   ],
-                )
-              ],
-            ),
+                )),
+              ),
+            ],
           ),
+
           //machineID
           Container(
             padding: EdgeInsets.all(1),
-            height: 40,
-           
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -247,7 +234,6 @@ class _MaterialPickState extends State<MaterialPick> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              height: 40,
               width: 40,
               decoration: BoxDecoration(
                   boxShadow: [
@@ -391,11 +377,11 @@ class _MaterialPickState extends State<MaterialPick> {
                           });
                         _qty.requestFocus();
                       },
-                      onTap: (){
+                      onTap: () {
                         setState(() {
-                            SystemChannels.textInput.invokeMethod('TextInput.hide');
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
                         });
-                         
                       },
                       onChanged: (value) {
                         trackingNumber = value;
@@ -461,10 +447,7 @@ class _MaterialPickState extends State<MaterialPick> {
                   child: TextField(
                     controller: _qtyController,
                     onTap: () {
-                      setState(() {
-                        
-                      });
-                     
+                      setState(() {});
                     },
                     focusNode: _qty,
                     keyboardType: TextInputType.number,
@@ -511,7 +494,9 @@ class _MaterialPickState extends State<MaterialPick> {
                               // postRawmaterial.date = selectedDate;
                               postRawmaterial.partDescription = ip.description;
                               print('qty $qty');
-                              postRawmaterial.existingQuantity = int.parse(qty);
+                              postRawmaterial.existingQuantity =
+                                  int.parse(ip.toatalScheduleQuantity);
+                              postRawmaterial.scannedQuantity = int.parse(qty);
                               postRawmaterial.orderidentification =
                                   int.parse(widget.schedule.orderId);
                               postRawmaterial.totalScheduledQuantity =
@@ -835,8 +820,8 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               // DataCell(Text(e.n.toString())),
-                              DataCell(Text(e.existingQuantity .toString())),
-                              DataCell(Text(e.schedulerIdentification.toString())),
+                              DataCell(Text(e.existingQuantity.toString())),
+                              DataCell(Text(e.scannedQuantity.toString())),
                               DataCell(IconButton(
                                 icon: Icon(
                                   Icons.delete,
@@ -876,9 +861,7 @@ class _MaterialPickState extends State<MaterialPick> {
             title: Center(child: Text('Confirm Selected Material')),
             content: SingleChildScrollView(
               child: ListBody(
-                children: <Widget>[
-                  Center(child: Text('Proceed to Process'))
-                ],
+                children: <Widget>[Center(child: Text('Proceed to Process'))],
               ),
             ),
             actions: <Widget>[
@@ -904,18 +887,18 @@ class _MaterialPickState extends State<MaterialPick> {
                   ),
                   onPressed: () {
                     apiService.postRawmaterial(selectdItems).then((value) {
-                if (value) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProcessPage(
-                              schedule: widget.schedule,
-                              userId: widget.userId,
-                              machineId: widget.machineId,
-                            )),
-                  );
-                } else {}
-              });
+                      if (value) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProcessPage(
+                                    schedule: widget.schedule,
+                                    userId: widget.userId,
+                                    machineId: widget.machineId,
+                                  )),
+                        );
+                      } else {}
+                    });
                   },
                   child: Text('Proceed to Process')),
             ],

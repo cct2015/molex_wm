@@ -54,93 +54,44 @@ class _HomePageOp3State extends State<HomePageOp3> {
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
-          //typeselect
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
-                  //BoxShadow
-                  BoxShadow(
-                    color: Colors.grey[100],
-                    offset: const Offset(0.0, 0.0),
-                    blurRadius: 3.0,
-                    spreadRadius: 2.0,
-                  ), //BoxShadow
-                ],
-              ),
-              child: ToggleSwitch(
-                minWidth: 80.0,
-                cornerRadius: 10.0,
-                activeBgColor: Colors.green,
-                activeFgColor: Colors.white,
-                initialLabelIndex: type,
-                inactiveBgColor: Colors.grey[200],
-                inactiveFgColor: Colors.black,
-                labels: ['Auto', 'Mannual'],
-                onToggle: (index) {
-                  print('switched to: $index');
-                  type = index;
-
-                  setState(() {
-                    type = index;
-                  });
-                },
-              ),
-            ),
-          ),
-          //shift
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                child: Center(
+                    child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.schedule,
+                        size: 18,
+                        color: Colors.redAccent,
                       ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
+                    ),
+                    Text(
+                      "Shift A",
+                      style: TextStyle(fontSize: 13, color: Colors.black),
                     ),
                   ],
-                )
-              ],
-            ),
+                )),
+              ),
+            ],
           ),
-          //machine Id
+
+          //machineID
           Container(
             padding: EdgeInsets.all(1),
-            height: 40,
-            // width: 130,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -204,53 +155,39 @@ class _HomePageOp3State extends State<HomePageOp3> {
           ),
 
           TimeDisplay(),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NavPage(
-                          schedule: schedule,
-                          userId: widget.userId,
-                          machineId: widget.machineId,
-                        )),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.redAccent[100],
-                        offset: const Offset(
-                          2.0,
-                          2.0,
-                        ),
-                        blurRadius: 3.0,
-                        spreadRadius: 1.0,
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              width: 40,
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.redAccent[100],
+                      offset: const Offset(
+                        2.0,
+                        2.0,
                       ),
-                      BoxShadow(
-                        color: Colors.white,
-                        offset: const Offset(0.0, 0.0),
-                        blurRadius: 0.0,
-                        spreadRadius: 0.0,
-                      ), //Bo
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                    image: DecorationImage(
-                        image: AssetImage(
-                          'assets/image/profile.jpg',
-                        ),
-                        fit: BoxFit.fill)),
-              ),
+                      blurRadius: 3.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: const Offset(0.0, 0.0),
+                      blurRadius: 0.0,
+                      spreadRadius: 0.0,
+                    ), //Bo
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  image: DecorationImage(
+                      image: AssetImage(
+                        'assets/image/profile.jpg',
+                      ),
+                      fit: BoxFit.fill)),
             ),
           )
         ],
-      ),
+       ),
       body: SingleChildScrollView(
         child: Column(
           children: [

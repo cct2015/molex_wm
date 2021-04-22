@@ -101,9 +101,9 @@ class _GenerateLabelState extends State<GenerateLabel> {
   bool hasBin = false;
   Status status = Status.quantity;
   TransferBundle transferBundle = new TransferBundle();
-   static const platform = const MethodChannel('com.impereal.dev/tsc');
+  static const platform = const MethodChannel('com.impereal.dev/tsc');
   String _printerStatus = 'Waiting';
-Future<void> _print({
+  Future<void> _print({
     String ipaddress,
     String bq,
     String qr,
@@ -147,6 +147,7 @@ Future<void> _print({
       _printerStatus = printerStatus;
     });
   }
+
   @override
   void initState() {
     transferBundle = new TransferBundle();
@@ -198,7 +199,7 @@ Future<void> _print({
     print('NickMark ${windowGapController.text}');
     print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
-      if (buttonText == 'Clear') {
+      if (buttonText == 'X') {
         _output = '';
       } else {
         _output = _output + buttonText;
@@ -233,16 +234,27 @@ Future<void> _print({
               },
             ),
           ),
-          child: new Text(
-            buttonText,
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
+          child: buttonText == "X"
+              ? Container(
+                  width: 50,
+                  height: 50,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.red[400],
+                    ),
+                    onPressed: () => {buttonPressed(buttonText)},
+                  ))
+              : new Text(
+                  buttonText,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
           onPressed: () => {buttonPressed(buttonText)},
         ),
       ));
@@ -292,7 +304,7 @@ Future<void> _print({
               children: [
                 buildbutton('00'),
                 buildbutton('0'),
-                buildbutton('Clear'),
+                buildbutton('X'),
               ],
             ),
           ],
@@ -699,7 +711,6 @@ Future<void> _print({
                           ),
                         ],
                       ),
-                  
                     ],
                   ),
                 ),
@@ -733,17 +744,16 @@ Future<void> _print({
                       onPressed: () {
                         setState(() {
                           _print(
-                            ipaddress: "192.168.1.130",
-                            bq: bundleQty.text,
-                            qr: "123456",
-                            routenumber1: "12345",
-                            fgPartNumber: widget.schedule.finishedGoodsNumber,
-                            cutlength: widget.schedule.length,
-                            cablepart: widget.schedule.cablePartNumber,
-                            wireGauge: widget.schedule.finishedGoodsNumber,
-                            terminalfrom: widget.schedule.finishedGoodsNumber,
-                            terminalto: widget.schedule.finishedGoodsNumber
-                          );
+                              ipaddress: "192.168.1.130",
+                              bq: bundleQty.text,
+                              qr: "123456",
+                              routenumber1: "12345",
+                              fgPartNumber: widget.schedule.finishedGoodsNumber,
+                              cutlength: widget.schedule.length,
+                              cablepart: widget.schedule.cablePartNumber,
+                              wireGauge: widget.schedule.finishedGoodsNumber,
+                              terminalfrom: widget.schedule.finishedGoodsNumber,
+                              terminalto: widget.schedule.finishedGoodsNumber);
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;
                           // _print();
@@ -760,6 +770,10 @@ Future<void> _print({
       ),
     );
   }
+
+
+
+
 
   Widget quantitycell(
       {String name,

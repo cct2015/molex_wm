@@ -46,53 +46,44 @@ class _ProcessPageState extends State<ProcessPage> {
         ),
         elevation: 0,
         actions: [
-          Container(
-            padding: EdgeInsets.all(5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                child: Center(
+                    child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.schedule,
+                        size: 18,
+                        color: Colors.redAccent,
                       ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
+                    ),
+                    Text(
+                      "Shift A",
+                      style: TextStyle(fontSize: 13, color: Colors.black),
                     ),
                   ],
-                )
-              ],
-            ),
+                )),
+              ),
+            ],
           ),
+
+          //machineID
           Container(
             padding: EdgeInsets.all(1),
-            height: 40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -154,11 +145,11 @@ class _ProcessPageState extends State<ProcessPage> {
               ],
             ),
           ),
+
           TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              height: 40,
               width: 40,
               decoration: BoxDecoration(
                   boxShadow: [
@@ -1273,7 +1264,7 @@ class _DetailState extends State<Detail> {
                           boxes("FG Scheduled", fgDetail.fgScheduleDate ?? ''),
                           boxes("Customer", fgDetail.customer ?? ''),
                           boxes("Drg Rev", fgDetail.drgRev ?? ''),
-                          boxes("Cable #", fgDetail.cableSerialNo ?? ''),
+                          boxes("Cable #", "${fgDetail.cableSerialNo ?? ''}"),
                           boxes('Tolerance ',
                               '± ${fgDetail.tolrance} / ±${fgDetail.tolrance}'),
                         ])),

@@ -7,6 +7,7 @@ import 'package:molex/screens/operator%202/process/FullyCompleteP2.dart';
 import 'package:molex/screens/operator%202/process/partialCompletion.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/widgets/time.dart';
 
 class ProcessPage2 extends StatefulWidget {
   final String userId;
@@ -34,54 +35,44 @@ class _ProcessPage2State extends State<ProcessPage2> {
           color: Colors.red,
         ),
         actions: [
-          Container(
-            padding: EdgeInsets.all(5),
-            width: 130,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                child: Center(
+                    child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.schedule,
+                        size: 18,
+                        color: Colors.redAccent,
                       ),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Icon(
-                              Icons.schedule,
-                              size: 18,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
-                        ],
-                      )),
+                    ),
+                    Text(
+                      "Shift A",
+                      style: TextStyle(fontSize: 13, color: Colors.black),
                     ),
                   ],
-                )
-              ],
-            ),
+                )),
+              ),
+            ],
           ),
+
+          //machineID
           Container(
             padding: EdgeInsets.all(1),
-            height: 40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Column(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
@@ -143,36 +134,11 @@ class _ProcessPage2State extends State<ProcessPage2> {
               ],
             ),
           ),
-          Container(
-            width: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat('MM-dd-yyyy').format(DateTime.now()),
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Text(
-                      DateFormat('hh:mm').format(DateTime.now()),
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(width: 10)
-              ],
-            ),
-          ),
+
+          TimeDisplay(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              height: 40,
               width: 40,
               decoration: BoxDecoration(
                   boxShadow: [
@@ -202,7 +168,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
             ),
           )
         ],
-      ),
+       ),
       body: StreamBuilder(
           stream: Stream.periodic(const Duration(milliseconds: 2000)),
           builder: (context, snapshot) {

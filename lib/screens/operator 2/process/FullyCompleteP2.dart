@@ -42,11 +42,9 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
   TextEditingController cutOffLessMoreController = new TextEditingController();
   TextEditingController brushLengthLessMoreController =
       new TextEditingController();
-      TextEditingController bundleQuantityController =
-      new TextEditingController();
-      TextEditingController passedQuantityController =
-      new TextEditingController();
-      TextEditingController rejectedQuantityController =
+  TextEditingController bundleQuantityController = new TextEditingController();
+  TextEditingController passedQuantityController = new TextEditingController();
+  TextEditingController rejectedQuantityController =
       new TextEditingController();
   String _output = '';
   @override
@@ -56,7 +54,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
 
   @override
   Widget build(BuildContext context) {
-     SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
       child: Row(
@@ -69,7 +67,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
     // print('NickMark ${windowGapController.text}');
     // print('End wire ${endWireController.text}');
     buttonPressed(String buttonText) {
-      if (buttonText == 'clear') {
+      if (buttonText == 'X') {
         _output = '';
       } else {
         _output = _output + buttonText;
@@ -104,16 +102,27 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
               },
             ),
           ),
-          child: new Text(
-            buttonText,
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
+          child: buttonText == "X"
+              ? Container(
+                  width: 50,
+                  height: 50,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.red[400],
+                    ),
+                    onPressed: () => {buttonPressed(buttonText)},
+                  ))
+              : new Text(
+                  buttonText,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
           onPressed: () => {buttonPressed(buttonText)},
         ),
       ));
@@ -163,7 +172,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
               children: [
                 buildbutton('00'),
                 buildbutton('0'),
-                buildbutton('Clear'),
+                buildbutton('X'),
               ],
             ),
           ],
@@ -339,15 +348,15 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
               ),
             ),
             Container(
-               width: MediaQuery.of(context).size.width * 0.75,
+              width: MediaQuery.of(context).size.width * 0.75,
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  quantity("Bundle Qty", 10,bundleQuantityController),
-                  quantity("Passed Qty", 10,passedQuantityController),
-                  quantity("Rejected Qty", 10,rejectedQuantityController),
+                  quantity("Bundle Qty", 10, bundleQuantityController),
+                  quantity("Passed Qty", 10, passedQuantityController),
+                  quantity("Rejected Qty", 10, rejectedQuantityController),
                   Container(
                     height: 50,
                     child: Center(
@@ -435,7 +444,8 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
     );
   }
 
-  Widget quantity(String title, int quantity,TextEditingController textEditingController) {
+  Widget quantity(
+      String title, int quantity, TextEditingController textEditingController) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 6.0),
       child: Container(
@@ -454,12 +464,11 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
               height: 35,
               width: 130,
               child: TextField(
-                onTap: (){
+                onTap: () {
                   setState(() {
-                     _output = '';
-                      mainController = textEditingController;
+                    _output = '';
+                    mainController = textEditingController;
                   });
-                    
                 },
                 style: TextStyle(fontSize: 12),
                 controller: textEditingController,
