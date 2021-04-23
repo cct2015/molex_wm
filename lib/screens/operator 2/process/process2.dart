@@ -510,7 +510,10 @@ class _DetailState extends State<Detail> {
       return ScanBundle();
     }
     if (main == "100") {
-      return FullCompleteP2();
+      return FullCompleteP2(
+        userId: widget.userId,
+        machineId: widget.machineId,
+      );
     }
     if (main == "partial") {
       return PartialCompletionP2(

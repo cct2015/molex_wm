@@ -284,7 +284,7 @@ class _DetailState extends State<Detail> {
       (() {
         if (_chosenValue != null) {
           return Column(children: [
-            // terminal(),
+            terminal(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -903,22 +903,22 @@ class _DetailState extends State<Detail> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             process(
-                'Terminal A',
-                'From Strip Length Spec(mm) - 40',
-                'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
+                '',
+                '',
+                '',
+                '',
                 'From Unsheathing Length (mm) - 40'),
             process(
-                'Cable',
-                'Cut Length Spec(mm) - 2060',
+                '',
+                '',
                 'Cable Part Number(Description)',
                 '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
                 ''),
             process(
-                'Terminal B',
-                'To Strip Length Spec(mm) - 60',
-                'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',
+                '',
+                '',
+                '',
+                '',
                 'To Unsheathing Length (mm) - 60'),
           ],
         ),
@@ -931,7 +931,7 @@ class _DetailState extends State<Detail> {
       padding: const EdgeInsets.all(.0),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
-        height: 80,
+        height: 50,
         width: MediaQuery.of(context).size.width * 0.325,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -959,24 +959,24 @@ class _DetailState extends State<Detail> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          p1,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        // Text(
+                        //   p1,
+                        //   style: TextStyle(
+                        //     fontSize: 12,
+                        //     fontWeight: FontWeight.w500,
+                        //   ),
+                        // ),
                         SizedBox(width: 20),
-                        Text(
-                          p2,
-                          style: TextStyle(
-                            fontSize: 11,
-                          ),
-                        ),
+                        // Text(
+                        //   p2,
+                        //   style: TextStyle(
+                        //     fontSize: 11,
+                        //   ),
+                        // ),
                       ],
                     ),
-                    SizedBox(height: 5),
-                    Text(
+                    // SizedBox(height: 5),
+                    p3==''?Container():Text(
                       p3,
                       style: TextStyle(fontSize: 9),
                     ),
@@ -992,10 +992,10 @@ class _DetailState extends State<Detail> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    // SizedBox(height: 5),
                     Text(
                       p5,
-                      style: TextStyle(fontSize: 11),
+                      style: TextStyle(fontSize: 11,fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),

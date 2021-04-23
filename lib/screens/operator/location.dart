@@ -570,8 +570,8 @@ class _LocationState extends State<Location> {
                   .map(
                     (e) => DataRow(cells: <DataCell>[
                       DataCell(Text("${a++}")),
-                      DataCell(Text(e.locationId)),
-                      DataCell(Text(e.binId)),
+                      DataCell(Text(e.locationId??'')),
+                      DataCell(Text(e.binId??'')),
                       DataCell(
                         IconButton(
                           icon: Icon(

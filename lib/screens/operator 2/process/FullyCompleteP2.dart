@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/operator/location.dart';
 
 class FullCompleteP2 extends StatefulWidget {
   String userId;
@@ -384,7 +385,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Bin(
+                                    builder: (context) => Location(
                                           userId: widget.userId,
                                           machineId: widget.machineId,
                                         )),

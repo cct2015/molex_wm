@@ -131,7 +131,9 @@ class ApiService {
         GetRawMaterial getrawMaterial1 = getRawMaterialFromJson(response1.body);
 
         GetRawMaterial getrawMaterial2 = getRawMaterialFromJson(response2.body);
+              print(response2.body);
         GetRawMaterial getrawMaterial3 = getRawMaterialFromJson(response3.body);
+             print(response3.body);
         List<RawMaterial> rawmaterialList1 =
             getrawMaterial1.data.rawMaterialDetails;
         List<RawMaterial> rawmaterialList2 =

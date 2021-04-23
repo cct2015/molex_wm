@@ -9,7 +9,7 @@ enum Status {
   quantity,
   generateLabel,
   scanBundle,
-  scanBin,
+  scanBin, 
 }
 
 class GenerateLabel extends StatefulWidget {

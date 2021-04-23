@@ -7,7 +7,7 @@ import 'package:molex/model_api/visualInspection/postViSchedule_model.dart';
 
 import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/navigation.dart';
-import 'package:molex/screens/visual%20Inspector/VIscan.dart';
+import 'package:molex/screens/visual%20Inspector/VIscanWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -460,6 +460,7 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
                     ),
                   );
                 } else {
+                  
                   return Container();
                 }
               }())
@@ -478,10 +479,10 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              cell("Order Id", 0.07, true),
-              cell("FG Part", 0.07, true),
+              cell("Order Id", 0.09, true),
+              cell("FG Part", 0.09, true),
               cell("Schedule ID", 0.08, false),
-              cell("Schedule Type", 0.12, false),
+             
               cell("Bin ID", 0.08, true),
               cell("Total Bundles", 0.10, false),
               cell("Total BundleQty", 0.11, true),
@@ -529,13 +530,13 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell(viSchedule.orderId, 0.07),
+            cell(viSchedule.orderId, 0.09),
             //Fg Part
-            cell(viSchedule.fgNo, 0.07),
+            cell(viSchedule.fgNo, 0.09),
 
             //Schudule ID
             cell(viSchedule.scheduleId, 0.08),
-            cell(viSchedule.scheduleType, 0.12),
+
             //Cable Part
             cell(viSchedule.binId, 0.08),
             //Process

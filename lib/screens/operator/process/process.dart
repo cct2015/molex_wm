@@ -608,7 +608,10 @@ class _DetailState extends State<Detail> {
                                   machineId: widget.machineId,
                                 );
                               } else if (rightside == "partial") {
-                                return PartiallyComplete();
+                                return PartiallyComplete(
+                                  userId: widget.userId,
+                                  machineId: widget.machineId,
+                                );
                               } else if (rightside == "bundle") {
                                 return bundleTable();
                               } else {

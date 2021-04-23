@@ -25,6 +25,12 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
   TextEditingController _scanIdController = new TextEditingController();
   Status status = Status.scan;
 
+  TextEditingController bundleQtyController= new TextEditingController();
+
+  TextEditingController passedQtyController= new TextEditingController();
+
+  TextEditingController rejectedQtyController= new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return main(status);
@@ -226,9 +232,9 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                 ),
               ),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                quantity('Bundle Qty', 10),
-                quantity('Passed Qty', 10),
-                quantity('Rejected Qty', 10),
+                quantity('Bundle Qty', 10,bundleQtyController),
+                quantity('Passed Qty', 10,passedQtyController),
+                quantity('Rejected Qty', 10,rejectedQtyController),
               ]),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -380,7 +386,7 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
     );
   }
 
-  Widget quantity(String title, int quantity) {
+  Widget quantity(String title, int quantity,TextEditingController textEditingController) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       child: Container(
@@ -392,7 +398,14 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
               height: 35,
               width: 120,
               child: TextField(
+                controller: textEditingController,
                 style: TextStyle(fontSize: 12),
+                onTap: (){
+                    setState(() {
+                    _output = '';
+                    mainController = textEditingController;
+                  });
+                },
                 keyboardType: TextInputType.number,
                 decoration: new InputDecoration(
                   labelText: title,

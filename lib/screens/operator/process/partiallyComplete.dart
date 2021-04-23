@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/screens/operator/location.dart';
 
 class PartiallyComplete extends StatefulWidget {
+    String machineId;
+  String userId;
+  PartiallyComplete({this.machineId, this.userId});
   @override
   _PartiallyCompleteState createState() => _PartiallyCompleteState();
 }
@@ -621,7 +625,14 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                           ),
                           child: Text("Save & End Process"),
                           onPressed: () {
-                            
+                               Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Location(
+                                          userId: widget.userId,
+                                          machineId: widget.machineId,
+                                        )),
+                              );
                           },
                         ),
                       ),
