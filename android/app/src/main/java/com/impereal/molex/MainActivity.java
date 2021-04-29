@@ -49,7 +49,7 @@ public class MainActivity extends FlutterActivity {
             TscEthernetDll.sendcommand("TEXT 298,131,\"0\",180,9,9,\"TERMINAL P/N \\[\"] FROM\\[\"]:\"\n");
             TscEthernetDll.sendcommand("TEXT 298,260,\"0\",180,9,9,\"CABLE PART#:\"\n");
             TscEthernetDll.sendcommand("TEXT 298,356,\"0\",180,9,9,\""+fgpart+"\"\n");
-            TscEthernetDll.sendcommand("TEXT 298,37,\"0\",180,9,9,\"ABCDE1234567890\"\n");
+            TscEthernetDll.sendcommand("TEXT 298,37,\"0\",180,9,9,\""+terminalto+"\"\n");
             TscEthernetDll.sendcommand("TEXT 152,292,\"0\",180,9,9,\""+cutLength+"\"\n");
             TscEthernetDll.sendcommand("TEXT 298,168,\"0\",180,9,9,\""+cablePart+"\"\n");
             TscEthernetDll.sendcommand("TEXT 298,103,\"0\",180,9,9,\""+terminalFrom+"\"\n");

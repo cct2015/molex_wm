@@ -64,21 +64,21 @@ class CableTerminalB {
         this.stripLength,
     });
 
-    String fronStripLengthSpec;
+    dynamic fronStripLengthSpec;
     String processType;
-    int terminalPart;
-    int specCrimpLength;
-    double pullforce;
-    String comment;
-    String unsheathingLength;
-    String stripLength;
+    dynamic terminalPart;
+    dynamic specCrimpLength;
+    dynamic pullforce;
+    dynamic comment;
+    dynamic unsheathingLength;
+    dynamic stripLength;
 
     factory CableTerminalB.fromJson(Map<String, dynamic> json) => CableTerminalB(
         fronStripLengthSpec: json["fronStripLengthSpec"],
         processType: json["processType"],
         terminalPart: json["terminalPart"],
         specCrimpLength: json["specCrimpLength"],
-        pullforce: json["pullforce"].toDouble(),
+        pullforce: json["pullforce"],
         comment: json["comment"],
         unsheathingLength: json["unsheathingLength"],
         stripLength: json["stripLength"],

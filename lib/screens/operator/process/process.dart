@@ -13,6 +13,7 @@ import 'package:molex/screens/operator/process/100complete.dart';
 import 'package:molex/screens/operator/process/generateLabel.dart';
 import 'package:molex/screens/operator/process/partiallyComplete.dart';
 import 'package:molex/screens/widgets/P1AutoCurScheduledetail.dart';
+import 'package:molex/screens/widgets/P1processDetail.dart';
 import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
@@ -318,7 +319,8 @@ class _DetailState extends State<Detail> {
           (() {
             if (_chosenValue != null) {
               return Column(children: [
-                terminal(),
+                // terminal(),
+                P1ProcessDetail(cablePartNo: widget.schedule.cablePartNumber,fgpartNo: widget.schedule.finishedGoodsNumber),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -666,18 +668,19 @@ class _DetailState extends State<Detail> {
                     if (snapshot.hasData) {
                       return process(
                           'From Process',
-                          'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
+                          '',
+                          // 'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                           '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
-                          'From Unsheathing Length (mm) - 40',
+                          '',
                           0.35);
                     } else {
                       return process(
                           'From Process',
-                          'From Strip Length Spec(mm) - 40}',
+                          '',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                           '(-)()(-)(-)(-)',
-                          'From Unsheathing Length (mm) - 40',
+                          '',
                           0.325);
                     }
                   }),
@@ -693,8 +696,8 @@ class _DetailState extends State<Detail> {
                         'Cable',
                         'Cut Length Spec(mm) -${cableDetail.cutLengthSpec}',
                         'Cable Part Number(Description)',
-                        '${cableDetail.cablePartNumber}(${cableDetail.description})',
-                        '',
+                        '${cableDetail.cablePartNumber}(${cableDetail.description })',
+                        'From Strip Length Spec(mm) ${cableDetail.stripLengthFrom}} \n To Strip Length Spec(mm) ${cableDetail.stripLengthTo}}',
                         0.28);
                   } else {
                     return Center(
@@ -711,10 +714,11 @@ class _DetailState extends State<Detail> {
                     CableTerminalB cableTerminalB = snapshot.data;
                     return process(
                         'To Process',
-                        'To Strip Length Spec(mm) - ${cableTerminalB.stripLength}',
+                        '',
+                        // 'To Strip Length Spec(mm) - ${cableTerminalB.stripLength}',
                         'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                         '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
-                        'To Unsheathing Length (mm) - 60',
+                        '',
                         0.34);
                   } else {
                     return process(
@@ -722,7 +726,7 @@ class _DetailState extends State<Detail> {
                         'From Strip Length Spec(mm) - 40}',
                         'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                         '(-)()(-)(-)(-)',
-                        'From Unsheathing Length (mm) - 40',
+                        '',
                         0.325);
                   }
                 })
@@ -1095,24 +1099,22 @@ class Process extends StatefulWidget {
 
 class _ProcessState extends State<Process> {
   bool expanded = true;
-  StartProcess process;
+  PostStartProcessP1 process;
   ApiService apiService;
   @override
   void initState() {
-    process = new StartProcess();
+    process = new PostStartProcessP1();
     print('check ${widget.schedule.scheduledId.toString()}');
-    process.cablePartNumber = int.parse(widget.schedule.cablePartNumber ?? "0");
+    process.cablePartNumber = widget.schedule.cablePartNumber ?? "0";
     process.color = widget.schedule.color;
-    process.finishedGoodsNumber =
-        int.parse(widget.schedule.finishedGoodsNumber ?? "0");
-    process.lengthSpecificationInmm = int.parse(widget.schedule.length ?? "0");
+    process.finishedGoodsNumber = widget.schedule.finishedGoodsNumber ?? "0";
+    process.lengthSpecificationInmm = widget.schedule.length ?? "0";
     process.machineIdentification = widget.machineId;
-    process.orderIdentification = int.parse(widget.schedule.orderId ?? "0");
+    process.orderIdentification = widget.schedule.orderId ?? "0";
     //TODO: schedule id is giving empt string and not null
     // process.scheduledIdentification = int.parse(widget.schedule.scheduledId??"0");
-    process.scheduledIdentification = 10;
-    process.scheduledQuantity =
-        int.parse(widget.schedule.scheduledQuantity ?? "0");
+    process.scheduledIdentification = widget.schedule.scheduledId;
+    process.scheduledQuantity = widget.schedule.scheduledQuantity ?? "0";
     apiService = new ApiService();
     super.initState();
   }

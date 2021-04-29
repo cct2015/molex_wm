@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final getCableDetails = getCableDetailsFromJson(jsonString);
+//     final getCableDetail = getCableDetailFromJson(jsonString);
 
 import 'dart:convert';
 
-GetCableDetails getCableDetailsFromJson(String str) => GetCableDetails.fromJson(json.decode(str));
+GetCableDetail getCableDetailFromJson(String str) => GetCableDetail.fromJson(json.decode(str));
 
-String getCableDetailsToJson(GetCableDetails data) => json.encode(data.toJson());
+String getCableDetailToJson(GetCableDetail data) => json.encode(data.toJson());
 
-class GetCableDetails {
-    GetCableDetails({
+class GetCableDetail {
+    GetCableDetail({
         this.status,
         this.statusMsg,
         this.errorCode,
@@ -21,7 +21,7 @@ class GetCableDetails {
     dynamic errorCode;
     Data data;
 
-    factory GetCableDetails.fromJson(Map<String, dynamic> json) => GetCableDetails(
+    factory GetCableDetail.fromJson(Map<String, dynamic> json) => GetCableDetail(
         status: json["status"],
         statusMsg: json["statusMsg"],
         errorCode: json["errorCode"],
@@ -57,21 +57,29 @@ class CableDetails {
         this.cutLengthSpec,
         this.cablePartNumber,
         this.description,
+        this.stripLengthFrom,
+        this.stripLengthTo,
     });
 
-    int cutLengthSpec;
-    int cablePartNumber;
-    String description;
+    dynamic cutLengthSpec;
+    dynamic cablePartNumber;
+    dynamic description;
+    dynamic stripLengthFrom;
+    dynamic stripLengthTo;
 
     factory CableDetails.fromJson(Map<String, dynamic> json) => CableDetails(
         cutLengthSpec: json["cutLengthSpec"],
         cablePartNumber: json["cablePartNumber"],
         description: json["description"],
+        stripLengthFrom: json["stripLengthFrom"],
+        stripLengthTo: json["stripLengthTo"],
     );
 
     Map<String, dynamic> toJson() => {
         "cutLengthSpec": cutLengthSpec,
         "cablePartNumber": cablePartNumber,
         "description": description,
+        "stripLengthFrom": stripLengthFrom,
+        "stripLengthTo": stripLengthTo,
     };
 }

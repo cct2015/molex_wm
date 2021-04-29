@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/cableDetails_model.dart';
+import 'package:molex/model_api/cableTerminalA_model.dart';
+import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%202/process/FullyCompleteP2.dart';
@@ -10,6 +13,7 @@ import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/widgets/P2CrimpingScheduledetail.dart';
 import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 
 class ProcessPage2 extends StatefulWidget {
   final String userId;
@@ -210,8 +214,10 @@ class _DetailState extends State<Detail> {
   String output = '';
   String _output = '';
   String mainb;
+  ApiService apiService;
   @override
   void initState() {
+    apiService = new ApiService();
     super.initState();
   }
 
@@ -219,9 +225,10 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     return Container(
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Column(
-          children: [
-           P2ScheduleDetailWIP(schedule: widget.schedule,),
+        Column(children: [
+          P2ScheduleDetailWIP(
+            schedule: widget.schedule,
+          ),
           // tableHeading(),
           // buildDataRow(schedule: widget.schedule),
           // fgDetails(),
@@ -746,7 +753,8 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
- Widget bundlerejection() {
+
+  Widget bundlerejection() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -1288,62 +1296,157 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0),
       child: Container(
-        height: 80,
+        height: 91,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        // color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            process(
-                'From Process',
-                'From Strip Length Spec(mm) - 40',
-                'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
-                'From Unsheathing Length (mm) - 40'),
-            process(
-                'Cable',
-                'Cut Length Spec(mm) - 2060',
-                'Cable Part Number(Description)',
-                '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
-                ''),
-            process(
-                'To Process',
-                'To Strip Length Spec(mm) - 60',
-                'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',
-                'To Unsheathing Length (mm) - 60'),
+            // terminal A
+            Container(
+              height: 91,
+              child: FutureBuilder(
+                  future: apiService.getCableTerminalA(
+                      cablepartno: widget.schedule.cablePartNumber ??
+                          widget.schedule.finishedGoodsNumber),
+                  builder: (context, snapshot) {
+                    CableTerminalA terminalA = snapshot.data;
+                    if (snapshot.hasData) {
+                      return process(
+                          'From Process',
+                          '',
+                          // 'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
+                          'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                          '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
+                            '',
+                          // 'From Unsheathing Length (mm) - 40',
+                          0.35);
+                    } else {
+                      return process(
+                          'From Process',
+                          '',
+                          'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                          '(-)()(-)(-)(-)',
+                          '',
+                          // 'From Unsheathing Length (mm) - 40',
+                          0.325);
+                    }
+                  }),
+            ),
+            FutureBuilder(
+                future: apiService.getCableDetails(
+                    fgpartNo: widget.schedule.finishedGoodsNumber,
+                    cablepartno: widget.schedule.cablePartNumber ?? "0"),
+                builder: (context, snapshot) {
+                  CableDetails cableDetail = snapshot.data;
+                  if (snapshot.hasData) {
+                    return process(
+                        'Cable',
+                        'Cut Length Spec(mm) -${cableDetail.cutLengthSpec}',
+                        'Cable Part Number(Description)',
+                        '${cableDetail.cablePartNumber}(${cableDetail.description})',
+                        'From Strip Length Spec(mm) ${cableDetail.stripLengthFrom}} \n To Strip Length Spec(mm) ${cableDetail.stripLengthTo}}',
+                        0.28);
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
+            FutureBuilder(
+                future: apiService.getCableTerminalB(
+                    cablepartno: widget.schedule.cablePartNumber ??
+                        widget.schedule.finishedGoodsNumber),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    CableTerminalB cableTerminalB = snapshot.data;
+                    return process(
+                        'To Process',
+                        '',
+                        // 'To Strip Length Spec(mm) - ${cableTerminalB.stripLength}',
+                        'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                        '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
+                      '',
+                        0.34);
+                  } else {
+                    return process(
+                        'To Process',
+                        'From Strip Length Spec(mm) - 40}',
+                        'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+                        '(-)()(-)(-)(-)',
+                        // 'From Unsheathing Length (mm) - 40',''
+                        '',
+                        0.325);
+                  }
+                })
           ],
         ),
       ),
     );
   }
 
-  Widget process(String p1, String p2, String p3, String p4, String p5) {
-    return Padding(
-      padding: const EdgeInsets.all(.0),
+  // Widget terminal() {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(bottom: 2.0),
+  //     child: Container(
+  //       height: 80,
+  //       width: MediaQuery.of(context).size.width,
+  //       color: Colors.white,
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //         children: [
+  //           process(
+  //               'From Process',
+  //               'From Strip Length Spec(mm) - 40',
+  //               'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+  //               '(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
+  //               'From Unsheathing Length (mm) - 40'),
+  //           process(
+  //               'Cable',
+  //               'Cut Length Spec(mm) - 2060',
+  //               'Cable Part Number(Description)',
+  //               '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
+  //               ''),
+  //           process(
+  //               'To Process',
+  //               'To Strip Length Spec(mm) - 60',
+  //               'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
+  //               '(SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',
+  //               'To Unsheathing Length (mm) - 60'),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+ Widget process(
+      String p1, String p2, String p3, String p4, String p5, double width) {
+    return Material(
+      elevation: 10,
+      shadowColor: Colors.grey[100],
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
-        height: 80,
-        width: MediaQuery.of(context).size.width * 0.325,
+        height: 91,
+        width: MediaQuery.of(context).size.width * width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(.5),
-              blurRadius: 20.0, // soften the shadow
-              spreadRadius: 0.0, //extend the shadow
-              offset: Offset(
-                3.0, // Move to right 10  horizontally
-                3.0, // Move to bottom 10 Vertically
-              ),
-            )
-          ],
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(.3),
+          //     blurRadius: 20.0, // soften the shadow
+          //     spreadRadius: 0.0, //extend the shadow
+          //     offset: Offset(
+          //       3.0, // Move to right 10  horizontally
+          //       3.0, // Move to bottom 10 Vertically
+          //     ),
+          //   )
+          // ],
         ),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(1.0),
+              padding: const EdgeInsets.all(0.0),
               child: Container(
                 // width: MediaQuery.of(context).size.width * 0.31,
                 child: Column(
@@ -1373,7 +1476,7 @@ class _DetailState extends State<Detail> {
                       style: TextStyle(fontSize: 9),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.320,
+                      width: MediaQuery.of(context).size.width * width,
                       child: Text(
                         p4,
                         textAlign: TextAlign.center,
@@ -1398,7 +1501,7 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-
+  
   Widget startProcess() {
     if (_chosenValue == null) {
       return Padding(

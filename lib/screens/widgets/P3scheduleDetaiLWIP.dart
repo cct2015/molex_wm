@@ -208,7 +208,7 @@ class _P3ScheduleDetailWIPState extends State<P3ScheduleDetailWIP> {
                               width: 0.09),
                           feild(
                               heading: 'Tolerance ',
-                              value: '± ${fgDetail.tolrance} / ± ${fgDetail.tolrance}',
+                              value: '${fgDetail.tolrance} /${fgDetail.tolrance}',
                               width: 0.1),
                         ]));
               } else {

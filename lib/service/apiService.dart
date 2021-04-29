@@ -212,7 +212,7 @@ class ApiService {
     var response = await http.get(url);
     print('Cable details status code ${response.statusCode}');
     if (response.statusCode == 200) {
-      GetCableDetails getCableDetails = getCableDetailsFromJson(response.body);
+      GetCableDetail getCableDetails = getCableDetailFromJson(response.body);
       CableDetails cableDetails = getCableDetails.data.findCableDetails;
       return cableDetails;
     } else {
@@ -241,11 +241,11 @@ class ApiService {
 
   //CableTerminalB
   Future<CableTerminalB> getCableTerminalB({String cablepartno}) async {
-    //TODO variable in url
     var url = Uri.parse(baseUrl +
-        'molex/ejobticketmaster/get-cable-terminalB-bycableNo?cblPartNo=$cablepartno');
+        'molex/ejobticketmaster/get-cable-terminalB-bycableNo?cblPartNo=0');
     var response = await http.get(url);
-    print('Cable termianl A status code ${response.statusCode}');
+    print('Cable termianl B status code ${response.statusCode}');
+    print('body: ${response.body}');
     if (response.statusCode == 200) {
       GetCableTerminalB getCableTerminalB =
           getCableTerminalBFromJson(response.body);
@@ -253,16 +253,17 @@ class ApiService {
           getCableTerminalB.data.findCableTerminalBDto;
       return cableTerminalB;
     } else {
-      return null;
+       CableTerminalB cableTerminalB = new CableTerminalB();
+      return cableTerminalB;
     }
   }
 
   //Start Process
-  Future<bool> startProcess1(StartProcess process) async {
+  Future<bool> startProcess1(PostStartProcessP1 process) async {
     var url = Uri.parse(baseUrl +
         "molex/schedule-start-tracking/start-process-save-in-schedule-tracking");
     var response = await http.post(url,
-        body: startProcessToJson(process), headers: headerList);
+        body: postStartProcessP1ToJson(process), headers: headerList);
     print("start proces response = ${response.statusCode}");
     if (response.statusCode == 200) {
       return true;

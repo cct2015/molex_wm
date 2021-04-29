@@ -559,7 +559,7 @@ class _SchudleTableState extends State<SchudleTable> {
                           // );
                         },
                         child: Container(
-                            child: schedule.scheduledStatus == "Allocated"
+                            child: schedule.scheduledStatus == "Allocated"|| schedule.scheduledStatus == "Open"||schedule.scheduledStatus == ""||schedule.scheduledStatus == null
                                 ? Text(
                                     "Accept",
                                     style: GoogleFonts.openSans(

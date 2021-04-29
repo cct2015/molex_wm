@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final startProcess = startProcessFromJson(jsonString);
+//     final postStartProcessP1 = postStartProcessP1FromJson(jsonString);
 
 import 'dart:convert';
 
-StartProcess startProcessFromJson(String str) => StartProcess.fromJson(json.decode(str));
+PostStartProcessP1 postStartProcessP1FromJson(String str) => PostStartProcessP1.fromJson(json.decode(str));
 
-String startProcessToJson(StartProcess data) => json.encode(data.toJson());
+String postStartProcessP1ToJson(PostStartProcessP1 data) => json.encode(data.toJson());
 
-class StartProcess {
-    StartProcess({
+class PostStartProcessP1 {
+    PostStartProcessP1({
         this.scheduledIdentification,
         this.machineIdentification,
         this.scheduledQuantity,
@@ -18,18 +18,20 @@ class StartProcess {
         this.cablePartNumber,
         this.lengthSpecificationInmm,
         this.color,
+        this.scheduleStatus,
     });
 
-    int scheduledIdentification;
+    String scheduledIdentification;
     String machineIdentification;
-    int scheduledQuantity;
-    int finishedGoodsNumber;
-    int orderIdentification;
-    int cablePartNumber;
-    int lengthSpecificationInmm;
+    String scheduledQuantity;
+    String finishedGoodsNumber;
+    String orderIdentification;
+    String cablePartNumber;
+    String lengthSpecificationInmm;
     String color;
+    String scheduleStatus;
 
-    factory StartProcess.fromJson(Map<String, dynamic> json) => StartProcess(
+    factory PostStartProcessP1.fromJson(Map<String, dynamic> json) => PostStartProcessP1(
         scheduledIdentification: json["scheduledIdentification"],
         machineIdentification: json["machineIdentification"],
         scheduledQuantity: json["scheduledQuantity"],
@@ -38,6 +40,7 @@ class StartProcess {
         cablePartNumber: json["cablePartNumber"],
         lengthSpecificationInmm: json["lengthSpecificationInmm"],
         color: json["color"],
+        scheduleStatus: json["scheduleStatus"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -49,5 +52,6 @@ class StartProcess {
         "cablePartNumber": cablePartNumber,
         "lengthSpecificationInmm": lengthSpecificationInmm,
         "color": color,
+        "scheduleStatus": scheduleStatus,
     };
 }
