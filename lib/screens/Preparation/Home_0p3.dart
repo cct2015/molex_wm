@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/screens/Preparation/materialPick3.dart';
+import 'package:molex/screens/Preparation/process/process3.dart';
 import 'package:molex/screens/navigation.dart';
-import 'package:molex/screens/operator%203/materialPick3.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -187,7 +190,7 @@ class _HomePageOp3State extends State<HomePageOp3> {
             ),
           )
         ],
-       ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -311,11 +314,13 @@ class SchudleTable extends StatefulWidget {
 }
 
 class _SchudleTableState extends State<SchudleTable> {
+  ApiService apiService;
   List<Schedule> rowList = [];
 
   List<DataRow> datarows = [];
   @override
   void initState() {
+    apiService = ApiService();
     rowList.add(
       Schedule(
           orderId: "846478041",
@@ -354,15 +359,27 @@ class _SchudleTableState extends State<SchudleTable> {
           children: [
             tableHeading(),
             Container(
-              // height: double.parse("${rowList.length*60}"),
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: rowList.length,
-                  itemBuilder: (context, index) {
-                    return buildDataRow(schedule: rowList[index], c: index);
-                  }),
-            ),
+                // height: double.parse("${rowList.length*60}"),
+                child: FutureBuilder(
+              future: apiService.getPreparationSchedule(
+                  type: "A", machineNo: widget.machineId),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<PreparationSchedule> preparationSchedulelist =
+                      snapshot.data;
+                  return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: preparationSchedulelist.length,
+                      itemBuilder: (context, index) {
+                        return buildDataRow(
+                            schedule: preparationSchedulelist[index], c: index);
+                      });
+                } else {
+                  return Container();
+                }
+              },
+            )),
           ],
         ),
       ),
@@ -411,7 +428,7 @@ class _SchudleTableState extends State<SchudleTable> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({PreparationSchedule schedule, int c}) {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
@@ -435,9 +452,9 @@ class _SchudleTableState extends State<SchudleTable> {
               left: BorderSide(
             color: schedule.scheduledStatus == "Completed"
                 ? Colors.green
-                : schedule.scheduledStatus == "Pending"
-                    ? Colors.red
-                    : Colors.green[100],
+                : schedule.scheduledStatus == "Partial"
+                    ? Colors.orange[100]
+                    : Colors.blue[100],
             width: 5,
           )),
         ),
@@ -461,17 +478,49 @@ class _SchudleTableState extends State<SchudleTable> {
             //Color
             cell(schedule.color, 0.04),
             //Bin Id
-            cell("BIN8712122", 0.09),
+            cell("${schedule.binIdentification}", 0.09),
             // Total bundles
-            cell("30", 0.05),
+            cell("${schedule.bundleQuantity}", 0.05),
             //Total Bundle Qty
-            cell("100", 0.07),
+            cell("${schedule.passedQuantity}", 0.07),
 
             //Status
-            cell(schedule.scheduledStatus, 0.09),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.1,
+              height: 30,
+              padding: EdgeInsets.all(5),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: schedule.scheduledStatus == 'Completed'
+                      ? Colors.green[50]
+                      : schedule.scheduledStatus == "Partial"
+                          ? Colors.red[100]
+                          : Colors.blue[100],
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: Center(
+                  child: Text(
+                    schedule.scheduledStatus,
+                    style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: schedule.scheduledStatus == 'Completed'
+                            ? Colors.green
+                            : schedule.scheduledStatus == "Partial"
+                                ? Colors.yellow[900]
+                                : Colors.blue[900],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             //Action
             Container(
-              width: MediaQuery.of(context).size.width * 0.10,
+              width: 88,
+              height: 35,
               child: Center(
                 child: schedule.scheduledStatus == "Completed"
                     ? Text("-")
@@ -484,8 +533,8 @@ class _SchudleTableState extends State<SchudleTable> {
                                 return Colors.green;
                               return schedule.scheduledStatus == "Pending"
                                   ? Colors.red
-                                  : Colors
-                                      .green; // Use the component's default.
+                                  : Colors.green[
+                                      500]; // Use the component's default.
                             },
                           ),
                         ),
@@ -493,18 +542,41 @@ class _SchudleTableState extends State<SchudleTable> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MaterialPickOp3(
+                                builder: (context) => Processpage3(
                                       schedule: schedule,
                                       userId: widget.userId,
                                       machineId: widget.machineId,
                                     )),
                           );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => MaterialPickOp3(
+                          //              schedule: schedule,
+                          //             userId: widget.userId,
+                          //             machineId: widget.machineId,
+                          //           )),
+                          // );
                         },
                         child: Container(
-                            child: schedule.scheduledStatus == "Not Completed"
-                                ? Text("Accept")
-                                : schedule.scheduledStatus == "Pending"
-                                    ? Text('Continue')
+                            child: schedule.scheduledStatus == "Allocated"
+                                ? Text(
+                                    "Accept",
+                                    style: GoogleFonts.openSans(
+                                      textStyle: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  )
+                                : schedule.scheduledStatus == "Partial"
+                                    ? Text(
+                                        'Continue',
+                                        style: GoogleFonts.openSans(
+                                          textStyle: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      )
                                     : Text('')),
                       ),
               ),

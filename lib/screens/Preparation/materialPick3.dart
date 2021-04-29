@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
+import 'package:molex/screens/Preparation/process/process3.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
-import 'package:molex/screens/operator%203/process/process3.dart';
 import 'package:molex/screens/operator/process/process.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class MaterialPickOp3 extends StatefulWidget {
-  Schedule schedule;
+  PreparationSchedule schedule;
   String userId;
   String machineId;
   MaterialPickOp3({this.userId, this.machineId, this.schedule});
@@ -818,7 +819,7 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({PreparationSchedule schedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {

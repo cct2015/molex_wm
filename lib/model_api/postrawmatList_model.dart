@@ -27,25 +27,27 @@ class PostRawMaterial {
         this.color,
         this.status,
         this.process,
+        this.date,
     });
 
     String schedulerIdentification;
     String machineIdentification;
-    int finishedGoodsNumber;
-    int orderidentification;
-    int partNumber;
+    String finishedGoodsNumber;
+    String orderidentification;
+    String partNumber;
     String partDescription;
-    int requiredQuantityOrPiece;
-    int totalScheduledQuantity;
+    String requiredQuantityOrPiece;
+    String totalScheduledQuantity;
     String unitOfMeasurement;
-    int traceabilityNumber;
-    int existingQuantity;
-    int scannedQuantity;
-    int cablePartNumber;
-    int length;
+    String traceabilityNumber;
+    String existingQuantity;
+    String scannedQuantity;
+    String cablePartNumber;
+    String length;
     String color;
     String status;
     String process;
+    DateTime date;
 
     factory PostRawMaterial.fromJson(Map<String, dynamic> json) => PostRawMaterial(
         schedulerIdentification: json["schedulerIdentification"],

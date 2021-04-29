@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
 import 'package:molex/model_api/visualInspection/saveVIBundleQty.dart';
 import 'package:molex/screens/visual%20Inspector/scanBundle.dart';
-import 'package:molex/screens/widgets/scheduleDetailWIP.dart';
+import 'package:molex/screens/widgets/VIscheduleDetailWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class Viscan extends StatefulWidget {
@@ -234,9 +233,14 @@ class _DetailState extends State<Detail> {
           ScheduleDetailWIP(
             viSchedule: widget.viSchedule,
           ),
-          Container(
-              height: MediaQuery.of(context).size.height*0.4,
-               child: Center(child: ViScanBundle()))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  height: MediaQuery.of(context).size.height*0.6,
+                   child: Center(child: ViScanBundle())),
+            ],
+          )
         ]));
   }
 }

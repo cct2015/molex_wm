@@ -51,6 +51,10 @@ class _ScanBundleState extends State<ScanBundle> {
   TextEditingController cutOffLessMoreController = new TextEditingController();
   TextEditingController brushLengthLessMoreController =
       new TextEditingController();
+       TextEditingController rejectedQtyController =
+      new TextEditingController();
+       TextEditingController bundlQtyController =
+      new TextEditingController();
   FocusNode _scanfocus = new FocusNode();
   TextEditingController _scanIdController = new TextEditingController();
   bool next = false;
@@ -535,9 +539,19 @@ class _ScanBundleState extends State<ScanBundle> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  quantity("Bundle Qty", 10),
-                  quantity("Passed Qty", 10),
-                  quantity("Rejected Qty", 10),
+                    quantitycell(
+                            name: "Bundle Qty",
+                            quantity: 10,
+                            textEditingController:
+                                bundlQtyController,
+                          ),
+                          quantitycell(
+                            name: "Rejected Qty",
+                            quantity: 10,
+                            textEditingController:
+                                rejectedQtyController,
+                          ),
+                          SizedBox(width:20),
                   Container(
                     height: 50,
                     child: Center(

@@ -666,9 +666,9 @@ class _SchudleTableState extends State<SchudleTable> {
               left: BorderSide(
             color: schedule.scheduledStatus == "Completed"
                 ? Colors.green
-                : schedule.scheduledStatus == "Pending"
-                    ? Colors.red
-                    : Colors.green[100],
+                : schedule.scheduledStatus == "Partial"
+                    ? Colors.orange[100]
+                    : Colors.blue[100],
             width: 5,
           )),
         ),
@@ -701,9 +701,9 @@ class _SchudleTableState extends State<SchudleTable> {
               padding: EdgeInsets.all(5),
               child: Container(
                 decoration: BoxDecoration(
-                  color: schedule.scheduledStatus == 'Allocated'
+                  color: schedule.scheduledStatus == 'Completed'
                       ? Colors.green[50]
-                      : Colors.red[100],
+                      : schedule.scheduledStatus=="Partial"?Colors.red[100]:Colors.blue[100],
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
@@ -713,9 +713,9 @@ class _SchudleTableState extends State<SchudleTable> {
                       textStyle: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: schedule.scheduledStatus == 'Allocated'
+                        color: schedule.scheduledStatus == 'Completed'
                             ? Colors.green
-                            : Colors.red,
+                            : schedule.scheduledStatus=="Partial"?Colors.yellow[900]:Colors.blue[900],
                       ),
                     ),
                   ),
@@ -724,7 +724,7 @@ class _SchudleTableState extends State<SchudleTable> {
             ),
             //Action
             Container(
-              width: 80,
+              width: 84,
               height: 35,
               child: Center(
                 child: schedule.scheduledStatus == "Completed"
@@ -748,14 +748,14 @@ class _SchudleTableState extends State<SchudleTable> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MaterialPick(
-                                      schedule: schedule,
+                                       schedule: schedule,
                                       userId: widget.userId,
                                       machineId: widget.machineId,
                                     )),
                           );
                         },
                         child: Container(
-                            child: schedule.scheduledStatus == "Allocated"
+                            child: schedule.scheduledStatus == "Open"
                                 ? Text(
                                     "Accept",
                                     style: GoogleFonts.openSans(
@@ -764,7 +764,7 @@ class _SchudleTableState extends State<SchudleTable> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                   )
-                                : schedule.scheduledStatus == "Pending"
+                                : schedule.scheduledStatus == "Partial"
                                     ? Text(
                                         'Continue',
                                         style: GoogleFonts.openSans(

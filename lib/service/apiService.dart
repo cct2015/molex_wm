@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
@@ -28,6 +29,7 @@ import 'package:molex/model_api/visualInspection/updatebundleStsScheStartTrackin
 
 class ApiService {
   String baseUrl = "http://justerp.in:8080/wipts/";
+  // String baseUrl = "http://10.221.46.8:8080/wipts/";
   // String baseUrl = "http://192.168.1.252:8080/wipts/";
 
   // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
@@ -193,6 +195,7 @@ class ApiService {
     var response = await http.get(url);
     print('Fg  details status code ${response.statusCode}');
     if (response.statusCode == 200) {
+      print(response.body);
       GetFgDetails getFgDetails = getFgDetailsFromJson(response.body);
       FgDetails fgDetails = getFgDetails.data.getFgDetaials;
       return fgDetails;
@@ -325,14 +328,17 @@ class ApiService {
   //BundleQuantity api Json missing
   //TODO
   // Generate label request model POst method
-  Future<bool> postGeneratelabel(PostGenerateLabel generateLabel) async {
-    var url = Uri.parse(baseUrl + 'molex/wccr/generate-label');
+  Future<ResponseGenerateLabel> postGeneratelabel(PostGenerateLabel postGenerateLabel,String bundleQuantiy) async {
+    var url = Uri.parse(baseUrl + 'molex/wccr/generate-label/bdQty=$bundleQuantiy');
+    print('body generate label :${postGenerateLabelToJson(postGenerateLabel)} ');
     var response =
-        await http.post(url, body: getGenerateLabelToJson(generateLabel));
+        await http.post(url, body: postGenerateLabelToJson(postGenerateLabel),headers: headerList);
+        print("response post generate label ${response.statusCode}");
     if (response.statusCode == 200) {
-      return true;
+      ResponseGenerateLabel responseGenerateLabel = responseGenerateLabelFromJson(response.body);
+      return responseGenerateLabel;
     } else {
-      return false;
+      return null;
     }
   }
 
@@ -462,4 +468,37 @@ class ApiService {
       return false;
     }
   }
+
+   Future<List<PreparationSchedule>> getPreparationSchedule({String type,String machineNo}) async {
+    var url = Uri.parse(
+        baseUrl + 'molex/preparation/get-preparation-schedule-data?scheduleType=$type&machineNumber=$machineNo&sameMachine=true');
+    var response = await http.get(url);
+    print('Get Preparation Schedule status Code: ${response.statusCode}');
+    print(response.body);
+    if (response.statusCode == 200) {
+      GetpreparationShedule getpreparationShedule = getpreparationSheduleFromJson(response.body);
+      List<PreparationSchedule> preparationList = getpreparationShedule.data.preparationProcessData;
+      return preparationList;
+    } else {
+      return [];
+    }
+  }
+
+  // generate label
+  //  Future<bool> generatelabel(PostGenerateLabel postGenerateLabel,String qty) async {
+  //   var url = Uri.parse(
+  //       baseUrl + 'molex/wccr/generate-label/bdQty=150');
+  //   var response = await http.post(url,
+  //       body: postGenerateLabelToJson(postGenerateLabel),
+  //       headers: headerList);
+  //       print("post update bundle status in track: ${response.statusCode}");
+  //   if (response.statusCode == 200) {
+  //     return true;
+  //   } else {
+  //     return false;
+  // //   }
+  // }
+
+
+
 }

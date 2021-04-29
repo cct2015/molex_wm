@@ -356,7 +356,6 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   quantity("Bundle Qty", 10, bundleQuantityController),
-                  quantity("Passed Qty", 10, passedQuantityController),
                   quantity("Rejected Qty", 10, rejectedQuantityController),
                   Container(
                     height: 50,

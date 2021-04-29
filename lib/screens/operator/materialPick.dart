@@ -359,7 +359,8 @@ class _MaterialPickState extends State<MaterialPick> {
                                     _partNumberController.clear();
                                   });
                                 },
-                                child: Icon(Icons.clear, size: 18))
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
                             : Container(),
                         labelText: "Part No.",
                         fillColor: Colors.white,
@@ -423,7 +424,8 @@ class _MaterialPickState extends State<MaterialPick> {
                                     _trackingNumberController.clear();
                                   });
                                 },
-                                child: Icon(Icons.clear, size: 18))
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
                             : Container(),
                         labelText: "Tracebility Number",
                         fillColor: Colors.white,
@@ -540,34 +542,33 @@ class _MaterialPickState extends State<MaterialPick> {
                               postRawmaterial.partDescription = ip.description;
                               print('qty $qty');
                               postRawmaterial.existingQuantity =
-                                  int.parse(ip.toatalScheduleQuantity);
-                              postRawmaterial.scannedQuantity = int.parse(qty);
+                                  ip.toatalScheduleQuantity??'0';
+                              postRawmaterial.scannedQuantity = qty;
                               postRawmaterial.orderidentification =
-                                  int.parse(widget.schedule.orderId);
+                                  widget.schedule.orderId??'0';
                               postRawmaterial.totalScheduledQuantity =
-                                  int.parse(widget.schedule.scheduledQuantity);
-                              postRawmaterial.unitOfMeasurement = ip.uom;
+                                  widget.schedule.scheduledQuantity??'0';
+                              postRawmaterial.unitOfMeasurement = ip.uom??'0';
                               postRawmaterial.cablePartNumber =
                                   partNumber != null
-                                      ? int.parse(partNumber ?? '0')
-                                      : null;
+                                      ? partNumber ?? '0'
+                                      : 'null';
                               postRawmaterial.machineIdentification =
                                   "mac"; //TODO machine number
-                              postRawmaterial.finishedGoodsNumber = int.parse(
-                                  widget.schedule.finishedGoodsNumber);
+                              postRawmaterial.finishedGoodsNumber = 
+                                  widget?.schedule?.finishedGoodsNumber??'0';
                               postRawmaterial.schedulerIdentification =
                                   widget.schedule.scheduledId;
                               // ? int.parse(widget.schedule.scheduledId)
                               // : 0;
                               // "${selectedDate.toLocal()}".split(' ')[0];
-                              postRawmaterial.color = widget.schedule.color;
-                              postRawmaterial.process = widget.schedule.process;
+                              postRawmaterial.color = widget?.schedule?.color??'color';
+                              postRawmaterial.process = widget?.schedule?.process??'0';
                               postRawmaterial.status = "SUCCESS";
-                              postRawmaterial.length =
-                                  int.parse(widget.schedule.length);
-                              postRawmaterial.traceabilityNumber =
-                                  int.parse(trackingNumber);
+                              postRawmaterial.length =widget.schedule.length??'0';
+                              postRawmaterial.traceabilityNumber =trackingNumber;
                               print(postRawmaterial);
+                              postRawmaterial.date= selectedDate;
                               selectdItems.add(postRawmaterial);
                               _partNumberController.clear();
                               _trackingNumberController.clear();
@@ -663,13 +664,23 @@ class _MaterialPickState extends State<MaterialPick> {
                       ),
                       Row(
                         children: [
-                          IconButton(
-                              icon: isCollapsedRawMaterial
-                                  ? Icon(Icons.keyboard_arrow_down)
-                                  : Icon(Icons.keyboard_arrow_up),
-                              onPressed: () {
+                          GestureDetector(
+                              onTap: () {
                                 triggerCollapseRawMaterial();
-                              })
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Icon(isCollapsedRawMaterial
+                                    ? Icons.keyboard_arrow_down
+                                    : Icons.keyboard_arrow_up),
+                              ))
+                          // IconButton(
+                          //     icon: isCollapsedRawMaterial
+                          //         ? Icon(Icons.keyboard_arrow_down)
+                          //         : Icon(Icons.keyboard_arrow_up),
+                          //     onPressed: () {
+
+                          //     })
                         ],
                       )
                     ],
@@ -776,13 +787,24 @@ class _MaterialPickState extends State<MaterialPick> {
               ),
               Row(
                 children: [
-                  IconButton(
-                      icon: isCollapsedScannedMaterial
-                          ? Icon(Icons.keyboard_arrow_down)
-                          : Icon(Icons.keyboard_arrow_up),
-                      onPressed: () {
+                  GestureDetector(
+                      onTap: () {
                         triggerCollapseScannedMaterial();
-                      })
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Icon(isCollapsedScannedMaterial
+                            ? Icons.keyboard_arrow_down
+                            : Icons.keyboard_arrow_up),
+                      ))
+
+                  // IconButton(
+                  //     icon: isCollapsedScannedMaterial
+                  //         ? Icon(Icons.keyboard_arrow_down)
+                  //         : Icon(Icons.keyboard_arrow_up),
+                  //     onPressed: () {
+
+                  //     })
                 ],
               )
             ],
@@ -862,8 +884,8 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                // "${e.date.toLocal()}".split(' ')[0],
-                                "",
+                                "${e.date.toLocal()}".split(' ')[0],
+                                
                                 style: TextStyle(fontSize: 12),
                               )),
                               // DataCell(Text(e.n.toString())),

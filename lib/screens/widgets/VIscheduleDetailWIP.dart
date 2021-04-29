@@ -99,8 +99,8 @@ class _ScheduleDetailWIPState extends State<ScheduleDetailWIP> {
           color: Colors.red[50],
           ),
           
-          width: 30,
-          height:30,
+          width: 22,
+          height:22,
           child: Center(child: Image.asset('assets/image/order.png')),
         ),
         feild(                                   
@@ -177,4 +177,5 @@ class _ScheduleDetailWIPState extends State<ScheduleDetailWIP> {
           ])),
     );
   }
+
 }

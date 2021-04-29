@@ -252,70 +252,148 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                         children: [
                           //Select
                           Container(
+                            width: MediaQuery.of(context).size.width - 30,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  height: 38,
-                                  width: 180,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[100],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.search,
-                                          size: 20,
-                                          color: Colors.red[400],
-                                        ),
-                                        SizedBox(width: 5),
-                                        Container(
-                                          width: 130,
-                                          height: 30,
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 5),
-                                          child: TextField(
-                                            onChanged: (value) {
-                                              setState(() {});
-                                            },
-                                            style: TextStyle(fontSize: 13),
-                                            onTap: () {},
-                                            decoration: new InputDecoration(
-                                              hintText: _chosenValue,
-                                              hintStyle: GoogleFonts.openSans(
-                                                textStyle: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              focusedBorder: InputBorder.none,
-                                              enabledBorder: InputBorder.none,
-                                              errorBorder: InputBorder.none,
-                                              disabledBorder: InputBorder.none,
-                                              contentPadding: EdgeInsets.only(
-                                                  left: 15,
-                                                  bottom: 11,
-                                                  top: 11,
-                                                  right: 15),
-                                              fillColor: Colors.white,
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: 38,
+                                      width: 180,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5)),
+                                        color: Colors.grey[100],
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.search,
+                                              size: 20,
+                                              color: Colors.red[400],
                                             ),
-                                            //fillColor: Colors.green
-                                          ),
+                                            SizedBox(width: 5),
+                                            Container(
+                                              width: 130,
+                                              height: 30,
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 5),
+                                              child: TextField(
+                                                onChanged: (value) {
+                                                  setState(() {});
+                                                },
+                                                style: TextStyle(fontSize: 13),
+                                                onTap: () {},
+                                                decoration: new InputDecoration(
+                                                  hintText: _chosenValue,
+                                                  hintStyle:
+                                                      GoogleFonts.openSans(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  focusedBorder:
+                                                      InputBorder.none,
+                                                  enabledBorder:
+                                                      InputBorder.none,
+                                                  errorBorder: InputBorder.none,
+                                                  disabledBorder:
+                                                      InputBorder.none,
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          left: 15,
+                                                          bottom: 11,
+                                                          top: 11,
+                                                          right: 15),
+                                                  fillColor: Colors.white,
+                                                ),
+                                                //fillColor: Colors.green
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
+                                    SizedBox(width: 10),
+                                    dropdown(options: [
+                                      "Order ID",
+                                      "FG No.",
+                                      "Schedule Id",
+                                    ], name: "Order Id"),
+                                  ],
+                                ),
+                                Container(
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              side: BorderSide(
+                                                  color: Colors.transparent))),
+                                      backgroundColor: MaterialStateProperty
+                                          .resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                          if (states
+                                              .contains(MaterialState.pressed))
+                                            return Colors.green[200];
+                                          return Colors.green[
+                                              500]; // Use the component's default.
+                                        },
+                                      ),
+                                    ),
+                                    child: Container(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            height: 20,
+                                            width: 20,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: AssetImage(
+                                                        "assets/image/scan.png"))),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                            'Scan',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      // postViSchedule.orderId = int.parse(viSchedule.orderId);
+                                      // postViSchedule.scheduledId = int.parse(viSchedule.scheduleId);
+                                      // postViSchedule.process = viSchedule.scheduleType;
+                                      // apiService
+                                      //     .postVisualInspectionSchedular(postViSchedule)
+                                      //     .then((value) {
+                                      //   if (value) {
+                                      //     Navigator.push(
+                                      //       context,
+                                      //       MaterialPageRoute(
+                                      //           builder: (context) => Viscan(
+                                      //                 userId: '45642313',
+                                      //                 machineId: '45642313',
+                                      //                 viSchedule: viSchedule,
+                                      //               )),
+                                      //     );
+                                      //   } else {
+                                      //     print('failed');
+                                      //   }
+                                      // });
+                                    },
                                   ),
                                 ),
-                                SizedBox(width: 10),
-                                dropdown(options: [
-                                  "Order ID",
-                                  "FG No.",
-                                  "Schedule Id",
-                                ], name: "Order Id"),
                               ],
                             ),
                           ),
@@ -460,7 +538,6 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
                     ),
                   );
                 } else {
-                  
                   return Container();
                 }
               }())
@@ -482,11 +559,10 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
               cell("Order Id", 0.09, true),
               cell("FG Part", 0.09, true),
               cell("Schedule ID", 0.08, false),
-             
               cell("Bin ID", 0.08, true),
               cell("Total Bundles", 0.10, false),
               cell("Total BundleQty", 0.11, true),
-              cell("Action", 0.08, true),
+              // cell("Action", 0.08, true),
             ],
           ),
         ],
@@ -542,43 +618,8 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
             //Process
             cell(viSchedule.totalBundles, 0.10),
             // Cut length
-            cell(viSchedule.totalBundles, 0.11),
-            //Color
-            Container(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.transparent))),
-                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed))
-                        return Colors.green[200];
-                      return Colors.green[500]; // Use the component's default.
-                    },
-                  ),
-                ),
-                child: Container(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: 20,
-                        width: 20,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/image/scan.png"))),
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        'Scan',
-                        style: TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
-                onPressed: () {
+            GestureDetector(
+                onTap: () {
                   postViSchedule.orderId = int.parse(viSchedule.orderId);
                   postViSchedule.scheduledId = int.parse(viSchedule.scheduleId);
                   postViSchedule.process = viSchedule.scheduleType;
@@ -600,8 +641,8 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
                     }
                   });
                 },
-              ),
-            ),
+                child: cell(viSchedule.totalBundles, 0.11)),
+            //Color
           ],
         ),
       ),

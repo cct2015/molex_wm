@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
-import 'package:molex/screens/operator%203/process/scanBundle.dart';
-import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/Preparation/process/scanBundle.dart';
 import 'package:molex/screens/operator/location.dart';
+import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class Processpage3 extends StatefulWidget {
   String userId;
   String machineId;
-  Schedule schedule;
+  PreparationSchedule schedule;
   Processpage3({this.machineId, this.userId, this.schedule});
   @override
   _Processpage3State createState() => _Processpage3State();
@@ -195,7 +196,7 @@ class _Processpage3State extends State<Processpage3> {
 }
 
 class Detail extends StatefulWidget {
-  Schedule schedule;
+  PreparationSchedule schedule;
   String rightside;
   String userId;
   String machineId;
@@ -222,6 +223,11 @@ class _DetailState extends State<Detail> {
   String mainb;
 
   FocusNode reasonFocus = new FocusNode();
+     void continueProcess(String name) {
+    setState(() {
+      rightside = name;
+    });
+     }
   @override
   Widget build(BuildContext context) {
     if (!reasonFocus.hasFocus) {
@@ -229,52 +235,15 @@ class _DetailState extends State<Detail> {
     }
 
     return Container(
+      color: Colors.white,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      GestureDetector(
-        onTap: () {
-          setState(() {
-            orderDetailExpanded = !orderDetailExpanded;
-          });
-        },
-        child: Container(
-          height: 20,
-          child: Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
-                child: Text(
-                  "Order Detail",
-                  style: TextStyle(color: Colors.black, fontSize: 12),
-                ),
-              ),
-              IconButton(
-                  iconSize: 15,
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(0),
-                  icon: orderDetailExpanded
-                      ? Icon(Icons.keyboard_arrow_down)
-                      : Icon(Icons.keyboard_arrow_right),
-                  onPressed: () {
-                    setState(() {
-                      orderDetailExpanded = !orderDetailExpanded;
-                    });
-                  })
-            ],
-          ),
-        ),
-      ),
-      (() {
-        if (orderDetailExpanded) {
-          return Column(children: [
-            tableHeading(),
-            buildDataRow(schedule: widget.schedule),
-            fgDetails(),
-          ]);
-        } else {
-          return Container();
-        }
-      }()),
+     
+      Column(children: [
+        P3ScheduleDetailWIP(schedule: widget.schedule,),
+        // tableHeading(),
+        // buildDataRow(schedule: widget.schedule),
+        // fgDetails(),
+      ]),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -289,7 +258,7 @@ class _DetailState extends State<Detail> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width*0.7,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -386,38 +355,38 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                       ),
-                      //Reaload Material
-                      Container(
-                        width: 140,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(2.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green[200];
-                                  return Colors.green[
-                                      500]; // Use the component's default.
-                                },
-                              ),
-                            ),
-                            child: Text(
-                              'Reload Material',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
-                      ),
+                      // //Reaload Material
+                      // Container(
+                      //   width: 140,
+                      //   child: ElevatedButton(
+                      //       style: ButtonStyle(
+                      //         shape: MaterialStateProperty.all<
+                      //                 RoundedRectangleBorder>(
+                      //             RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(2.0),
+                      //                 side: BorderSide(
+                      //                     color: Colors.transparent))),
+                      //         backgroundColor:
+                      //             MaterialStateProperty.resolveWith<Color>(
+                      //           (Set<MaterialState> states) {
+                      //             if (states.contains(MaterialState.pressed))
+                      //               return Colors.green[200];
+                      //             return Colors.green[
+                      //                 500]; // Use the component's default.
+                      //           },
+                      //         ),
+                      //       ),
+                      //       child: Text(
+                      //         'Reload Material',
+                      //         style: TextStyle(
+                      //           fontSize: 13,
+                      //           fontWeight: FontWeight.normal,
+                      //         ),
+                      //       ),
+                      //       onPressed: () {
+                      //         Navigator.pop(context);
+                      //       }),
+                      // ),
 
                       //Load user
                       Row(
@@ -467,7 +436,7 @@ class _DetailState extends State<Detail> {
               ],
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.53,
               width: MediaQuery.of(context).size.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -486,7 +455,9 @@ class _DetailState extends State<Detail> {
 
   Widget mainbox(String mainbr) {
     if (mainbr == "scanBundle") {
-      return ScanBundleP3();
+      return ScanBundleP3(
+        schedule: widget.schedule,
+      );
     }
     if (mainbr == "partial") {
       return partialcompletepop();
@@ -896,30 +867,16 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0),
       child: Container(
-        height: 80,
+        height: 50,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+      
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            process(
-                '',
-                '',
-                '',
-                '',
-                'From Unsheathing Length (mm) - 40'),
-            process(
-                '',
-                '',
-                'Cable Part Number(Description)',
-                '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
-                ''),
-            process(
-                '',
-                '',
-                '',
-                '',
-                'To Unsheathing Length (mm) - 60'),
+            process('', '', '', '', 'From Unsheathing Length (mm) - 40'),
+            process('', '', 'Cable Part Number(Description)',
+                '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)', ''),
+            process('', '', '', '', 'To Unsheathing Length (mm) - 60'),
           ],
         ),
       ),
@@ -976,10 +933,12 @@ class _DetailState extends State<Detail> {
                       ],
                     ),
                     // SizedBox(height: 5),
-                    p3==''?Container():Text(
-                      p3,
-                      style: TextStyle(fontSize: 9),
-                    ),
+                    p3 == ''
+                        ? Container()
+                        : Text(
+                            p3,
+                            style: TextStyle(fontSize: 9),
+                          ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.320,
                       child: Text(
@@ -995,7 +954,8 @@ class _DetailState extends State<Detail> {
                     // SizedBox(height: 5),
                     Text(
                       p5,
-                      style: TextStyle(fontSize: 11,fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -1030,9 +990,7 @@ class _DetailState extends State<Detail> {
                   controller: scanBundleController,
                   focusNode: reasonFocus,
                   autofocus: true,
-                  onTap: () {
-                  
-                  },
+                  onTap: () {},
                   decoration: new InputDecoration(
                     labelText: "Type the Reason",
                     fillColor: Colors.white,
@@ -1046,7 +1004,7 @@ class _DetailState extends State<Detail> {
                 ),
               ),
             ),
-            Column(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
@@ -1064,11 +1022,16 @@ class _DetailState extends State<Detail> {
                           },
                         ),
                       ),
-                      onPressed: () {},
-                      child: Text('Accept and Continue Process'),
+                      onPressed: () {
+                        setState(() {
+                          mainb = "scanBundle";
+                        });
+                      },
+                      child: Text('Accept and Continue'),
                     ),
                   ),
                 ),
+                SizedBox(width:10),
                 Padding(
                   padding: const EdgeInsets.all(0.0),
                   child: Container(

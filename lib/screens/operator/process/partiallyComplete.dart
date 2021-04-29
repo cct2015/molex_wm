@@ -4,9 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/screens/operator/location.dart';
 
 class PartiallyComplete extends StatefulWidget {
-    String machineId;
+  String machineId;
   String userId;
-  PartiallyComplete({this.machineId, this.userId});
+  Function continueProcess;
+  PartiallyComplete({this.machineId, this.userId,this.continueProcess});
   @override
   _PartiallyCompleteState createState() => _PartiallyCompleteState();
 }
@@ -340,7 +341,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                             name: "Applicator Position Setting		",
                             quantity: 10,
                             textEditingController:
-                                applicatorChangeoverController,
+                                applicatorPositionSettingController,
                           ),
                           quantitycell(
                             name: "Validation",
@@ -591,7 +592,9 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                             ),
                           ),
                           child: Text("Accept and Continue Process"),
-                          onPressed: () {},
+                          onPressed: () {
+                            widget.continueProcess("label");
+                          },
                         ),
                       ),
                     ),

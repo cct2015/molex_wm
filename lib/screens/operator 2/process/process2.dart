@@ -7,6 +7,8 @@ import 'package:molex/screens/operator%202/process/FullyCompleteP2.dart';
 import 'package:molex/screens/operator%202/process/partialCompletion.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/screens/widgets/P2CrimpingScheduledetail.dart';
+import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class ProcessPage2 extends StatefulWidget {
@@ -168,19 +170,18 @@ class _ProcessPage2State extends State<ProcessPage2> {
             ),
           )
         ],
-       ),
+      ),
       body: StreamBuilder(
           stream: Stream.periodic(const Duration(milliseconds: 2000)),
           builder: (context, snapshot) {
             return Column(
-                children: [
-                  Detail(
-                    schedule: widget.schedule,
-                    userId: widget.userId,
-                    machineId: widget.machineId,
-                  ),
-                ],
-              
+              children: [
+                Detail(
+                  schedule: widget.schedule,
+                  userId: widget.userId,
+                  machineId: widget.machineId,
+                ),
+              ],
             );
           }),
     );
@@ -218,51 +219,13 @@ class _DetailState extends State<Detail> {
   Widget build(BuildContext context) {
     return Container(
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              orderDetailExpanded = !orderDetailExpanded;
-            });
-          },
-          child: Container(
-            height: 20,
-            child: Row(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
-                  child: Text(
-                    "Order Detail",
-                    style: TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                ),
-                IconButton(
-                    iconSize: 15,
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.all(0),
-                    icon: orderDetailExpanded
-                        ? Icon(Icons.keyboard_arrow_down)
-                        : Icon(Icons.keyboard_arrow_right),
-                    onPressed: () {
-                      setState(() {
-                        orderDetailExpanded = !orderDetailExpanded;
-                      });
-                    })
-              ],
-            ),
-          ),
-        ),
-        (() {
-          if (orderDetailExpanded) {
-            return Column(children: [
-              tableHeading(),
-              buildDataRow(schedule: widget.schedule),
-              fgDetails(),
-            ]);
-          } else {
-            return Container();
-          }
-        }()),
+        Column(
+          children: [
+           P2ScheduleDetailWIP(schedule: widget.schedule,),
+          // tableHeading(),
+          // buildDataRow(schedule: widget.schedule),
+          // fgDetails(),
+        ]),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -279,7 +242,8 @@ class _DetailState extends State<Detail> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                        color: Colors.transparent, child: Process(type: _chosenValue)),
+                        color: Colors.transparent,
+                        child: Process(type: _chosenValue)),
 
                     //buttons and num pad
                     Container(
@@ -782,147 +746,7 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-
-  Widget rejectioncase() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Crimping Rejection Cases',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
-                    ))
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          quantitycell("Terminal Damage", 10),
-                          quantitycell("Window Gap	", 10),
-                          quantitycell("Cut-off Burr", 10),
-                          quantitycell("Terminal Copper Mark", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Crimp On Insulation	", 10),
-                          quantitycell("Cut-off Bend	", 10),
-                          quantitycell("Setup Rejections", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Improper Crimping", 10),
-                          quantitycell("Insulation Damage	", 10),
-                          quantitycell("Terminal Back Out", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Exposure Strands		", 10),
-                          quantitycell("Insulation Curling Up & Down", 10),
-                          quantitycell("Bellmouth Less / More", 10),
-                          quantitycell("Strands Cut", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Conductor Curling Up & Down", 10),
-                          quantitycell("Tab Bend / Tap Open	", 10),
-                          quantitycell("Terminal Changeover", 10),
-                          quantitycell("Terminal Twist", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Extrusion Burr Issue", 10),
-                          quantitycell("CFM Error", 10),
-                          quantitycell("Supplier Taken for Maintenance", 10),
-                          quantitycell("Roller Changeover	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Conductor Burr	", 10),
-                          quantitycell("Cut-Off Less / More	", 10),
-                          quantitycell("Brush Length Less / More", 10),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  quantity("Bundle Qty", 10),
-                  quantity("Passed Qty", 10),
-                  quantity("Rejected Qty", 10),
-                  Container(
-                    height: 50,
-                    child: Center(
-                      child: Container(
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green[200];
-                                  return Colors.green[
-                                      500]; // Use the component's default.
-                                },
-                              ),
-                            ),
-                            child: Text("Save & Complete Process"),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Bin(
-                                          userId: widget.userId,
-                                          machineId: widget.machineId,
-                                        )),
-                              );
-                            }),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget bundlerejection() {
+ Widget bundlerejection() {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),

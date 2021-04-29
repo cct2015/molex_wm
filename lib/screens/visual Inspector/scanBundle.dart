@@ -53,7 +53,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
       SystemChrome.setEnabledSystemUIOverlays([]);
        SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
-       height: MediaQuery.of(context).size.height*0.5,
+       height: MediaQuery.of(context).size.height*0.6,
       child: Center(child: main(status)),
     );
   }
@@ -220,6 +220,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
       shadowColor: Colors.grey[200],
       child: Container(
         width: MediaQuery.of(context).size.width * 0.24,
+          height: MediaQuery.of(context).size.height*0.4,
         decoration: new BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -416,7 +417,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     quantity("Bundle Qty", 10,bundleQtyController),
-                    quantity("Passed Qty", 10,passedQtyController),
+                    // quantity("Passed Qty", 10,passedQtyController),
                     quantity("Rejected Qty", 10,rejectedQtyController),
                   ],
                 ),

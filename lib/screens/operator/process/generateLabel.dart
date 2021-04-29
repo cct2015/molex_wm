@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/generateLabel_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
+import 'package:molex/service/apiService.dart';
 
 enum Status {
   quantity,
   generateLabel,
   scanBundle,
-  scanBin, 
+  scanBin,
 }
 
 class GenerateLabel extends StatefulWidget {
@@ -93,6 +95,12 @@ class _GenerateLabelState extends State<GenerateLabel> {
   TextEditingController stripLengthController = new TextEditingController();
   TextEditingController lengthvariationController = new TextEditingController();
   FocusNode lengthvariationFocus = new FocusNode();
+
+
+/// Main Content
+
+
+
   bool labelGenerated = false;
   String _output = '';
   String binState;
@@ -101,6 +109,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   bool hasBin = false;
   Status status = Status.quantity;
   TransferBundle transferBundle = new TransferBundle();
+  PostGenerateLabel postGenerateLabel = new PostGenerateLabel();
   static const platform = const MethodChannel('com.impereal.dev/tsc');
   String _printerStatus = 'Waiting';
   Future<void> _print({
@@ -147,9 +156,10 @@ class _GenerateLabelState extends State<GenerateLabel> {
       _printerStatus = printerStatus;
     });
   }
-
+  ApiService apiService;
   @override
   void initState() {
+    apiService = new ApiService();
     transferBundle = new TransferBundle();
 
     transferBundle.cablePartDescription = widget.schedule.cablePartNumber;
@@ -320,7 +330,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
         children: [
           //Quantity Feild
           Container(
-            width: 180,
+            width: 190,
             height: 50,
             child: TextField(
               textAlign: TextAlign.center,
@@ -341,10 +351,10 @@ class _GenerateLabelState extends State<GenerateLabel> {
               showCursor: false,
               keyboardType: TextInputType.number,
               textAlignVertical: TextAlignVertical.center,
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 15),
               decoration: new InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 3),
-                labelText: "Bundle Qty (SPQ)",
+                labelText: "  Bundle Qty (SPQ)",
                 fillColor: Colors.white,
                 border: new OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(5.0),
@@ -616,19 +626,14 @@ class _GenerateLabelState extends State<GenerateLabel> {
                                 lengthlessLengthMoreController,
                           ),
                           quantitycell(
-                            name: "Crimp On Insulation	",
+                            name: "Window Gap	",
                             quantity: 10,
-                            textEditingController: crimpOnInsulationController,
+                            textEditingController: windowGapController,
                           ),
                         ],
                       ),
                       Column(
                         children: [
-                          quantitycell(
-                            name: "Window Gap	",
-                            quantity: 10,
-                            textEditingController: windowGapController,
-                          ),
                           quantitycell(
                             name: "End Wire",
                             quantity: 10,
@@ -651,16 +656,16 @@ class _GenerateLabelState extends State<GenerateLabel> {
                             textEditingController:
                                 brushLengthLessMoreController,
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
                           quantitycell(
                             name: "Wire Over load Rejections ",
                             quantity: 10,
                             textEditingController:
                                 wireOverloadRejectionsController,
                           ),
+                        ],
+                      ),
+                      Column(
+                        children: [
                           quantitycell(
                             name: "Gripper Mark",
                             quantity: 10,
@@ -672,19 +677,10 @@ class _GenerateLabelState extends State<GenerateLabel> {
                             textEditingController: cablePositionController,
                           ),
                           quantitycell(
-                            name: "Crimp On Insulation",
-                            quantity: 10,
-                            textEditingController: crimpOnInsulationController,
-                          ),
-                          quantitycell(
                             name: "End Terminal",
                             quantity: 10,
                             textEditingController: endTerminalController,
                           ),
-                        ],
-                      ),
-                      Column(
-                        children: [
                           quantitycell(
                             name: "Conductor Burr",
                             quantity: 10,
@@ -695,6 +691,10 @@ class _GenerateLabelState extends State<GenerateLabel> {
                             quantity: 10,
                             textEditingController: cutoffBendController,
                           ),
+                        ],
+                      ),
+                      Column(
+                        children: [
                           quantitycell(
                             name: "Terminal Copper Mark	",
                             quantity: 10,
@@ -703,7 +703,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           quantitycell(
                             name: "Crimping Position Out / Miss Crimp",
                             quantity: 10,
-                            textEditingController: crimpOnInsulationController,
+                            textEditingController: crimpingPositionOutMissCrimpController,
                           ),
                           quantitycell(
                             name: "Crimp On Insulation",
@@ -744,17 +744,34 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       child: Text("Save & Generate Label"),
                       onPressed: () {
                         setState(() {
-                          _print(
-                              ipaddress: "192.168.1.130",
+                          postGenerateLabel = new PostGenerateLabel();
+                          postGenerateLabel.cablePartNumber = widget.schedule.cablePartNumber;
+                          postGenerateLabel.finishedGoods = widget.schedule.finishedGoodsNumber;
+                          postGenerateLabel.machineIdentification = widget.machineId;
+                          postGenerateLabel.terminalBend = terminalBendController.text;
+                          postGenerateLabel.terminalDamage = terminalDamangeController.text;
+                          apiService.postGeneratelabel(postGenerateLabel, bundleQty.text).then((value) {
+                            if(value!=null){
+                              ResponseGenerateLabel response;
+                              response = value;
+                               _print(
+                              // ipaddress: "192.168.1.130",
+                              ipaddress: "172.26.59.14",
                               bq: bundleQty.text,
-                              qr: "123456",
+                              qr: response.data.generateLabel.bundleId,
                               routenumber1: "12345",
                               fgPartNumber: widget.schedule.finishedGoodsNumber,
-                              cutlength: widget.schedule.length,
-                              cablepart: widget.schedule.cablePartNumber,
-                              wireGauge: widget.schedule.finishedGoodsNumber,
-                              terminalfrom: widget.schedule.finishedGoodsNumber,
-                              terminalto: widget.schedule.finishedGoodsNumber);
+                              cutlength: "${widget.schedule.length}",
+                              cablepart: "${widget.schedule.cablePartNumber}",
+                              wireGauge: "${widget.schedule.finishedGoodsNumber}",
+                              terminalfrom: "${response?.data?.generateLabel?.terminalFrom??''}",
+                              terminalto: "${response?.data?.generateLabel?.terminalTo??''}");
+
+                            }
+
+                          });
+
+                         
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;
                           // _print();

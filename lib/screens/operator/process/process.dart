@@ -12,6 +12,8 @@ import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/operator/process/100complete.dart';
 import 'package:molex/screens/operator/process/generateLabel.dart';
 import 'package:molex/screens/operator/process/partiallyComplete.dart';
+import 'package:molex/screens/widgets/P1AutoCurScheduledetail.dart';
+import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -226,6 +228,11 @@ class _DetailState extends State<Detail> {
     super.initState();
   }
 
+   void continueProcess(String name) {
+    setState(() {
+      rightside = name;
+    });
+  }
   // Future<void> _print() async {
   //   String printerStatus;
 
@@ -299,61 +306,7 @@ class _DetailState extends State<Detail> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // GestureDetector(
-          //   onTap: () {
-          //     setState(() {
-          //       orderDetailExpanded = !orderDetailExpanded;
-          //     });
-          //   },
-          //   child: Container(
-          //     height: 20,
-          //     child: Row(
-          //       children: [
-          //         Padding(
-          //           padding: const EdgeInsets.symmetric(
-          //               horizontal: 10.0, vertical: 4),
-          //           child: Text(
-          //             "Order Detail",
-          //             style: TextStyle(color: Colors.black, fontSize: 12),
-          //           ),
-          //         ),
-          //         IconButton(
-          //             iconSize: 15,
-          //             alignment: Alignment.centerLeft,
-          //             padding: EdgeInsets.all(0),
-          //             icon: orderDetailExpanded
-          //                 ? Icon(Icons.keyboard_arrow_down)
-          //                 : Icon(Icons.keyboard_arrow_right),
-          //             onPressed: () {
-          //               setState(() {
-          //                 orderDetailExpanded = !orderDetailExpanded;
-          //               });
-          //             })
-          //       ],
-          //     ),
-          //   ),
-          // ),
-
-          (() {
-            if (orderDetailExpanded) {
-              return Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Material(
-                  elevation: 5,
-                  shadowColor: Colors.grey[100],
-                  child: Container(
-                    child: Column(children: [
-                      tableHeading(),
-                      buildDataRow(schedule: widget.schedule),
-                      fgDetails(),
-                    ]),
-                  ),
-                ),
-              );
-            } else {
-              return Container();
-            }
-          }()),
+          P1ScheduleDetailWIP(schedule: widget.schedule),
 
           // terminal(),
           Row(
@@ -392,48 +345,6 @@ class _DetailState extends State<Detail> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      //Label
-                                      // Container(
-                                      //   height: 40,
-                                      //   width: 160,
-                                      //   child: ElevatedButton(
-                                      //     style: ButtonStyle(
-                                      //       shape: MaterialStateProperty.all<
-                                      //               RoundedRectangleBorder>(
-                                      //           RoundedRectangleBorder(
-                                      //               borderRadius:
-                                      //                   BorderRadius.circular(
-                                      //                       10.0),
-                                      //               side: BorderSide(
-                                      //                   color: Colors
-                                      //                       .transparent))),
-                                      //       backgroundColor:
-                                      //           MaterialStateProperty
-                                      //               .resolveWith<Color>(
-                                      //         (Set<MaterialState> states) {
-                                      //           if (states.contains(
-                                      //               MaterialState.pressed))
-                                      //             return Colors.green[200];
-                                      //           return Colors.green[
-                                      //               500]; // Use the component's default.
-                                      //         },
-                                      //       ),
-                                      //     ),
-                                      //     onPressed: () {
-                                      //       setState(() {
-                                      //         rightside = "label";
-                                      //       });
-                                      //     },
-                                      //     child: Text(
-                                      //       "Label",
-                                      //       style: TextStyle(
-                                      //         fontSize: 15,
-                                      //         fontWeight: FontWeight.normal,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
-
                                       //100% complete
                                       Container(
                                         height: 40,
@@ -476,7 +387,7 @@ class _DetailState extends State<Detail> {
                                         ),
                                       ),
                                       //partially complete
-                                       Container(
+                                      Container(
                                         height: 40,
                                         width: 160,
                                         child: ElevatedButton(
@@ -516,15 +427,13 @@ class _DetailState extends State<Detail> {
                                           ),
                                         ),
                                       ),
-                                     
                                     ],
                                   ),
                                 ),
                                 Container(
                                   width: 330,
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       //partially complete
                                       //Reload material
@@ -611,6 +520,7 @@ class _DetailState extends State<Detail> {
                                 return PartiallyComplete(
                                   userId: widget.userId,
                                   machineId: widget.machineId,
+                                  continueProcess: continueProcess,
                                 );
                               } else if (rightside == "bundle") {
                                 return bundleTable();
@@ -738,15 +648,15 @@ class _DetailState extends State<Detail> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2.0),
       child: Container(
-        height: 80,
+        height: 91,
         width: MediaQuery.of(context).size.width,
-        color: Colors.white,
+        // color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // terminal A
             Container(
-              height: 80,
+              height: 91,
               child: FutureBuilder(
                   future: apiService.getCableTerminalA(
                       cablepartno: widget.schedule.cablePartNumber ??
@@ -759,14 +669,16 @@ class _DetailState extends State<Detail> {
                           'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                           '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
-                          'From Unsheathing Length (mm) - 40');
+                          'From Unsheathing Length (mm) - 40',
+                          0.35);
                     } else {
                       return process(
                           'From Process',
                           'From Strip Length Spec(mm) - 40}',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                           '(-)()(-)(-)(-)',
-                          'From Unsheathing Length (mm) - 40');
+                          'From Unsheathing Length (mm) - 40',
+                          0.325);
                     }
                   }),
             ),
@@ -782,7 +694,8 @@ class _DetailState extends State<Detail> {
                         'Cut Length Spec(mm) -${cableDetail.cutLengthSpec}',
                         'Cable Part Number(Description)',
                         '${cableDetail.cablePartNumber}(${cableDetail.description})',
-                        '');
+                        '',
+                        0.28);
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),
@@ -801,14 +714,16 @@ class _DetailState extends State<Detail> {
                         'To Strip Length Spec(mm) - ${cableTerminalB.stripLength}',
                         'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                         '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
-                        'To Unsheathing Length (mm) - 60');
+                        'To Unsheathing Length (mm) - 60',
+                        0.34);
                   } else {
                     return process(
                         'To Process',
                         'From Strip Length Spec(mm) - 40}',
                         'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                         '(-)()(-)(-)(-)',
-                        'From Unsheathing Length (mm) - 40');
+                        'From Unsheathing Length (mm) - 40',
+                        0.325);
                   }
                 })
           ],
@@ -820,14 +735,15 @@ class _DetailState extends State<Detail> {
   //       localhost:9090//molex/scheduler/get-req-material-detail-from?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445
   //       localhost:9090//molex/scheduler/get-req-material-detail-to?machId=EMU-m/c-006C&fgNo=367680784&schdId=1223445"
 
-  Widget process(String p1, String p2, String p3, String p4, String p5) {
+  Widget process(
+      String p1, String p2, String p3, String p4, String p5, double width) {
     return Material(
       elevation: 10,
       shadowColor: Colors.grey[100],
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 2.0),
-        height: 80,
-        width: MediaQuery.of(context).size.width * 0.325,
+        height: 91,
+        width: MediaQuery.of(context).size.width * width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Colors.white,
@@ -846,7 +762,7 @@ class _DetailState extends State<Detail> {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(1.0),
+              padding: const EdgeInsets.all(0.0),
               child: Container(
                 // width: MediaQuery.of(context).size.width * 0.31,
                 child: Column(
@@ -876,7 +792,7 @@ class _DetailState extends State<Detail> {
                       style: TextStyle(fontSize: 9),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.320,
+                      width: MediaQuery.of(context).size.width * width,
                       child: Text(
                         p4,
                         textAlign: TextAlign.center,
@@ -901,188 +817,6 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-
-  Widget partialCompletion() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Partial Completion Reason',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 12,
-                    ))
-              ]),
-            ),
-            Row(
-              children: [
-                Container(height: 30, width: 300, child: TextField()),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          quantitycell("First Piece & Patrol", 10),
-                          quantitycell("Spare Changeover", 10),
-                          quantitycell("Crimp Height Setting", 10),
-                          quantitycell("Resetting CFM Program	", 10),
-                          quantitycell("New Program Setting CVM/CFM", 10),
-                          quantitycell("Air Pressure Low", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Applicator Changeover	", 10),
-                          quantitycell("Sink Height Adjustment", 10),
-                          quantitycell("Feeding Adjustment	", 10),
-                          quantitycell("Applicator Position Setting	", 10),
-                          quantitycell("Validation", 10),
-                          quantitycell("CFA Crimping Fault", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Length Changeover", 10),
-                          quantitycell("Terminal Bend	", 10),
-                          quantitycell("Cut Off Burr Issue", 10),
-                          quantitycell("CVM Error Correction", 10),
-                          quantitycell("Cable Feeding Front Unit Problem", 10),
-                          quantitycell("Drift Limit Reached	", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Terminal Changeover", 10),
-                          quantitycell("Terminal Twist		", 10),
-                          quantitycell("Extrusion Burr Issue", 10),
-                          quantitycell("CFM Error", 10),
-                          quantitycell("Supplier Taken for Maintenance", 10),
-                          quantitycell("Roller Changeover", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Coil Changeover	", 10),
-                          quantitycell("Bellmouth Adjustment	", 10),
-                          quantitycell("Camera Setting", 10),
-                          quantitycell("CVM Error	", 10),
-                          quantitycell("Terminal Twist", 10),
-                          quantitycell("Length Variations		", 10),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          quantitycell("Last Piece", 10),
-                          quantitycell("Curling Adjustment	", 10),
-                          quantitycell("Wire Feeding Adjustment", 10),
-                          quantitycell("CVM Program Reloading	", 10),
-                          quantitycell("Sensor Not Working", 10),
-                          quantitycell("Preventive Maintenance", 10),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 95.0),
-                  child: Container(
-                    child: Center(
-                      child: Container(
-                        height: 45,
-                        width: 250,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green[200];
-                                  return Colors.green[
-                                      500]; // Use the component's default.
-                                },
-                              ),
-                            ),
-                            child: Text("Accept and Continue Process"),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProcessPage()),
-                              );
-                            }),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 50,
-                    child: Center(
-                      child: Container(
-                        height: 45,
-                        width: 250,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green[200];
-                                  return Colors.green[
-                                      500]; // Use the component's default.
-                                },
-                              ),
-                            ),
-                            child: Text("Save & End Process"),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Bin()),
-                              );
-                            }),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget quantitycell(String title, int quantity) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 6.0),
@@ -1245,19 +979,7 @@ class _DetailState extends State<Detail> {
             if (snapshot.hasData) {
               FgDetails fgDetail = snapshot.data;
               return Container(
-                decoration: BoxDecoration(
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: Colors.grey.withOpacity(.5),
-                    //     blurRadius: 20.0, // soften the shadow
-                    //     spreadRadius: 0.0, //extend the shadow
-                    //     offset: Offset(
-                    //       3.0, // Move to right 10  horizontally
-                    //       3.0, // Move to bottom 10 Vertically
-                    //     ),
-                    //   )
-                    // ],
-                    ),
+                decoration: BoxDecoration(),
                 child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 40,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
 
@@ -10,6 +11,8 @@ enum Status {
 }
 
 class ScanBundleP3 extends StatefulWidget {
+  PreparationSchedule schedule;
+  ScanBundleP3({this.schedule});
   @override
   _ScanBundleP3State createState() => _ScanBundleP3State();
 }
@@ -25,18 +28,37 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
   TextEditingController _scanIdController = new TextEditingController();
   Status status = Status.scan;
 
-  TextEditingController bundleQtyController= new TextEditingController();
+  TextEditingController bundleQtyController = new TextEditingController();
 
-  TextEditingController passedQtyController= new TextEditingController();
+  TextEditingController passedQtyController = new TextEditingController();
 
-  TextEditingController rejectedQtyController= new TextEditingController();
-
+  TextEditingController rejectedQtyController = new TextEditingController();
+  TextEditingController cableDamageController = new TextEditingController();
+  TextEditingController cablecrosscutController = new TextEditingController();
+  TextEditingController stripLengthController = new TextEditingController();
+  TextEditingController stripNickController = new TextEditingController();
+  TextEditingController unsheathingLengthController =
+      new TextEditingController();
+  TextEditingController drainWirecutController = new TextEditingController();
+  TextEditingController trimmingCableWrongController =
+      new TextEditingController();
+  TextEditingController trimmingLengthlessController =
+      new TextEditingController();
+  TextEditingController hstImproperShrinkingController =
+      new TextEditingController();
+  TextEditingController hstDamageController = new TextEditingController();
+  TextEditingController bootReverseController = new TextEditingController();
+  TextEditingController wrongBootInsertionController =
+      new TextEditingController();
+  TextEditingController bootDamageController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     return main(status);
   }
 
   Widget main(Status status) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     switch (status) {
       case Status.scan:
         return scanBundlePop();
@@ -48,89 +70,6 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
         return Container();
     }
   }
-  // Widget scanbundlepop() {
-  //   return Container(
-  //     width: MediaQuery.of(context).size.width * 0.3,
-  //     height: 150,
-  //     decoration: BoxDecoration(
-  //       borderRadius: new BorderRadius.circular(20.0),
-  //       color: Colors.grey[100],
-  //     ),
-  //     child: Center(
-  //       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-  //         Padding(
-  //           padding: const EdgeInsets.all(8.0),
-  //           child: Container(
-  //             height: 50,
-  //             width: MediaQuery.of(context).size.width * 0.3 * 0.7,
-  //             child: TextField(
-  //               // controller: scanBundleController,
-  //               // focusNode: scanFocus,
-  //               autofocus: true,
-  //               onTap: () {
-  //                 SystemChannels.textInput.invokeMethod('TextInput.hide');
-  //               },
-  //               decoration: new InputDecoration(
-  //                 hintText: "Scan Bundle",
-  //                 fillColor: Colors.white,
-  //                 border: new OutlineInputBorder(
-  //                   borderRadius: new BorderRadius.circular(7.0),
-  //                   borderSide: new BorderSide(),
-  //                 ),
-  //                 //fillColor: Colors.green
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Padding(
-  //               padding: const EdgeInsets.all(8.0),
-  //               child: Container(
-  //                 child: ElevatedButton(
-  //                   style: ButtonStyle(
-  //                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
-  //                       (Set<MaterialState> states) {
-  //                         if (states.contains(MaterialState.pressed))
-  //                           return Colors.red[500];
-  //                         return Colors
-  //                             .red[900]; // Use the component's default.
-  //                       },
-  //                     ),
-  //                   ),
-  //                   onPressed: () {
-  //                     setState(() {
-  //                       next = !next;
-  //                     });
-  //                   },
-  //                   child: Text('Scan Bundle'),
-  //                 ),
-  //               ),
-  //             ),
-  //             Padding(
-  //               padding: const EdgeInsets.all(8.0),
-  //               child: Container(
-  //                   child: ElevatedButton(
-  //                 style: ButtonStyle(
-  //                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
-  //                     (Set<MaterialState> states) {
-  //                       if (states.contains(MaterialState.pressed))
-  //                         return Colors.grey[200];
-  //                       return Colors.grey[100]; // Use the component's default.
-  //                     },
-  //                   ),
-  //                 ),
-  //                 onPressed: () {},
-  //                 child: Text('999', style: TextStyle(color: Colors.black)),
-  //               )),
-  //             ),
-  //           ],
-  //         )
-  //       ]),
-  //     ),
-  //   );
-  // }
 
   Widget scanBundlePop() {
     return Container(
@@ -215,58 +154,170 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
     return Row(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.55,
+          width: MediaQuery.of(context).size.width * 0.65,
+          height: MediaQuery.of(context).size.height * 0.55,
           decoration: BoxDecoration(
             borderRadius: new BorderRadius.circular(20.0),
             color: Colors.grey[100],
           ),
-          child: Center(
+          child: Container(
+              width: MediaQuery.of(context).size.width * 0.65,
               child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Bundle Id - BUN123412129',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                quantity('Bundle Qty', 10,bundleQtyController),
-                quantity('Passed Qty', 10,passedQtyController),
-                quantity('Rejected Qty', 10,rejectedQtyController),
-              ]),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                    child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed))
-                          return Colors.green[300];
-                        return Colors
-                            .green[800]; // Use the component's default.
-                      },
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: feild(
+                            heading: "Bundle Id",
+                            value: "${_scanIdController.text}",
+                            width: 0.12),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: feild(
+                            heading: "Bundle Qty",
+                            value: "${widget.schedule.bundleQuantity}",
+                            width: 0.15),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: feild(
+                            heading: "Rejected Qty",
+                            value: "${widget.schedule.bundleQuantity}",
+                            width: 0.15),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(children: [
+                              quantity(
+                                  'Cable Damage', 10, cableDamageController),
+                              quantity('Cable Cross Cut', 10,
+                                  cablecrosscutController),
+                              quantity(' Strip Length less / More', 10,
+                                  stripLengthController),
+                              quantity('Strip Nick mark / blade mark', 10,
+                                  stripNickController),
+                            ]),
+                            Column(children: [
+                              quantity('Unsheathing Length less / More', 10,
+                                  unsheathingLengthController),
+                              quantity(
+                                  'Drain Wire Cut', 10, drainWirecutController),
+                              quantity('Trimming cable Wrong', 10,
+                                  trimmingCableWrongController),
+                              quantity('Trimming Length less / More', 10,
+                                  trimmingLengthlessController),
+                            ]),
+                            Column(children: [
+                              quantity('HST Improper Shrinking', 10,
+                                  hstImproperShrinkingController),
+                              quantity('HST Damage', 10, hstDamageController),
+                              quantity(
+                                  'Boot Reverse', 10, bootReverseController),
+                              quantity('Boot Damage', 10, bootDamageController),
+                            ]),
+                            Column(children: [
+                              quantity('Wrong Boot Insertion', 10,
+                                  wrongBootInsertionController),
+                            ]),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      status = Status.scan;
-                      next = !next;
-                    });
-                  },
-                  child: Text('Save and Scan next',
-                      style: TextStyle(color: Colors.white)),
-                )),
-              ),
-            ],
-          )),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed))
+                              return Colors.green[300];
+                            return Colors
+                                .green[800]; // Use the component's default.
+                          },
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          Future.delayed(
+                            const Duration(milliseconds: 50),
+                            () {
+                              SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                            },
+                          );
+                          _scanIdController.clear();
+
+                          status = Status.scan;
+                          next = !next;
+                        });
+                      },
+                      child: Text('Save and Scan next',
+                          style: TextStyle(color: Colors.white)),
+                    )),
+                  ),
+                ],
+              )),
         ),
         Container(
             padding: EdgeInsets.all(50),
             child: Center(child: keypad(mainController))),
       ],
+    );
+  }
+
+  Widget feild({String heading, String value, double width}) {
+    width = MediaQuery.of(context).size.width * width;
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Container(
+        // color: Colors.red[100],
+        width: width,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  heading,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey[500],
+                    fontWeight: FontWeight.normal,
+                  )),
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1.0),
+              child: Row(
+                children: [
+                  Text(
+                    value ?? '',
+                    style: GoogleFonts.poppins(
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -386,9 +437,10 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
     );
   }
 
-  Widget quantity(String title, int quantity,TextEditingController textEditingController) {
+  Widget quantity(
+      String title, int quantity, TextEditingController textEditingController) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 5.0),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.15,
         child: Row(
@@ -396,12 +448,12 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
           children: [
             Container(
               height: 35,
-              width: 120,
+              width: 140,
               child: TextField(
                 controller: textEditingController,
-                style: TextStyle(fontSize: 12),
-                onTap: (){
-                    setState(() {
+                style: TextStyle(fontSize: 13),
+                onTap: () {
+                  setState(() {
                     _output = '';
                     mainController = textEditingController;
                   });
@@ -410,14 +462,13 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                 decoration: new InputDecoration(
                   labelText: title,
                   fillColor: Colors.white,
-                  labelStyle: TextStyle(fontSize: 15),
+                  labelStyle: TextStyle(fontSize: 13),
                   border: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(5.0),
                     borderSide: new BorderSide(),
                   ),
                   //fillColor: Colors.green
                 ),
-
                 //fillColor: Colors.green
               ),
             ),
