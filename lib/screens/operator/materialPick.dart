@@ -695,6 +695,7 @@ class _MaterialPickState extends State<MaterialPick> {
                         child: DataTable(
                             columns: const <DataColumn>[
                               DataColumn(
+                               
                                 label: Text(
                                   'Part No.',
                                   style: TextStyle(fontSize: 12),

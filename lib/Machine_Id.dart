@@ -88,9 +88,23 @@ class _MachineIdState extends State<MachineId> {
                     child: Column(children: [
                       Lottie.asset('assets/lottie/scan-barcode.json',
                           width: 320, fit: BoxFit.cover),
-                      Text(
-                        'Scan Machine ${machineId ?? ""}',
-                        style: TextStyle(color: Colors.grey, fontSize: 20),
+                      GestureDetector(
+                        onTap: () {
+                          MachineDetails machineDetails1 =
+                              new MachineDetails(machineNumber: machineId);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Homepage(
+                                      userId: widget.employee.empId,
+                                      machine: machineDetails1,
+                                    )),
+                          );
+                        },
+                        child: Text(
+                          'Scan Machine ${machineId ?? ""}',
+                          style: TextStyle(color: Colors.grey, fontSize: 20),
+                        ),
                       ),
                       SizedBox(height: 20),
                       Container(
@@ -161,7 +175,7 @@ class _MachineIdState extends State<MachineId> {
                                       MaterialPageRoute(
                                           builder: (context) => Homepage(
                                                 userId: widget.employee.empId,
-                                               machine: machineDetails,
+                                                machine: machineDetails,
                                               )),
                                     );
                                     break;
@@ -250,7 +264,7 @@ class _MachineIdState extends State<MachineId> {
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontWeight: FontWeight.w500,
-                        fontSize: 22,
+                        fontSize: 18,
                       ),
                     ),
                     Text(
@@ -258,22 +272,28 @@ class _MachineIdState extends State<MachineId> {
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                        fontSize: 16,
                       ),
                     ),
                   ],
                 ),
                 SizedBox(width: 15),
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.all(Radius.circular(100))),
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 40,
+                Material(
+                  elevation: 5,
+                  shadowColor: Colors.grey[200],
+                  shape:  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100.0)),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(100))),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 35,
+                    ),
                   ),
                 )
               ],

@@ -138,7 +138,7 @@ class _ProcessPageState extends State<ProcessPage> {
                             ),
                           ),
                           Text(
-                            widget.machine ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -235,28 +235,6 @@ class _DetailState extends State<Detail> {
       rightside = name;
     });
   }
-  // Future<void> _print() async {
-  //   String printerStatus;
-
-  //   try {
-  //     final String result = await platform.invokeMethod('Print');
-  //     printerStatus = 'Printer status : $result % .';
-  //   } on PlatformException catch (e) {
-  //     printerStatus = "Failed to get printer: '${e.message}'.";
-  //   }
-  //   Fluttertoast.showToast(
-  //       msg: "$printerStatus",
-  //       toastLength: Toast.LENGTH_LONG,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0);
-
-  //   setState(() {
-  //     _printerStatus = printerStatus;
-  //   });
-  // }
   Future<void> _print({
     String ipaddress,
     String bq,
@@ -328,7 +306,7 @@ class _DetailState extends State<Detail> {
                     Process(
                       type: _chosenValue,
                       schedule: widget.schedule,
-                      machineId: widget.machine.machineNumber,
+                      machine: widget.machine,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(1.0),
@@ -511,8 +489,8 @@ class _DetailState extends State<Detail> {
                               } else if (rightside == "label") {
                                 return GenerateLabel(
                                   schedule: widget.schedule,
-                                  machineId: widget.machine ?? "",
-                                  userId: widget.userId ?? "",
+                                  machine: widget.machine ,
+                                  userId: widget.userId,
                                 );
                               } else if (rightside == "complete") {
                                 return FullyComplete(
@@ -1092,8 +1070,8 @@ class _DetailState extends State<Detail> {
 class Process extends StatefulWidget {
   final String type;
   final Schedule schedule;
-  final String machineId;
-  Process({this.type, this.schedule, this.machineId});
+  final MachineDetails machine;
+  Process({this.type, this.schedule, this.machine});
   @override
   _ProcessState createState() => _ProcessState();
 }
@@ -1110,7 +1088,7 @@ class _ProcessState extends State<Process> {
     process.color = widget.schedule.color;
     process.finishedGoodsNumber = widget.schedule.finishedGoodsNumber ?? "0";
     process.lengthSpecificationInmm = widget.schedule.length ?? "0";
-    process.machineIdentification = widget.machineId;
+    process.machineIdentification = widget.machine.machineNumber;
     process.orderIdentification = widget.schedule.orderId ?? "0";
     //TODO: schedule id is giving empt string and not null
     // process.scheduledIdentification = int.parse(widget.schedule.scheduledId??"0");

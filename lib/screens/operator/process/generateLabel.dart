@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/generateLabel_model.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
 import 'package:molex/service/apiService.dart';
@@ -16,9 +17,9 @@ enum Status {
 
 class GenerateLabel extends StatefulWidget {
   Schedule schedule;
-  String machineId;
+  MachineDetails machine;
   String userId;
-  GenerateLabel({this.machineId, this.schedule, this.userId});
+  GenerateLabel({this.machine, this.schedule, this.userId});
   @override
   _GenerateLabelState createState() => _GenerateLabelState();
 }
@@ -166,7 +167,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
     transferBundle.scheduledQuantity =
         int.parse(widget.schedule.scheduledQuantity);
     transferBundle.orderIdentification = int.parse(widget.schedule.orderId);
-    transferBundle.machineIdentification = widget.machineId;
+    transferBundle.machineIdentification = widget.machine.machineNumber;
     transferBundle.scheduledId = widget.schedule.scheduledId == ''
         ? 0
         : int.parse(widget.schedule.scheduledId);
@@ -233,7 +234,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
         return generateLabel();
         break;
       case Status.generateLabel:
-           clear();
+         
         return rejectioncase();
         break;
       case Status.scanBin:
@@ -789,7 +790,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           postGenerateLabel = new PostGenerateLabel();
                           postGenerateLabel.cablePartNumber = widget.schedule.cablePartNumber;
                           postGenerateLabel.finishedGoods = widget.schedule.finishedGoodsNumber;
-                          postGenerateLabel.machineIdentification = widget.machineId;
+                          postGenerateLabel.machineIdentification = widget.machine.machineNumber;
                           postGenerateLabel.terminalBend = terminalBendController.text;
                           postGenerateLabel.terminalDamage = terminalDamangeController.text;
                           apiService.postGeneratelabel(postGenerateLabel, bundleQty.text).then((value) {
@@ -809,7 +810,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                               terminalfrom: "${response.data.generateLabel.terminalFrom}",
                               terminalto: "${response.data.generateLabel.terminalTo}");
                             }
-
+  clear();
                           });
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;
