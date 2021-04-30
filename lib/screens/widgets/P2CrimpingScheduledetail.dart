@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
+import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/service/apiService.dart';
 
 class P2ScheduleDetailWIP extends StatefulWidget {
-  Schedule schedule;
+  CrimpingSchedule schedule;
 
   P2ScheduleDetailWIP({this.schedule});
   @override
@@ -113,32 +114,32 @@ class _P2ScheduleDetailWIPState extends State<P2ScheduleDetailWIP> {
             ),
             feild(
                 heading: "Order Id",
-                value: widget.schedule.orderId,
+                value: '${widget.schedule.purchaseOrder}',
                 width: 0.1),
             feild(
                 heading: "FG Part",
-                value: widget.schedule.finishedGoodsNumber,
+                value: '${widget.schedule.finishedGoods}',
                 width: 0.1),
             feild(
                 heading: "Schedule ID",
-                value: widget.schedule.scheduledId,
+                value: '${widget.schedule.scheduleId}',
                 width: 0.1),
             feild(
                 heading: "Cable Part No.",
-                value: widget.schedule.cablePartNumber,
+                value: '${widget.schedule.cablePartNo}',
                 width: 0.12),
             feild(
                 heading: "Process",
-                value: widget.schedule.process,
+                value: '${widget.schedule.process}',
                 width: 0.15),
             feild(
                 heading: "Cut Length",
-                value: widget.schedule.length,
+                value: '${widget.schedule.length}',
                 width: 0.08),
-            feild(heading: "Color", value: widget.schedule.color, width: 0.05),
+            feild(heading: "Color", value: '${widget.schedule.wireColour}', width: 0.05),
             feild(
                 heading: "Scheduled Qty",
-                value: widget.schedule.scheduledQuantity,
+                value: '${widget.schedule.scheduledQuantity}',
                 width: 0.1),
             feild(heading: "Schedule", value: "10:00 - 11:00", width: 0.1)
           ],
@@ -176,9 +177,9 @@ class _P2ScheduleDetailWIPState extends State<P2ScheduleDetailWIP> {
         padding: const EdgeInsets.all(0.0),
         child: FutureBuilder(
             future:
-                apiService.getFgDetails(widget.schedule.finishedGoodsNumber),
+                apiService.getFgDetails(widget.schedule.finishedGoods),
             builder: (context, snapshot) {
-              print('fg number ${widget.schedule.finishedGoodsNumber}');
+              print('fg number ${widget.schedule.finishedGoods}');
               FgDetails fgDetail = snapshot.data;
               if (snapshot.hasData) {
                 return Container(

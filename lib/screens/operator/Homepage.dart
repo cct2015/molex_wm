@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/materialPick.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-
+// Process 1 Auto Cut and Crimp
 class Homepage extends StatefulWidget {
   String userId;
-  String machineId;
-  Homepage({this.userId, this.machineId});
+  MachineDetails machine;
+  Homepage({this.userId, this.machine});
   @override
   _HomepageState createState() => _HomepageState();
 }
@@ -32,7 +33,7 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     apiService = new ApiService();
     apiService.getScheduelarData(
-        machId: widget.machineId, type: type == 0 ? "A" : "B");
+        machId: widget.machine.machineNumber, type: type == 0 ? "A" : "B");
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
     schedule = Schedule(
@@ -249,7 +250,7 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -270,7 +271,7 @@ class _HomepageState extends State<Homepage> {
                     builder: (context) => NavPage(
                           schedule: schedule,
                           userId: widget.userId,
-                          machineId: widget.machineId,
+                          machineId: widget.machine.machineNumber,
                         )),
               );
             },
@@ -319,7 +320,7 @@ class _HomepageState extends State<Homepage> {
             SchudleTable(
               schedule: schedule,
               userId: widget.userId,
-              machineId: widget.machineId,
+              machineId: widget.machine.machineNumber,
               type: type == 0 ? "A" : "B",
             ),
           ],

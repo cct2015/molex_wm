@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator%202/materialPick2.dart';
@@ -373,10 +374,12 @@ class SchudleTable extends StatefulWidget {
 
 class _SchudleTableState extends State<SchudleTable> {
   List<Schedule> rowList = [];
-
   List<DataRow> datarows = [];
+  ApiService apiService;
+  List<CrimpingSchedule> crimpingSchedule;
   @override
   void initState() {
+    apiService = new ApiService();
     rowList.add(
       Schedule(
           orderId: "846478041",
@@ -403,15 +406,24 @@ class _SchudleTableState extends State<SchudleTable> {
           children: [
             tableHeading(),
             Container(
-              // height: double.parse("${rowList.length*60}"),
-              child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: rowList.length,
-                  itemBuilder: (context, index) {
-                    return buildDataRow(schedule: rowList[index], c: index);
-                  }),
-            ),
+                // height: double.parse("${rowList.length*60}"),
+                child: FutureBuilder(
+              future: apiService.getCrimpingSchedule(scheduleType: "A",machineNo: widget.machineId),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: rowList.length,
+                      itemBuilder: (context, index) {
+                        return buildDataRow(
+                            schedule: snapshot.data[index], c: index);
+                      });
+                }else{
+                  return Container();
+                }
+              },
+            )),
           ],
         ),
       ),
@@ -460,7 +472,7 @@ class _SchudleTableState extends State<SchudleTable> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({CrimpingSchedule schedule, int c}) {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
@@ -485,8 +497,8 @@ class _SchudleTableState extends State<SchudleTable> {
             color: schedule.scheduledStatus == "Completed"
                 ? Colors.green
                 : schedule.scheduledStatus == "Pending"
-                    ? Colors.red
-                    : Colors.green[100],
+                    ?  Colors.orange[100]
+                    : Colors.blue[100],
             width: 5,
           )),
         ),
@@ -494,28 +506,28 @@ class _SchudleTableState extends State<SchudleTable> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell(schedule.orderId, 0.1),
+            cell('${schedule.purchaseOrder}', 0.1),
             //Fg Part
-            cell(schedule.finishedGoodsNumber, 0.1),
+            cell('${schedule.finishedGoods}', 0.1),
             //Schudule ID
-            cell(schedule.scheduledId, 0.1),
+            cell('${schedule.scheduleId}', 0.1),
             //Cable Part
-            cell(schedule.cablePartNumber, 0.1),
+            cell('${schedule.cablePartNo}', 0.1),
             //Process
-            cell(schedule.process, 0.07),
+            cell('${schedule.process}', 0.07),
             // Cut length
-            cell(schedule.length, 0.07),
+            cell('${schedule.length}', 0.07),
             //Color
-            cell(schedule.color, 0.04),
+            cell('${schedule.wireColour}', 0.04),
             //Bin Id
-            cell("BIN8712122", 0.09),
+            cell("${schedule.binIdentification}", 0.09),
             // Total bundles
-            cell("30", 0.05),
+            cell("${schedule.bundleIdentificationCount}", 0.05),
             //Total Bundle Qty
-            cell("100", 0.07),
+            cell("${schedule.bundleQuantityTotal}", 0.07),
 
             //Status
-            cell(schedule.scheduledStatus, 0.09),
+            cell("${schedule.scheduledStatus}", 0.09),
             //Action
             Container(
               width: MediaQuery.of(context).size.width * 0.10,
@@ -548,7 +560,7 @@ class _SchudleTableState extends State<SchudleTable> {
                           );
                         },
                         child: Container(
-                            child: schedule.scheduledStatus == "Not Completed"
+                           child: schedule.scheduledStatus == "Allocated"|| schedule.scheduledStatus == "Open"||schedule.scheduledStatus == ""||schedule.scheduledStatus == null
                                 ? Text("Accept")
                                 : schedule.scheduledStatus == "Pending"
                                     ? Text('Continue')

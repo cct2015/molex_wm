@@ -117,28 +117,28 @@ class _P1ScheduleDetailWIPState extends State<P1ScheduleDetailWIP> {
                 width: 0.1),
             feild(
                 heading: "FG Part",
-                value: widget.schedule.finishedGoodsNumber,
+                value: "${widget.schedule.finishedGoodsNumber}",
                 width: 0.1),
             feild(
                 heading: "Schedule ID",
-                value: widget.schedule.scheduledId,
+                value: "${widget.schedule.scheduledId}",
                 width: 0.1),
             feild(
                 heading: "Cable Part No.",
-                value: widget.schedule.cablePartNumber,
+                value: "${widget.schedule.cablePartNumber}",
                 width: 0.12),
             feild(
                 heading: "Process",
-                value: widget.schedule.process,
+                value: "${widget.schedule.process}",
                 width: 0.15),
             feild(
                 heading: "Cut Length",
-                value: widget.schedule.length,
+                value: "${widget.schedule.length}",
                 width: 0.08),
-            feild(heading: "Color", value: widget.schedule.color, width: 0.05),
+            feild(heading: "Color", value: "${widget.schedule.color}", width: 0.05),
             feild(
                 heading: "Scheduled Qty",
-                value: widget.schedule.scheduledQuantity,
+                value: "${widget.schedule.scheduledQuantity}",
                 width: 0.1),
             feild(heading: "Schedule", value: "10:00 - 11:00", width: 0.1)
           ],
@@ -190,17 +190,17 @@ class _P1ScheduleDetailWIPState extends State<P1ScheduleDetailWIP> {
                         children: [
                           feild(
                               heading: "FG Description",
-                              value: fgDetail.fgDescription,
+                              value: "${fgDetail.fgDescription}",
                               width: 0.33),
                           feild(
                               heading: "FG Scheduled Date",
-                              value: fgDetail.fgScheduleDate,
+                              value: "${fgDetail.fgScheduleDate}",
                               width: 0.12),
                           feild(
                               heading: "Customer",
-                              value: fgDetail.customer,
+                              value: "${fgDetail.customer}",
                               width: 0.15),
-                          feild(heading: "Drg Rev", value:fgDetail.drgRev, width: 0.05),
+                          feild(heading: "Drg Rev", value:"${fgDetail.drgRev}", width: 0.05),
                           feild(
                               heading: "Cable Serial No",
                               value: fgDetail.cableSerialNo.toString() ,

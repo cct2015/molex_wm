@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
+import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%202/process/FullyCompleteP2.dart';
@@ -18,7 +19,7 @@ import 'package:molex/service/apiService.dart';
 class ProcessPage2 extends StatefulWidget {
   final String userId;
   final String machineId;
-  final Schedule schedule;
+  final CrimpingSchedule schedule;
   ProcessPage2({this.machineId, this.userId, this.schedule});
   @override
   _ProcessPage2State createState() => _ProcessPage2State();
@@ -195,7 +196,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
 class Detail extends StatefulWidget {
   String userId;
   String machineId;
-  Schedule schedule;
+  CrimpingSchedule schedule;
   Detail({this.schedule, this.machineId, this.userId});
   @override
   _DetailState createState() => _DetailState();
@@ -1307,8 +1308,8 @@ class _DetailState extends State<Detail> {
               height: 91,
               child: FutureBuilder(
                   future: apiService.getCableTerminalA(
-                      cablepartno: widget.schedule.cablePartNumber ??
-                          widget.schedule.finishedGoodsNumber),
+                      cablepartno: widget.schedule.cablePartNo ??
+                          widget.schedule.finishedGoods),
                   builder: (context, snapshot) {
                     CableTerminalA terminalA = snapshot.data;
                     if (snapshot.hasData) {
@@ -1335,8 +1336,8 @@ class _DetailState extends State<Detail> {
             ),
             FutureBuilder(
                 future: apiService.getCableDetails(
-                    fgpartNo: widget.schedule.finishedGoodsNumber,
-                    cablepartno: widget.schedule.cablePartNumber ?? "0"),
+                    fgpartNo: widget.schedule.finishedGoods,
+                    cablepartno: widget.schedule.cablePartNo ?? "0"),
                 builder: (context, snapshot) {
                   CableDetails cableDetail = snapshot.data;
                   if (snapshot.hasData) {
@@ -1355,8 +1356,8 @@ class _DetailState extends State<Detail> {
                 }),
             FutureBuilder(
                 future: apiService.getCableTerminalB(
-                    cablepartno: widget.schedule.cablePartNumber ??
-                        widget.schedule.finishedGoodsNumber),
+                    cablepartno: widget.schedule.cablePartNo ??
+                        widget.schedule.finishedGoods),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     CableTerminalB cableTerminalB = snapshot.data;

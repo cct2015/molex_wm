@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:molex/models/location_bin.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 
 class Location extends StatefulWidget {
   String userId;
@@ -43,9 +44,9 @@ class _LocationState extends State<Location> {
 
   @override
   Widget build(BuildContext context) {
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
-          SystemChrome.setEnabledSystemUIOverlays([]);
-    
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    SystemChrome.setEnabledSystemUIOverlays([]);
+
     return Scaffold(
         key: _scaffoldKey1,
         appBar: AppBar(
@@ -450,9 +451,7 @@ class _LocationState extends State<Location> {
                             SystemChannels.textInput
                                 .invokeMethod('TextInput.hide');
                           },
-                          onSubmitted: (value) {
-                           
-                          },
+                          onSubmitted: (value) {},
                           onChanged: (value) {
                             setState(() {
                               binId = value;
@@ -486,12 +485,12 @@ class _LocationState extends State<Location> {
                       'Scan Bin',
                     ),
                     onPressed: () {
-                       setState(() {
-                              listLocation.add(LocationBin(
-                                  locationId: locationId, binId: binId));
-                              _binController.clear();
-                              binId = null;
-                            });
+                      setState(() {
+                        listLocation.add(
+                            LocationBin(locationId: locationId, binId: binId));
+                        _binController.clear();
+                        binId = null;
+                      });
                     },
                   )),
             ],
@@ -570,8 +569,8 @@ class _LocationState extends State<Location> {
                   .map(
                     (e) => DataRow(cells: <DataCell>[
                       DataCell(Text("${a++}")),
-                      DataCell(Text(e.locationId??'')),
-                      DataCell(Text(e.binId??'')),
+                      DataCell(Text(e.locationId ?? '')),
+                      DataCell(Text(e.binId ?? '')),
                       DataCell(
                         IconButton(
                           icon: Icon(
@@ -636,20 +635,23 @@ class _LocationState extends State<Location> {
                         (states) => Colors.green),
                   ),
                   onPressed: () {
+                    ApiService apiService = new ApiService();
                     Future.delayed(
                       const Duration(milliseconds: 50),
                       () {
                         SystemChannels.textInput.invokeMethod('TextInput.hide');
                       },
                     );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Homepage(
-                                userId: widget.userId,
-                                machineId: widget.machineId,
-                              )),
-                    );
+                    apiService
+                        .getmachinedetails(widget.machineId)
+                        .then((value) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Homepage(
+                                userId: widget.userId, machine: value[0]),
+                          ));
+                    });
                   },
                   child: Text('Confirm Transfer')),
             ],

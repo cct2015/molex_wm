@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class MaterialPickOp2 extends StatefulWidget {
-  final Schedule schedule;
+  final CrimpingSchedule schedule;
   final String userId;
   final String machineId;
   MaterialPickOp2({this.userId, this.machineId, this.schedule});
@@ -850,7 +851,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
     );
   }
 
-  Widget buildDataRow({Schedule schedule, int c}) {
+  Widget buildDataRow({CrimpingSchedule schedule, int c}) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cell(String name, double d) {
@@ -888,20 +889,20 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell(schedule.orderId, 0.1),
+            cell(schedule.purchaseOrder, 0.1),
             //Fg Part
-            cell(schedule.finishedGoodsNumber, 0.1),
+            cell(schedule.finishedGoods, 0.1),
             //Schudule ID
-            cell(schedule.scheduledId, 0.1),
+            cell(schedule.scheduleId, 0.1),
 
             //Cable Part
-            cell(schedule.cablePartNumber, 0.1),
+            cell(schedule.cablePartNo, 0.1),
             //Process
             cell(schedule.process, 0.1),
             // Cut length
             cell(schedule.length, 0.1),
             //Color
-            cell(schedule.color, 0.1),
+            cell(schedule.wireColour, 0.1),
             //Scheduled Qty
             cell(schedule.scheduledQuantity, 0.1),
             //Schudule

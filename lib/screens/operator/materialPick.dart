@@ -927,12 +927,8 @@ class _MaterialPickState extends State<MaterialPick> {
       builder: (BuildContext context) {
         return Center(
           child: AlertDialog(
-            title: Center(child: Text('Start Process')),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[Center(child: Text('Proceed to Process'))],
-              ),
-            ),
+            title: Center(child: Text('Proceed to Process')),
+          
             actions: <Widget>[
               ElevatedButton(
                   style: ButtonStyle(

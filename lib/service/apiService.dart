@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
+import 'package:molex/model_api/operator2/scanBundle_model.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
@@ -26,10 +28,9 @@ import 'package:molex/model_api/visualInspection/saveVIBundleQty.dart';
 import 'package:molex/model_api/visualInspection/updateBundleStatus_model.dart';
 import 'package:molex/model_api/visualInspection/updatebundleStsScheStartTracking_mode.dart';
 
-
 class ApiService {
-  String baseUrl = "http://justerp.in:8080/wipts/";
-  // String baseUrl = "http://10.221.46.8:8080/wipts/";
+  // String baseUrl = "http://justerp.in:8080/wipts/";
+  String baseUrl = "http://10.221.46.8:8080/wipts/";
   // String baseUrl = "http://192.168.1.252:8080/wipts/";
 
   // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
@@ -62,8 +63,8 @@ class ApiService {
 
   Future<List<Schedule>> getScheduelarData({String machId, String type}) async {
     print("called api");
-      print("called $machId");
-        print("called $type");
+    print("called $machId");
+    print("called $type");
     // var url = Uri.parse(baseUrl +
     //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
     var url = Uri.parse(baseUrl +
@@ -133,9 +134,9 @@ class ApiService {
         GetRawMaterial getrawMaterial1 = getRawMaterialFromJson(response1.body);
 
         GetRawMaterial getrawMaterial2 = getRawMaterialFromJson(response2.body);
-              print(response2.body);
+        print(response2.body);
         GetRawMaterial getrawMaterial3 = getRawMaterialFromJson(response3.body);
-             print(response3.body);
+        print(response3.body);
         List<RawMaterial> rawmaterialList1 =
             getrawMaterial1.data.rawMaterialDetails;
         List<RawMaterial> rawmaterialList2 =
@@ -253,7 +254,7 @@ class ApiService {
           getCableTerminalB.data.findCableTerminalBDto;
       return cableTerminalB;
     } else {
-       CableTerminalB cableTerminalB = new CableTerminalB();
+      CableTerminalB cableTerminalB = new CableTerminalB();
       return cableTerminalB;
     }
   }
@@ -329,14 +330,18 @@ class ApiService {
   //BundleQuantity api Json missing
   //TODO
   // Generate label request model POst method
-  Future<ResponseGenerateLabel> postGeneratelabel(PostGenerateLabel postGenerateLabel,String bundleQuantiy) async {
-    var url = Uri.parse(baseUrl + 'molex/wccr/generate-label/bdQty=$bundleQuantiy');
-    print('body generate label :${postGenerateLabelToJson(postGenerateLabel)} ');
-    var response =
-        await http.post(url, body: postGenerateLabelToJson(postGenerateLabel),headers: headerList);
-        print("response post generate label ${response.statusCode}");
+  Future<ResponseGenerateLabel> postGeneratelabel(
+      PostGenerateLabel postGenerateLabel, String bundleQuantiy) async {
+    var url =
+        Uri.parse(baseUrl + 'molex/wccr/generate-label/bdQty=$bundleQuantiy');
+    print(
+        'body generate label :${postGenerateLabelToJson(postGenerateLabel)} ');
+    var response = await http.post(url,
+        body: postGenerateLabelToJson(postGenerateLabel), headers: headerList);
+    print("response post generate label ${response.statusCode}");
     if (response.statusCode == 200) {
-      ResponseGenerateLabel responseGenerateLabel = responseGenerateLabelFromJson(response.body);
+      ResponseGenerateLabel responseGenerateLabel =
+          responseGenerateLabelFromJson(response.body);
       return responseGenerateLabel;
     } else {
       return null;
@@ -454,15 +459,18 @@ class ApiService {
       return false;
     }
   }
+
   //Update bundle Status in Schedule Start Track
   Future<bool> viUpdateBundleStartTracking(
-      ViUpdateBundleStatusScheduleStartTracking viUpdateBundleStatusScheduleStartTracking) async {
+      ViUpdateBundleStatusScheduleStartTracking
+          viUpdateBundleStatusScheduleStartTracking) async {
     var url = Uri.parse(
         baseUrl + 'molex/scheduler/update-bundle-status-in-schedule-master');
     var response = await http.post(url,
-        body: viUpdateBundleStatusScheduleStartTrackingToJson(viUpdateBundleStatusScheduleStartTracking),
+        body: viUpdateBundleStatusScheduleStartTrackingToJson(
+            viUpdateBundleStatusScheduleStartTracking),
         headers: headerList);
-        print("post update bundle status in track: ${response.statusCode}");
+    print("post update bundle status in track: ${response.statusCode}");
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -470,36 +478,57 @@ class ApiService {
     }
   }
 
-   Future<List<PreparationSchedule>> getPreparationSchedule({String type,String machineNo}) async {
-    var url = Uri.parse(
-        baseUrl + 'molex/preparation/get-preparation-schedule-data?scheduleType=$type&machineNumber=$machineNo&sameMachine=true');
+  Future<List<PreparationSchedule>> getPreparationSchedule(
+      {String type, String machineNo}) async {
+    var url = Uri.parse(baseUrl +
+        'molex/preparation/get-preparation-schedule-data?scheduleType=$type&machineNumber=$machineNo&sameMachine=true');
     var response = await http.get(url);
     print('Get Preparation Schedule status Code: ${response.statusCode}');
     print(response.body);
     if (response.statusCode == 200) {
-      GetpreparationShedule getpreparationShedule = getpreparationSheduleFromJson(response.body);
-      List<PreparationSchedule> preparationList = getpreparationShedule.data.preparationProcessData;
+      GetpreparationShedule getpreparationShedule =
+          getpreparationSheduleFromJson(response.body);
+      List<PreparationSchedule> preparationList =
+          getpreparationShedule.data.preparationProcessData;
       return preparationList;
     } else {
       return [];
     }
   }
 
-  // generate label
-  //  Future<bool> generatelabel(PostGenerateLabel postGenerateLabel,String qty) async {
-  //   var url = Uri.parse(
-  //       baseUrl + 'molex/wccr/generate-label/bdQty=150');
-  //   var response = await http.post(url,
-  //       body: postGenerateLabelToJson(postGenerateLabel),
-  //       headers: headerList);
-  //       print("post update bundle status in track: ${response.statusCode}");
-  //   if (response.statusCode == 200) {
-  //     return true;
-  //   } else {
-  //     return false;
-  // //   }
-  // }
+// CRIMPING API
+  // crimping Schedule
+  Future<List<CrimpingSchedule>> getCrimpingSchedule(
+      {String scheduleType, String machineNo}) async {
+    var url = Uri.parse(baseUrl +
+        'molex/crimping/get-bundle-detail?machineNo=$machineNo&scheduleType=$scheduleType&sameMachine=true');
+    var response = await http.get(url);
+    print('Get Crimping Schedule status Code: ${response.statusCode}');
+    print('crimping schedule response :${response.body}');
+    if (response.statusCode == 200) {
+      GetCrimpingSchedule getCrimpingSchedule =
+          getCrimpingScheduleFromJson(response.body);
+      List<CrimpingSchedule> crimpingScheduleList =
+          getCrimpingSchedule.data.getBundleDetail;
+      return crimpingScheduleList;
+    } else {
+      return [];
+    }
+  }
 
-
-
+  // Scan bundle Get Quantity
+  Future<String> scaBundleGetQty({String bundleID}) async {
+    var url = Uri.parse(baseUrl +
+        'molex/crimping/get-bundle-quantity?bundleId=$bundleID');
+    var response = await http.get(url);
+    print('Get BundleQty from Id status Code: ${response.statusCode}');
+    print('bundle Scan schedule response :${response.body}');
+    if(response.statusCode==200){
+      GetScanBundleId getScanBundleId = getScanBundleIdFromJson(response.body);
+      String qty = getScanBundleId.data.crimpingProcess.bundleQuantity;
+      return qty;
+    }else{
+      return '';
+    }
+  }
 }

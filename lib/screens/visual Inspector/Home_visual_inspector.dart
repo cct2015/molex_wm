@@ -164,34 +164,34 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                           ],
                         )),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.settings,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            Text(
-                              widget.machineId ?? "",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
-                      ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(horizontal: 10),
+                      //   height: 24,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.grey[100],
+                      //     borderRadius: BorderRadius.all(Radius.circular(100)),
+                      //   ),
+                      //   child: Center(
+                      //       child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       Padding(
+                      //         padding:
+                      //             const EdgeInsets.symmetric(horizontal: 4.0),
+                      //         child: Icon(
+                      //           Icons.settings,
+                      //           size: 18,
+                      //           color: Colors.redAccent,
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         widget.machineId ?? "",
+                      //         style:
+                      //             TextStyle(fontSize: 13, color: Colors.black),
+                      //       ),
+                      //     ],
+                      //   )),
+                      // ),
                     ],
                   )
                 ],
@@ -371,26 +371,14 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      // postViSchedule.orderId = int.parse(viSchedule.orderId);
-                                      // postViSchedule.scheduledId = int.parse(viSchedule.scheduleId);
-                                      // postViSchedule.process = viSchedule.scheduleType;
-                                      // apiService
-                                      //     .postVisualInspectionSchedular(postViSchedule)
-                                      //     .then((value) {
-                                      //   if (value) {
-                                      //     Navigator.push(
-                                      //       context,
-                                      //       MaterialPageRoute(
-                                      //           builder: (context) => Viscan(
-                                      //                 userId: '45642313',
-                                      //                 machineId: '45642313',
-                                      //                 viSchedule: viSchedule,
-                                      //               )),
-                                      //     );
-                                      //   } else {
-                                      //     print('failed');
-                                      //   }
-                                      // });
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Viscan(
+                                                  userId: '45642313',
+                                                  machineId: '45642313',
+                                                )),
+                                      );
                                     },
                                   ),
                                 ),

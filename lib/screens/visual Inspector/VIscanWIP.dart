@@ -110,34 +110,7 @@ class _ViscanState extends State<Viscan> {
                           ],
                         )),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.settings,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            Text(
-                              widget.machineId ?? "",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
-                      ),
+                     
                     ],
                   )
                 ],
@@ -230,9 +203,9 @@ class _DetailState extends State<Detail> {
     return Container(
         height: MediaQuery.of(context).size.height-100,
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          ScheduleDetailWIP(
-            viSchedule: widget.viSchedule,
-          ),
+          // ScheduleDetailWIP(
+          //   viSchedule: widget.viSchedule,
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -174,6 +174,46 @@ class _GenerateLabelState extends State<GenerateLabel> {
     super.initState();
   }
 
+  void clear(){
+        terminalDamangeController.clear();
+    brushLengthLessMoreController.clear();
+    setupRejectionsController.clear();
+    improperCrimpingController.clear();
+    insulationDamageController.clear();
+    terminalBackOutController.clear();
+    terminalSeamOpenController.clear();
+    exposureStrandsController.clear();
+    crimpingPositionOutMissCrimpController.clear();
+    terminalBendController.clear();
+    cableDamageController.clear();
+    bellmouthLessMoreController.clear();
+    tabBendTapOpenController.clear();
+    exposureStrandsController.clear();
+    entangledCableController.clear();
+    rollerMarkController.clear();
+    cameraPositionOutController.clear();
+    terminalTwistController.clear();
+    halfCurlingController.clear();
+    conductorCurlingUpDownController.clear();
+    cutOffLessMoreController.clear();
+    strandsCutController.clear();
+    troubleshootingRejectionsController.clear();
+    lengthlessLengthMoreController.clear();
+    windowGapController.clear();
+    endWireController.clear();
+    insulationCurlingUpDownController.clear();
+    cutoffBurrController.clear();
+    brushLengthLessMoreController.clear();
+    wireOverloadRejectionsController.clear();
+    wireOverloadRejectionsController.clear();
+    cablePositionController.clear();
+    endTerminalController.clear();
+    conductorBurrController.clear();
+    cutoffBendController.clear();
+    terminalCopperMarkController.clear();
+    crimpingPositionOutMissCrimpController.clear();
+    crimpOnInsulationController.clear();
+  }
   @override
   Widget build(BuildContext context) {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -193,6 +233,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
         return generateLabel();
         break;
       case Status.generateLabel:
+           clear();
         return rejectioncase();
         break;
       case Status.scanBin:
@@ -452,6 +493,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   }
 
   Widget rejectioncase() {
+  
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(

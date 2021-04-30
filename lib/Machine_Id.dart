@@ -3,12 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:molex/model_api/login_model.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/service/apiService.dart';
 
 class MachineId extends StatefulWidget {
-  String userId;
-  MachineId({this.userId});
+  Employee employee;
+  MachineId({this.employee});
   @override
   _MachineIdState createState() => _MachineIdState();
 }
@@ -89,7 +92,7 @@ class _MachineIdState extends State<MachineId> {
                         'Scan Machine ${machineId ?? ""}',
                         style: TextStyle(color: Colors.grey, fontSize: 20),
                       ),
-                        SizedBox(height: 20),
+                      SizedBox(height: 20),
                       Container(
                         height: 40,
                         width: 180,
@@ -110,6 +113,7 @@ class _MachineIdState extends State<MachineId> {
                                 .getmachinedetails(machineId)
                                 .then((value) {
                               if (value != null) {
+                                MachineDetails machineDetails = value[0];
                                 Fluttertoast.showToast(
                                     msg: machineId,
                                     toastLength: Toast.LENGTH_SHORT,
@@ -120,15 +124,67 @@ class _MachineIdState extends State<MachineId> {
                                     fontSize: 16.0);
 
                                 print("machineID:$machineId");
-
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Homepage(
-                                            userId: widget.userId,
-                                            machineId: machineId,
-                                          )),
-                                );
+                                switch (machineDetails.category) {
+                                  case "Manual Crimping":
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePageOp2(
+                                                userId: widget.employee.empId,
+                                                machineId: machineId,
+                                              )),
+                                    );
+                                    break;
+                                  case "Manual Cutting":
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage(
+                                                userId: widget.employee.empId,
+                                                machine: machineDetails,
+                                              )),
+                                    );
+                                    break;
+                                  case "Automatic Cut & Crimp":
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage(
+                                                userId: widget.employee.empId,
+                                                machine: machineDetails,
+                                              )),
+                                    );
+                                    break;
+                                  case "Semi Automatic Strip and Crimp machine":
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage(
+                                                userId: widget.employee.empId,
+                                               machine: machineDetails,
+                                              )),
+                                    );
+                                    break;
+                                  case "Automatic Cutting":
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage(
+                                                userId: widget.employee.empId,
+                                                machine: machineDetails,
+                                              )),
+                                    );
+                                    break;
+                                  default:
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Homepage(
+                                                userId: widget.employee.empId,
+                                                machine: machineDetails,
+                                              )),
+                                    );
+                                }
                               } else {
                                 Fluttertoast.showToast(
                                     msg: "Machine not Found",
@@ -187,13 +243,25 @@ class _MachineIdState extends State<MachineId> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  widget.userId ?? '',
-                  style: TextStyle(
-                    color: Colors.grey[700],
-                    fontWeight: FontWeight.w500,
-                    fontSize: 26,
-                  ),
+                Column(
+                  children: [
+                    Text(
+                      widget.employee.employeeName ?? '',
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w500,
+                        fontSize: 22,
+                      ),
+                    ),
+                    Text(
+                      widget.employee.empId ?? '',
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(width: 15),
                 Container(

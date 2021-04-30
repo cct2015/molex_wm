@@ -319,8 +319,8 @@ class _DetailState extends State<Detail> {
           (() {
             if (_chosenValue != null) {
               return Column(children: [
-                // terminal(),
-                P1ProcessDetail(cablePartNo: widget.schedule.cablePartNumber,fgpartNo: widget.schedule.finishedGoodsNumber),
+                terminal(),
+                // P1ProcessDetail(cablePartNo: widget.schedule.cablePartNumber,fgpartNo: widget.schedule.finishedGoodsNumber),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -697,7 +697,7 @@ class _DetailState extends State<Detail> {
                         'Cut Length Spec(mm) -${cableDetail.cutLengthSpec}',
                         'Cable Part Number(Description)',
                         '${cableDetail.cablePartNumber}(${cableDetail.description })',
-                        'From Strip Length Spec(mm) ${cableDetail.stripLengthFrom}} \n To Strip Length Spec(mm) ${cableDetail.stripLengthTo}}',
+                        'From Strip Length Spec(mm) ${cableDetail.stripLengthFrom} \n To Strip Length Spec(mm) ${cableDetail.stripLengthTo}',
                         0.28);
                   } else {
                     return Center(

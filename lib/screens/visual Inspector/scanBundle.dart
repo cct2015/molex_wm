@@ -101,6 +101,9 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                           
                           });
                         },
+                        onChanged: (value){
+
+                        },
                         decoration: new InputDecoration(
                           labelText: "Scan Bundle",
                           fillColor: Colors.white,
@@ -132,7 +135,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                     ),
                     onPressed: () {
                       setState(() {
-                        status= Status.rejection;
+                        status= scanBundleController.text.length>0? Status.rejection:Status.scanBundle;
                       });
                     },
                     child: Text('Scan Bundle'),
@@ -295,7 +298,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                           ),
                         ),
                         Text(
-                          'BUN13241551',
+                          "${scanBundleController.text}",
                           style: TextStyle(
                             color: Colors.green[900],
                             fontSize: 15,

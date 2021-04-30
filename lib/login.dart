@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 // import 'package:lottie/lottie.dart';
-import 'package:molex/screens/operator/Machine_Id.dart';
+import 'package:molex/Machine_Id.dart';
 import 'package:molex/service/apiService.dart';
 
 class LoginScan extends StatefulWidget {
@@ -128,7 +128,7 @@ class _LoginScanState extends State<LoginScan> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => MachineId(
-                                                    userId: value.empId,
+                                                    employee: value,
                                                   )),
                                         );
                                       } else {
