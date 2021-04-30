@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/screens/operator/location.dart';
 
 class PartiallyComplete extends StatefulWidget {
-  String machineId;
+  MachineDetails machine;
   String userId;
   Function continueProcess;
-  PartiallyComplete({this.machineId, this.userId,this.continueProcess});
+  PartiallyComplete({this.machine, this.userId,this.continueProcess});
   @override
   _PartiallyCompleteState createState() => _PartiallyCompleteState();
 }
@@ -633,7 +634,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                                 MaterialPageRoute(
                                     builder: (context) => Location(
                                           userId: widget.userId,
-                                          machineId: widget.machineId,
+                                          machine: widget.machine,
                                         )),
                               );
                           },

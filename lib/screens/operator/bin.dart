@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/models/bundle_bun.dart';
 import 'package:molex/screens/operator/loc.dart';
 import 'package:molex/screens/operator/location.dart';
@@ -8,8 +9,8 @@ import 'package:molex/screens/operator/location.dart';
 class Bin extends StatefulWidget {
   @override
   String userId;
-  String machineId;
-  Bin({this.userId, this.machineId});
+  MachineDetails machine;
+  Bin({this.userId, this.machine});
   _BinState createState() => _BinState();
 }
 
@@ -166,7 +167,7 @@ class _BinState extends State<Bin> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -596,7 +597,7 @@ class _BinState extends State<Bin> {
                     MaterialPageRoute(
                         builder: (context) => Location(
                               userId: widget.userId,
-                              machineId: widget.machineId,
+                              machine: widget.machine,
                             )),
                   );
                 },

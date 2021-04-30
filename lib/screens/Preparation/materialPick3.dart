@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/Preparation/process/process3.dart';
@@ -13,8 +14,8 @@ import 'package:molex/screens/widgets/time.dart';
 class MaterialPickOp3 extends StatefulWidget {
   PreparationSchedule schedule;
   String userId;
-  String machineId;
-  MaterialPickOp3({this.userId, this.machineId, this.schedule});
+  MachineDetails machine;
+  MaterialPickOp3({this.userId, this.machine, this.schedule});
   @override
   _MaterialPickOp3State createState() => _MaterialPickOp3State();
 }
@@ -200,7 +201,7 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -510,7 +511,7 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
                     builder: (context) => Processpage3(
                           schedule: widget.schedule,
                           userId: widget.userId,
-                          machineId: widget.machineId,
+                          machine: widget.machine,
                         )),
               );
             },

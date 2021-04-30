@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
@@ -18,9 +19,9 @@ import 'package:molex/service/apiService.dart';
 
 class ProcessPage2 extends StatefulWidget {
   final String userId;
-  final String machineId;
+  final MachineDetails machine;
   final CrimpingSchedule schedule;
-  ProcessPage2({this.machineId, this.userId, this.schedule});
+  ProcessPage2({this.machine, this.userId, this.schedule});
   @override
   _ProcessPage2State createState() => _ProcessPage2State();
 }
@@ -130,7 +131,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -184,7 +185,7 @@ class _ProcessPage2State extends State<ProcessPage2> {
                 Detail(
                   schedule: widget.schedule,
                   userId: widget.userId,
-                  machineId: widget.machineId,
+                  machine: widget.machine,
                 ),
               ],
             );
@@ -195,9 +196,9 @@ class _ProcessPage2State extends State<ProcessPage2> {
 
 class Detail extends StatefulWidget {
   String userId;
-  String machineId;
+  MachineDetails machine;
   CrimpingSchedule schedule;
-  Detail({this.schedule, this.machineId, this.userId});
+  Detail({this.schedule, this.machine, this.userId});
   @override
   _DetailState createState() => _DetailState();
 }
@@ -484,12 +485,12 @@ class _DetailState extends State<Detail> {
     if (main == "100") {
       return FullCompleteP2(
         userId: widget.userId,
-        machineId: widget.machineId,
+        machine: widget.machine,
       );
     }
     if (main == "partial") {
       return PartialCompletionP2(
-        machineId: widget.machineId,
+        machine: widget.machine,
         userId: widget.userId,
       );
     } else {
@@ -739,7 +740,7 @@ class _DetailState extends State<Detail> {
                                 MaterialPageRoute(
                                     builder: (context) => Bin(
                                           userId: widget.userId,
-                                          machineId: widget.machineId,
+                                          machine: widget.machine,
                                         )),
                               );
                             }),
@@ -875,7 +876,7 @@ class _DetailState extends State<Detail> {
                           MaterialPageRoute(
                               builder: (context) => Bin(
                                     userId: widget.userId,
-                                    machineId: widget.machineId,
+                                    machine: widget.machine,
                                   )),
                         );
                       }),

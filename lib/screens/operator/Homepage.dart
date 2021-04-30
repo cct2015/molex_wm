@@ -23,10 +23,6 @@ class _HomepageState extends State<Homepage> {
   int scheduleType = 0;
   ApiService apiService;
 
-  bool _secValue = false;
-
-  bool _firstValue = true;
-  bool _thirdValue = false;
   String dropdownName = "FG part";
 
   @override
@@ -271,7 +267,7 @@ class _HomepageState extends State<Homepage> {
                     builder: (context) => NavPage(
                           schedule: schedule,
                           userId: widget.userId,
-                          machineId: widget.machine.machineNumber,
+                          machine: widget.machine,
                         )),
               );
             },
@@ -320,7 +316,7 @@ class _HomepageState extends State<Homepage> {
             SchudleTable(
               schedule: schedule,
               userId: widget.userId,
-              machineId: widget.machine.machineNumber,
+              machine: widget.machine,
               type: type == 0 ? "A" : "B",
             ),
           ],
@@ -497,9 +493,9 @@ class _HomepageState extends State<Homepage> {
 class SchudleTable extends StatefulWidget {
   Schedule schedule;
   String userId;
-  String machineId;
+  MachineDetails machine;
   String type;
-  SchudleTable({Key key, this.schedule, this.userId, this.type, this.machineId})
+  SchudleTable({Key key, this.schedule, this.userId, this.type, this.machine})
       : super(key: key);
 
   @override
@@ -533,7 +529,7 @@ class _SchudleTableState extends State<SchudleTable> {
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
               future: apiService.getScheduelarData(
-                  machId: widget.machineId, type: widget.type),
+                  machId: widget.machine.machineNumber, type: widget.type),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // return  buildDataRow(schedule:widget.schedule,c:2);
@@ -751,7 +747,7 @@ class _SchudleTableState extends State<SchudleTable> {
                                 builder: (context) => MaterialPick(
                                        schedule: schedule,
                                       userId: widget.userId,
-                                      machineId: widget.machineId,
+                                      machine: widget.machine,
                                     )),
                           );
                         },

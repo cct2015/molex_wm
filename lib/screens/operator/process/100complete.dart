@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/login.dart';
 import 'package:molex/main.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/operator/location.dart';
 
 class FullyComplete extends StatefulWidget {
   String userId;
-  String machineId;
-  FullyComplete({this.userId,this.machineId});
+  MachineDetails machine;
+  FullyComplete({this.userId,this.machine});
   @override
   _FullyCompleteState createState() => _FullyCompleteState();
 }
@@ -141,7 +142,7 @@ class _FullyCompleteState extends State<FullyComplete> {
                           MaterialPageRoute(
                               builder: (context) => Location(
                                     userId: widget.userId,
-                                    machineId: widget.machineId,
+                                    machine: widget.machine,
                                   )),
                         );
                       },

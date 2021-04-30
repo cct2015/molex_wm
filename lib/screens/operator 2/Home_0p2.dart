@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/navigation.dart';
@@ -10,8 +11,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 class HomePageOp2 extends StatefulWidget {
   final String userId;
-  final String machineId;
-  HomePageOp2({this.userId, this.machineId});
+  final MachineDetails machine;
+  HomePageOp2({this.userId, this.machine});
   @override
   _HomePageOp2State createState() => _HomePageOp2State();
 }
@@ -191,7 +192,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -212,7 +213,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
                     builder: (context) => NavPage(
                           schedule: schedule,
                           userId: widget.userId,
-                          machineId: widget.machineId,
+                          machine: widget.machine,
                         )),
               );
             },
@@ -258,10 +259,10 @@ class _HomePageOp2State extends State<HomePageOp2> {
               thickness: 2,
             ),
             search(),
-            SchudleTable(userId: widget.userId, machineId: widget.machineId),
+            SchudleTable(userId: widget.userId, machine: widget.machine),
             FutureBuilder(
                 future: apiService.getScheduelarData(
-                    machId: widget.machineId, type: "A"),
+                    machId: widget.machine.machineName, type: "A"),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Container();
@@ -364,8 +365,8 @@ class _HomePageOp2State extends State<HomePageOp2> {
 class SchudleTable extends StatefulWidget {
   final Schedule schedule;
   final String userId;
-  final String machineId;
-  SchudleTable({Key key, this.schedule, this.userId, this.machineId})
+  final MachineDetails machine;
+  SchudleTable({Key key, this.schedule, this.userId, this.machine})
       : super(key: key);
 
   @override
@@ -408,7 +409,7 @@ class _SchudleTableState extends State<SchudleTable> {
             Container(
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
-              future: apiService.getCrimpingSchedule(scheduleType: "A",machineNo: widget.machineId),
+              future: apiService.getCrimpingSchedule(scheduleType: "A",machineNo: widget.machine.machineNumber),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
@@ -555,7 +556,7 @@ class _SchudleTableState extends State<SchudleTable> {
                                 builder: (context) => MaterialPickOp2(
                                       schedule: schedule,
                                       userId: widget.userId,
-                                      machineId: widget.machineId,
+                                      machine: widget.machine,
                                     )),
                           );
                         },

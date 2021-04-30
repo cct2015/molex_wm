@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/models/materialSchedule.dart';
 import 'package:molex/screens/operator/bin.dart';
 
 class HomeMaterialCoordinator extends StatefulWidget {
   final String userId;
-  final String machineId;
-  HomeMaterialCoordinator({this.userId, this.machineId});
+  final MachineDetails machine;
+  HomeMaterialCoordinator({this.userId, this.machine});
   @override
   _HomeMaterialCoordinatorState createState() =>
       _HomeMaterialCoordinatorState();
@@ -174,7 +175,7 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
                               ),
                             ),
                             Text(
-                              widget.machineId ?? "",
+                              widget.machine.machineNumber ?? "",
                               style:
                                   TextStyle(fontSize: 13, color: Colors.black),
                             ),
@@ -352,7 +353,7 @@ class _HomeMaterialCoordinatorState extends State<HomeMaterialCoordinator> {
                                   MaterialPageRoute(
                                       builder: (context) => Bin(
                                             userId: widget.userId,
-                                            machineId: widget.machineId,
+                                            machine: widget.machine,
                                           )),
                                 );
                               },

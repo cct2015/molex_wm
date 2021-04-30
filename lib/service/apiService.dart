@@ -29,8 +29,8 @@ import 'package:molex/model_api/visualInspection/updateBundleStatus_model.dart';
 import 'package:molex/model_api/visualInspection/updatebundleStsScheStartTracking_mode.dart';
 
 class ApiService {
-  // String baseUrl = "http://justerp.in:8080/wipts/";
-  String baseUrl = "http://10.221.46.8:8080/wipts/";
+  String baseUrl = "http://justerp.in:8080/wipts/";
+  // String baseUrl = "http://10.221.46.8:8080/wipts/";
   // String baseUrl = "http://192.168.1.252:8080/wipts/";
 
   // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';

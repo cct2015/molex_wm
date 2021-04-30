@@ -5,6 +5,7 @@ import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/models/bundle_print.dart';
@@ -20,9 +21,9 @@ import 'package:molex/service/apiService.dart';
 
 class ProcessPage extends StatefulWidget {
   String userId;
-  String machineId;
+  MachineDetails machine;
   Schedule schedule;
-  ProcessPage({this.machineId, this.userId, this.schedule});
+  ProcessPage({this.machine, this.userId, this.schedule});
   @override
   _ProcessPageState createState() => _ProcessPageState();
 }
@@ -137,7 +138,7 @@ class _ProcessPageState extends State<ProcessPage> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -190,7 +191,7 @@ class _ProcessPageState extends State<ProcessPage> {
               Detail(
                 schedule: widget.schedule,
                 userId: widget.userId,
-                machineId: widget.machineId,
+                machine: widget.machine,
               ),
             ],
           ),
@@ -204,8 +205,8 @@ class Detail extends StatefulWidget {
   Schedule schedule;
   String rightside;
   String userId;
-  String machineId;
-  Detail({this.schedule, this.rightside, this.machineId, this.userId});
+  MachineDetails machine;
+  Detail({this.schedule, this.rightside, this.machine, this.userId});
   @override
   _DetailState createState() => _DetailState();
 }
@@ -327,7 +328,7 @@ class _DetailState extends State<Detail> {
                     Process(
                       type: _chosenValue,
                       schedule: widget.schedule,
-                      machineId: widget.machineId,
+                      machineId: widget.machine.machineNumber,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(1.0),
@@ -510,18 +511,18 @@ class _DetailState extends State<Detail> {
                               } else if (rightside == "label") {
                                 return GenerateLabel(
                                   schedule: widget.schedule,
-                                  machineId: widget.machineId ?? "",
+                                  machineId: widget.machine ?? "",
                                   userId: widget.userId ?? "",
                                 );
                               } else if (rightside == "complete") {
                                 return FullyComplete(
                                   userId: widget.userId,
-                                  machineId: widget.machineId,
+                                  machine: widget.machine,
                                 );
                               } else if (rightside == "partial") {
                                 return PartiallyComplete(
                                   userId: widget.userId,
-                                  machineId: widget.machineId,
+                                  machine: widget.machine,
                                   continueProcess: continueProcess,
                                 );
                               } else if (rightside == "bundle") {

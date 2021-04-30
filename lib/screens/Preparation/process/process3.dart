@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/Preparation/process/scanBundle.dart';
@@ -10,9 +11,9 @@ import 'package:molex/screens/widgets/time.dart';
 
 class Processpage3 extends StatefulWidget {
   String userId;
-  String machineId;
+  MachineDetails machine;
   PreparationSchedule schedule;
-  Processpage3({this.machineId, this.userId, this.schedule});
+  Processpage3({this.machine, this.userId, this.schedule});
   @override
   _Processpage3State createState() => _Processpage3State();
 }
@@ -128,7 +129,7 @@ class _Processpage3State extends State<Processpage3> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -183,7 +184,7 @@ class _Processpage3State extends State<Processpage3> {
                   children: [
                     Detail(
                       userId: widget.userId,
-                      machineId: widget.machineId,
+                      machine: widget.machine,
                       schedule: widget.schedule,
                     ),
                   ],
@@ -199,8 +200,8 @@ class Detail extends StatefulWidget {
   PreparationSchedule schedule;
   String rightside;
   String userId;
-  String machineId;
-  Detail({this.schedule, this.rightside, this.machineId, this.userId});
+  MachineDetails machine;
+  Detail({this.schedule, this.rightside, this.machine, this.userId});
   @override
   _DetailState createState() => _DetailState();
 }
@@ -309,7 +310,7 @@ class _DetailState extends State<Detail> {
                                 MaterialPageRoute(
                                     builder: (context) => Location(
                                           userId: widget.userId,
-                                          machineId: widget.machineId,
+                                          machine: widget.machine,
                                         )));
                           },
                           child: Text(

@@ -466,13 +466,13 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      Location(userId: '121200', machineId: '6541531'),
-                                ),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) =>
+                              //         Location(userId: '121200', machine: '6541531'),
+                              //   ),
+                              // );
                             },
                             child: Text('Complete Inspection'),
                           ),

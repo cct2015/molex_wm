@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
@@ -11,8 +12,8 @@ import 'package:molex/service/apiService.dart';
 class MaterialPick extends StatefulWidget {
   final Schedule schedule;
   final String userId;
-  final String machineId;
-  MaterialPick({this.userId, this.machineId, this.schedule});
+  final MachineDetails machine;
+  MaterialPick({this.userId, this.machine, this.schedule});
   @override
   _MaterialPickState createState() => _MaterialPickState();
 }
@@ -226,7 +227,7 @@ class _MaterialPickState extends State<MaterialPick> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -631,7 +632,7 @@ class _MaterialPickState extends State<MaterialPick> {
   Widget buildDataRawMaterial() {
     return FutureBuilder(
         future: apiService.rawMaterial(
-            machineId: widget.machineId,
+            machineId: widget.machine.machineNumber,
             fgNo: widget.schedule.finishedGoodsNumber,
             scheduleId: widget.schedule.scheduledId),
         // 'EMU-M/C-038B', '367760913', '367870011', '1223445'),
@@ -959,7 +960,7 @@ class _MaterialPickState extends State<MaterialPick> {
                               builder: (context) => ProcessPage(
                                     schedule: widget.schedule,
                                     userId: widget.userId,
-                                    machineId: widget.machineId,
+                                    machine: widget.machine,
                                   )),
                         );
                       } else {}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/transferLocation_model.dart';
 import 'package:molex/screens/operator/location.dart';
 
@@ -8,8 +9,8 @@ import '../../operator/bin.dart';
 
 class PartialCompletionP2 extends StatefulWidget {
   String userId;
-  String machineId;
-  PartialCompletionP2({this.machineId, this.userId});
+  MachineDetails machine;
+  PartialCompletionP2({this.machine, this.userId});
   @override
   _PartialCompletionP2State createState() => _PartialCompletionP2State();
 }
@@ -626,7 +627,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                                 MaterialPageRoute(
                                     builder: (context) => Location(
                                           userId: widget.userId,
-                                          machineId: widget.machineId,
+                                          machine: widget.machine,
                                         )),
                               );
                             }),

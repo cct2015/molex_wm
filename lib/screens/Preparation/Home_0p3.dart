@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/Preparation/materialPick3.dart';
 import 'package:molex/screens/Preparation/process/process3.dart';
@@ -12,8 +13,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 class HomePageOp3 extends StatefulWidget {
   String userId;
-  String machineId;
-  HomePageOp3({this.userId, this.machineId});
+  MachineDetails machine;
+  HomePageOp3({this.userId, this.machine});
   @override
   _HomePageOp3State createState() => _HomePageOp3State();
 }
@@ -145,7 +146,7 @@ class _HomePageOp3State extends State<HomePageOp3> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -199,10 +200,10 @@ class _HomePageOp3State extends State<HomePageOp3> {
               thickness: 2,
             ),
             search(),
-            SchudleTable(userId: widget.userId, machineId: widget.machineId),
+            SchudleTable(userId: widget.userId, machine: widget.machine),
             FutureBuilder(
                 future: apiService.getScheduelarData(
-                    machId: widget.machineId, type: "A"),
+                    machId: widget.machine.machineNumber, type: "A"),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Container();
@@ -305,8 +306,8 @@ class _HomePageOp3State extends State<HomePageOp3> {
 class SchudleTable extends StatefulWidget {
   Schedule schedule;
   String userId;
-  String machineId;
-  SchudleTable({Key key, this.schedule, this.userId, this.machineId})
+  MachineDetails machine;
+  SchudleTable({Key key, this.schedule, this.userId, this.machine})
       : super(key: key);
 
   @override
@@ -362,7 +363,7 @@ class _SchudleTableState extends State<SchudleTable> {
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
               future: apiService.getPreparationSchedule(
-                  type: "A", machineNo: widget.machineId),
+                  type: "A", machineNo: widget.machine.machineNumber),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<PreparationSchedule> preparationSchedulelist =
@@ -545,7 +546,7 @@ class _SchudleTableState extends State<SchudleTable> {
                                 builder: (context) => Processpage3(
                                       schedule: schedule,
                                       userId: widget.userId,
-                                      machineId: widget.machineId,
+                                      machine: widget.machine,
                                     )),
                           );
                           // Navigator.push(

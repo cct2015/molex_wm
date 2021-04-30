@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/operator/location.dart';
 
 class FullCompleteP2 extends StatefulWidget {
   String userId;
-  String machineId;
-  FullCompleteP2({this.userId, this.machineId});
+  MachineDetails machine;
+  FullCompleteP2({this.userId, this.machine});
   @override
   _FullCompleteP2State createState() => _FullCompleteP2State();
 }
@@ -386,7 +387,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                                 MaterialPageRoute(
                                     builder: (context) => Location(
                                           userId: widget.userId,
-                                          machineId: widget.machineId,
+                                          machine: widget.machine,
                                         )),
                               );
                             }),

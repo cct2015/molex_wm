@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
@@ -10,8 +11,8 @@ import 'package:molex/screens/widgets/time.dart';
 class MaterialPickOp2 extends StatefulWidget {
   final CrimpingSchedule schedule;
   final String userId;
-  final String machineId;
-  MaterialPickOp2({this.userId, this.machineId, this.schedule});
+  final MachineDetails machine;
+  MaterialPickOp2({this.userId, this.machine, this.schedule});
   @override
   _MaterialPickOp2State createState() => _MaterialPickOp2State();
 }
@@ -218,7 +219,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                             ),
                           ),
                           Text(
-                            widget.machineId ?? "",
+                            widget.machine.machineNumber ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -974,7 +975,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                           builder: (context) => ProcessPage2(
                                 schedule: widget.schedule,
                                 userId: widget.userId,
-                                machineId: widget.machineId,
+                                machine: widget.machine,
                               )),
                     );
                     // } else {}

@@ -801,25 +801,18 @@ class _GenerateLabelState extends State<GenerateLabel> {
                               ipaddress: "172.26.59.14",
                               bq: bundleQty.text,
                               qr: response.data.generateLabel.bundleId,
-                              routenumber1: "12345",
+                              routenumber1: "${response.data.generateLabel.routeNo}",
                               fgPartNumber: widget.schedule.finishedGoodsNumber,
                               cutlength: "${widget.schedule.length}",
                               cablepart: "${widget.schedule.cablePartNumber}",
                               wireGauge: "${widget.schedule.finishedGoodsNumber}",
-                              terminalfrom: "${response?.data?.generateLabel?.terminalFrom??''}",
-                              terminalto: "${response?.data?.generateLabel?.terminalTo??''}");
-
+                              terminalfrom: "${response.data.generateLabel.terminalFrom}",
+                              terminalto: "${response.data.generateLabel.terminalTo}");
                             }
 
                           });
-
-                         
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;
-                          // _print();
-                          // bundlePrint.add(BundlePrint(
-                          //     bundelId: "0123456789", bundleQty: "100"));
-                          // rightside = null;
                         });
                       }),
                 ),

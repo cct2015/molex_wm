@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/models/location_bin.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/widgets/time.dart';
@@ -8,8 +9,8 @@ import 'package:molex/service/apiService.dart';
 
 class Location extends StatefulWidget {
   String userId;
-  String machineId;
-  Location({this.userId, this.machineId});
+  MachineDetails machine;
+  Location({this.userId, this.machine});
   @override
   _LocationState createState() => _LocationState();
 }
@@ -149,7 +150,7 @@ class _LocationState extends State<Location> {
                               ),
                             ),
                             Text(
-                              widget.machineId ?? "",
+                              widget.machine.machineNumber ?? "",
                               style:
                                   TextStyle(fontSize: 13, color: Colors.black),
                             ),
@@ -643,7 +644,7 @@ class _LocationState extends State<Location> {
                       },
                     );
                     apiService
-                        .getmachinedetails(widget.machineId)
+                        .getmachinedetails(widget.machine.machineNumber)
                         .then((value) {
                       Navigator.push(
                           context,

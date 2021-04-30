@@ -131,7 +131,7 @@ class _MachineIdState extends State<MachineId> {
                                       MaterialPageRoute(
                                           builder: (context) => HomePageOp2(
                                                 userId: widget.employee.empId,
-                                                machineId: machineId,
+                                                machine: machineDetails,
                                               )),
                                     );
                                     break;

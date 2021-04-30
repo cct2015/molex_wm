@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
 import 'package:molex/login.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/Preparation/Home_0p3.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/print.dart';
 import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
+import 'package:molex/service/apiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavPage extends StatefulWidget {
   final String userId;
-  final String machineId;
+  final MachineDetails machine;
   final Schedule schedule;
-  NavPage({this.machineId, this.userId, this.schedule});
+  NavPage({this.machine, this.userId, this.schedule});
   @override
   _NavPageState createState() => _NavPageState();
 }
@@ -29,14 +31,17 @@ class _NavPageState extends State<NavPage> {
           ListTile(
             title: Text('Crimping'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HomePageOp2(
-                          machineId: widget.machineId,
-                          userId: widget.userId,
-                        )),
-              );
+              ApiService apiService = new ApiService();
+              apiService.getmachinedetails(widget.machine.machineNumber).then((value) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePageOp2(
+                            machine: value[0],
+                            userId: widget.userId,
+                          )),
+                );
+              });
             },
           ),
           ListTile(
@@ -46,7 +51,7 @@ class _NavPageState extends State<NavPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomePageOp3(
-                          machineId: widget.machineId,
+                          machine: widget.machine,
                           userId: widget.userId,
                         )),
               );
@@ -59,7 +64,7 @@ class _NavPageState extends State<NavPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomeVisualInspector(
-                          machineId: widget.machineId,
+                          machineId: widget.machine.machineNumber,
                           userId: widget.userId,
                         )),
               );
