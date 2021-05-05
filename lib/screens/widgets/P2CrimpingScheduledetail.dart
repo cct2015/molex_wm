@@ -139,7 +139,7 @@ class _P2ScheduleDetailWIPState extends State<P2ScheduleDetailWIP> {
             feild(heading: "Color", value: '${widget.schedule.wireColour}', width: 0.05),
             feild(
                 heading: "Scheduled Qty",
-                value: '${widget.schedule.scheduledQuantity}',
+                value: '',
                 width: 0.1),
             feild(heading: "Schedule", value: "10:00 - 11:00", width: 0.1)
           ],
@@ -177,7 +177,7 @@ class _P2ScheduleDetailWIPState extends State<P2ScheduleDetailWIP> {
         padding: const EdgeInsets.all(0.0),
         child: FutureBuilder(
             future:
-                apiService.getFgDetails(widget.schedule.finishedGoods),
+                apiService.getFgDetails(widget.schedule.finishedGoods.toString()),
             builder: (context, snapshot) {
               print('fg number ${widget.schedule.finishedGoods}');
               FgDetails fgDetail = snapshot.data;

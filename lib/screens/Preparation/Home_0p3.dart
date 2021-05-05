@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/Machine_Id.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
-import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
-import 'package:molex/screens/Preparation/materialPick3.dart';
+import 'package:molex/screens/Preparation/process/preparationProcess.dart';
 import 'package:molex/screens/Preparation/process/process3.dart';
-import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
-import 'package:toggle_switch/toggle_switch.dart';
 
 class HomePageOp3 extends StatefulWidget {
   String userId;
-  MachineDetails machine;
-  HomePageOp3({this.userId, this.machine});
+  String machineId;
+  HomePageOp3({this.userId, this.machineId});
   @override
   _HomePageOp3State createState() => _HomePageOp3State();
 }
@@ -52,7 +50,7 @@ class _HomePageOp3State extends State<HomePageOp3> {
         backwardsCompatibility: false,
         leading: null,
         title: const Text(
-          'DashBoard Operator 3',
+          'Preparation DashBoard',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,
@@ -89,7 +87,7 @@ class _HomePageOp3State extends State<HomePageOp3> {
             ],
           ),
 
-          //machineID
+          // machineID
           Container(
             padding: EdgeInsets.all(1),
             child: Row(
@@ -146,7 +144,7 @@ class _HomePageOp3State extends State<HomePageOp3> {
                             ),
                           ),
                           Text(
-                            widget.machine ?? "",
+                            widget.machineId ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -199,18 +197,66 @@ class _HomePageOp3State extends State<HomePageOp3> {
               color: Colors.redAccent,
               thickness: 2,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Container(
+                      child: ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.transparent))),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.green[200];
+                          return Colors
+                              .green[500]; // Use the component's default.
+                        },
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Preparationprocess(
+                                  userId: widget.userId,
+                                  machineId: widget.machineId,
+                                )),
+                      );
+                    },
+                    child: Container(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 20,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage("assets/image/scan.png"))),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            'Scan',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+                )
+              ],
+            ),
             search(),
-            SchudleTable(userId: widget.userId, machine: widget.machine),
-            FutureBuilder(
-                future: apiService.getScheduelarData(
-                    machId: widget.machine.machineNumber, type: "A"),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Container();
-                  } else {
-                    return Container();
-                  }
-                })
+            SchudleTable(
+              userId: widget.userId,
+              machineId: widget.machineId,
+            ),
           ],
         ),
       ),
@@ -306,8 +352,8 @@ class _HomePageOp3State extends State<HomePageOp3> {
 class SchudleTable extends StatefulWidget {
   Schedule schedule;
   String userId;
-  MachineDetails machine;
-  SchudleTable({Key key, this.schedule, this.userId, this.machine})
+  String machineId;
+  SchudleTable({Key key, this.schedule, this.machineId, this.userId})
       : super(key: key);
 
   @override
@@ -363,7 +409,7 @@ class _SchudleTableState extends State<SchudleTable> {
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
               future: apiService.getPreparationSchedule(
-                  type: "A", machineNo: widget.machine.machineNumber),
+                  type: "A", machineNo: widget.machineId),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<PreparationSchedule> preparationSchedulelist =
@@ -421,7 +467,7 @@ class _SchudleTableState extends State<SchudleTable> {
               cell("Total \nBundles", 0.05),
               cell("total \nBundle Qty", 0.07),
               cell("Status", 0.09),
-              cell("Action", 0.1),
+              // cell("Action", 0.1),
             ],
           ),
         ],
@@ -519,69 +565,71 @@ class _SchudleTableState extends State<SchudleTable> {
             ),
 
             //Action
-            Container(
-              width: 88,
-              height: 35,
-              child: Center(
-                child: schedule.scheduledStatus == "Completed"
-                    ? Text("-")
-                    : ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.pressed))
-                                return Colors.green;
-                              return schedule.scheduledStatus == "Pending"
-                                  ? Colors.red
-                                  : Colors.green[
-                                      500]; // Use the component's default.
-                            },
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Processpage3(
-                                      schedule: schedule,
-                                      userId: widget.userId,
-                                      machine: widget.machine,
-                                    )),
-                          );
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => MaterialPickOp3(
-                          //              schedule: schedule,
-                          //             userId: widget.userId,
-                          //             machineId: widget.machineId,
-                          //           )),
-                          // );
-                        },
-                        child: Container(
-                            child: schedule.scheduledStatus == "Allocated"|| schedule.scheduledStatus == "Open"||schedule.scheduledStatus == ""||schedule.scheduledStatus == null
-                                ? Text(
-                                    "Accept",
-                                    style: GoogleFonts.openSans(
-                                      textStyle: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  )
-                                : schedule.scheduledStatus == "Partial"
-                                    ? Text(
-                                        'Continue',
-                                        style: GoogleFonts.openSans(
-                                          textStyle: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      )
-                                    : Text('')),
-                      ),
-              ),
-            )
+            // Container(
+            //   width: 88,
+            //   height: 35,
+            //   child: Center(
+            //     child: schedule.scheduledStatus == "Completed"
+            //         ? Text("-")
+            //         : ElevatedButton(
+            //             style: ButtonStyle(
+            //               backgroundColor:
+            //                   MaterialStateProperty.resolveWith<Color>(
+            //                 (Set<MaterialState> states) {
+            //                   if (states.contains(MaterialState.pressed))
+            //                     return Colors.green;
+            //                   return schedule.scheduledStatus == "Pending"
+            //                       ? Colors.red
+            //                       : Colors.green[
+            //                           500]; // Use the component's default.
+            //                 },
+            //               ),
+            //             ),
+            //             onPressed: () {
+            //               Navigator.push(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                     builder: (context) => Processpage3(
+            //                           schedule: schedule,
+            //                           userId: widget.userId,
+            //                         )),
+            //               );
+            //               // Navigator.push(
+            //               //   context,
+            //               //   MaterialPageRoute(
+            //               //       builder: (context) => MaterialPickOp3(
+            //               //              schedule: schedule,
+            //               //             userId: widget.userId,
+            //               //             machineId: widget.machineId,
+            //               //           )),
+            //               // );
+            //             },
+            //             child: Container(
+            //                 child: schedule.scheduledStatus == "Allocated" ||
+            //                         schedule.scheduledStatus == "Open" ||
+            //                         schedule.scheduledStatus == "" ||
+            //                         schedule.scheduledStatus == null
+            //                     ? Text(
+            //                         "Accept",
+            //                         style: GoogleFonts.openSans(
+            //                           textStyle: TextStyle(
+            //                               fontSize: 12,
+            //                               fontWeight: FontWeight.w700),
+            //                         ),
+            //                       )
+            //                     : schedule.scheduledStatus == "Partial"
+            //                         ? Text(
+            //                             'Continue',
+            //                             style: GoogleFonts.openSans(
+            //                               textStyle: TextStyle(
+            //                                   fontSize: 12,
+            //                                   fontWeight: FontWeight.w600),
+            //                             ),
+            //                           )
+            //                         : Text('')),
+            //           ),
+            //   ),
+            // )
           ],
         ),
       ),

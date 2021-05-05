@@ -61,14 +61,14 @@ class ApiService {
     }
   }
 
-  Future<List<Schedule>> getScheduelarData({String machId, String type}) async {
+  Future<List<Schedule>> getScheduelarData({String machId, String type,String sameMachine}) async {
     print("called api");
     print("called $machId");
     print("called $type");
     // var url = Uri.parse(baseUrl +
     //     "molex/scheduler/get-scheduler-same-machine-data?schdTyp=A&mchNo=$machId&sameMachine=true");
     var url = Uri.parse(baseUrl +
-        "molex/scheduler/get-scheduler-same-machine-data?schdTyp=$type&mchNo=$machId&sameMachine=true");
+        "molex/scheduler/get-scheduler-same-machine-data?schdTyp=$type&mchNo=$machId&sameMachine=$sameMachine");
     var response = await http.get(url);
     print('schedular data status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -125,9 +125,9 @@ class ApiService {
     var response1 = await http.get(url1);
     var response2 = await http.get(url2);
     var response3 = await http.get(url3);
-    print('Raw Material1 status code ${response1.statusCode}');
-    print('Raw Material2 status code ${response1.statusCode}');
-    print('Raw Material3 status code ${response1.statusCode}');
+    print('Raw Material1 status code ${response1.body}');
+    print('Raw Material2 status code ${response1.body}');
+    print('Raw Material3 status code ${response1.body}');
     if (response3.statusCode == 200) {
       try {
         print(response1.body);
@@ -209,7 +209,7 @@ class ApiService {
   Future<CableDetails> getCableDetails(
       {String fgpartNo, String cablepartno}) async {
     var url = Uri.parse(baseUrl +
-        "/molex/ejobticketmaster/get-cable-Details-bycableNo?fgPartNo=$fgpartNo&cblPartNo=$cablepartno");
+        "molex/ejobticketmaster/get-cable-Details-bycableNo?fgPartNo=$fgpartNo&cblPartNo=$cablepartno");
     var response = await http.get(url);
     print('Cable details status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -221,12 +221,31 @@ class ApiService {
     }
   }
 
+  // Get material Tracking cable Detail
+  Future<List<MaterialTrackingCableDetails>> getMaterialTrackingCableDetail(
+      {String partNo}) async {
+    var url = Uri.parse(
+        baseUrl + "molex/material-tracking/tracking-cable?partNo=$partNo");
+    var response = await http.get(url);
+    print(
+        'getMaterialTrackingCableDetail details status code ${response.body}');
+    if (response.statusCode == 200) {
+      GetMaterialTrackingCableDetails getMaterialTrackingCableDetails =
+          getMaterialTrackingCableDetailsFromJson(response.body);
+      List<MaterialTrackingCableDetails> materialTrackingCableDetails =
+          getMaterialTrackingCableDetails.data.materialTrackingCable;
+      return materialTrackingCableDetails;
+    } else {
+      return [];
+    }
+  }
+
   //cableTerminalA
   Future<CableTerminalA> getCableTerminalA({String cablepartno}) async {
     //TODO variable in url
     print("cable No TA : $cablepartno");
     var url = Uri.parse(baseUrl +
-        "/molex/ejobticketmaster/get-cable-terminalA-bycableNo?cblPartNo=$cablepartno");
+        "molex/ejobticketmaster/get-cable-terminalA-bycableNo?cblPartNo=$cablepartno");
     var response = await http.get(url);
     print('Cable termianl A status code ${response.statusCode}');
     if (response.statusCode == 200) {
@@ -243,7 +262,7 @@ class ApiService {
   //CableTerminalB
   Future<CableTerminalB> getCableTerminalB({String cablepartno}) async {
     var url = Uri.parse(baseUrl +
-        'molex/ejobticketmaster/get-cable-terminalB-bycableNo?cblPartNo=0');
+        'molex/ejobticketmaster/get-cable-terminalB-bycableNo?cblPartNo=$cablepartno');
     var response = await http.get(url);
     print('Cable termianl B status code ${response.statusCode}');
     print('body: ${response.body}');
@@ -509,7 +528,7 @@ class ApiService {
       GetCrimpingSchedule getCrimpingSchedule =
           getCrimpingScheduleFromJson(response.body);
       List<CrimpingSchedule> crimpingScheduleList =
-          getCrimpingSchedule.data.getBundleDetail;
+          getCrimpingSchedule.data.crimpingBundleList;
       return crimpingScheduleList;
     } else {
       return [];
@@ -518,16 +537,16 @@ class ApiService {
 
   // Scan bundle Get Quantity
   Future<String> scaBundleGetQty({String bundleID}) async {
-    var url = Uri.parse(baseUrl +
-        'molex/crimping/get-bundle-quantity?bundleId=$bundleID');
+    var url = Uri.parse(
+        baseUrl + 'molex/crimping/get-bundle-quantity?bundleId=$bundleID');
     var response = await http.get(url);
     print('Get BundleQty from Id status Code: ${response.statusCode}');
     print('bundle Scan schedule response :${response.body}');
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       GetScanBundleId getScanBundleId = getScanBundleIdFromJson(response.body);
       String qty = getScanBundleId.data.crimpingProcess.bundleQuantity;
       return qty;
-    }else{
+    } else {
       return '';
     }
   }

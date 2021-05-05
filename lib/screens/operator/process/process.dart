@@ -6,16 +6,16 @@ import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/model_api/materialTrackingCableDetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/models/bundle_print.dart';
-import 'package:molex/screens/operator/bin.dart';
+
+import 'package:molex/screens/operator/location.dart';
 import 'package:molex/screens/operator/process/100complete.dart';
 import 'package:molex/screens/operator/process/generateLabel.dart';
 import 'package:molex/screens/operator/process/partiallyComplete.dart';
 import 'package:molex/screens/widgets/P1AutoCurScheduledetail.dart';
-import 'package:molex/screens/widgets/P1processDetail.dart';
-import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -230,11 +230,12 @@ class _DetailState extends State<Detail> {
     super.initState();
   }
 
-   void continueProcess(String name) {
+  void continueProcess(String name) {
     setState(() {
       rightside = name;
     });
   }
+
   Future<void> _print({
     String ipaddress,
     String bq,
@@ -489,14 +490,26 @@ class _DetailState extends State<Detail> {
                               } else if (rightside == "label") {
                                 return GenerateLabel(
                                   schedule: widget.schedule,
-                                  machine: widget.machine ,
+                                  machine: widget.machine,
                                   userId: widget.userId,
                                 );
                               } else if (rightside == "complete") {
-                                return FullyComplete(
-                                  userId: widget.userId,
-                                  machine: widget.machine,
-                                );
+                                if (widget.machine.category ==
+                                    "Manual Cutting") {
+                                  return FullyComplete(
+                                    userId: widget.userId,
+                                    machine: widget.machine,
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Location(
+                                              userId: widget.userId,
+                                              machine: widget.machine,
+                                            )),
+                                  );
+                                }
                               } else if (rightside == "partial") {
                                 return PartiallyComplete(
                                   userId: widget.userId,
@@ -675,7 +688,7 @@ class _DetailState extends State<Detail> {
                         'Cable',
                         'Cut Length Spec(mm) -${cableDetail.cutLengthSpec}',
                         'Cable Part Number(Description)',
-                        '${cableDetail.cablePartNumber}(${cableDetail.description })',
+                        '${cableDetail.cablePartNumber}(${cableDetail.description})',
                         'From Strip Length Spec(mm) ${cableDetail.stripLengthFrom} \n To Strip Length Spec(mm) ${cableDetail.stripLengthTo}',
                         0.28);
                   } else {
@@ -800,6 +813,7 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
+
   Widget quantitycell(String title, int quantity) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 6.0),
@@ -1028,12 +1042,11 @@ class _DetailState extends State<Detail> {
                 iconEnabledColor: Colors.black,
 
                 items: <String>[
-                  'Terminal A,Cutlength,Terminal B',
-                  'Terminal A,Cutlength',
-                  'Cutlenght, Terminal B',
-                  'Terminal A',
-                  'Terminal B',
-                  'Preparation',
+                  'CRIMP-FROM,CUTLENGTH,CRIMP-TO',
+                  'CRIMP-FROM,CUTLENGTH',
+                  'CUTLENGTH,CRIMP-TO',
+                  'CRIMP-FROM',
+                  'CRIMP-TO',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -1044,7 +1057,7 @@ class _DetailState extends State<Detail> {
                   );
                 }).toList(),
                 hint: Text(
-                  'Select Terminal',
+                  'Select Process',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,
@@ -1101,7 +1114,7 @@ class _ProcessState extends State<Process> {
   @override
   Widget build(BuildContext context) {
     // Terminal A,Cutlength,Terminal B
-    if (widget.type == "Terminal A,Cutlength,Terminal B") {
+    if (widget.type == "CRIMP-FROM,CUTLENGTH,CRIMP-TO") {
       return FutureBuilder(
           future: apiService.startProcess1(process),
           builder: (context, snapshot) {
@@ -1120,7 +1133,7 @@ class _ProcessState extends State<Process> {
                               Padding(
                                   padding: const EdgeInsets.all(0.0),
                                   child: Text(
-                                    "Process Type : \nTerminal A,\nCutlength,\nTerminal B",
+                                    "Process Type :\nCRIMP-FROM,\nCUTLENGTH,\nCRIMP-TO",
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 13,
@@ -1144,7 +1157,7 @@ class _ProcessState extends State<Process> {
     }
     // Terminal A
 
-    if (widget.type == "Terminal A") {
+    if (widget.type == "CRIMP-FROM,CUTLENGTH") {
       return Row(
         children: [
           GestureDetector(
@@ -1158,7 +1171,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Process Type : \nTerminal A",
+                      "Process Type : \nCRIMP-FROM,\nCUTLENGTH",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -1186,7 +1199,7 @@ class _ProcessState extends State<Process> {
     }
     // Terminal B
 
-    if (widget.type == "Terminal B") {
+    if (widget.type == "CUTLENGTH,CRIMP-TO") {
       return Column(
         children: [
           GestureDetector(
@@ -1202,7 +1215,7 @@ class _ProcessState extends State<Process> {
                   child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Text(
-                        "Process Type : Terminal B",
+                        "Process Type :\nCUTLENGTH,\nCRIMP-TO",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -1216,7 +1229,7 @@ class _ProcessState extends State<Process> {
         ],
       );
     }
-    if (widget.type == "Terminal A,Cutlength") {
+    if (widget.type == "CRIMP-FROM") {
       return Column(
         children: [
           GestureDetector(
@@ -1230,7 +1243,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Process Type :\n Terminal A,\nCutlength",
+                      "Process Type :\nCRIMP-FROM",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -1257,7 +1270,7 @@ class _ProcessState extends State<Process> {
       );
     }
 
-    if (widget.type == "Cutlenght, Terminal B") {
+    if (widget.type == "CRIMP-TO") {
       return Column(
         children: [
           GestureDetector(
@@ -1271,7 +1284,7 @@ class _ProcessState extends State<Process> {
                 Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Text(
-                      "Process Type : \nCutlenght,\nTerminal B",
+                      "Process Type : \nCRIMP-TO",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
@@ -1297,70 +1310,52 @@ class _ProcessState extends State<Process> {
         ],
       );
     }
-    if (widget.type == "Preparation") {
-      return Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                expanded = !expanded;
-              });
-            },
-            child: Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        "Process Type : \n Preparation",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )),
-                ),
-                tableRow('Terminal A,Cutlength,Terminal B'),
-              ],
-            ),
-          ),
-          (() {
-            if (expanded) {
-              return Column(
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }()),
-        ],
-      );
-    } else {
-      return Container(
-        child: Center(
-          child: Text(widget.type ?? ""),
-        ),
-      );
-    }
   }
 
   Widget table(String type, String pn, String r, String l, String a, String p) {
-    return Container(
-        width: MediaQuery.of(context).size.width * 0.47,
-        child: Column(children: [
-          row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE', 'PENDING',
-              Colors.blue[100]),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
-              Colors.grey[100]),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
-              Colors.grey[100]),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
-              Colors.grey[100]),
-        ]));
+    ApiService apiService = new ApiService();
+    return FutureBuilder(
+        future: apiService.getMaterialTrackingCableDetail(
+            partNo: widget.schedule.cablePartNumber),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<MaterialTrackingCableDetails> materialtrackingdetail =
+                snapshot.data;
+            return Container(
+                width: MediaQuery.of(context).size.width * 0.47,
+                child: Column(children: [
+                  row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE',
+                      'PENDING', Colors.blue[100]),
+                  ListView.builder(
+                      itemCount: materialtrackingdetail.length,
+                      itemBuilder: (context, index) {
+                        return row(
+                            "${materialtrackingdetail[index].partNumber.toString()}",
+                            "${materialtrackingdetail[index].uom}",
+                            "${materialtrackingdetail[index].required.toString()}",
+                            "${materialtrackingdetail[index].loaded.toString()}",
+                            "${materialtrackingdetail[index].available.toString()}",
+                            "${materialtrackingdetail[index].pending.toString()}",
+                            Colors.grey[100]);
+                      })
+                  // row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
+                  //     Colors.grey[100]),
+                  // row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
+                  //     Colors.grey[100]),
+                  // row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
+                  //     Colors.grey[100]),
+                ]));
+          } else {
+            return Container(
+                width: MediaQuery.of(context).size.width * 0.47,
+                child: Column(
+                  children: [
+                    row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE',
+                        'PENDING', Colors.blue[100]),
+                  ],
+                ));
+          }
+        });
   }
 
   Widget row(String partno, String uom, String require, String loaded,

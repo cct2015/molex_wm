@@ -1,12 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
+import 'package:molex/model_api/postrawmatList_model.dart';
+import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 
 class MaterialPickOp2 extends StatefulWidget {
   final CrimpingSchedule schedule;
@@ -32,10 +36,14 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
   bool isCollapsedRawMaterial = false;
   bool isCollapsedScannedMaterial = false;
   DateTime selectedDate = DateTime.now();
-
+  ApiService apiService;
+    List<RawMaterial> rawMaterial = [];
   bool keyBoard = false;
+    List<RawMaterial> rawmaterial1;
+      List<PostRawMaterial> selectdItems = [];
   @override
   void initState() {
+        apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     _textNode.requestFocus();
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -126,7 +134,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
           color: Colors.red,
         ),
         title: const Text(
-          'Material',
+          'Raw Material Loading',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,
@@ -296,7 +304,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
     );
   }
 
-  Widget scannerInput() {
+ Widget scannerInput() {
     double width = MediaQuery.of(context).size.width * 0.8;
     return Row(
       children: [
@@ -319,7 +327,22 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                       keyboardType: TextInputType.number,
                       autofocus: true,
                       focusNode: _textNode,
-                      onSubmitted: (value) {},
+                      onSubmitted: (value) {
+                        for (RawMaterial ip in rawMaterial) {
+                          if (ip.partNunber.toString() == value) {
+                            if (!rawMaterial.contains(ip)) {
+                              _trackingNumber.requestFocus();
+                              Future.delayed(
+                                const Duration(milliseconds: 100),
+                                () {
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                },
+                              );
+                            }
+                          }
+                        }
+                      },
                       onChanged: (value) {
                         setState(() {
                           partNumber = value;
@@ -342,7 +365,8 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                                     _partNumberController.clear();
                                   });
                                 },
-                                child: Icon(Icons.clear, size: 18))
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
                             : Container(),
                         labelText: "Part No.",
                         fillColor: Colors.white,
@@ -406,7 +430,8 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                                     _trackingNumberController.clear();
                                   });
                                 },
-                                child: Icon(Icons.clear, size: 18))
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
                             : Container(),
                         labelText: "Tracebility Number",
                         fillColor: Colors.white,
@@ -510,21 +535,67 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                       ),
                     ),
                     onPressed: () {
+                      print('rawmaterial = $rawMaterial');
                       setState(() {
-                        _partNumberController.clear();
-                        _trackingNumberController.clear();
-                        _qtyController.clear();
-                        partNumber = null;
-                        trackingNumber = null;
-                        qty = null;
-                        _textNode.requestFocus();
-                        Future.delayed(
-                          const Duration(milliseconds: 100),
-                          () {
-                            SystemChannels.textInput
-                                .invokeMethod('TextInput.hide');
-                          },
-                        );
+                        PostRawMaterial postRawmaterial = new PostRawMaterial();
+                        for (RawMaterial ip in rawMaterial) {
+                          // print(rawMaterial.contains(ip).toString());
+                          // print('loop ${ip.partNunber.toString()}');
+                          if (ip.partNunber == partNumber) {
+                            if (!selectdItems.contains(ip)) {
+                              print('loop ${ip.partNunber.toString()}');
+                              // postRawmaterial.date = selectedDate;
+                              postRawmaterial.partDescription = ip.description;
+                              print('qty $qty');
+                              postRawmaterial.existingQuantity = '0';
+                              postRawmaterial.scannedQuantity = qty;
+                              postRawmaterial.orderidentification =
+                                  "${widget.schedule.purchaseOrder}" ?? '0';
+                              postRawmaterial.totalScheduledQuantity =
+                                  "${widget.schedule.bundleQuantityTotal}" ?? '0';
+                              postRawmaterial.unitOfMeasurement = ip.uom ?? '0';
+                              postRawmaterial.cablePartNumber =
+                                  partNumber != null
+                                      ? partNumber ?? '0'
+                                      : 'null';
+                              postRawmaterial.machineIdentification =
+                                  widget.machine.machineNumber; //TODO machine number
+                              postRawmaterial.finishedGoodsNumber =
+                                  "${widget?.schedule?.finishedGoods}" ?? '0';
+                              postRawmaterial.schedulerIdentification =
+                          "${widget.schedule.scheduleId}";
+                              // ? int.parse(widget.schedule.scheduledId)
+                              // : 0;
+                              // "${selectedDate.toLocal()}".split(' ')[0];
+                              // postRawmaterial.color =
+                              //     widget?.schedule?. ?? 'color';
+                              postRawmaterial.process =
+                                  widget?.schedule?.process ?? '0';
+                              postRawmaterial.status = "SUCCESS";
+                              postRawmaterial.length =
+                                  "${widget.schedule.length}" ?? '0';
+                              postRawmaterial.traceabilityNumber =
+                                  trackingNumber;
+                              print(postRawmaterial);
+                              postRawmaterial.date = selectedDate;
+                              selectdItems.add(postRawmaterial);
+                              _partNumberController.clear();
+                              _trackingNumberController.clear();
+                              _qtyController.clear();
+                              partNumber = null;
+                              trackingNumber = null;
+                              qty = null;
+                              _textNode.requestFocus();
+                              Future.delayed(
+                                const Duration(milliseconds: 100),
+                                () {
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                },
+                              );
+                            }
+                          }
+                        }
                       });
                     },
                     child: Text('Add')),
@@ -542,7 +613,19 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               onPrimary: Colors.white,
             ),
             onPressed: () {
-              _showConfirmationDialog();
+              List<String> rawPartNo = rawmaterial1.map((e) {
+                return e.partNunber;
+              }).toList();
+              print(rawPartNo.toSet());
+              List<String> scannedPartNo = selectdItems.map((e) {
+                return e.cablePartNumber;
+              }).toList();
+              print(scannedPartNo.toSet());
+              if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
+                _showConfirmationDialog();
+              } else {
+                _notAllRawMaterial();
+              }
             },
             child: Text(
               'Start Process',
@@ -567,6 +650,19 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
   // to Show the raw material required
   Widget buildDataRawMaterial() {
+     return FutureBuilder(
+        future: apiService.rawMaterial(
+            machineId: widget.machine.machineNumber,
+            fgNo: "${widget.schedule.finishedGoods}",
+            scheduleId:"${widget.schedule.scheduleId}"),
+        // 'EMU-M/C-038B', '367760913', '367870011', '1223445'),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<RawMaterial> rawmaterial = snapshot.data;
+            rawmaterial1 = snapshot.data;
+
+            rawMaterial = snapshot.data;
+
     return Container(
       child: Column(
         children: [
@@ -581,7 +677,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                   triggerCollapseRawMaterial();
                 },
                 child: Text(
-                  'Raw material Scan',
+                  'Required Raw Material',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -629,21 +725,21 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                       ),
                       DataColumn(
                         label: Text(
-                          'REQ Qty/PC',
+                          'Req. Per Unit',
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
                       DataColumn(
                         label: Text(
-                          'Total SCh Qty',
+                          'Req Schedule Unit',
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
                     ],
-                    rows: items
+                    rows: rawmaterial
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
-                                e.partNo,
+                                e.partNunber,
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
@@ -655,11 +751,11 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.oty,
+                                e.requireQuantity,
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.schQty,
+                                e.toatalScheduleQuantity,
                                 style: TextStyle(fontSize: 12),
                               )),
                             ]))
@@ -672,6 +768,9 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
         ],
       ),
     );
+          }
+        }
+     );
   }
 
   // To Show the scanned products with quantity
@@ -699,13 +798,24 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               ),
               Row(
                 children: [
-                  IconButton(
-                      icon: isCollapsedScannedMaterial
-                          ? Icon(Icons.keyboard_arrow_down)
-                          : Icon(Icons.keyboard_arrow_up),
-                      onPressed: () {
+                  GestureDetector(
+                      onTap: () {
                         triggerCollapseScannedMaterial();
-                      })
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Icon(isCollapsedScannedMaterial
+                            ? Icons.keyboard_arrow_down
+                            : Icons.keyboard_arrow_up),
+                      ))
+
+                  // IconButton(
+                  //     icon: isCollapsedScannedMaterial
+                  //         ? Icon(Icons.keyboard_arrow_down)
+                  //         : Icon(Icons.keyboard_arrow_up),
+                  //     onPressed: () {
+
+                  //     })
                 ],
               )
             ],
@@ -745,12 +855,12 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
-                      DataColumn(
-                        label: Text(
-                          'UOM',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
+                      // DataColumn(
+                      //   label: Text(
+                      //     'UOM',
+                      //     style: TextStyle(fontSize: 12),
+                      //   ),
+                      // ),
                       DataColumn(
                         label: Text(
                           'EXIST QTY	',
@@ -770,34 +880,36 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                         ),
                       ),
                     ],
-                    rows: selectditems
+                    rows: selectdItems
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
-                                e.partNo,
+                                e.cablePartNumber.toString(),
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.description,
+                                e.partDescription,
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.partNo,
+                                e.traceabilityNumber.toString(),
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.date,
+                                "${e.date.toLocal()}".split(' ')[0],
                                 style: TextStyle(fontSize: 12),
                               )),
-                              DataCell(Text(e.uom)),
-                              DataCell(Text("25.5")),
-                              DataCell(Text("30")),
+                              // DataCell(Text(e.n.toString())),
+                              DataCell(Text(e.existingQuantity.toString())),
+                              DataCell(Text(e.scannedQuantity.toString())),
                               DataCell(IconButton(
                                 icon: Icon(
                                   Icons.delete,
                                   color: Colors.red,
                                 ),
                                 onPressed: () {
-                                  selectditems.remove(e);
+                                  setState(() {
+                                    selectdItems.remove(e);
+                                  });
                                 },
                               )),
                             ]))
@@ -876,42 +988,42 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
       color: Colors.grey[100],
       child: Container(
         decoration: BoxDecoration(
-          border: Border(
-              left: BorderSide(
-            color: schedule.scheduledStatus == "Completed"
-                ? Colors.green
-                : schedule.scheduledStatus == "Pending"
-                    ? Colors.red
-                    : Colors.green[100],
-            width: 5,
-          )),
+          // border: Border(
+          //     left: BorderSide(
+          //   color: schedule.scheduledStatus == "Completed"
+          //       ? Colors.green
+          //       : schedule.scheduledStatus == "Pending"
+          //           ? Colors.red
+          //           : Colors.green[100],
+          //   width: 5,
+          // )),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell(schedule.purchaseOrder, 0.1),
+            cell(schedule.purchaseOrder.toString(), 0.1),
             //Fg Part
-            cell(schedule.finishedGoods, 0.1),
+            cell(schedule.finishedGoods.toString(), 0.1),
             //Schudule ID
-            cell(schedule.scheduleId, 0.1),
+            cell(schedule.scheduleId.toString(), 0.1),
 
             //Cable Part
-            cell(schedule.cablePartNo, 0.1),
+            cell(schedule.cablePartNo.toString(), 0.1),
             //Process
             cell(schedule.process, 0.1),
             // Cut length
-            cell(schedule.length, 0.1),
+            cell(schedule.length.toString(), 0.1),
             //Color
             cell(schedule.wireColour, 0.1),
             //Scheduled Qty
-            cell(schedule.scheduledQuantity, 0.1),
+            cell(schedule.bundleQuantityTotal.toString(), 0.1),
             //Schudule
             Container(
               width: width * 0.1,
               child: Center(
                 child: Text(
-                  "11:00 - 12:00",
+                  "null",
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 12,
@@ -926,6 +1038,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
     );
   }
 
+
   Future<void> _showConfirmationDialog() async {
     Future.delayed(
       const Duration(milliseconds: 50),
@@ -939,12 +1052,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
       builder: (BuildContext context) {
         return Center(
           child: AlertDialog(
-            title: Center(child: Text('Start Process')),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[Center(child: Text('Proceed to Process'))],
-              ),
-            ),
+            title: Center(child: Text('Proceed to Process')),
             actions: <Widget>[
               ElevatedButton(
                   style: ButtonStyle(
@@ -967,19 +1075,19 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                         (states) => Colors.green),
                   ),
                   onPressed: () {
-                    // apiService.postRawmaterial(selectdItems).then((value) {
-                    //   if (value) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProcessPage2(
-                                schedule: widget.schedule,
-                                userId: widget.userId,
-                                machine: widget.machine,
-                              )),
-                    );
-                    // } else {}
-                    // });
+                    apiService.postRawmaterial(selectdItems).then((value) {
+                      if (value) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProcessPage2(
+                                    schedule: widget.schedule,
+                                    userId: widget.userId,
+                                    machine: widget.machine,
+                                  )),
+                        );
+                      } else {}
+                    });
                   },
                   child: Text('       Confirm      ')),
             ],
@@ -988,4 +1096,50 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
       },
     );
   }
+
+  Future<void> _notAllRawMaterial() async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return Center(
+          child: AlertDialog(
+            title: Center(child: Text('Raw Material Not Added')),
+            content: Text('Add all raw material to start process'),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.green),
+                  ),
+                  onPressed: () {
+                    apiService.postRawmaterial(selectdItems).then((value) {
+                      if (value) {
+                        Navigator.pop(context);
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => ProcessPage2(
+                        //             schedule: widget.schedule,
+                        //             userId: widget.userId,
+                        //             machine: widget.machine,
+                        //           )),
+                        // );
+                      } else {}
+                    });
+                  },
+                  child: Text('        Add       ')),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }

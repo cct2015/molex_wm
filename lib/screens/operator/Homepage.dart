@@ -20,6 +20,7 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   Schedule schedule;
   int type = 0;
+  String sameMachine = 'true';
   int scheduleType = 0;
   ApiService apiService;
 
@@ -317,7 +318,8 @@ class _HomepageState extends State<Homepage> {
               schedule: schedule,
               userId: widget.userId,
               machine: widget.machine,
-              type: type == 0 ? "A" : "B",
+              type: type == 0 ? "A" : "M",
+              scheduleType:scheduleType == 0?"true":"false",
             ),
           ],
         ),
@@ -494,8 +496,9 @@ class SchudleTable extends StatefulWidget {
   Schedule schedule;
   String userId;
   MachineDetails machine;
+  String scheduleType;
   String type;
-  SchudleTable({Key key, this.schedule, this.userId, this.type, this.machine})
+  SchudleTable({Key key, this.schedule, this.userId, this.type, this.machine,this.scheduleType})
       : super(key: key);
 
   @override
@@ -529,7 +532,7 @@ class _SchudleTableState extends State<SchudleTable> {
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
               future: apiService.getScheduelarData(
-                  machId: widget.machine.machineNumber, type: widget.type),
+                  machId: widget.machine.machineNumber, type: widget.type,sameMachine: widget.scheduleType),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // return  buildDataRow(schedule:widget.schedule,c:2);
@@ -661,9 +664,9 @@ class _SchudleTableState extends State<SchudleTable> {
         decoration: BoxDecoration(
           border: Border(
               left: BorderSide(
-            color: schedule.scheduledStatus == "Completed"
+            color: schedule.scheduledStatus.toLowerCase() == "Completed".toLowerCase()
                 ? Colors.green
-                : schedule.scheduledStatus == "Partial"
+                : schedule.scheduledStatus.toLowerCase() == "Partial".toLowerCase()
                     ? Colors.orange[100]
                     : Colors.blue[100],
             width: 5,
@@ -698,7 +701,7 @@ class _SchudleTableState extends State<SchudleTable> {
               padding: EdgeInsets.all(5),
               child: Container(
                 decoration: BoxDecoration(
-                  color: schedule.scheduledStatus == 'Completed'
+                  color: schedule.scheduledStatus.toLowerCase() == 'Completed'.toLowerCase()
                       ? Colors.green[50]
                       : schedule.scheduledStatus=="Partial"?Colors.red[100]:Colors.blue[100],
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -710,9 +713,9 @@ class _SchudleTableState extends State<SchudleTable> {
                       textStyle: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: schedule.scheduledStatus == 'Completed'
+                        color: schedule.scheduledStatus.toLowerCase() == 'Completed'.toLowerCase()
                             ? Colors.green
-                            : schedule.scheduledStatus=="Partial"?Colors.yellow[900]:Colors.blue[900],
+                            : schedule.scheduledStatus.toLowerCase()=="Partial".toLowerCase()?Colors.yellow[900]:Colors.blue[900],
                       ),
                     ),
                   ),
@@ -724,7 +727,7 @@ class _SchudleTableState extends State<SchudleTable> {
               width: 84,
               height: 35,
               child: Center(
-                child: schedule.scheduledStatus == "Completed"
+                child: schedule.scheduledStatus.toLowerCase() == "Completed".toLowerCase()
                     ? Text("-")
                     : ElevatedButton(
                         style: ButtonStyle(
@@ -752,7 +755,7 @@ class _SchudleTableState extends State<SchudleTable> {
                           );
                         },
                         child: Container(
-                            child: schedule.scheduledStatus == "Allocated"|| schedule.scheduledStatus == "Open"||schedule.scheduledStatus == ""||schedule.scheduledStatus == null
+                            child: schedule.scheduledStatus.toLowerCase() == "Allocated".toLowerCase()|| schedule.scheduledStatus.toLowerCase() == "Open".toLowerCase()||schedule.scheduledStatus.toLowerCase() == "".toLowerCase()||schedule.scheduledStatus == null
                                 ? Text(
                                     "Accept",
                                     style: GoogleFonts.openSans(

@@ -135,12 +135,12 @@ class _P1ScheduleDetailWIPState extends State<P1ScheduleDetailWIP> {
                 heading: "Cut Length",
                 value: "${widget.schedule.length}",
                 width: 0.08),
-            feild(heading: "Color", value: "${widget.schedule.color}", width: 0.05),
+            feild(heading: "Color", value: "${widget.schedule.color}", width: 0.1),
             feild(
                 heading: "Scheduled Qty",
                 value: "${widget.schedule.scheduledQuantity}",
-                width: 0.1),
-            feild(heading: "Schedule", value: "10:00 - 11:00", width: 0.1)
+                width: 0.09),
+            feild(heading: "Schedule", value: "10:00 - 11:00", width: 0.08)
           ],
         ));
   }
@@ -202,7 +202,7 @@ class _P1ScheduleDetailWIPState extends State<P1ScheduleDetailWIP> {
                               width: 0.15),
                           feild(heading: "Drg Rev", value:"${fgDetail.drgRev}", width: 0.05),
                           feild(
-                              heading: "Cable Serial No",
+                              heading: "Cable#",
                               value: fgDetail.cableSerialNo.toString() ,
                               width: 0.09),
                           feild(

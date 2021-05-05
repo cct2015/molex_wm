@@ -5,6 +5,7 @@ import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/model_api/materialTrackingCableDetails_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
@@ -252,7 +253,7 @@ class _DetailState extends State<Detail> {
                   children: [
                     Container(
                         color: Colors.transparent,
-                        child: Process(type: _chosenValue)),
+                        child: Process(type: _chosenValue,schedule: widget.schedule,  )),
 
                     //buttons and num pad
                     Container(
@@ -1172,101 +1173,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget scheduleDetail() {
-    Widget cell(String name, double width) {
-      return Container(
-        width: MediaQuery.of(context).size.width * width,
-        height: 40,
-        child: Center(
-          child: Text(name,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-        ),
-      );
-    }
 
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 90,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              cell(
-                "Order Id",
-                0.1,
-              ),
-              cell(
-                "FG Part",
-                0.1,
-              ),
-              cell("Schedule ID", 0.08),
-              cell("Cable Part No.", 0.08),
-              cell("Process", 0.1),
-              cell("Cut Length(mm)", 0.1),
-              cell("Color", 0.1),
-              cell("Scheduled Qty", 0.1),
-              cell("Scheduled", 0.1),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              cell("846478041", 120),
-              cell("367810109", 140),
-              cell("945810107", 140),
-              cell("824923001", 140),
-              cell("Wirecutting", 140),
-              cell("2060", 140),
-              cell("RED", 70),
-              cell("500 Pcs", 115),
-              cell("11:00-12:00AM", 160),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget fgDetails() {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(.5),
-                blurRadius: 20.0, // soften the shadow
-                spreadRadius: 0.0, //extend the shadow
-                offset: Offset(
-                  3.0, // Move to right 10  horizontally
-                  3.0, // Move to bottom 10 Vertically
-                ),
-              )
-            ],
-          ),
-          width: MediaQuery.of(context).size.width,
-          height: 30,
-          // color: Colors.grey[200],
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 40,
-            color: Colors.white,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  boxes("FG Description",
-                      'OW4441 WIRE ASSY AC110KW BASE FEATURES'),
-                  boxes("FG Scheduled", '29/03/2021'),
-                  boxes("Customer", 'APC COOLING'),
-                  boxes("Drg Rev", 'D'),
-                  boxes("Cable #", '1'),
-                  boxes('Tolerance ', '± 5 / ± 5'),
-                ]),
-          )),
-    );
-  }
 
   Widget boxes(
     String str1,
@@ -1309,8 +1216,8 @@ class _DetailState extends State<Detail> {
               height: 91,
               child: FutureBuilder(
                   future: apiService.getCableTerminalA(
-                      cablepartno: widget.schedule.cablePartNo ??
-                          widget.schedule.finishedGoods),
+                      cablepartno: "${widget.schedule.cablePartNo.toString()}" ??
+                          "${widget.schedule.finishedGoods}"),
                   builder: (context, snapshot) {
                     CableTerminalA terminalA = snapshot.data;
                     if (snapshot.hasData) {
@@ -1337,8 +1244,8 @@ class _DetailState extends State<Detail> {
             ),
             FutureBuilder(
                 future: apiService.getCableDetails(
-                    fgpartNo: widget.schedule.finishedGoods,
-                    cablepartno: widget.schedule.cablePartNo ?? "0"),
+                    fgpartNo: "${widget.schedule.finishedGoods}",
+                    cablepartno: "${widget.schedule.cablePartNo}" ?? "0"),
                 builder: (context, snapshot) {
                   CableDetails cableDetail = snapshot.data;
                   if (snapshot.hasData) {
@@ -1357,8 +1264,8 @@ class _DetailState extends State<Detail> {
                 }),
             FutureBuilder(
                 future: apiService.getCableTerminalB(
-                    cablepartno: widget.schedule.cablePartNo ??
-                        widget.schedule.finishedGoods),
+                    cablepartno: "${widget.schedule.cablePartNo}" ??
+                        "${widget.schedule.finishedGoods}"),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     CableTerminalB cableTerminalB = snapshot.data;
@@ -1557,7 +1464,8 @@ class _DetailState extends State<Detail> {
 
 class Process extends StatefulWidget {
   String type;
-  Process({this.type});
+  CrimpingSchedule schedule;
+  Process({this.type,this.schedule});
   @override
   _ProcessState createState() => _ProcessState();
 }
@@ -1824,39 +1732,6 @@ class _ProcessState extends State<Process> {
     }
   }
 
-  Widget terminal() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 5.0),
-      child: Container(
-        height: 70,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            process(
-                'Terminal A',
-                'From Strip Length Spec(mm) - 40',
-                'Type (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(4.00-4.50)(367760073)(CIC APPL-1.16-1.23)(5.89)',
-                'From Unsheathing Length (mm) - 40'),
-            process(
-                'Cable',
-                'Cut Length Spec(mm) - 2060',
-                'Cable Part Number(Description)',
-                '884566210(3X20AWG SHIELD PVC GR 4.9MM UL2464)',
-                ''),
-            process(
-                'Terminal B',
-                'To Strip Length Spec(mm) - 60',
-                'Type(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                '(SC)(3.00-3.50)(367760073)(JAM APPL-0.86-0.96)(5.89)(ICH-2.72 REF)',
-                'To Unsheathing Length (mm) - 60'),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget process(String p1, String p2, String p3, String p4, String p5) {
     return Padding(
@@ -1932,95 +1807,125 @@ class _ProcessState extends State<Process> {
       ),
     );
   }
-
   Widget table(String type, String pn, String r, String l, String a, String p) {
-    return Container(
-        width: MediaQuery.of(context).size.width * 0.48,
-        color: Colors.grey[200],
-        child: Column(children: [
-          row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE', 'PENDING'),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
-          row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m'),
-        ]));
+    ApiService apiService = new ApiService();
+    return FutureBuilder(
+        future: apiService.getMaterialTrackingCableDetail(
+            partNo: "${widget.schedule.cablePartNo}"),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<MaterialTrackingCableDetails> materialtrackingdetail =
+                snapshot.data;
+            return Container(
+                width: MediaQuery.of(context).size.width * 0.47,
+                child: Column(children: [
+                  row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE',
+                      'PENDING', Colors.blue[100]),
+                  ListView.builder(
+                      itemCount: materialtrackingdetail.length,
+                      itemBuilder: (context, index) {
+                        return row(
+                            "${materialtrackingdetail[index].partNumber.toString()}",
+                            "${materialtrackingdetail[index].uom}",
+                            "${materialtrackingdetail[index].required.toString()}",
+                            "${materialtrackingdetail[index].loaded.toString()}",
+                            "${materialtrackingdetail[index].available.toString()}",
+                            "${materialtrackingdetail[index].pending.toString()}",
+                            Colors.grey[100]);
+                      })
+                ]));
+          } else {
+            return Container(
+                width: MediaQuery.of(context).size.width * 0.47,
+                child: Column(
+                  children: [
+                    row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE',
+                        'PENDING', Colors.blue[100]),
+                  ],
+                ));
+          }
+        });
   }
 
   Widget row(String partno, String uom, String require, String loaded,
-      String available, String pending) {
-    return Row(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
+      String available, String pending, Color color) {
+    return Container(
+      color: color,
+      child: Row(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                    border: Border.all(width: 0.5, color: Colors.grey[100])),
+                height: 20,
+                width: MediaQuery.of(context).size.width * 0.1,
+                child: Center(
+                    child: Text(partno, style: TextStyle(fontSize: 12)))),
+            Container(
               decoration: BoxDecoration(
                   border: Border.all(width: 0.5, color: Colors.grey[100])),
               height: 20,
-              width: MediaQuery.of(context).size.width * 0.1,
-              child:
-                  Center(child: Text(partno, style: TextStyle(fontSize: 12)))),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.05,
-            child: Center(
-              child: Text(
-                uom,
-                style: TextStyle(fontSize: 10),
+              width: MediaQuery.of(context).size.width * 0.05,
+              child: Center(
+                child: Text(
+                  uom,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                require,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  require,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                loaded,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  loaded,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                available,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  available,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 0.5, color: Colors.grey[100])),
-            height: 20,
-            width: MediaQuery.of(context).size.width * 0.08,
-            child: Center(
-              child: Text(
-                pending,
-                style: TextStyle(fontSize: 10),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 0.5, color: Colors.grey[100])),
+              height: 20,
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Center(
+                child: Text(
+                  pending,
+                  style: TextStyle(fontSize: 10),
+                ),
               ),
             ),
-          ),
-        ],
-      )
-    ]);
+          ],
+        )
+      ]),
+    );
   }
 
   Widget tableRow(String name) {

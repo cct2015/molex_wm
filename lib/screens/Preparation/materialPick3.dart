@@ -4,12 +4,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
-import 'package:molex/screens/Preparation/process/process3.dart';
-import 'package:molex/screens/operator%202/process/process2.dart';
-import 'package:molex/screens/operator/process/process.dart';
 import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 
 class MaterialPickOp3 extends StatefulWidget {
   PreparationSchedule schedule;
@@ -35,8 +34,11 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
   bool isCollapsedRawMaterial = false;
   bool isCollapsedScannedMaterial = false;
   DateTime selectedDate = DateTime.now();
+   List<RawMaterial> rawMaterial = [];
+   ApiService apiService;
   @override
   void initState() {
+     apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     _textNode.requestFocus();
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -505,15 +507,15 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
               onPrimary: Colors.white,
             ),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Processpage3(
-                          schedule: widget.schedule,
-                          userId: widget.userId,
-                          machine: widget.machine,
-                        )),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => Processpage3(
+              //             schedule: widget.schedule,
+              //             userId: widget.userId,
+              //             machine: widget.machine,
+              //           )),
+              // );
             },
             child: Text(
               'Strat Process',
@@ -535,6 +537,19 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
 
   // to Show the raw material required
   Widget buildDataRawMaterial() {
+
+        return FutureBuilder(
+        future: apiService.rawMaterial(
+            machineId: widget.machine.machineNumber,
+            fgNo: widget.schedule.finishedGoodsNumber,
+            scheduleId: widget.schedule.scheduledId),
+        // 'EMU-M/C-038B', '367760913', '367870011', '1223445'),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<RawMaterial> rawmaterial = snapshot.data;
+           
+
+            rawMaterial = snapshot.data;
     return Container(
       child: Column(
         children: [
@@ -608,10 +623,10 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
                         ),
                       ),
                     ],
-                    rows: items
+                    rows: rawmaterial
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
-                                e.partNo,
+                                e.partNunber,
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
@@ -623,11 +638,11 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.oty,
+                                e.uom,
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                e.schQty,
+                                e.toatalScheduleQuantity,
                                 style: TextStyle(fontSize: 12),
                               )),
                             ]))
@@ -640,6 +655,10 @@ class _MaterialPickOp3State extends State<MaterialPickOp3> {
         ],
       ),
     );
+          }
+        }
+        );
+
   }
 
   // To Show the scanned products with quantity

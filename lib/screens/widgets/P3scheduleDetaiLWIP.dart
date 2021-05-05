@@ -131,17 +131,17 @@ class _P3ScheduleDetailWIPState extends State<P3ScheduleDetailWIP> {
             feild(
                 heading: "Process",
                 value: widget.schedule.process,
-                width: 0.15),
+                width: 0.10),
             feild(
                 heading: "Cut Length",
                 value: widget.schedule.length,
-                width: 0.08),
-            feild(heading: "Color", value: widget.schedule.color, width: 0.05),
+                width: 0.07),
+            feild(heading: "Color", value: widget.schedule.color, width: 0.12),
             feild(
                 heading: "Scheduled Qty",
                 value: widget.schedule.scheduledQuantity,
                 width: 0.1),
-            feild(heading: "Schedule", value: "10:00 - 11:00", width: 0.1)
+            feild(heading: "Schedule", value: "null", width: 0.1)
           ],
         ));
   }

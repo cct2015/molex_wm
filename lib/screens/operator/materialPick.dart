@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
@@ -37,6 +38,7 @@ class _MaterialPickState extends State<MaterialPick> {
   DateTime selectedDate = DateTime.now();
   ApiService apiService;
   bool keyBoard = false;
+  List<RawMaterial> rawmaterial1;
 
   @override
   void initState() {
@@ -134,7 +136,7 @@ class _MaterialPickState extends State<MaterialPick> {
           color: Colors.red,
         ),
         title: const Text(
-          'Material',
+          'Raw Material Loading',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,
@@ -542,34 +544,37 @@ class _MaterialPickState extends State<MaterialPick> {
                               // postRawmaterial.date = selectedDate;
                               postRawmaterial.partDescription = ip.description;
                               print('qty $qty');
-                              postRawmaterial.existingQuantity =
-                                  ip.toatalScheduleQuantity??'0';
+                              postRawmaterial.existingQuantity = '0';
                               postRawmaterial.scannedQuantity = qty;
                               postRawmaterial.orderidentification =
-                                  widget.schedule.orderId??'0';
+                                  widget.schedule.orderId ?? '0';
                               postRawmaterial.totalScheduledQuantity =
-                                  widget.schedule.scheduledQuantity??'0';
-                              postRawmaterial.unitOfMeasurement = ip.uom??'0';
+                                  widget.schedule.scheduledQuantity ?? '0';
+                              postRawmaterial.unitOfMeasurement = ip.uom ?? '0';
                               postRawmaterial.cablePartNumber =
                                   partNumber != null
                                       ? partNumber ?? '0'
                                       : 'null';
                               postRawmaterial.machineIdentification =
                                   "mac"; //TODO machine number
-                              postRawmaterial.finishedGoodsNumber = 
-                                  widget?.schedule?.finishedGoodsNumber??'0';
+                              postRawmaterial.finishedGoodsNumber =
+                                  widget?.schedule?.finishedGoodsNumber ?? '0';
                               postRawmaterial.schedulerIdentification =
                                   widget.schedule.scheduledId;
                               // ? int.parse(widget.schedule.scheduledId)
                               // : 0;
                               // "${selectedDate.toLocal()}".split(' ')[0];
-                              postRawmaterial.color = widget?.schedule?.color??'color';
-                              postRawmaterial.process = widget?.schedule?.process??'0';
+                              postRawmaterial.color =
+                                  widget?.schedule?.color ?? 'color';
+                              postRawmaterial.process =
+                                  widget?.schedule?.process ?? '0';
                               postRawmaterial.status = "SUCCESS";
-                              postRawmaterial.length =widget.schedule.length??'0';
-                              postRawmaterial.traceabilityNumber =trackingNumber;
+                              postRawmaterial.length =
+                                  widget.schedule.length ?? '0';
+                              postRawmaterial.traceabilityNumber =
+                                  trackingNumber;
                               print(postRawmaterial);
-                              postRawmaterial.date= selectedDate;
+                              postRawmaterial.date = selectedDate;
                               selectdItems.add(postRawmaterial);
                               _partNumberController.clear();
                               _trackingNumberController.clear();
@@ -605,7 +610,19 @@ class _MaterialPickState extends State<MaterialPick> {
               onPrimary: Colors.white,
             ),
             onPressed: () {
-              _showConfirmationDialog();
+              List<String> rawPartNo = rawmaterial1.map((e) {
+                return e.partNunber;
+              }).toList();
+              print(rawPartNo.toSet());
+              List<String> scannedPartNo = selectdItems.map((e) {
+                return e.cablePartNumber;
+              }).toList();
+              print(scannedPartNo.toSet());
+              if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
+                _showConfirmationDialog();
+              } else {
+                _notAllRawMaterial();
+              }
             },
             child: Text(
               'Start Process',
@@ -639,6 +656,7 @@ class _MaterialPickState extends State<MaterialPick> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<RawMaterial> rawmaterial = snapshot.data;
+            rawmaterial1 = snapshot.data;
 
             rawMaterial = snapshot.data;
 
@@ -656,7 +674,7 @@ class _MaterialPickState extends State<MaterialPick> {
                           triggerCollapseRawMaterial();
                         },
                         child: Text(
-                          'Raw material Scan',
+                          'Required Raw Material',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -695,7 +713,6 @@ class _MaterialPickState extends State<MaterialPick> {
                         child: DataTable(
                             columns: const <DataColumn>[
                               DataColumn(
-                               
                                 label: Text(
                                   'Part No.',
                                   style: TextStyle(fontSize: 12),
@@ -715,13 +732,13 @@ class _MaterialPickState extends State<MaterialPick> {
                               ),
                               DataColumn(
                                 label: Text(
-                                  'REQ Qty/PC',
+                                  'Req. Per Unit',
                                   style: TextStyle(fontSize: 12),
                                 ),
                               ),
                               DataColumn(
                                 label: Text(
-                                  'Total SCh Qty',
+                                  'Req Schedule Unit',
                                   style: TextStyle(fontSize: 12),
                                 ),
                               ),
@@ -887,7 +904,6 @@ class _MaterialPickState extends State<MaterialPick> {
                               )),
                               DataCell(Text(
                                 "${e.date.toLocal()}".split(' ')[0],
-                                
                                 style: TextStyle(fontSize: 12),
                               )),
                               // DataCell(Text(e.n.toString())),
@@ -930,7 +946,6 @@ class _MaterialPickState extends State<MaterialPick> {
         return Center(
           child: AlertDialog(
             title: Center(child: Text('Proceed to Process')),
-          
             actions: <Widget>[
               ElevatedButton(
                   style: ButtonStyle(
@@ -968,6 +983,50 @@ class _MaterialPickState extends State<MaterialPick> {
                     });
                   },
                   child: Text('       Confirm      ')),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _notAllRawMaterial() async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return Center(
+          child: AlertDialog(
+            title: Center(child: Text('Raw Material Not Added')),
+            content: Text('Add all raw material to start process'),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.green),
+                  ),
+                  onPressed: () {
+                    apiService.postRawmaterial(selectdItems).then((value) {
+                      if (value) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProcessPage(
+                                    schedule: widget.schedule,
+                                    userId: widget.userId,
+                                    machine: widget.machine,
+                                  )),
+                        );
+                      } else {}
+                    });
+                  },
+                  child: Text('        Add       ')),
             ],
           ),
         );
@@ -1074,7 +1133,7 @@ class _MaterialPickState extends State<MaterialPick> {
               width: width * 0.1,
               child: Center(
                 child: Text(
-                  "11:00 - 12:00",
+                  "null",
                   style: TextStyle(
                     color: Colors.blue,
                     fontSize: 12,

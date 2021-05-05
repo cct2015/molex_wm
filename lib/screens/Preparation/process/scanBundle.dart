@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
+import 'package:molex/screens/widgets/time.dart';
 
 enum Status {
   scan,
@@ -11,8 +12,11 @@ enum Status {
 }
 
 class ScanBundleP3 extends StatefulWidget {
-  PreparationSchedule schedule;
-  ScanBundleP3({this.schedule});
+  String bundleId;
+  String machineId;
+  String userId;
+  // PreparationSchedule schedule;
+  ScanBundleP3({this.bundleId,this.machineId,this.userId});
   @override
   _ScanBundleP3State createState() => _ScanBundleP3State();
 }
@@ -54,7 +58,156 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
   @override
   Widget build(BuildContext context) {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
-    return main(status);
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.red,
+        ),
+        title: const Text(
+          'Preparation',
+          style: TextStyle(color: Colors.red),
+        ),
+        elevation: 0,
+        actions: [
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
+                child: Center(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Icon(
+                        Icons.schedule,
+                        size: 18,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                    Text(
+                      "Shift A",
+                      style: TextStyle(fontSize: 13, color: Colors.black),
+                    ),
+                  ],
+                )),
+              ),
+            ],
+          ),
+
+          //machineID
+          Container(
+            padding: EdgeInsets.all(1),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.person,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.userId,
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Icon(
+                              Icons.settings,
+                              size: 18,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                          Text(
+                            widget.machineId ?? "",
+                            style: TextStyle(fontSize: 13, color: Colors.black),
+                          ),
+                        ],
+                      )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+
+          TimeDisplay(),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              width: 40,
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.redAccent[100],
+                      offset: const Offset(
+                        2.0,
+                        2.0,
+                      ),
+                      blurRadius: 3.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Colors.white,
+                      offset: const Offset(0.0, 0.0),
+                      blurRadius: 0.0,
+                      spreadRadius: 0.0,
+                    ), //Bo
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                  image: DecorationImage(
+                      image: AssetImage(
+                        'assets/image/profile.jpg',
+                      ),
+                      fit: BoxFit.fill)),
+            ),
+          )
+        ],
+      ),
+      body:Center(child: scanbundleidpop()) ,
+    );
+    
+    
   }
 
   Widget main(Status status) {
@@ -152,128 +305,133 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
 
   Widget scanbundleidpop() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: MediaQuery.of(context).size.width * 0.65,
-          height: MediaQuery.of(context).size.height * 0.55,
-          decoration: BoxDecoration(
-            borderRadius: new BorderRadius.circular(20.0),
-            color: Colors.grey[100],
-          ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Container(
-              width: MediaQuery.of(context).size.width * 0.65,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: feild(
-                            heading: "Bundle Id",
-                            value: "${_scanIdController.text}",
-                            width: 0.12),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: feild(
-                            heading: "Bundle Qty",
-                            value: "${widget.schedule.bundleQuantity}",
-                            width: 0.15),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: feild(
-                            heading: "Rejected Qty",
-                            value: "${widget.schedule.bundleQuantity}",
-                            width: 0.15),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
+            width: MediaQuery.of(context).size.width * 0.65,
+            height: MediaQuery.of(context).size.height * 0.55,
+            decoration: BoxDecoration(
+              borderRadius: new BorderRadius.circular(20.0),
+              color: Colors.grey[100],
+            ),
+            child: Container(
+                width: MediaQuery.of(context).size.width * 0.65,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: feild(
+                              heading: "Bundle Id",
+                              value: "${widget.bundleId}",
+                              width: 0.12),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: feild(
+                              heading: "Bundle Qty",
+                              value: "",
+                              width: 0.15),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: feild(
+                              heading: "Rejected Qty",
+                              value: "",
+                              width: 0.15),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
                       child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(children: [
-                              quantity(
-                                  'Cable Damage', 10, cableDamageController),
-                              quantity('Cable Cross Cut', 10,
-                                  cablecrosscutController),
-                              quantity(' Strip Length less / More', 10,
-                                  stripLengthController),
-                              quantity('Strip Nick mark / blade mark', 10,
-                                  stripNickController),
-                            ]),
-                            Column(children: [
-                              quantity('Unsheathing Length less / More', 10,
-                                  unsheathingLengthController),
-                              quantity(
-                                  'Drain Wire Cut', 10, drainWirecutController),
-                              quantity('Trimming cable Wrong', 10,
-                                  trimmingCableWrongController),
-                              quantity('Trimming Length less / More', 10,
-                                  trimmingLengthlessController),
-                            ]),
-                            Column(children: [
-                              quantity('HST Improper Shrinking', 10,
-                                  hstImproperShrinkingController),
-                              quantity('HST Damage', 10, hstDamageController),
-                              quantity(
-                                  'Boot Reverse', 10, bootReverseController),
-                              quantity('Boot Damage', 10, bootDamageController),
-                            ]),
-                            Column(children: [
-                              quantity('Wrong Boot Insertion', 10,
-                                  wrongBootInsertionController),
-                            ]),
-                          ],
+                        scrollDirection: Axis.vertical,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(children: [
+                                quantity(
+                                    'Cable Damage', 10, cableDamageController),
+                                quantity('Cable Cross Cut', 10,
+                                    cablecrosscutController),
+                                quantity(' Strip Length less / More', 10,
+                                    stripLengthController),
+                                quantity('Strip Nick mark / blade mark', 10,
+                                    stripNickController),
+                              ]),
+                              Column(children: [
+                                quantity('Unsheathing Length less / More', 10,
+                                    unsheathingLengthController),
+                                quantity(
+                                    'Drain Wire Cut', 10, drainWirecutController),
+                                quantity('Trimming cable Wrong', 10,
+                                    trimmingCableWrongController),
+                                quantity('Trimming Length less / More', 10,
+                                    trimmingLengthlessController),
+                              ]),
+                              Column(children: [
+                                quantity('HST Improper Shrinking', 10,
+                                    hstImproperShrinkingController),
+                                quantity('HST Damage', 10, hstDamageController),
+                                quantity(
+                                    'Boot Reverse', 10, bootReverseController),
+                                quantity('Boot Damage', 10, bootDamageController),
+                              ]),
+                              Column(children: [
+                                quantity('Wrong Boot Insertion', 10,
+                                    wrongBootInsertionController),
+                              ]),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.green[300];
-                            return Colors
-                                .green[800]; // Use the component's default.
-                          },
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          Future.delayed(
-                            const Duration(milliseconds: 50),
-                            () {
-                              SystemChannels.textInput
-                                  .invokeMethod('TextInput.hide');
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                          child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed))
+                                return Colors.green[300];
+                              return Colors
+                                  .green[800]; // Use the component's default.
                             },
-                          );
-                          _scanIdController.clear();
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            Future.delayed(
+                              const Duration(milliseconds: 50),
+                              () {
+                                SystemChannels.textInput
+                                    .invokeMethod('TextInput.hide');
+                              },
+                            );
+                            _scanIdController.clear();
 
-                          status = Status.scan;
-                          next = !next;
-                        });
-                      },
-                      child: Text('Save and Scan next',
-                          style: TextStyle(color: Colors.white)),
-                    )),
-                  ),
-                ],
-              )),
+                            status = Status.scan;
+                            next = !next;
+                          });
+                        },
+                        child: Text('Save and Scan next',
+                            style: TextStyle(color: Colors.white)),
+                      )),
+                    ),
+                  ],
+                )),
+          ),
         ),
         Container(
-            padding: EdgeInsets.all(50),
+          height: 300,
+            padding: EdgeInsets.all(20),
             child: Center(child: keypad(mainController))),
       ],
     );

@@ -375,7 +375,7 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Viscan(
-                                                  userId: '45642313',
+                                                  userId: widget.userId,
                                                   machineId: '45642313',
                                                 )),
                                       );

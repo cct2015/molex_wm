@@ -51,7 +51,7 @@ class _NavPageState extends State<NavPage> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomePageOp3(
-                          machine: widget.machine,
+                         
                           userId: widget.userId,
                         )),
               );

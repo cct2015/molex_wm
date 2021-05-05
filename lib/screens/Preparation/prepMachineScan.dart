@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
-import 'package:molex/screens/operator%202/Home_0p2.dart';
+import 'package:molex/screens/Preparation/Home_0p3.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/service/apiService.dart';
 
-class MachineId extends StatefulWidget {
-  Employee employee;
-  MachineId({this.employee});
+class PrepMachine extends StatefulWidget {
+   Employee employee;
+   PrepMachine({this.employee});
   @override
-  _MachineIdState createState() => _MachineIdState();
+  _PrepMachineState createState() => _PrepMachineState();
 }
 
-class _MachineIdState extends State<MachineId> {
-  TextEditingController _textController = new TextEditingController();
+class _PrepMachineState extends State<PrepMachine> {
+    TextEditingController _textController = new TextEditingController();
   FocusNode _textNode = new FocusNode();
   String machineId;
   ApiService apiService;
-
-  @override
+    @override
   void initState() {
     apiService = new ApiService();
     _textNode.requestFocus();
@@ -43,15 +41,6 @@ class _MachineIdState extends State<MachineId> {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
   }
-
-  @override
-  void dispose() {
-    // Clean up the focus node when the Form is disposed.
-    _textNode.dispose();
-
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,16 +79,6 @@ class _MachineIdState extends State<MachineId> {
                           width: 320, fit: BoxFit.cover),
                       GestureDetector(
                         onTap: () {
-                          MachineDetails machineDetails1 =
-                              new MachineDetails(machineNumber: machineId);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Homepage(
-                                      userId: widget.employee.empId,
-                                      machine: machineDetails1,
-                                    )),
-                          );
                         },
                         child: Text(
                           'Scan Machine ${machineId ?? ""}',
@@ -123,97 +102,14 @@ class _MachineIdState extends State<MachineId> {
                             ),
                           ),
                           onPressed: () {
-                            apiService
-                                .getmachinedetails(machineId)
-                                .then((value) {
-                              if (value != null) {
-                                MachineDetails machineDetails = value[0];
-                                Fluttertoast.showToast(
-                                    msg: machineId,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-
-                                print("machineID:$machineId");
-                                switch (machineDetails.category) {
-                                  case "Manual Crimping":
-                                    Navigator.pushReplacement(
+                               Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => HomePageOp2(
+                                          builder: (context) => HomePageOp3(
                                                 userId: widget.employee.empId,
-                                                machine: machineDetails,
+                                                machineId: machineId,
                                               )),
                                     );
-                                    break;
-                                  case "Manual Cutting":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  case "Automatic Cut & Crimp":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  case "Semi Automatic Strip and Crimp machine":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePageOp2(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  case "Automatic Cutting":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  default:
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                }
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: "Machine not Found",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                                setState(() {
-                                  machineId = null;
-                                  _textController.clear();
-                                });
-                              }
-                            });
                           },
                           child: Text('Next'),
                         ),
@@ -302,16 +198,4 @@ class _MachineIdState extends State<MachineId> {
     ));
   }
 
-  Future<String> scanBarcodeNormal() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          "#ff6666", "Cancel", true, ScanMode.BARCODE);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    return barcodeScanRes;
-  }
 }

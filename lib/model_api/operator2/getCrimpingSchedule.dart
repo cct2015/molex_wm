@@ -38,17 +38,17 @@ class GetCrimpingSchedule {
 
 class Data {
     Data({
-        this.getBundleDetail,
+        this.crimpingBundleList,
     });
 
-    List<CrimpingSchedule> getBundleDetail;
+    List<CrimpingSchedule> crimpingBundleList;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        getBundleDetail: List<CrimpingSchedule>.from(json["get bundle detail "].map((x) => CrimpingSchedule.fromJson(x))),
+        crimpingBundleList: List<CrimpingSchedule>.from(json["Crimping Bundle List "].map((x) => CrimpingSchedule.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "get bundle detail ": List<dynamic>.from(getBundleDetail.map((x) => x.toJson())),
+        "Crimping Bundle List ": List<dynamic>.from(crimpingBundleList.map((x) => x.toJson())),
     };
 }
 
@@ -60,28 +60,22 @@ class CrimpingSchedule {
         this.purchaseOrder,
         this.finishedGoods,
         this.scheduleId,
-        this.scheduledQuantity,
-        this.scheduledStatus,
         this.process,
-        this.numberOfBundles,
         this.binIdentification,
         this.bundleIdentificationCount,
         this.bundleQuantityTotal,
     });
 
-    String cablePartNo;
-    String length;
+    int cablePartNo;
+    int length;
     String wireColour;
-    String purchaseOrder;
-    String finishedGoods;
-    String scheduleId;
-    String scheduledQuantity;
-    String scheduledStatus;
+    int purchaseOrder;
+    int finishedGoods;
+    int scheduleId;
     String process;
-    String numberOfBundles;
     String binIdentification;
-    String bundleIdentificationCount;
-    String bundleQuantityTotal;
+    int bundleIdentificationCount;
+    int bundleQuantityTotal;
 
     factory CrimpingSchedule.fromJson(Map<String, dynamic> json) => CrimpingSchedule(
         cablePartNo: json["cablePartNo"],
@@ -90,10 +84,7 @@ class CrimpingSchedule {
         purchaseOrder: json["purchaseOrder"],
         finishedGoods: json["finishedGoods"],
         scheduleId: json["scheduleId"],
-        scheduledQuantity: json["scheduledQuantity"],
-        scheduledStatus: json["scheduledStatus"],
         process: json["process"],
-        numberOfBundles: json["numberOfBundles"],
         binIdentification: json["binIdentification"],
         bundleIdentificationCount: json["bundleIdentificationCount"],
         bundleQuantityTotal: json["bundleQuantityTotal"],
@@ -106,10 +97,7 @@ class CrimpingSchedule {
         "purchaseOrder": purchaseOrder,
         "finishedGoods": finishedGoods,
         "scheduleId": scheduleId,
-        "scheduledQuantity": scheduledQuantity,
-        "scheduledStatus": scheduledStatus,
         "process": process,
-        "numberOfBundles": numberOfBundles,
         "binIdentification": binIdentification,
         "bundleIdentificationCount": bundleIdentificationCount,
         "bundleQuantityTotal": bundleQuantityTotal,

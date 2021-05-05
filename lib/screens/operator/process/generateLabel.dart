@@ -97,10 +97,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   TextEditingController lengthvariationController = new TextEditingController();
   FocusNode lengthvariationFocus = new FocusNode();
 
-
-/// Main Content
-
-
+  /// Main Content
 
   bool labelGenerated = false;
   String _output = '';
@@ -157,6 +154,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
       _printerStatus = printerStatus;
     });
   }
+
   ApiService apiService;
   @override
   void initState() {
@@ -175,8 +173,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
     super.initState();
   }
 
-  void clear(){
-        terminalDamangeController.clear();
+  void clear() {
+    terminalDamangeController.clear();
     brushLengthLessMoreController.clear();
     setupRejectionsController.clear();
     improperCrimpingController.clear();
@@ -215,6 +213,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
     crimpingPositionOutMissCrimpController.clear();
     crimpOnInsulationController.clear();
   }
+
   @override
   Widget build(BuildContext context) {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -234,7 +233,6 @@ class _GenerateLabelState extends State<GenerateLabel> {
         return generateLabel();
         break;
       case Status.generateLabel:
-         
         return rejectioncase();
         break;
       case Status.scanBin:
@@ -494,7 +492,6 @@ class _GenerateLabelState extends State<GenerateLabel> {
   }
 
   Widget rejectioncase() {
-  
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
@@ -746,7 +743,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           quantitycell(
                             name: "Crimping Position Out / Miss Crimp",
                             quantity: 10,
-                            textEditingController: crimpingPositionOutMissCrimpController,
+                            textEditingController:
+                                crimpingPositionOutMissCrimpController,
                           ),
                           quantitycell(
                             name: "Crimp On Insulation",
@@ -788,29 +786,43 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       onPressed: () {
                         setState(() {
                           postGenerateLabel = new PostGenerateLabel();
-                          postGenerateLabel.cablePartNumber = widget.schedule.cablePartNumber;
-                          postGenerateLabel.finishedGoods = widget.schedule.finishedGoodsNumber;
-                          postGenerateLabel.machineIdentification = widget.machine.machineNumber;
-                          postGenerateLabel.terminalBend = terminalBendController.text;
-                          postGenerateLabel.terminalDamage = terminalDamangeController.text;
-                          apiService.postGeneratelabel(postGenerateLabel, bundleQty.text).then((value) {
-                            if(value!=null){
+                          postGenerateLabel.cablePartNumber =
+                              widget.schedule.cablePartNumber;
+                          postGenerateLabel.finishedGoods =
+                              widget.schedule.finishedGoodsNumber;
+                          postGenerateLabel.machineIdentification =
+                              widget.machine.machineNumber;
+                          postGenerateLabel.terminalBend =
+                              terminalBendController.text;
+                          postGenerateLabel.terminalDamage =
+                              terminalDamangeController.text;
+                          apiService
+                              .postGeneratelabel(
+                                  postGenerateLabel, bundleQty.text)
+                              .then((value) {
+                            if (value != null) {
                               ResponseGenerateLabel response;
                               response = value;
-                               _print(
-                              // ipaddress: "192.168.1.130",
-                              ipaddress: "172.26.59.14",
-                              bq: bundleQty.text,
-                              qr: response.data.generateLabel.bundleId,
-                              routenumber1: "${response.data.generateLabel.routeNo}",
-                              fgPartNumber: widget.schedule.finishedGoodsNumber,
-                              cutlength: "${widget.schedule.length}",
-                              cablepart: "${widget.schedule.cablePartNumber}",
-                              wireGauge: "${widget.schedule.finishedGoodsNumber}",
-                              terminalfrom: "${response.data.generateLabel.terminalFrom}",
-                              terminalto: "${response.data.generateLabel.terminalTo}");
+                              _print(
+                                  ipaddress: "192.168.1.130",
+                                  // ipaddress: "172.26.59.14",
+                                  bq: bundleQty.text,
+                                  qr: "${response.data.generateLabel.bundleId}",
+                                  routenumber1:
+                                      "${response.data.generateLabel.routeNo}",
+                                  fgPartNumber:
+                                      "${widget.schedule.finishedGoodsNumber}",
+                                  cutlength: "${widget.schedule.length}",
+                                  cablepart:
+                                      "${widget.schedule.cablePartNumber}",
+                                  wireGauge:
+                                      "${widget.schedule.finishedGoodsNumber}",
+                                  terminalfrom:
+                                      "${response.data.generateLabel.terminalFrom}",
+                                  terminalto:
+                                      "${response.data.generateLabel.terminalTo}");
                             }
-  clear();
+                            clear();
                           });
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;

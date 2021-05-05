@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:molex/Machine_Id.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
@@ -11,9 +12,9 @@ import 'package:molex/screens/widgets/time.dart';
 
 class Processpage3 extends StatefulWidget {
   String userId;
-  MachineDetails machine;
+  String machineId;
   PreparationSchedule schedule;
-  Processpage3({this.machine, this.userId, this.schedule});
+  Processpage3 ({this.userId,this.machineId, this.schedule});
   @override
   _Processpage3State createState() => _Processpage3State();
 }
@@ -129,7 +130,7 @@ class _Processpage3State extends State<Processpage3> {
                             ),
                           ),
                           Text(
-                            widget.machine.machineNumber ?? "",
+                            widget.machineId ?? "",
                             style: TextStyle(fontSize: 13, color: Colors.black),
                           ),
                         ],
@@ -184,7 +185,7 @@ class _Processpage3State extends State<Processpage3> {
                   children: [
                     Detail(
                       userId: widget.userId,
-                      machine: widget.machine,
+                      machineId: widget.machineId,
                       schedule: widget.schedule,
                     ),
                   ],
@@ -200,8 +201,8 @@ class Detail extends StatefulWidget {
   PreparationSchedule schedule;
   String rightside;
   String userId;
-  MachineDetails machine;
-  Detail({this.schedule, this.rightside, this.machine, this.userId});
+  String machineId;
+  Detail({this.schedule, this.rightside, this.machineId, this.userId});
   @override
   _DetailState createState() => _DetailState();
 }
@@ -305,13 +306,13 @@ class _DetailState extends State<Detail> {
                             onPrimary: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Location(
-                                          userId: widget.userId,
-                                          machine: widget.machine,
-                                        )));
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => Location(
+                            //               userId: widget.userId,
+                            //               machine: widget.machine,
+                            //             )));
                           },
                           child: Text(
                             "100% complete",
@@ -457,7 +458,7 @@ class _DetailState extends State<Detail> {
   Widget mainbox(String mainbr) {
     if (mainbr == "scanBundle") {
       return ScanBundleP3(
-        schedule: widget.schedule,
+        // schedule: widget.schedule,
       );
     }
     if (mainbr == "partial") {
