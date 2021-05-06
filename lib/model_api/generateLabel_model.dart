@@ -12,37 +12,34 @@ class PostGenerateLabel {
     PostGenerateLabel({
         this.finishedGoods,
         this.cablePartNumber,
-        this.machineIdentification,
-        this.rejectedQuantity,
-        this.terminalDamage,
-        this.terminalBend,
+        this.cutLength,
+        this.color,
+        this.bundleQuantity,
     });
 
     String finishedGoods;
     String cablePartNumber;
-    String machineIdentification;
-    String rejectedQuantity;
-    String terminalDamage;
-    String terminalBend;
+    String cutLength;
+    String color;
+    String bundleQuantity;
 
     factory PostGenerateLabel.fromJson(Map<String, dynamic> json) => PostGenerateLabel(
         finishedGoods: json["finishedGoods"],
         cablePartNumber: json["cablePartNumber"],
-        machineIdentification: json["machineIdentification"],
-        rejectedQuantity: json["rejectedQuantity"],
-        terminalDamage: json["terminalDamage"],
-        terminalBend: json["terminalBend"],
+        cutLength: json["cutLength"],
+        color: json["color"],
+        bundleQuantity: json["bundleQuantity"],
     );
 
     Map<String, dynamic> toJson() => {
         "finishedGoods": finishedGoods,
         "cablePartNumber": cablePartNumber,
-        "machineIdentification": machineIdentification,
-        "rejectedQuantity": rejectedQuantity,
-        "terminalDamage": terminalDamage,
-        "terminalBend": terminalBend,
+        "cutLength": cutLength,
+        "color": color,
+        "bundleQuantity": bundleQuantity,
     };
 }
+
 // To parse this JSON data, do
 //
 //     final responseGenerateLabel = responseGenerateLabelFromJson(jsonString);

@@ -74,48 +74,48 @@ class _ViscanState extends State<Viscan> {
             ),
 
             //machineID
-            Container(
-              padding: EdgeInsets.all(1),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                        child: Center(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Icon(
-                                Icons.person,
-                                size: 18,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                            Text(
-                              widget.userId,
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
-                            ),
-                          ],
-                        )),
-                      ),
+            // Container(
+            //   padding: EdgeInsets.all(1),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.end,
+            //     children: [
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //         children: [
+            //           Container(
+            //             padding: EdgeInsets.symmetric(horizontal: 10),
+            //             height: 24,
+            //             decoration: BoxDecoration(
+            //               color: Colors.grey[100],
+            //               borderRadius: BorderRadius.all(Radius.circular(100)),
+            //             ),
+            //             child: Center(
+            //                 child: Row(
+            //               mainAxisAlignment: MainAxisAlignment.start,
+            //               children: [
+            //                 Padding(
+            //                   padding:
+            //                       const EdgeInsets.symmetric(horizontal: 4.0),
+            //                   child: Icon(
+            //                     Icons.person,
+            //                     size: 18,
+            //                     color: Colors.redAccent,
+            //                   ),
+            //                 ),
+            //                 Text(
+            //                   widget.userId,
+            //                   style:
+            //                       TextStyle(fontSize: 13, color: Colors.black),
+            //                 ),
+            //               ],
+            //             )),
+            //           ),
                      
-                    ],
-                  )
-                ],
-              ),
-            ),
+            //         ],
+            //       )
+            //     ],
+            //   ),
+            // ),
 
             TimeDisplay(),
             Padding(
@@ -158,7 +158,6 @@ class _ViscanState extends State<Viscan> {
                 Detail(
                   viSchedule: widget.viSchedule,
                   userId: widget.userId,
-                  machineId: widget.machineId,
                 ),
               ],
             ),
@@ -171,10 +170,9 @@ class Detail extends StatefulWidget {
   ViScheduler viSchedule;
   String rightside;
   String userId;
-  String machineId;
-
+  
   @override
-  Detail({this.viSchedule, this.rightside, this.machineId, this.userId});
+  Detail({this.viSchedule, this.rightside, this.userId});
   @override
   _DetailState createState() => _DetailState();
 }

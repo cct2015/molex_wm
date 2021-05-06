@@ -5,8 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/screens/Preparation/Home_0p3.dart';
+import 'package:molex/screens/Preparation/prepMachineScan.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
 import 'package:molex/service/apiService.dart';
 
 class MachineId extends StatefulWidget {
@@ -109,7 +112,7 @@ class _MachineIdState extends State<MachineId> {
                       SizedBox(height: 20),
                       Container(
                         height: 40,
-                        width: 180,
+                        width: 200,
                         child: ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor:
@@ -218,6 +221,87 @@ class _MachineIdState extends State<MachineId> {
                           child: Text('Next'),
                         ),
                       ),
+                      SizedBox(height: 10),
+                      //INSPECTION
+                      Container(
+                        height: 40,
+                        width: 200,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed))
+                                    return Colors.green;
+                                  return Colors
+                                      .red; // Use the component's default.
+                                },
+                              ),
+                            ),
+                            onPressed: () {
+                              Fluttertoast.showToast(
+                                  msg: "logged In",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeVisualInspector(
+                                          userId: widget.employee.empId,
+                                        )),
+                              );
+                            },
+                            child: Text('Login as Inspection')),
+                      ),
+                      //pREPARATION
+                      SizedBox(height: 10),
+                      Container(
+                        height: 40,
+                        width: 200,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed))
+                                    return Colors.green;
+                                  return Colors
+                                      .red; // Use the component's default.
+                                },
+                              ),
+                            ),
+                            onPressed: () {
+                              Fluttertoast.showToast(
+                                  msg: "logged In",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => PrepMachine(
+                              //             employee: value,
+                              //           )),
+                              // );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePageOp3(
+                                          userId: widget.employee.empId,
+                                          machineId: machineId,
+                                        )),
+                              );
+                            },
+                            child: Text('Login as Preparation')),
+                      ),
+
                       Container(
                         child: RawKeyboardListener(
                             focusNode: FocusNode(),
@@ -281,8 +365,8 @@ class _MachineIdState extends State<MachineId> {
                 Material(
                   elevation: 5,
                   shadowColor: Colors.grey[200],
-                  shape:  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100.0)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100.0)),
                   child: Container(
                     height: 40,
                     width: 40,

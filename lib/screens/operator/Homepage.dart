@@ -727,7 +727,7 @@ class _SchudleTableState extends State<SchudleTable> {
               width: 84,
               height: 35,
               child: Center(
-                child: schedule.scheduledStatus.toLowerCase() == "Completed".toLowerCase()
+                child: schedule.scheduledStatus.toLowerCase() == "Complete".toLowerCase()
                     ? Text("-")
                     : ElevatedButton(
                         style: ButtonStyle(

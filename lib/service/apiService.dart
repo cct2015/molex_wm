@@ -86,7 +86,7 @@ class ApiService {
     var url = Uri.parse(
         baseUrl + "molex/machine/get-by-machine-number?machNo=$machineid");
     var response = await http.get(url);
-    print('Machine details status code ${response.statusCode}');
+    print('Machine details status code ${response.body}');
     Fluttertoast.showToast(
         msg: "Machine details status code ${response.statusCode}",
         toastLength: Toast.LENGTH_SHORT,
@@ -357,7 +357,7 @@ class ApiService {
         'body generate label :${postGenerateLabelToJson(postGenerateLabel)} ');
     var response = await http.post(url,
         body: postGenerateLabelToJson(postGenerateLabel), headers: headerList);
-    print("response post generate label ${response.statusCode}");
+    print("response post generate label ${response.body}");
     if (response.statusCode == 200) {
       ResponseGenerateLabel responseGenerateLabel =
           responseGenerateLabelFromJson(response.body);

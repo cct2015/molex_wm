@@ -153,115 +153,115 @@ class _LoginScanState extends State<LoginScan> {
                                   child: Text('Login')),
                             ),
                                SizedBox(height:10),
-                             Container(
-                              height: 40,
-                              width: 200,
-                              child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.pressed))
-                                          return Colors.green;
-                                        return Colors
-                                            .red; // Use the component's default.
-                                      },
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    print('pressed');
-                                    apiService.empIdlogin(userId).then((value) {
-                                      if (value != null) {
-                                        Fluttertoast.showToast(
-                                            msg: "logged In",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                        print("userId:$userId");
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => PrepMachine(
-                                                    employee: value,
-                                                  )),
-                                        );
-                                      } else {
-                                        Fluttertoast.showToast(
-                                            msg: "login Failed",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                        setState(() {
-                                          userId = null;
-                                          _textController.clear();
-                                        });
-                                      }
-                                    });
-                                  },
-                                  child: Text('Login as Preparation')),
-                            ),
-                            SizedBox(height:10),
-                             Container(
-                              height: 40,
-                              width: 200,
-                              child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty
-                                        .resolveWith<Color>(
-                                      (Set<MaterialState> states) {
-                                        if (states
-                                            .contains(MaterialState.pressed))
-                                          return Colors.green;
-                                        return Colors
-                                            .red; // Use the component's default.
-                                      },
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    print('pressed');
-                                    apiService.empIdlogin(userId).then((value) {
-                                      if (value != null) {
-                                        Fluttertoast.showToast(
-                                            msg: "logged In",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                        print("userId:$userId");
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => HomeVisualInspector(
-                                                    userId: value.empId,
-                                                  )),
-                                        );
-                                      } else {
-                                        Fluttertoast.showToast(
-                                            msg: "login Failed",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                        setState(() {
-                                          userId = null;
-                                          _textController.clear();
-                                        });
-                                      }
-                                    });
-                                  },
-                                  child: Text('Login as Inspection')),
-                            ),
+                            //  Container(
+                            //   height: 40,
+                            //   width: 200,
+                            //   child: ElevatedButton(
+                            //       style: ButtonStyle(
+                            //         backgroundColor: MaterialStateProperty
+                            //             .resolveWith<Color>(
+                            //           (Set<MaterialState> states) {
+                            //             if (states
+                            //                 .contains(MaterialState.pressed))
+                            //               return Colors.green;
+                            //             return Colors
+                            //                 .red; // Use the component's default.
+                            //           },
+                            //         ),
+                            //       ),
+                            //       onPressed: () {
+                            //         print('pressed');
+                            //         apiService.empIdlogin(userId).then((value) {
+                            //           if (value != null) {
+                            //             Fluttertoast.showToast(
+                            //                 msg: "logged In",
+                            //                 toastLength: Toast.LENGTH_SHORT,
+                            //                 gravity: ToastGravity.BOTTOM,
+                            //                 timeInSecForIosWeb: 1,
+                            //                 backgroundColor: Colors.red,
+                            //                 textColor: Colors.white,
+                            //                 fontSize: 16.0);
+                            //             print("userId:$userId");
+                            //             Navigator.pushReplacement(
+                            //               context,
+                            //               MaterialPageRoute(
+                            //                   builder: (context) => PrepMachine(
+                            //                         employee: value,
+                            //                       )),
+                            //             );
+                            //           } else {
+                            //             Fluttertoast.showToast(
+                            //                 msg: "login Failed",
+                            //                 toastLength: Toast.LENGTH_SHORT,
+                            //                 gravity: ToastGravity.BOTTOM,
+                            //                 timeInSecForIosWeb: 1,
+                            //                 backgroundColor: Colors.red,
+                            //                 textColor: Colors.white,
+                            //                 fontSize: 16.0);
+                            //             setState(() {
+                            //               userId = null;
+                            //               _textController.clear();
+                            //             });
+                            //           }
+                            //         });
+                            //       },
+                            //       child: Text('Login as Preparation')),
+                            // ),
+                            // SizedBox(height:10),
+                            //  Container(
+                            //   height: 40,
+                            //   width: 200,
+                            //   child: ElevatedButton(
+                            //       style: ButtonStyle(
+                            //         backgroundColor: MaterialStateProperty
+                            //             .resolveWith<Color>(
+                            //           (Set<MaterialState> states) {
+                            //             if (states
+                            //                 .contains(MaterialState.pressed))
+                            //               return Colors.green;
+                            //             return Colors
+                            //                 .red; // Use the component's default.
+                            //           },
+                            //         ),
+                            //       ),
+                            //       onPressed: () {
+                            //         print('pressed');
+                            //         apiService.empIdlogin(userId).then((value) {
+                            //           if (value != null) {
+                            //             Fluttertoast.showToast(
+                            //                 msg: "logged In",
+                            //                 toastLength: Toast.LENGTH_SHORT,
+                            //                 gravity: ToastGravity.BOTTOM,
+                            //                 timeInSecForIosWeb: 1,
+                            //                 backgroundColor: Colors.red,
+                            //                 textColor: Colors.white,
+                            //                 fontSize: 16.0);
+                            //             print("userId:$userId");
+                            //             Navigator.pushReplacement(
+                            //               context,
+                            //               MaterialPageRoute(
+                            //                   builder: (context) => HomeVisualInspector(
+                            //                         userId: value.empId,
+                            //                       )),
+                            //             );
+                            //           } else {
+                            //             Fluttertoast.showToast(
+                            //                 msg: "login Failed",
+                            //                 toastLength: Toast.LENGTH_SHORT,
+                            //                 gravity: ToastGravity.BOTTOM,
+                            //                 timeInSecForIosWeb: 1,
+                            //                 backgroundColor: Colors.red,
+                            //                 textColor: Colors.white,
+                            //                 fontSize: 16.0);
+                            //             setState(() {
+                            //               userId = null;
+                            //               _textController.clear();
+                            //             });
+                            //           }
+                            //         });
+                            //       },
+                            //       child: Text('Login as Inspection')),
+                            // ),
                             Container(
                                 alignment: Alignment.center,
                                 width: 0,

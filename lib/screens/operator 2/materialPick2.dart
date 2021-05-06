@@ -663,7 +663,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
             rawMaterial = snapshot.data;
 
-    return Container(
+        return Container(
       child: Column(
         children: [
           // heading
@@ -768,6 +768,8 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
         ],
       ),
     );
+          }else{
+            return Center(child: CircularProgressIndicator());
           }
         }
      );

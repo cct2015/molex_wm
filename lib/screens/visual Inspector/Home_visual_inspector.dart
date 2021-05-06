@@ -126,8 +126,6 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                 ),
               ],
             ),
-
-            //machineID
             Container(
               padding: EdgeInsets.all(1),
               child: Row(
@@ -376,7 +374,7 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                         MaterialPageRoute(
                                             builder: (context) => Viscan(
                                                   userId: widget.userId,
-                                                  machineId: '45642313',
+                                                 
                                                 )),
                                       );
                                     },

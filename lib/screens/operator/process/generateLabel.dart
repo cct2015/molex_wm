@@ -790,12 +790,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
                               widget.schedule.cablePartNumber;
                           postGenerateLabel.finishedGoods =
                               widget.schedule.finishedGoodsNumber;
-                          postGenerateLabel.machineIdentification =
-                              widget.machine.machineNumber;
-                          postGenerateLabel.terminalBend =
-                              terminalBendController.text;
-                          postGenerateLabel.terminalDamage =
-                              terminalDamangeController.text;
+                              postGenerateLabel.color=widget.schedule.color;
+                              postGenerateLabel.cutLength=widget.schedule.length;
                           apiService
                               .postGeneratelabel(
                                   postGenerateLabel, bundleQty.text)
@@ -816,11 +812,13 @@ class _GenerateLabelState extends State<GenerateLabel> {
                                   cablepart:
                                       "${widget.schedule.cablePartNumber}",
                                   wireGauge:
-                                      "${widget.schedule.finishedGoodsNumber}",
+                                      "${response.data.generateLabel.wireGauge}",
                                   terminalfrom:
                                       "${response.data.generateLabel.terminalFrom}",
                                   terminalto:
-                                      "${response.data.generateLabel.terminalTo}");
+                                      "${response.data.generateLabel.terminalTo}"
+                                      
+                                      );
                             }
                             clear();
                           });

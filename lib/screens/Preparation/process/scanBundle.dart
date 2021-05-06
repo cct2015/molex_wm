@@ -395,33 +395,28 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                           child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.pressed))
-                                return Colors.green[300];
-                              return Colors
-                                  .green[800]; // Use the component's default.
-                            },
-                          ),
+                       style: ElevatedButton.styleFrom(
+                          elevation: 4,
+                          primary: Colors.green, // background
+                          onPrimary: Colors.white,
                         ),
                         onPressed: () {
-                          setState(() {
-                            Future.delayed(
-                              const Duration(milliseconds: 50),
-                              () {
-                                SystemChannels.textInput
-                                    .invokeMethod('TextInput.hide');
-                              },
-                            );
-                            _scanIdController.clear();
+                            Navigator.pop(context);
+                          // setState(() {
+                          //   Future.delayed(
+                          //     const Duration(milliseconds: 50),
+                          //     () {
+                          //       SystemChannels.textInput
+                          //           .invokeMethod('TextInput.hide');
+                          //     },
+                          //   );
+                          //   _scanIdController.clear();
 
-                            status = Status.scan;
-                            next = !next;
-                          });
+                          //   status = Status.scan;
+                          //   next = !next;
+                          // });
                         },
-                        child: Text('Save and Scan next',
+                        child: Text('Save',
                             style: TextStyle(color: Colors.white)),
                       )),
                     ),

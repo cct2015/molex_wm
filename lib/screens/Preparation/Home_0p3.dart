@@ -368,31 +368,6 @@ class _SchudleTableState extends State<SchudleTable> {
   @override
   void initState() {
     apiService = ApiService();
-    rowList.add(
-      Schedule(
-          orderId: "846478041",
-          finishedGoodsNumber: "367810109",
-          scheduledId: "945810107",
-          cablePartNumber: "824923001",
-          process: "Wirecutting",
-          length: "2060",
-          color: "RED",
-          scheduledQuantity: "500 Pcs",
-          scheduledStatus: "Not Completed"),
-    );
-    rowList.add(
-      Schedule(
-          orderId: "846478042",
-          finishedGoodsNumber: "367810110",
-          scheduledId: "945810108",
-          cablePartNumber: "824923002",
-          process: "Wirecutting",
-          length: "2060",
-          color: "Green",
-          scheduledQuantity: "500 Pcs",
-          scheduledStatus: "Completed"),
-    );
-
     super.initState();
   }
 
