@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
-import 'package:molex/models/location_bin.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
@@ -21,13 +20,15 @@ class _LocationState extends State<Location> {
   TextEditingController _binController = new TextEditingController();
   FocusNode _binFocus = new FocusNode();
   FocusNode _locationFocus = new FocusNode();
-  List<LocationBin> listLocation = [];
+  List<TransferBinToLocation> transferList = [];
 
   String locationId;
   String binId;
   bool hasLocation = false;
+  ApiService apiService = new ApiService();
   @override
   void initState() {
+    apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     _locationFocus.requestFocus();
     Future.delayed(
@@ -38,10 +39,6 @@ class _LocationState extends State<Location> {
     );
     super.initState();
   }
-
-  void checkLocation(String l) {}
-
-  void checkBin(String bi) {}
 
   @override
   Widget build(BuildContext context) {
@@ -209,126 +206,10 @@ class _LocationState extends State<Location> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.white,
-                            ),
-                            child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.25,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: RawKeyboardListener(
-                                              focusNode: FocusNode(),
-                                              onKey: (event) =>
-                                                  handleKey(event.data),
-                                              child: TextField(
-                                                  focusNode: _locationFocus,
-                                                  autofocus: true,
-                                                  controller:
-                                                      _locationController,
-                                                  onTap: () {
-                                                    SystemChannels.textInput
-                                                        .invokeMethod(
-                                                            'TextInput.hide');
-                                                  },
-                                                  onSubmitted: (value) {},
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      locationId = value;
-                                                    });
-                                                  },
-                                                  decoration:
-                                                      new InputDecoration(
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color: Colors
-                                                                    .redAccent,
-                                                                width: 2.0),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color: Colors
-                                                                    .grey[400],
-                                                                width: 2.0),
-                                                          ),
-                                                          hintText:
-                                                              'Scan Location',
-                                                          contentPadding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      5.0))),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                          height: 40,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.red, // background
-                                              onPrimary: Colors.white,
-                                            ),
-                                            child: Text(
-                                              'Scan Location',
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                hasLocation = true;
-                                                _binFocus.requestFocus();
-                                                Future.delayed(
-                                                  const Duration(
-                                                      milliseconds: 50),
-                                                  () {
-                                                    SystemChannels.textInput
-                                                        .invokeMethod(
-                                                            'TextInput.hide');
-                                                  },
-                                                );
-                                              });
-                                            },
-                                          )),
-                                    ],
-                                  ),
-                                ]),
-                          ),
-                        ),
+                        location(),
                         bin(),
-                        Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: Container(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width * 0.2,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith(
-                                          (states) => Colors.green),
-                                ),
-                                onPressed: () {
-                                  _showConfirmationDialog();
-                                },
-                                child: Text('Confirm Transfer')),
-                          ),
-                        )
+                        confirmTransfer(),
+                        completeTransfer(),
                       ]),
                 ),
                 Container(child: SingleChildScrollView(child: dataTable())),
@@ -336,91 +217,122 @@ class _LocationState extends State<Location> {
         ));
   }
 
-  // Widget location() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(8.0),
-  //     child: Container(
-  //       height: 100,
-  //       width: 405,
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(30),
-  //         color: Colors.white,
-  //       ),
-  //       child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           children: [
-  //             Row(
-  //               children: [
-  //                 Padding(
-  //                   padding: const EdgeInsets.all(10.0),
-  //                   child: Container(
-  //                     width: 250,
-  //                     height: 80,
-  //                     child: Padding(
-  //                       padding: const EdgeInsets.all(15.0),
-  //                       child: RawKeyboardListener(
-  //                         focusNode: FocusNode(),
-  //                         onKey: (event) => handleKey(event.data),
-  //                         child: TextField(
-  //                             focusNode: _locationFocus,
-  //                             autofocus: true,
-  //                             controller: _locationController,
-  //                             onTap: () {
-  //                               SystemChannels.textInput
-  //                                   .invokeMethod('TextInput.hide');
-  //                             },
-  //                             onSubmitted: (value) {
-  //                               setState(() {
-  //                                 listLocation.add(LocationBin(
-  //                                     locationId: locationId, binId: binId));
-  //                                 _binController.clear();
-  //                                 binId = null;
-  //                               });
-  //                             },
-  //                             onChanged: (value) {
-  //                               setState(() {
-  //                                 binId = value;
-  //                               });
-  //                             },
-  //                             decoration: new InputDecoration(
-  //                                 focusedBorder: OutlineInputBorder(
-  //                                   borderSide: BorderSide(
-  //                                       color: Colors.redAccent, width: 2.0),
-  //                                 ),
-  //                                 enabledBorder: OutlineInputBorder(
-  //                                   borderSide: BorderSide(
-  //                                       color: Colors.grey[400], width: 2.0),
-  //                                 ),
-  //                                 hintText: 'Scan Bin',
-  //                                 contentPadding: const EdgeInsets.symmetric(
-  //                                     horizontal: 5.0))),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 Container(
-  //                     child: ElevatedButton(
-  //                   style: ElevatedButton.styleFrom(
-  //                     primary: Colors.red, // background
-  //                     onPrimary: Colors.white,
-  //                   ),
-  //                   child: Text(
-  //                     'Scan Location',
-  //                   ),
-  //                   onPressed: () {},
-  //                 )),
-  //               ],
-  //             ),
-  //           ]),
-  //     ),
-  //   );
-  // }
-
   handleKey(RawKeyEventDataAndroid key) {
     setState(() {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
+  }
+
+  Widget location() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.3,
+      child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: RawKeyboardListener(
+                        focusNode: FocusNode(),
+                        onKey: (event) => handleKey(event.data),
+                        child: TextField(
+                            focusNode: _locationFocus,
+                            autofocus: true,
+                            controller: _locationController,
+                            onTap: () {
+                              SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                            },
+                            onSubmitted: (value) {},
+                            onChanged: (value) {
+                              setState(() {
+                                locationId = value;
+                              });
+                            },
+                            decoration: new InputDecoration(
+                               suffix: _locationController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _locationController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
+                            : Container(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.redAccent, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.grey[400], width: 2.0),
+                                ),
+                                labelText: 'Scan Location',
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0))),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ]),
+    );
+  }
+
+  Widget confirmTransfer() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width * 0.23,
+        child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.resolveWith((states) => Colors.green),
+            ),
+            onPressed: () {
+              setState(() {
+                transferList
+                    .add(TransferBinToLocation(
+                      binLocation: locationId,
+                       binIdentification: binId
+                       ));
+                _binController.clear();
+                binId = null;
+              });
+            },
+            child: Text('Confirm Transfer')),
+      ),
+    );
+  }
+
+  Widget completeTransfer() {
+    
+    return transferList.length>0? Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 50,
+        width: MediaQuery.of(context).size.width * 0.23,
+        child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.resolveWith((states) => Colors.green),
+            ),
+            onPressed: () {
+              _showConfirmationDialog();
+            },
+            child: Text('Complete Transfer')),
+      ),
+    ):Container();
   }
 
   Widget bin() {
@@ -439,7 +351,7 @@ class _LocationState extends State<Location> {
                 padding: const EdgeInsets.all(0.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.23,
-                  height: 60,
+                
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: RawKeyboardListener(
@@ -451,6 +363,10 @@ class _LocationState extends State<Location> {
                           onTap: () {
                             SystemChannels.textInput
                                 .invokeMethod('TextInput.hide');
+                            setState(() {
+                              _binController.clear();
+                              binId = null;
+                            });
                           },
                           onSubmitted: (value) {},
                           onChanged: (value) {
@@ -459,6 +375,19 @@ class _LocationState extends State<Location> {
                             });
                           },
                           decoration: new InputDecoration(
+                               suffix: _binController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _binController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
+                            : Container(
+                              height: 1,
+                              width: 1,
+                            ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.redAccent, width: 2.0),
@@ -467,33 +396,13 @@ class _LocationState extends State<Location> {
                                 borderSide: BorderSide(
                                     color: Colors.grey[400], width: 2.0),
                               ),
-                              hintText: 'Scan bin',
+                              labelText: 'Scan bin',
                               contentPadding:
                                   const EdgeInsets.symmetric(horizontal: 5.0))),
                     ),
                   ),
                 ),
               ),
-              Container(
-                  height: 40,
-                  width: 100,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red, // background
-                      onPrimary: Colors.white,
-                    ),
-                    child: Text(
-                      'Scan Bin',
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        listLocation.add(
-                            LocationBin(locationId: locationId, binId: binId));
-                        _binController.clear();
-                        binId = null;
-                      });
-                    },
-                  )),
             ],
           ),
         ]),
@@ -566,12 +475,12 @@ class _LocationState extends State<Location> {
                   label: Text('Remove'),
                 ),
               ],
-              rows: listLocation
+              rows: transferList
                   .map(
                     (e) => DataRow(cells: <DataCell>[
                       DataCell(Text("${a++}")),
-                      DataCell(Text(e.locationId ?? '')),
-                      DataCell(Text(e.binId ?? '')),
+                      DataCell(Text(e.binLocation ?? '')),
+                      DataCell(Text(e.binIdentification ?? '')),
                       DataCell(
                         IconButton(
                           icon: Icon(
@@ -580,7 +489,7 @@ class _LocationState extends State<Location> {
                           ),
                           onPressed: () {
                             setState(() {
-                              listLocation.remove(e);
+                              transferList.remove(e);
                             });
                           },
                         ),

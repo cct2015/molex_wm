@@ -83,10 +83,10 @@ class Data {
         this.generateLabel,
     });
 
-    GenerateLabel generateLabel;
+    GeneratedLabel generateLabel;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        generateLabel: GenerateLabel.fromJson(json[" Generate Label "]),
+        generateLabel: GeneratedLabel.fromJson(json[" Generate Label "]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -94,8 +94,8 @@ class Data {
     };
 }
 
-class GenerateLabel {
-    GenerateLabel({
+class GeneratedLabel {
+    GeneratedLabel({
         this.finishedGoods,
         this.cablePartNumber,
         this.cutLength,
@@ -117,7 +117,7 @@ class GenerateLabel {
     dynamic routeNo;
     String bundleId;
 
-    factory GenerateLabel.fromJson(Map<String, dynamic> json) => GenerateLabel(
+    factory GeneratedLabel.fromJson(Map<String, dynamic> json) => GeneratedLabel(
         finishedGoods: json["finishedGoods"],
         cablePartNumber: json["cablePartNumber"],
         cutLength: json["cutLength"],

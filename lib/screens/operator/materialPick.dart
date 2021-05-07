@@ -52,28 +52,6 @@ class _MaterialPickState extends State<MaterialPick> {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
       },
     );
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538504",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538505",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538506",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-
     super.initState();
   }
 
@@ -116,6 +94,7 @@ class _MaterialPickState extends State<MaterialPick> {
 
   @override
   Widget build(BuildContext context) {
+        SystemChrome.setEnabledSystemUIOverlays([]);
     // if (!_qty.hasFocus && partNumber != null) {
     //   checkPartNumber(partNumber);
     //   checkTrackNumber(trackingNumber);

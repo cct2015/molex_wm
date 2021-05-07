@@ -135,7 +135,7 @@ class _P1ScheduleDetailWIPState extends State<P1ScheduleDetailWIP> {
                 heading: "Cut Length",
                 value: "${widget.schedule.length}",
                 width: 0.08),
-            feild(heading: "Color", value: "${widget.schedule.color}", width: 0.1),
+            feild(heading: "Color", value: "${widget.schedule.color}", width: 0.12),
             feild(
                 heading: "Scheduled Qty",
                 value: "${widget.schedule.scheduledQuantity}",

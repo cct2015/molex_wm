@@ -37,6 +37,8 @@ class _ProcessPageState extends State<ProcessPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -501,14 +503,17 @@ class _DetailState extends State<Detail> {
                                     machine: widget.machine,
                                   );
                                 } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Location(
-                                              userId: widget.userId,
-                                              machine: widget.machine,
-                                            )),
-                                  );
+                                  print("pusshed");
+                                  Future.delayed(Duration.zero, () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Location(
+                                                userId: widget.userId,
+                                                machine: widget.machine,
+                                              )),
+                                    );
+                                  });
                                 }
                               } else if (rightside == "partial") {
                                 return PartiallyComplete(

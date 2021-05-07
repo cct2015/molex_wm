@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/Transfer/binToLocation_model.dart';
+import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
 import 'package:molex/model_api/generateLabel_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
@@ -95,6 +97,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   FocusNode striplengthFocus = new FocusNode();
   TextEditingController stripLengthController = new TextEditingController();
   TextEditingController lengthvariationController = new TextEditingController();
+  TextEditingController _bundleScanController = new TextEditingController();
   FocusNode lengthvariationFocus = new FocusNode();
 
   /// Main Content
@@ -110,6 +113,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   PostGenerateLabel postGenerateLabel = new PostGenerateLabel();
   static const platform = const MethodChannel('com.impereal.dev/tsc');
   String _printerStatus = 'Waiting';
+
   Future<void> _print({
     String ipaddress,
     String bq,
@@ -156,11 +160,12 @@ class _GenerateLabelState extends State<GenerateLabel> {
   }
 
   ApiService apiService;
+  GeneratedLabel label;
   @override
   void initState() {
     apiService = new ApiService();
     transferBundle = new TransferBundle();
-
+    label = new GeneratedLabel();
     transferBundle.cablePartDescription = widget.schedule.cablePartNumber;
     transferBundle.scheduledQuantity =
         int.parse(widget.schedule.scheduledQuantity);
@@ -217,6 +222,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   @override
   Widget build(BuildContext context) {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+     SystemChrome.setEnabledSystemUIOverlays([]);
     return Container(
       child: Row(
         children: [
@@ -230,10 +236,10 @@ class _GenerateLabelState extends State<GenerateLabel> {
   Widget main(Status status) {
     switch (status) {
       case Status.quantity:
-        return generateLabel();
+        return quantity();
         break;
       case Status.generateLabel:
-        return rejectioncase();
+        return generateLabel();
         break;
       case Status.scanBin:
         return binScan();
@@ -363,7 +369,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
     );
   }
 
-  Widget generateLabel() {
+  Widget quantity() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
       child: Column(
@@ -491,7 +497,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
     );
   }
 
-  Widget rejectioncase() {
+  Widget generateLabel() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
@@ -790,35 +796,31 @@ class _GenerateLabelState extends State<GenerateLabel> {
                               widget.schedule.cablePartNumber;
                           postGenerateLabel.finishedGoods =
                               widget.schedule.finishedGoodsNumber;
-                              postGenerateLabel.color=widget.schedule.color;
-                              postGenerateLabel.cutLength=widget.schedule.length;
+                          postGenerateLabel.color = widget.schedule.color;
+                          postGenerateLabel.cutLength = widget.schedule.length;
                           apiService
                               .postGeneratelabel(
                                   postGenerateLabel, bundleQty.text)
                               .then((value) {
                             if (value != null) {
-                              ResponseGenerateLabel response;
-                              response = value;
+                              setState(() {
+                                label = value.data.generateLabel;
+                              });
+
                               _print(
-                                  ipaddress: "192.168.1.130",
-                                  // ipaddress: "172.26.59.14",
+                                  // ipaddress: "192.168.1.130",
+                                  ipaddress: "172.26.59.14",
                                   bq: bundleQty.text,
-                                  qr: "${response.data.generateLabel.bundleId}",
-                                  routenumber1:
-                                      "${response.data.generateLabel.routeNo}",
+                                  qr: "${label.bundleId}",
+                                  routenumber1: "${label.routeNo}",
                                   fgPartNumber:
                                       "${widget.schedule.finishedGoodsNumber}",
                                   cutlength: "${widget.schedule.length}",
                                   cablepart:
                                       "${widget.schedule.cablePartNumber}",
-                                  wireGauge:
-                                      "${response.data.generateLabel.wireGauge}",
-                                  terminalfrom:
-                                      "${response.data.generateLabel.terminalFrom}",
-                                  terminalto:
-                                      "${response.data.generateLabel.terminalTo}"
-                                      
-                                      );
+                                  wireGauge: "${label.wireGauge}",
+                                  terminalfrom: "${label.terminalFrom}",
+                                  terminalto: "${label.terminalTo}");
                             }
                             clear();
                           });
@@ -909,14 +911,11 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       );
                     },
                     onTap: () {
-                      SystemChannels.textInput.invokeMethod('TextInput.hide');
-                      if (binState == "Scan Next bin") {
+                     
                         _binController.clear();
                         setState(() {
-                          binId = null;
-                          binState = "Scan Bin";
+                           SystemChannels.textInput.invokeMethod('TextInput.hide');
                         });
-                      }
                     },
                     onChanged: (value) {
                       setState(() {
@@ -952,9 +951,24 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 'Scan Bundle',
               ),
               onPressed: () {
-                setState(() {
-                  status = Status.scanBundle;
-                });
+              
+                  if (_binController.text.length>0) {
+                    setState(() {
+                      status = Status.scanBundle;
+                    });
+                  }else{
+                     Fluttertoast.showToast(
+                        msg: "Bin not Scanned",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+
+                  }
+               
               },
             )),
           ),
@@ -978,7 +992,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 onKey: (event) => handleKey(event.data),
                 child: TextField(
                     // focusNode: _bundleFocus,
-                    // controller: _bundleController,
+                    controller: _bundleScanController,
                     onSubmitted: (value) {
                       setState(() {
                         hasBin = true;
@@ -992,10 +1006,13 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       });
                     },
                     onTap: () {
-                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                     setState(() {
+                           SystemChannels.textInput.invokeMethod('TextInput.hide');
+                        });
                     },
                     onChanged: (value) {
                       setState(() {
+                      
                         bundleId = value;
                       });
                     },
@@ -1027,9 +1044,49 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 'Save & Scan Next',
               ),
               onPressed: () {
-                setState(() {
-                  status = Status.quantity;
-                });
+                if (_bundleScanController.text.length>0) {
+                  apiService
+                      .postTransferBundletoBin(
+                          transferBundleToBin: getpostBundletoBin())
+                      .then((value) {
+                    if (value != null) {
+                      BundleTransferToBinTracking bundleTransferToBinTracking =
+                          value;
+                      Fluttertoast.showToast(
+                          msg:
+                              "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${bundleTransferToBinTracking.binIdentification}",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                      setState(() {
+                        status = Status.quantity;
+                      });
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "Unable to transfer Bundle to Bin",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                  });
+                } else {
+                  Fluttertoast.showToast(
+                    msg: "Bundle Not Scanned",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                }
               },
             )),
           ),
@@ -1042,5 +1099,31 @@ class _GenerateLabelState extends State<GenerateLabel> {
     setState(() {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
+  }
+
+  TransferBundleToBin getpostBundletoBin() {
+    TransferBundleToBin bundleToBin = TransferBundleToBin(
+      binIdentification: label.bundleId,
+      bundleQuantity: bundleQty.text,
+      finishedGoods: widget.schedule.finishedGoodsNumber,
+      scheduledId: widget.schedule.scheduledId,
+      bundleCreationTime: DateTime.now(),
+      machineIdentification: widget.machine.machineNumber,
+      operatorIdentification: widget.userId,
+      cablePartNumber: widget.schedule.cablePartNumber,
+      color: widget.schedule.color,
+      bundleRoute: label.routeNo,
+      purchaseOrder: widget.schedule.orderId,
+      orderIdentification: widget.schedule.orderId,
+      cutLength: widget.schedule.length,
+      scheduledQuantity: widget.schedule.scheduledQuantity,
+      bundleRejectedQuantity: total(),
+    );
+    return bundleToBin;
+  }
+
+  String total() {
+    //TODO total the rejected quantity
+    return null;
   }
 }

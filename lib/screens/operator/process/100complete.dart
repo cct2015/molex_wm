@@ -10,7 +10,7 @@ import 'package:molex/screens/operator/location.dart';
 class FullyComplete extends StatefulWidget {
   String userId;
   MachineDetails machine;
-  FullyComplete({this.userId,this.machine});
+  FullyComplete({this.userId, this.machine});
   @override
   _FullyCompleteState createState() => _FullyCompleteState();
 }
@@ -109,7 +109,7 @@ class _FullyCompleteState extends State<FullyComplete> {
           Column(
             children: [
               keypad(mainController),
-              SizedBox(height:5),
+              SizedBox(height: 5),
               Container(
                 padding: EdgeInsets.all(0),
                 child: Center(
@@ -137,14 +137,16 @@ class _FullyCompleteState extends State<FullyComplete> {
                       ),
                       child: Text("Save & Complete Process"),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Location(
-                                    userId: widget.userId,
-                                    machine: widget.machine,
-                                  )),
-                        );
+                        Future.delayed(Duration.zero, () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Location(
+                                      userId: widget.userId,
+                                      machine: widget.machine,
+                                    )),
+                          );
+                        });
                       },
                     ),
                   ),
@@ -196,26 +198,27 @@ class _FullyCompleteState extends State<FullyComplete> {
               },
             ),
           ),
-          child:buttonText=="X"?Container(
-            width: 50,
-            height: 50,
-            child: IconButton(
-              icon:Icon(Icons.backspace,
-              color: Colors.red[400],
-            ),
-            onPressed: ()=>{buttonPressed(buttonText)},
-            )
-            
-          ):new Text(
-            buttonText,
-            style: GoogleFonts.openSans(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
+          child: buttonText == "X"
+              ? Container(
+                  width: 50,
+                  height: 50,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.backspace,
+                      color: Colors.red[400],
+                    ),
+                    onPressed: () => {buttonPressed(buttonText)},
+                  ))
+              : new Text(
+                  buttonText,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
           onPressed: () => {buttonPressed(buttonText)},
         ),
       ));

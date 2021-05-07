@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final bundleToBin = bundleToBinFromJson(jsonString);
+//     final binToLocation = binToLocationFromJson(jsonString);
 
 import 'dart:convert';
 
-BundleToBin bundleToBinFromJson(String str) => BundleToBin.fromJson(json.decode(str));
+TransferBinToLocation transferbinToLocationFromJson(String str) => TransferBinToLocation.fromJson(json.decode(str));
 
-String bundleToBinToJson(BundleToBin data) => json.encode(data.toJson());
+String transferbinToLocationToJson(TransferBinToLocation data) => json.encode(data.toJson());
 
-class BundleToBin {
-    BundleToBin({
+class TransferBinToLocation {
+    TransferBinToLocation({
         this.binIdentification,
         this.binLocation,
         this.bundleQuantity,
@@ -63,7 +63,7 @@ class BundleToBin {
     String scheduledQuantity;
     String bundleRejectedQuantity;
 
-    factory BundleToBin.fromJson(Map<String, dynamic> json) => BundleToBin(
+    factory TransferBinToLocation.fromJson(Map<String, dynamic> json) => TransferBinToLocation(
         binIdentification: json["binIdentification"],
         binLocation: json["binLocation"],
         bundleQuantity: json["bundleQuantity"],

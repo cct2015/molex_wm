@@ -8,6 +8,7 @@ import 'package:molex/screens/operator/materialPick.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+
 // Process 1 Auto Cut and Crimp
 class Homepage extends StatefulWidget {
   String userId;
@@ -33,21 +34,11 @@ class _HomepageState extends State<Homepage> {
         machId: widget.machine.machineNumber, type: type == 0 ? "A" : "B");
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
-    schedule = Schedule(
-        orderId: "100",
-        finishedGoodsNumber: "300",
-        scheduledId: "300",
-        cablePartNumber: "200",
-        process: "Wirecutting",
-        length: "100",
-        color: "Red",
-        scheduledQuantity: "50",
-        scheduledStatus: "Not Completed");
   }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,7 +56,7 @@ class _HomepageState extends State<Homepage> {
         automaticallyImplyLeading: false,
         actions: [
           //typeselect
-         
+
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3),
             child: Row(
@@ -107,7 +98,7 @@ class _HomepageState extends State<Homepage> {
               ],
             ),
           ),
-           Container(
+          Container(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Row(
               children: [
@@ -306,23 +297,21 @@ class _HomepageState extends State<Homepage> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Divider(
-              color: Colors.redAccent,
-              thickness: 2,
-            ),
-            search(),
-            SchudleTable(
-              schedule: schedule,
-              userId: widget.userId,
-              machine: widget.machine,
-              type: type == 0 ? "A" : "M",
-              scheduleType:scheduleType == 0?"true":"false",
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          Divider(
+            color: Colors.redAccent,
+            thickness: 2,
+          ),
+          search(),
+          SchudleTable(
+            schedule: schedule,
+            userId: widget.userId,
+            machine: widget.machine,
+            type: type == 0 ? "A" : "M",
+            scheduleType: scheduleType == 0 ? "true" : "false",
+          ),
+        ],
       ),
     );
   }
@@ -498,7 +487,13 @@ class SchudleTable extends StatefulWidget {
   MachineDetails machine;
   String scheduleType;
   String type;
-  SchudleTable({Key key, this.schedule, this.userId, this.type, this.machine,this.scheduleType})
+  SchudleTable(
+      {Key key,
+      this.schedule,
+      this.userId,
+      this.type,
+      this.machine,
+      this.scheduleType})
       : super(key: key);
 
   @override
@@ -519,26 +514,26 @@ class _SchudleTableState extends State<SchudleTable> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            tableHeading(),
-            Container(
-
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          tableHeading(),
+          SingleChildScrollView(
+            child: Container(
+                height:widget.type=="M"? 430:490,
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
               future: apiService.getScheduelarData(
-                  machId: widget.machine.machineNumber, type: widget.type,sameMachine: widget.scheduleType),
+                  machId: widget.machine.machineNumber,
+                  type: widget.type,
+                  sameMachine: widget.scheduleType),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // return  buildDataRow(schedule:widget.schedule,c:2);
                   List<Schedule> schedulelist = snapshot.data;
                   return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: schedulelist.length,
                       itemBuilder: (context, index) {
@@ -549,17 +544,9 @@ class _SchudleTableState extends State<SchudleTable> {
                   return Center(child: SingleChildScrollView());
                 }
               },
-            )
-                //  ListView.builder(
-                //     physics: NeverScrollableScrollPhysics(),
-                //     shrinkWrap: true,
-                //     itemCount: rowList.length,
-                //     itemBuilder: (context, index) {
-                //       return buildDataRow(schedule: rowList[index]);
-                //     }),
-                ),
-          ],
-        ),
+            )),
+          ),
+        ],
       ),
     );
   }
@@ -664,9 +651,11 @@ class _SchudleTableState extends State<SchudleTable> {
         decoration: BoxDecoration(
           border: Border(
               left: BorderSide(
-            color: schedule.scheduledStatus.toLowerCase() == "Completed".toLowerCase()
+            color: schedule.scheduledStatus.toLowerCase() ==
+                    "Completed".toLowerCase()
                 ? Colors.green
-                : schedule.scheduledStatus.toLowerCase() == "Partial".toLowerCase()
+                : schedule.scheduledStatus.toLowerCase() ==
+                        "Partial".toLowerCase()
                     ? Colors.orange[100]
                     : Colors.blue[100],
             width: 5,
@@ -701,9 +690,12 @@ class _SchudleTableState extends State<SchudleTable> {
               padding: EdgeInsets.all(5),
               child: Container(
                 decoration: BoxDecoration(
-                  color: schedule.scheduledStatus.toLowerCase() == 'Completed'.toLowerCase()
+                  color: schedule.scheduledStatus.toLowerCase() ==
+                          'Completed'.toLowerCase()
                       ? Colors.green[50]
-                      : schedule.scheduledStatus=="Partial"?Colors.red[100]:Colors.blue[100],
+                      : schedule.scheduledStatus == "Partial"
+                          ? Colors.red[100]
+                          : Colors.blue[100],
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Center(
@@ -713,9 +705,13 @@ class _SchudleTableState extends State<SchudleTable> {
                       textStyle: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: schedule.scheduledStatus.toLowerCase() == 'Completed'.toLowerCase()
+                        color: schedule.scheduledStatus.toLowerCase() ==
+                                'Completed'.toLowerCase()
                             ? Colors.green
-                            : schedule.scheduledStatus.toLowerCase()=="Partial".toLowerCase()?Colors.yellow[900]:Colors.blue[900],
+                            : schedule.scheduledStatus.toLowerCase() ==
+                                    "Partial".toLowerCase()
+                                ? Colors.yellow[900]
+                                : Colors.blue[900],
                       ),
                     ),
                   ),
@@ -727,7 +723,8 @@ class _SchudleTableState extends State<SchudleTable> {
               width: 84,
               height: 35,
               child: Center(
-                child: schedule.scheduledStatus.toLowerCase() == "Complete".toLowerCase()
+                child: schedule.scheduledStatus.toLowerCase() ==
+                        "Completed".toLowerCase()
                     ? Text("-")
                     : ElevatedButton(
                         style: ButtonStyle(
@@ -736,7 +733,8 @@ class _SchudleTableState extends State<SchudleTable> {
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed))
                                 return Colors.green;
-                              return schedule.scheduledStatus == "Pending"
+                              return schedule.scheduledStatus.toLowerCase() ==
+                                      "Pending".toLowerCase()
                                   ? Colors.red
                                   : Colors.green[
                                       500]; // Use the component's default.
@@ -748,14 +746,20 @@ class _SchudleTableState extends State<SchudleTable> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MaterialPick(
-                                       schedule: schedule,
+                                      schedule: schedule,
                                       userId: widget.userId,
                                       machine: widget.machine,
                                     )),
                           );
                         },
                         child: Container(
-                            child: schedule.scheduledStatus.toLowerCase() == "Allocated".toLowerCase()|| schedule.scheduledStatus.toLowerCase() == "Open".toLowerCase()||schedule.scheduledStatus.toLowerCase() == "".toLowerCase()||schedule.scheduledStatus == null
+                            child: schedule.scheduledStatus.toLowerCase() ==
+                                        "Allocated".toLowerCase() ||
+                                    schedule.scheduledStatus.toLowerCase() ==
+                                        "Open".toLowerCase() ||
+                                    schedule.scheduledStatus.toLowerCase() ==
+                                        "".toLowerCase() ||
+                                    schedule.scheduledStatus == null
                                 ? Text(
                                     "Accept",
                                     style: GoogleFonts.openSans(
@@ -764,13 +768,16 @@ class _SchudleTableState extends State<SchudleTable> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                   )
-                                : schedule.scheduledStatus == "Partial"
+                                : schedule.scheduledStatus.toLowerCase() ==
+                                            "Pending".toLowerCase() ||
+                                        schedule.scheduledStatus ==
+                                            "Partial".toLowerCase()
                                     ? Text(
                                         'Continue',
                                         style: GoogleFonts.openSans(
                                           textStyle: TextStyle(
-                                            fontSize: 12,
-                                          ),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500),
                                         ),
                                       )
                                     : Text('')),

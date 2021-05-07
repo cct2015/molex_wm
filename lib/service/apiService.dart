@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/operator2/scanBundle_model.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
@@ -189,7 +190,6 @@ class ApiService {
     }
   }
 
-  // TODO:
   Future<FgDetails> getFgDetails(String partNo) async {
     var url = Uri.parse(
         baseUrl + 'molex/ejobticketmaster/fgDetails-byfgNo?fgPartNo=$partNo');
@@ -362,6 +362,23 @@ class ApiService {
       ResponseGenerateLabel responseGenerateLabel =
           responseGenerateLabelFromJson(response.body);
       return responseGenerateLabel;
+    } else {
+      return null;
+    }
+  }
+
+  //Transfer Bundle to bin 
+    Future<BundleTransferToBinTracking> postTransferBundletoBin({TransferBundleToBin transferBundleToBin}) async {
+    var url =
+        Uri.parse(baseUrl + 'molex/bin-tracking/transfer-bundle-to-bin-tracking');
+    print(
+        'post Transfer Bundle to bin :${transferbundleToBinToJson(transferBundleToBin)} ');
+    var response = await http.post(url,
+        body: transferbundleToBinToJson(transferBundleToBin), headers: headerList);
+    print("response post Transfer Bundle to bin ${response.body}");
+    if (response.statusCode == 200) {
+      BundleTransferToBinTracking b= responseTransferBundletoBinFromJson(response.body).data.bundleTransferToBinTracking[0];
+      return b;
     } else {
       return null;
     }

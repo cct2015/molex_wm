@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:molex/screens/operator/location.dart';
 enum Status {
   scanBundle,
   rejection,
@@ -466,6 +465,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                               ),
                             ),
                             onPressed: () {
+                              Navigator.pop(context);
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
