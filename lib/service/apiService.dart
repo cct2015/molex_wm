@@ -358,6 +358,15 @@ class ApiService {
     var response = await http.post(url,
         body: postGenerateLabelToJson(postGenerateLabel), headers: headerList);
     print("response post generate label ${response.body}");
+     Fluttertoast.showToast(
+                    msg: "Generate label status ${response.statusCode}",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
     if (response.statusCode == 200) {
       ResponseGenerateLabel responseGenerateLabel =
           responseGenerateLabelFromJson(response.body);
@@ -535,9 +544,9 @@ class ApiService {
 // CRIMPING API
   // crimping Schedule
   Future<List<CrimpingSchedule>> getCrimpingSchedule(
-      {String scheduleType, String machineNo}) async {
+      {String scheduleType, String machineNo,String sameMachine}) async {
     var url = Uri.parse(baseUrl +
-        'molex/crimping/get-bundle-detail?machineNo=$machineNo&scheduleType=$scheduleType&sameMachine=true');
+        'molex/crimping/get-bundle-detail?machineNo=$machineNo&scheduleType=$scheduleType&sameMachine=$sameMachine');
     var response = await http.get(url);
     print('Get Crimping Schedule status Code: ${response.statusCode}');
     print('crimping schedule response :${response.body}');

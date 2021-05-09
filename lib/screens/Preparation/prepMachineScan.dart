@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
-import 'package:molex/screens/Preparation/Home_0p3.dart';
+import 'package:molex/screens/Preparation/preparationDash.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -105,7 +105,7 @@ class _PrepMachineState extends State<PrepMachine> {
                                Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => HomePageOp3(
+                                          builder: (context) => PreprationDash(
                                                 userId: widget.employee.empId,
                                                 machineId: machineId,
                                               )),

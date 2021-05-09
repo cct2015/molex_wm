@@ -46,8 +46,8 @@ class _ProcessPageState extends State<ProcessPage> {
         iconTheme: IconThemeData(
           color: Colors.red,
         ),
-        title: const Text(
-          'Auto Cut & Crimp',
+        title:  Text(
+          '${widget.machine.category}',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,

@@ -27,6 +27,10 @@ class _HomepageState extends State<Homepage> {
 
   String dropdownName = "FG part";
 
+  var _chosenValue;
+
+  TextEditingController _searchController = new TextEditingController();
+
   @override
   void initState() {
     apiService = new ApiService();
@@ -297,21 +301,24 @@ class _HomepageState extends State<Homepage> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Divider(
-            color: Colors.redAccent,
-            thickness: 2,
-          ),
-          search(),
-          SchudleTable(
-            schedule: schedule,
-            userId: widget.userId,
-            machine: widget.machine,
-            type: type == 0 ? "A" : "M",
-            scheduleType: scheduleType == 0 ? "true" : "false",
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Divider(
+              color: Colors.redAccent,
+              thickness: 2,
+            ),
+            search(),
+            SchudleTable(
+              userId: widget.userId,
+              machine: widget.machine,
+              type: type == 0 ? "A" : "M",
+              scheduleType: scheduleType == 0 ? "true" : "false",
+              searchType: _chosenValue,
+              query: _searchController.text ?? "",
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -326,13 +333,13 @@ class _HomepageState extends State<Homepage> {
             SizedBox(width: 10),
             Container(
               height: 38,
-              width: 180,
+              width: 220,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 color: Colors.grey[100],
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Row(
                   children: [
                     Icon(
@@ -342,16 +349,36 @@ class _HomepageState extends State<Homepage> {
                     ),
                     SizedBox(width: 5),
                     Container(
-                      width: 130,
-                      height: 30,
+                      width: 180,
+                      height: 40,
                       padding: EdgeInsets.symmetric(vertical: 5),
+
                       child: TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _searchController,
                         onChanged: (value) {
                           setState(() {});
                         },
+                        style: GoogleFonts.openSans(
+                          textStyle: TextStyle(
+                            fontSize: 16
+                          )
+                        ),
                         onTap: () {},
                         decoration: new InputDecoration(
-                          hintText: "FG Part No.",
+                          // suffix: _searchController.text.length > 1
+                          //     ? GestureDetector(
+                          //         onTap: () {
+                          //           setState(() {
+                          //              SystemChannels.textInput
+                          //         .invokeMethod('TextInput.hide');
+                          //             _searchController.clear();
+                          //           });
+                          //         },
+                          //         child: Icon(Icons.clear,
+                          //             size: 16, color: Colors.red))
+                          //     : Container(),
+                          hintText: _chosenValue,
                           hintStyle: GoogleFonts.openSans(
                             textStyle: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.w500),
@@ -361,7 +388,7 @@ class _HomepageState extends State<Homepage> {
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
                           contentPadding: EdgeInsets.only(
-                              left: 15, bottom: 11, top: 11, right: 15),
+                              left: 15, bottom: 13, top: 11, right: 0),
                           fillColor: Colors.white,
                         ),
                         //fillColor: Colors.green
@@ -374,110 +401,49 @@ class _HomepageState extends State<Homepage> {
             SizedBox(
               width: 10,
             ),
-            Container(
-              height: 38,
-              width: 180,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Colors.grey[100],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.search,
-                      size: 20,
-                      color: Colors.red[400],
-                    ),
-                    SizedBox(width: 5),
-                    Container(
-                      width: 130,
-                      height: 30,
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        onTap: () {},
-                        decoration: new InputDecoration(
-                          hintText: "Order Id",
-                          hintStyle: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.w500),
-                          ),
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                              left: 15, bottom: 11, top: 11, right: 15),
-                          fillColor: Colors.white,
-                        ),
-                        //fillColor: Colors.green
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Container(
-              height: 38,
-              width: 180,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Colors.grey[100],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.search,
-                      size: 20,
-                      color: Colors.red[400],
-                    ),
-                    SizedBox(width: 5),
-                    Container(
-                      width: 130,
-                      height: 30,
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        onTap: () {},
-                        decoration: new InputDecoration(
-                          hintText: "Cable Part No.",
-                          hintStyle: GoogleFonts.openSans(
-                            textStyle: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.w500),
-                          ),
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.only(
-                              left: 15, bottom: 11, top: 11, right: 15),
-                          fillColor: Colors.white,
-                        ),
-                        //fillColor: Colors.green
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
+            dropdown(
+                options: ["Order Id", "FG Part No.", "Cable Part No"],
+                name: "Order Id"),
           ],
         ),
       );
     } else {
       return Container();
     }
+  }
+
+  Widget dropdown({List<String> options, String name}) {
+    return Container(
+        child: DropdownButton<String>(
+      focusColor: Colors.white,
+      value: _chosenValue,
+      underline: Container(),
+      isDense: false,
+      isExpanded: false,
+      style: GoogleFonts.openSans(
+        textStyle: TextStyle(color: Colors.white),
+      ),
+      iconEnabledColor: Colors.redAccent,
+      items: options.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            style: TextStyle(color: Colors.black),
+          ),
+        );
+      }).toList(),
+      hint: Text(
+        name,
+        style: TextStyle(
+            color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+      onChanged: (String value) {
+        setState(() {
+          _chosenValue = value;
+        });
+      },
+    ));
   }
 }
 
@@ -487,11 +453,15 @@ class SchudleTable extends StatefulWidget {
   MachineDetails machine;
   String scheduleType;
   String type;
+  String searchType;
+  String query;
   SchudleTable(
       {Key key,
       this.schedule,
       this.userId,
       this.type,
+      this.searchType,
+      this.query,
       this.machine,
       this.scheduleType})
       : super(key: key);
@@ -512,41 +482,68 @@ class _SchudleTableState extends State<SchudleTable> {
     super.initState();
   }
 
+  List<Schedule> searchfilter(List<Schedule> scheduleList) {
+    switch (widget.searchType) {
+      case "Order Id":
+        return scheduleList
+            .where((element) => element.orderId.startsWith(widget.query))
+            .toList();
+        break;
+      case "FG Part No.":
+        return scheduleList
+            .where((element) =>
+                element.finishedGoodsNumber.startsWith(widget.query))
+            .toList();
+        break;
+      case "Cable Part No":
+        return scheduleList
+            .where(
+                (element) => element.cablePartNumber.startsWith(widget.query))
+            .toList();
+        break;
+      default:
+        return scheduleList;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          tableHeading(),
-          SingleChildScrollView(
-            child: Container(
-                height:widget.type=="M"? 430:490,
-                // height: double.parse("${rowList.length*60}"),
-                child: FutureBuilder(
-              future: apiService.getScheduelarData(
-                  machId: widget.machine.machineNumber,
-                  type: widget.type,
-                  sameMachine: widget.scheduleType),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  // return  buildDataRow(schedule:widget.schedule,c:2);
-                  List<Schedule> schedulelist = snapshot.data;
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: schedulelist.length,
-                      itemBuilder: (context, index) {
-                        return buildDataRow(
-                            schedule: schedulelist[index], c: index + 1);
-                      });
-                } else {
-                  return Center(child: SingleChildScrollView());
-                }
-              },
-            )),
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            tableHeading(),
+            SingleChildScrollView(
+              child: Container(
+                  height: widget.type == "M" ? 430 : 490,
+                  // height: double.parse("${rowList.length*60}"),
+                  child: FutureBuilder(
+                    future: apiService.getScheduelarData(
+                        machId: widget.machine.machineNumber,
+                        type: widget.type,
+                        sameMachine: widget.scheduleType),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        // return  buildDataRow(schedule:widget.schedule,c:2);
+                        List<Schedule> schedulelist =
+                            searchfilter(snapshot.data);
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: schedulelist.length,
+                            itemBuilder: (context, index) {
+                              return buildDataRow(
+                                  schedule: schedulelist[index], c: index + 1);
+                            });
+                      } else {
+                        return Center(child: SingleChildScrollView());
+                      }
+                    },
+                  )),
+            ),
+          ],
+        ),
       ),
     );
   }

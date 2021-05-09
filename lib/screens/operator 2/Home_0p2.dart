@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
-import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator%202/materialPick2.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
@@ -18,29 +18,23 @@ class HomePageOp2 extends StatefulWidget {
 }
 
 class _HomePageOp2State extends State<HomePageOp2> {
-  Schedule schedule;
   int type = 0;
   ApiService apiService;
+  int scheduleType = 0;
+
+  var _chosenValue ="Order Id";
+  TextEditingController _searchController = new TextEditingController();
 
   @override
   void initState() {
     apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
-    schedule = Schedule(
-        orderId: "100",
-        finishedGoodsNumber: "300",
-        scheduledId: "300",
-        cablePartNumber: "200",
-        process: "Wirecutting",
-        length: "100",
-        color: "Red",
-        scheduledQuantity: "50",
-        scheduledStatus: "Not Completed");
   }
 
   @override
   Widget build(BuildContext context) {
+     SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -50,7 +44,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
         backwardsCompatibility: false,
         leading: null,
         title: const Text(
-          'DashBoard Operator 2',
+          'Crimping',
           style: TextStyle(color: Colors.red),
         ),
         elevation: 0,
@@ -58,38 +52,84 @@ class _HomePageOp2State extends State<HomePageOp2> {
         actions: [
           //typeselect
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
-                  //BoxShadow
-                  BoxShadow(
-                    color: Colors.grey[100],
-                    offset: const Offset(0.0, 0.0),
-                    blurRadius: 3.0,
-                    spreadRadius: 2.0,
-                  ), //BoxShadow
-                ],
-              ),
-              child: ToggleSwitch(
-                minWidth: 80.0,
-                cornerRadius: 10.0,
-                activeBgColor: Colors.green,
-                activeFgColor: Colors.white,
-                initialLabelIndex: type,
-                inactiveBgColor: Colors.grey[200],
-                inactiveFgColor: Colors.black,
-                labels: ['Auto', 'Mannual'],
-                onToggle: (index) {
-                  print('switched to: $index');
-                  type = index;
+            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3),
+            child: Row(
+              children: [
+                Container(
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      //BoxShadow
+                      BoxShadow(
+                        color: Colors.grey[100],
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 3.0,
+                        spreadRadius: 2.0,
+                      ), //BoxShadow
+                    ],
+                  ),
+                  child: ToggleSwitch(
+                    minWidth: 70.0,
+                    cornerRadius: 10.0,
+                    activeBgColor: Colors.green,
+                    activeFgColor: Colors.white,
+                    initialLabelIndex: type,
+                    inactiveBgColor: Colors.grey[200],
+                    inactiveFgColor: Colors.black,
+                    fontSize: 12,
+                    labels: ['Auto', 'Mannual'],
+                    onToggle: (index) {
+                      print('switched to: $index');
+                      type = index;
 
-                  setState(() {
-                    type = index;
-                  });
-                },
-              ),
+                      setState(() {
+                        type = index;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(
+              children: [
+                Container(
+                  height: 25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      //BoxShadow
+                      BoxShadow(
+                        color: Colors.grey[100],
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 3.0,
+                        spreadRadius: 2.0,
+                      ), //BoxShadow
+                    ],
+                  ),
+                  child: ToggleSwitch(
+                    minWidth: 80.0,
+                    cornerRadius: 10.0,
+                    activeBgColor: Colors.green,
+                    activeFgColor: Colors.white,
+                    initialLabelIndex: scheduleType,
+                    inactiveBgColor: Colors.grey[200],
+                    inactiveFgColor: Colors.black,
+                    labels: ['Auto Shdl', 'Others'],
+                    fontSize: 12,
+                    onToggle: (index) {
+                      print('switched to: $index');
+                      scheduleType = index;
+                      setState(() {
+                        scheduleType = index;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           //shift
@@ -206,17 +246,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
 
           TimeDisplay(),
           GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NavPage(
-                          schedule: schedule,
-                          userId: widget.userId,
-                          machine: widget.machine,
-                        )),
-              );
-            },
+            onTap: () {},
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
@@ -259,7 +289,14 @@ class _HomePageOp2State extends State<HomePageOp2> {
               thickness: 2,
             ),
             search(),
-            SchudleTable(userId: widget.userId, machine: widget.machine),
+            SchudleTable(
+              userId: widget.userId,
+              machine: widget.machine,
+              type: type == 0 ? "A" : "M",
+              scheduleType: scheduleType == 0 ? "true" : "false",
+              searchType: _chosenValue,
+              query: _searchController.text ?? "",
+            ),
           ],
         ),
       ),
@@ -275,74 +312,72 @@ class _HomePageOp2State extends State<HomePageOp2> {
           children: [
             SizedBox(width: 10),
             Container(
-                width: 130,
-                height: 40,
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  },
-                  decoration: new InputDecoration(
-                    labelText: "FG Part No.",
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
-                )),
-            SizedBox(width: 10),
-            Container(
-                width: 120,
-                height: 40,
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  },
-                  decoration: new InputDecoration(
-                    labelText: "Order Id.",
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
-                )),
-            SizedBox(width: 10),
-            Container(
-                width: 150,
-                height: 40,
-                child: TextField(
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  },
-                  decoration: new InputDecoration(
-                    labelText: "Cable Part No.",
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(5.0),
-                      borderSide: new BorderSide(),
-                    ),
-                    //fillColor: Colors.green
-                  ),
-                )),
-            SizedBox(width: 10),
-            Container(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Search'),
+              height: 38,
+              width: 220,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Colors.grey[100],
               ),
-            )
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.search,
+                      size: 20,
+                      color: Colors.red[400],
+                    ),
+                    SizedBox(width: 5),
+                    Container(
+                      width: 180,
+                      height: 40,
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        style: GoogleFonts.openSans(
+                            textStyle: TextStyle(fontSize: 16)),
+                        onTap: () {},
+                        decoration: new InputDecoration(
+                          // suffix: _searchController.text.length > 1
+                          //     ? GestureDetector(
+                          //         onTap: () {
+                          //           setState(() {
+                          //              SystemChannels.textInput
+                          //         .invokeMethod('TextInput.hide');
+                          //             _searchController.clear();
+                          //           });
+                          //         },
+                          //         child: Icon(Icons.clear,
+                          //             size: 16, color: Colors.red))
+                          //     : Container(),
+                          hintText: _chosenValue,
+                          hintStyle: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.only(
+                              left: 15, bottom: 13, top: 11, right: 0),
+                          fillColor: Colors.white,
+                        ),
+                        //fillColor: Colors.green
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            dropdown(
+                options: ["Order Id", "FG Part No.", "Cable Part No"],
+                name: "Order Id"),
           ],
         ),
       );
@@ -350,13 +385,59 @@ class _HomePageOp2State extends State<HomePageOp2> {
       return Container();
     }
   }
+
+  Widget dropdown({List<String> options, String name}) {
+    return Container(
+        child: DropdownButton<String>(
+      focusColor: Colors.white,
+      value: _chosenValue,
+      underline: Container(),
+      isDense: false,
+      isExpanded: false,
+      style: GoogleFonts.openSans(
+        textStyle: TextStyle(color: Colors.white),
+      ),
+      iconEnabledColor: Colors.redAccent,
+      items: options.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            style: TextStyle(color: Colors.black),
+          ),
+        );
+      }).toList(),
+      hint: Text(
+        name,
+        style: TextStyle(
+            color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+      onChanged: (String value) {
+        setState(() {
+          _chosenValue = value;
+        });
+      },
+    ));
+  }
 }
 
 class SchudleTable extends StatefulWidget {
   final Schedule schedule;
   final String userId;
   final MachineDetails machine;
-  SchudleTable({Key key, this.schedule, this.userId, this.machine})
+  String scheduleType;
+  String type;
+  String searchType;
+  String query;
+  SchudleTable(
+      {Key key,
+      this.schedule,
+      this.userId,
+      this.machine,
+      this.scheduleType,
+      this.type,
+      this.searchType,
+      this.query})
       : super(key: key);
 
   @override
@@ -374,6 +455,31 @@ class _SchudleTableState extends State<SchudleTable> {
     super.initState();
   }
 
+  List<CrimpingSchedule> searchfilter(List<CrimpingSchedule> scheduleList) {
+    switch (widget.searchType) {
+      case "Order Id":
+        return scheduleList
+            .where((element) =>
+                element.purchaseOrder.toString().startsWith(widget.query))
+            .toList();
+        break;
+      case "FG Part No.":
+        return scheduleList
+            .where((element) =>
+                element.finishedGoods.toString().startsWith(widget.query))
+            .toList();
+        break;
+      case "Cable Part No":
+        return scheduleList
+            .where((element) =>
+                element.cablePartNo.toString().startsWith(widget.query))
+            .toList();
+        break;
+      default:
+        return scheduleList;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -386,18 +492,23 @@ class _SchudleTableState extends State<SchudleTable> {
             Container(
                 // height: double.parse("${rowList.length*60}"),
                 child: FutureBuilder(
-              future: apiService.getCrimpingSchedule(scheduleType: "A",machineNo: widget.machine.machineNumber),
+              future: apiService.getCrimpingSchedule(
+                  scheduleType: "${widget.type}",
+                  machineNo: widget.machine.machineNumber,
+                  sameMachine: "${widget.scheduleType}"),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  List<CrimpingSchedule> schedulelist =
+                      searchfilter(snapshot.data);
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: snapshot.data.length,
+                      itemCount: schedulelist.length,
                       itemBuilder: (context, index) {
                         return buildDataRow(
-                            schedule: snapshot.data[index], c: index);
+                            schedule: schedulelist[index], c: index);
                       });
-                }else{
+                } else {
                   return Container();
                 }
               },
@@ -441,8 +552,8 @@ class _SchudleTableState extends State<SchudleTable> {
               cell("Bin Id", 0.09),
               cell("Total \nBundles", 0.05),
               cell("total \nBundle Qty", 0.07),
-              cell("Status", 0.09),
-              // cell("Action", 0.1),
+              // cell("Status", 0.09),
+              cell("Action", 0.1),
             ],
           ),
         ],
@@ -470,16 +581,16 @@ class _SchudleTableState extends State<SchudleTable> {
       color: c % 2 == 0 ? Colors.grey[50] : Colors.white,
       child: Container(
         decoration: BoxDecoration(
-          // border: Border(
-          //     left: BorderSide(
-          //   color: schedule.scheduledStatus == "Completed"
-          //       ? Colors.green
-          //       : schedule.scheduledStatus == "Pending"
-          //           ?  Colors.orange[100]
-          //           : Colors.blue[100],
-          //   width: 5,
-          // )),
-        ),
+            // border: Border(
+            //     left: BorderSide(
+            //   color: schedule.scheduledStatus == "Completed"
+            //       ? Colors.green
+            //       : schedule.scheduledStatus == "Pending"
+            //           ?  Colors.orange[100]
+            //           : Colors.blue[100],
+            //   width: 5,
+            // )),
+            ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -511,7 +622,7 @@ class _SchudleTableState extends State<SchudleTable> {
               width: MediaQuery.of(context).size.width * 0.10,
               child: Center(
                 child: false
-                // schedule.scheduledStatus == "Completed"
+                    // schedule.scheduledStatus == "Completed"
                     ? Text("-")
                     : ElevatedButton(
                         style: ButtonStyle(
@@ -547,7 +658,7 @@ class _SchudleTableState extends State<SchudleTable> {
                           //       : schedule.scheduledStatus == "Pending"
                           //           ? Text('Continue')
                           //           : Text(''),
-                                    ),
+                        ),
                       ),
               ),
             )

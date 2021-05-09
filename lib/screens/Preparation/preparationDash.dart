@@ -5,20 +5,18 @@ import 'package:molex/Machine_Id.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/Preparation/process/preparationProcess.dart';
-import 'package:molex/screens/Preparation/process/process3.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
-class HomePageOp3 extends StatefulWidget {
+class PreprationDash extends StatefulWidget {
   String userId;
   String machineId;
-  HomePageOp3({this.userId, this.machineId});
+  PreprationDash({this.userId, this.machineId});
   @override
-  _HomePageOp3State createState() => _HomePageOp3State();
+  _PreprationDashState createState() => _PreprationDashState();
 }
 
-class _HomePageOp3State extends State<HomePageOp3> {
-  Schedule schedule;
+class _PreprationDashState extends State<PreprationDash> {
   int type = 0;
   ApiService apiService;
 
@@ -27,20 +25,11 @@ class _HomePageOp3State extends State<HomePageOp3> {
     apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     super.initState();
-    schedule = Schedule(
-        orderId: "100",
-        finishedGoodsNumber: "300",
-        scheduledId: "300",
-        cablePartNumber: "200",
-        process: "Wirecutting",
-        length: "100",
-        color: "Red",
-        scheduledQuantity: "50",
-        scheduledStatus: "Not Completed");
   }
 
   @override
   Widget build(BuildContext context) {
+     SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -242,7 +231,7 @@ class _HomePageOp3State extends State<HomePageOp3> {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            'Scan',
+                            'Process',
                             style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
                         ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/models/preparationScan.dart';
-import 'package:molex/screens/Preparation/process/scanBundle.dart';
+import 'package:molex/screens/Preparation/process/bundlePrep.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class Preparationprocess extends StatefulWidget {
@@ -215,7 +215,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
           });
         },
         child: Text(
-          'Scan',
+          'Save',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -247,7 +247,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                 padding: const EdgeInsets.all(0.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.23,
-                  height: 60,
+                  height: 50,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: RawKeyboardListener(
@@ -267,6 +267,16 @@ class _PreparationprocessState extends State<Preparationprocess> {
                             });
                           },
                           decoration: new InputDecoration(
+                              suffix: _userScanController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _userScanController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
+                            : Container(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.redAccent, width: 2.0),
@@ -275,7 +285,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                                 borderSide: BorderSide(
                                     color: Colors.grey[400], width: 2.0),
                               ),
-                              hintText: 'Scan User',
+                              labelText: '  Scan User  ',
                               contentPadding:
                                   const EdgeInsets.symmetric(horizontal: 5.0))),
                     ),
@@ -305,7 +315,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                 padding: const EdgeInsets.all(0.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.23,
-                  height: 60,
+                  height: 50,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: RawKeyboardListener(
@@ -325,6 +335,16 @@ class _PreparationprocessState extends State<Preparationprocess> {
                             });
                           },
                           decoration: new InputDecoration(
+                              suffix: _bundleIdScanController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _bundleIdScanController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
+                            : Container(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.redAccent, width: 2.0),
@@ -333,9 +353,9 @@ class _PreparationprocessState extends State<Preparationprocess> {
                                 borderSide: BorderSide(
                                     color: Colors.grey[400], width: 2.0),
                               ),
-                              hintText: 'Scan Bundle Id',
+                              labelText: '  Scan Bundle Id  ',
                               contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 5.0))),
+                                  const EdgeInsets.symmetric(horizontal: 5.0,))),
                     ),
                   ),
                 ),

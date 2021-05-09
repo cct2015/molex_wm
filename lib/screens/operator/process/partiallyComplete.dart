@@ -8,7 +8,7 @@ class PartiallyComplete extends StatefulWidget {
   MachineDetails machine;
   String userId;
   Function continueProcess;
-  PartiallyComplete({this.machine, this.userId,this.continueProcess});
+  PartiallyComplete({this.machine, this.userId, this.continueProcess});
   @override
   _PartiallyCompleteState createState() => _PartiallyCompleteState();
 }
@@ -92,7 +92,50 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
       new TextEditingController();
   TextEditingController meetingController = new TextEditingController();
   TextEditingController systemFaultController = new TextEditingController();
-
+  List<String> reasonList = [
+    "Spare Changeover",
+    "Sink Height Adjustment",
+    "Terminal Bend",
+    "Terminal Twist",
+    "Bellmouth Adjustment",
+    "Curling Adjustment",
+    "Crimp Height Setting",
+    "Feeding Adjustment",
+    "Cut Off Burr Issue",
+    "Extrusion Burr Issue",
+    "Camera Setting",
+    "Wire Feeding Adjustment",
+    "Resetting CFM Program",
+    "Applicator Position Setting",
+    "CVM Error Correction",
+    "CFM Error",
+    "CVM Error",
+    "CVM Program Reloading",
+    "New Program Setting CVM/CFM",
+    "Cable Feeding Front Unit Problem",
+    "Supplier Taken for Maintenance",
+    "Length Variations",
+    "Sensor Not Working",
+    "Air Pressure Low",
+    "CFA Crimping Fault",
+    "Drift Limit Reached",
+    "Roller Changeover",
+    "Power Failure",
+    "Preventive Maintenance",
+    "Machine Taken for Removing CVM",
+    "Cable Entangle",
+    "Machine Slow",
+    "Gripen Unit Problem",
+    "Machine Cleaning",
+    "Meeting",
+    "No Material",
+    "Job Ticket Issue",
+    "No Plan for Machine",
+    "Technician Not Available",
+    "No Operator",
+    "System Fault",
+  ];
+  List<String> selectedreasons = [];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -233,6 +276,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(0.0),
@@ -246,18 +290,42 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                             ))
                       ]),
                 ),
-                SizedBox(width: 20),
-                Container(
-                    height: 25,
-                    width: 300,
-                    child: TextField(
-                      decoration: new InputDecoration(
-                        hintText: "reason",
-                        fillColor: Colors.white,
-
-                        //fillColor: Colors.green
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showReasons();
+                    },
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Text(
+                            'reason',
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                    color: Colors.blue, fontSize: 14)),
+                          ),
+                          Icon(
+                            Icons.edit,
+                            color: Colors.blueAccent,
+                            size: 14,
+                          )
+                        ],
                       ),
-                    )),
+                    ),
+                  ),
+                )
+                // Container(
+                //     height: 25,
+                //     width: 300,
+                //     child: TextField(
+                //       decoration: new InputDecoration(
+                //         hintText: "reason",
+                //         fillColor: Colors.white,
+
+                //         //fillColor: Colors.green
+                //       ),
+                //     )),
               ],
             ),
             Padding(
@@ -602,7 +670,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                   ),
                 ),
                 Padding(
-                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Container(
                     height: 40,
                     child: Center(
@@ -629,14 +697,14 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                           ),
                           child: Text("Save & End Process"),
                           onPressed: () {
-                               Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Location(
-                                          userId: widget.userId,
-                                          machine: widget.machine,
-                                        )),
-                              );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Location(
+                                        userId: widget.userId,
+                                        machine: widget.machine,
+                                      )),
+                            );
                           },
                         ),
                       ),
@@ -697,5 +765,209 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
         ),
       ),
     );
+  }
+
+  Future<void> showReasons() async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return Center(
+          child: ReasonSelection()
+            //  AlertDialog(
+            //     title: Container(
+            //   height: 400,
+            //   width: 400,
+            //   child: Column(
+            //     children: [
+            //       Row(
+            //         children: [
+            //           Text('Reason'),
+            //         ],
+            //       ),
+            //       Container(
+            //         child: SingleChildScrollView(
+            //           child: Row(
+            //             children: selectedreasons.map((e) =>  Text(e)).toList(),
+            //           ),
+            //         ),
+            //       ),
+            //       Container(
+            //         height: 300,
+            //         child: ListView.builder(
+            //           itemCount: reasonList.length,
+            //           itemBuilder: (context, index) {
+            //             return ListTile(
+            //               onTap: () {
+            //                 setState(() {
+            //                   selectedreasons.add(reasonList[index]);
+            //                 });
+            //               },
+            //               contentPadding: EdgeInsets.all(0),
+            //               title: Text(
+            //                 reasonList[index],
+            //                 style: GoogleFonts.poppins(
+            //                     textStyle: TextStyle(
+            //                   fontSize: 13,
+            //                 )),
+            //               ),
+            //               trailing: Icon(Icons.add),
+            //             );
+            //           },
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // )),
+            );
+      },
+    );
+  }
+}
+
+class ReasonSelection extends StatefulWidget {
+  @override
+  _ReasonSelectionState createState() => _ReasonSelectionState();
+}
+
+class _ReasonSelectionState extends State<ReasonSelection> {
+  List<String> reasonList = [
+    "Spare Changeover",
+    "Sink Height Adjustment",
+    "Terminal Bend",
+    "Terminal Twist",
+    "Bellmouth Adjustment",
+    "Curling Adjustment",
+    "Crimp Height Setting",
+    "Feeding Adjustment",
+    "Cut Off Burr Issue",
+    "Extrusion Burr Issue",
+    "Camera Setting",
+    "Wire Feeding Adjustment",
+    "Resetting CFM Program",
+    "Applicator Position Setting",
+    "CVM Error Correction",
+    "CFM Error",
+    "CVM Error",
+    "CVM Program Reloading",
+    "New Program Setting CVM/CFM",
+    "Cable Feeding Front Unit Problem",
+    "Supplier Taken for Maintenance",
+    "Length Variations",
+    "Sensor Not Working",
+    "Air Pressure Low",
+    "CFA Crimping Fault",
+    "Drift Limit Reached",
+    "Roller Changeover",
+    "Power Failure",
+    "Preventive Maintenance",
+    "Machine Taken for Removing CVM",
+    "Cable Entangle",
+    "Machine Slow",
+    "Gripen Unit Problem",
+    "Machine Cleaning",
+    "Meeting",
+    "No Material",
+    "Job Ticket Issue",
+    "No Plan for Machine",
+    "Technician Not Available",
+    "No Operator",
+    "System Fault",
+  ];
+  List<String> selectedreasons = [];
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        title: Container(
+      height: 400,
+      width: 400,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text('Reason'),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: selectedreasons
+                      .map((e) => Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 2.0),
+                            child: Container(
+                              color: Colors.grey[100],
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      e,
+                                      style: GoogleFonts.openSans(
+                                        textStyle: TextStyle(
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 4),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedreasons.remove(e);
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 12,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: 335,
+            child: ListView.builder(
+              itemCount: reasonList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {
+                    setState(() {
+                      selectedreasons.add(reasonList[index]);
+                    });
+                  },
+                  contentPadding: EdgeInsets.all(0),
+                  title: Text(
+                    reasonList[index],
+                    style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                      fontSize: 13,
+                    )),
+                  ),
+                  trailing: selectedreasons.contains(reasonList[index])
+                      ? Icon(Icons.check_rounded,color: Colors.green,)
+                      : Icon(Icons.add),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/models/bundle_scan.dart';
-import 'package:molex/screens/operator%202/process/scanBundle.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 enum Status {
-  scan,
   rejection,
+  scanBin,
+  scanBundle,
 }
 
 class ScanBundleP3 extends StatefulWidget {
@@ -16,7 +15,7 @@ class ScanBundleP3 extends StatefulWidget {
   String machineId;
   String userId;
   // PreparationSchedule schedule;
-  ScanBundleP3({this.bundleId,this.machineId,this.userId});
+  ScanBundleP3({this.bundleId, this.machineId, this.userId});
   @override
   _ScanBundleP3State createState() => _ScanBundleP3State();
 }
@@ -30,7 +29,7 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
   TextEditingController mainController = new TextEditingController();
 
   TextEditingController _scanIdController = new TextEditingController();
-  Status status = Status.scan;
+  Status status = Status.rejection;
 
   TextEditingController bundleQtyController = new TextEditingController();
 
@@ -204,99 +203,25 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
           )
         ],
       ),
-      body:Center(child: scanbundleidpop()) ,
+      body: Center(child: main(status)),
     );
-    
-    
   }
 
   Widget main(Status status) {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     switch (status) {
-      case Status.scan:
-        return scanBundlePop();
-        break;
       case Status.rejection:
         return scanbundleidpop();
+        break;
+      case Status.scanBin:
+        return scanBin();
+        break;
+      case Status.scanBundle:
+        return scanBundle();
         break;
       default:
         return Container();
     }
-  }
-
-  Widget scanBundlePop() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-              height: 100,
-              child: Column(
-                children: [
-                  Container(
-                    height: 40,
-                    width: 200,
-                    child: RawKeyboardListener(
-                      focusNode: FocusNode(),
-                      onKey: (event) => handleKey(event.data),
-                      child: TextField(
-                        onTap: () {
-                          SystemChannels.textInput
-                              .invokeMethod('TextInput.hide');
-                        },
-                        controller: _scanIdController,
-                        autofocus: true,
-                        textAlign: TextAlign.center,
-                        textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(fontSize: 14),
-                        decoration: new InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 3),
-                          labelText: "Scan Bundle",
-                          fillColor: Colors.white,
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(5.0),
-                            borderSide: new BorderSide(),
-                          ),
-                          //fillColor: Colors.green
-                        ),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.redAccent),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              status = Status.rejection;
-                            });
-                          },
-                          child: Text('Scan Bundle  ')),
-                      SizedBox(width: 5),
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.green),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              // showTable = !showTable;
-                            });
-                          },
-                          child: Text("${bundleScan.length}")),
-                    ],
-                  ),
-                ],
-              )),
-          // scanedTable(),
-        ],
-      ),
-    );
   }
 
   handleKey(RawKeyEventDataAndroid key) {
@@ -332,16 +257,12 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: feild(
-                              heading: "Bundle Qty",
-                              value: "",
-                              width: 0.15),
+                              heading: "Bundle Qty", value: "", width: 0.15),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: feild(
-                              heading: "Rejected Qty",
-                              value: "",
-                              width: 0.15),
+                              heading: "Rejected Qty", value: "", width: 0.15),
                         ),
                       ],
                     ),
@@ -367,8 +288,8 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                               Column(children: [
                                 quantity('Unsheathing Length less / More', 10,
                                     unsheathingLengthController),
-                                quantity(
-                                    'Drain Wire Cut', 10, drainWirecutController),
+                                quantity('Drain Wire Cut', 10,
+                                    drainWirecutController),
                                 quantity('Trimming cable Wrong', 10,
                                     trimmingCableWrongController),
                                 quantity('Trimming Length less / More', 10,
@@ -380,7 +301,8 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                                 quantity('HST Damage', 10, hstDamageController),
                                 quantity(
                                     'Boot Reverse', 10, bootReverseController),
-                                quantity('Boot Damage', 10, bootDamageController),
+                                quantity(
+                                    'Boot Damage', 10, bootDamageController),
                               ]),
                               Column(children: [
                                 quantity('Wrong Boot Insertion', 10,
@@ -395,13 +317,15 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                           child: ElevatedButton(
-                       style: ElevatedButton.styleFrom(
+                        style: ElevatedButton.styleFrom(
                           elevation: 4,
                           primary: Colors.green, // background
                           onPrimary: Colors.white,
                         ),
                         onPressed: () {
-                            Navigator.pop(context);
+                     setState(() {
+                       status =Status.scanBin;
+                     });
                           // setState(() {
                           //   Future.delayed(
                           //     const Duration(milliseconds: 50),
@@ -416,22 +340,170 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                           //   next = !next;
                           // });
                         },
-                        child: Text('Save',
-                            style: TextStyle(color: Colors.white)),
+                        child:
+                            Text('Save', style: TextStyle(color: Colors.white)),
                       )),
                     ),
                   ],
-                )),
+                ),
+                ),
           ),
         ),
         Container(
-          height: 300,
+            height: 300,
             padding: EdgeInsets.all(20),
             child: Center(child: keypad(mainController))),
       ],
     );
   }
 
+  Widget scanBin() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+              height: 100,
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    width: 200,
+                    child: RawKeyboardListener(
+                      focusNode: FocusNode(),
+                      onKey: (event) => handleKey(event.data),
+                      child: TextField(
+                        onTap: () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+                        },
+                        controller: _scanIdController,
+                        autofocus: true,
+                        textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(fontSize: 14),
+                        decoration: new InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 3),
+                          labelText: "Scan Bin",
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          //fillColor: Colors.green
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 40,
+                          width: 100,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.redAccent),
+                              ),
+                              onPressed: () {
+                               Navigator.pop(context);
+                              },
+                              child: Text('Scan Bin  ')),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                     
+                    ],
+                  ),
+                ],
+              )),
+          // scanedTable(),
+        ],
+      ),
+    );
+  }
+
+  Widget scanBundle() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.75,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+              height: 100,
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    width: 200,
+                    child: RawKeyboardListener(
+                      focusNode: FocusNode(),
+                      onKey: (event) => handleKey(event.data),
+                      child: TextField(
+                        onTap: () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+                        },
+                        controller: _scanIdController,
+                        autofocus: true,
+                        textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: TextStyle(fontSize: 14),
+                        decoration: new InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 3),
+                          labelText: "Scan Bin",
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          //fillColor: Colors.green
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.redAccent),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              status = Status.rejection;
+                            });
+                          },
+                          child: Text('Scan Bundle  ')),
+                      SizedBox(width: 5),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.green),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              // showTable = !showTable;
+                              status = Status.scanBundle;
+                            });
+                          },
+                          child: Text("${bundleScan.length}")),
+                    ],
+                  ),
+                ],
+              )),
+          // scanedTable(),
+        ],
+      ),
+    );
+  }
+
+  // To Show the bundle Id and  Bundle Qty and rejected Quantity
   Widget feild({String heading, String value, double width}) {
     width = MediaQuery.of(context).size.width * width;
     return Padding(

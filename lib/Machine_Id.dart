@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
-import 'package:molex/screens/Preparation/Home_0p3.dart';
+import 'package:molex/screens/Preparation/preparationDash.dart';
 import 'package:molex/screens/Preparation/prepMachineScan.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/operator/Homepage.dart';
@@ -126,97 +126,116 @@ class _MachineIdState extends State<MachineId> {
                             ),
                           ),
                           onPressed: () {
-                            apiService
-                                .getmachinedetails(machineId)
-                                .then((value) {
-                              if (value != null) {
-                                MachineDetails machineDetails = value[0];
-                                Fluttertoast.showToast(
-                                    msg: machineId,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
+                            if (machineId == "preparation") {
+                              Fluttertoast.showToast(
+                                  msg: "logged In",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PreprationDash(
+                                          userId: widget.employee.empId,
+                                          machineId: machineId,
+                                        )),
+                              );
+                            } else {
+                              apiService
+                                  .getmachinedetails(machineId)
+                                  .then((value) {
+                                if (value != null) {
+                                  MachineDetails machineDetails = value[0];
+                                  Fluttertoast.showToast(
+                                      msg: machineId,
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
 
-                                print("machineID:$machineId");
-                                switch (machineDetails.category) {
-                                  case "Manual Crimping":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePageOp2(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  case "Manual Cutting":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  case "Automatic Cut & Crimp":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  case "Semi Automatic Strip and Crimp machine":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePageOp2(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  case "Automatic Cutting":
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
-                                    break;
-                                  default:
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Homepage(
-                                                userId: widget.employee.empId,
-                                                machine: machineDetails,
-                                              )),
-                                    );
+                                  print("machineID:$machineId");
+                                  switch (machineDetails.category) {
+                                    case "Manual Crimping":
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePageOp2(
+                                                  userId: widget.employee.empId,
+                                                  machine: machineDetails,
+                                                )),
+                                      );
+                                      break;
+                                    case "Manual Cutting":
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Homepage(
+                                                  userId: widget.employee.empId,
+                                                  machine: machineDetails,
+                                                )),
+                                      );
+                                      break;
+                                    case "Automatic Cut & Crimp":
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Homepage(
+                                                  userId: widget.employee.empId,
+                                                  machine: machineDetails,
+                                                )),
+                                      );
+                                      break;
+                                    case "Semi Automatic Strip and Crimp machine":
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePageOp2(
+                                                  userId: widget.employee.empId,
+                                                  machine: machineDetails,
+                                                )),
+                                      );
+                                      break;
+                                    case "Automatic Cutting":
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Homepage(
+                                                  userId: widget.employee.empId,
+                                                  machine: machineDetails,
+                                                )),
+                                      );
+                                      break;
+                                    default:
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Homepage(
+                                                  userId: widget.employee.empId,
+                                                  machine: machineDetails,
+                                                )),
+                                      );
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Machine not Found",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                  setState(() {
+                                    machineId = null;
+                                    _textController.clear();
+                                  });
                                 }
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: "Machine not Found",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                                setState(() {
-                                  machineId = null;
-                                  _textController.clear();
-                                });
-                              }
-                            });
+                              });
+                            }
                           },
                           child: Text('Next'),
                         ),
@@ -259,49 +278,6 @@ class _MachineIdState extends State<MachineId> {
                       ),
                       //pREPARATION
                       SizedBox(height: 10),
-                      Container(
-                        height: 40,
-                        width: 200,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green;
-                                  return Colors
-                                      .red; // Use the component's default.
-                                },
-                              ),
-                            ),
-                            onPressed: () {
-                              Fluttertoast.showToast(
-                                  msg: "logged In",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
-                              // Navigator.pushReplacement(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => PrepMachine(
-                              //             employee: value,
-                              //           )),
-                              // );
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePageOp3(
-                                          userId: widget.employee.empId,
-                                          machineId: machineId,
-                                        )),
-                              );
-                            },
-                            child: Text('Login as Preparation')),
-                      ),
-
                       Container(
                         child: RawKeyboardListener(
                             focusNode: FocusNode(),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
 import 'package:molex/model_api/generateLabel_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
@@ -113,12 +112,16 @@ class _GenerateLabelState extends State<GenerateLabel> {
   PostGenerateLabel postGenerateLabel = new PostGenerateLabel();
   static const platform = const MethodChannel('com.impereal.dev/tsc');
   String _printerStatus = 'Waiting';
+  List<GeneratedBundle> generatedBundleList = [];
+  bool showtable = false;
 
   Future<void> _print({
     String ipaddress,
     String bq,
     String qr,
     String routenumber1,
+    String date,
+    String orderId,
     String fgPartNumber,
     String cutlength,
     String cablepart,
@@ -134,6 +137,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
         "bundleQty": bq,
         "qr": qr,
         "routenumber1": routenumber1,
+        "date":date,
+        "orderId":orderId,
         "fgPartNumber": fgPartNumber,
         "cutlength": cutlength,
         "cutpart": cablepart,
@@ -221,8 +226,13 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChannels.textInput.invokeMethod('TextInput.hide');
-     SystemChrome.setEnabledSystemUIOverlays([]);
+   Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Container(
       child: Row(
         children: [
@@ -236,7 +246,16 @@ class _GenerateLabelState extends State<GenerateLabel> {
   Widget main(Status status) {
     switch (status) {
       case Status.quantity:
-        return quantity();
+        return Container(
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              quantity(),
+              showtable ? showBundles() : Container(),
+            ],
+          ),
+        );
         break;
       case Status.generateLabel:
         return generateLabel();
@@ -370,129 +389,136 @@ class _GenerateLabelState extends State<GenerateLabel> {
   }
 
   Widget quantity() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Column(
-        children: [
-          //Quantity Feild
-          Container(
-            width: 190,
-            height: 50,
-            child: TextField(
-              textAlign: TextAlign.center,
-              controller: bundleQty,
-              onEditingComplete: () {
-                setState(() {
-                  labelGenerated = !labelGenerated;
-                  status = Status.generateLabel;
-                });
-              },
-              onTap: () {
-                setState(() {
-                  _output = '';
-                  maincontroller = bundleQty;
-                });
-                SystemChannels.textInput.invokeMethod('TextInput.hide');
-              },
-              showCursor: false,
-              keyboardType: TextInputType.number,
-              textAlignVertical: TextAlignVertical.center,
-              style: TextStyle(fontSize: 15),
-              decoration: new InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 3),
-                labelText: "  Bundle Qty (SPQ)",
-                fillColor: Colors.white,
-                border: new OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(5.0),
-                  borderSide: new BorderSide(),
+       maincontroller = bundleQty;
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Container(
+        child: Column(
+          children: [
+            //Quantity Feild
+            Container(
+              width: 190,
+              height: 50,
+              child: TextField(
+                autofocus: true,
+                textAlign: TextAlign.center,
+                controller: bundleQty,
+                onEditingComplete: () {
+                  setState(() {
+                    labelGenerated = !labelGenerated;
+                    status = Status.generateLabel;
+                  });
+                },
+                onTap: () {
+                  setState(() {
+                    _output = '';
+                    maincontroller = bundleQty;
+                  });
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                },
+                showCursor: false,
+                keyboardType: TextInputType.number,
+                textAlignVertical: TextAlignVertical.center,
+                style: TextStyle(fontSize: 15),
+                decoration: new InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 3),
+                  labelText: "  Bundle Qty (SPQ)",
+                  fillColor: Colors.white,
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(5.0),
+                    borderSide: new BorderSide(),
+                  ),
+                  //fillColor: Colors.green
                 ),
-                //fillColor: Colors.green
               ),
             ),
-          ),
-          Container(
-            width: 190,
-            height: 60,
-            child: Row(
-              children: [
-                Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width * 0.135,
-                  padding: const EdgeInsets.all(0.0),
-                  child: Container(
-                    color: Colors.transparent,
-                    child: ElevatedButton(
+            Container(
+              width: 190,
+              height: 60,
+              child: Row(
+                children: [
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.135,
+                    padding: const EdgeInsets.all(2.0),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    side:
+                                        BorderSide(color: Colors.transparent))),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.green[200];
+                                return Colors
+                                    .green[500]; // Use the component's default.
+                              },
+                            ),
+                          ),
+                          child: Text(
+                            'Generate Label',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              labelGenerated = !labelGenerated;
+                              status = Status.generateLabel;
+                            });
+                          }),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.05,
+                      child: ElevatedButton(
                         style: ButtonStyle(
-                          shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  side: BorderSide(color: Colors.transparent))),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.transparent),
+                            ),
+                          ),
                           backgroundColor:
                               MaterialStateProperty.resolveWith<Color>(
                             (Set<MaterialState> states) {
                               if (states.contains(MaterialState.pressed))
                                 return Colors.green[200];
                               return Colors
-                                  .green[500]; // Use the component's default.
+                                  .red[500]; // Use the component's default.
                             },
-                          ),
-                        ),
-                        child: Text(
-                          'Generate Label',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.normal,
                           ),
                         ),
                         onPressed: () {
                           setState(() {
-                            labelGenerated = !labelGenerated;
-                            status = Status.generateLabel;
+                            showtable = !showtable;
                           });
-                        }),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width * 0.05,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(color: Colors.transparent),
-                          ),
+                        },
+                        child: Text(
+                          '${generatedBundleList.length > 0 ? generatedBundleList.length : "0"}',
+                          // bundlePrint.length.toString(),
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.bold),
                         ),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed))
-                              return Colors.green[200];
-                            return Colors
-                                .red[500]; // Use the component's default.
-                          },
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: Text(
-                        '1',
-                        // bundlePrint.length.toString(),
-                        style: TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -806,13 +832,16 @@ class _GenerateLabelState extends State<GenerateLabel> {
                               setState(() {
                                 label = value.data.generateLabel;
                               });
+                              DateTime now = DateTime.now();
 
                               _print(
-                                  // ipaddress: "192.168.1.130",
-                                  ipaddress: "172.26.59.14",
+                                  ipaddress: "192.168.1.130",
+                                  // ipaddress: "172.26.59.14",
                                   bq: bundleQty.text,
                                   qr: "${label.bundleId}",
                                   routenumber1: "${label.routeNo}",
+                                  date: now.day.toString()+"-"+now.month.toString()+"-"+now.year.toString() ,
+                                  orderId: "${widget.schedule.orderId}",
                                   fgPartNumber:
                                       "${widget.schedule.finishedGoodsNumber}",
                                   cutlength: "${widget.schedule.length}",
@@ -833,6 +862,90 @@ class _GenerateLabelState extends State<GenerateLabel> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget showBundles() {
+    return Container(
+      height: 200,
+      width: 400,
+      child: SingleChildScrollView(
+        child: DataTable(
+            columnSpacing: 20,
+            columns: const <DataColumn>[
+              DataColumn(
+                label: Text(
+                  'Bundle Id',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Qty',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'Print',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+              DataColumn(
+                label: Text(
+                  'info',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
+            ],
+            rows: generatedBundleList
+                .map((e) => DataRow(cells: <DataCell>[
+                      DataCell(Text(
+                        e.transferBundleToBin.binIdentification.toString(),
+                        style: TextStyle(fontSize: 12),
+                      )),
+                      DataCell(Text(
+                        e.bundleQty,
+                        style: TextStyle(fontSize: 12),
+                      )),
+                      DataCell(ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.green),
+                        ),
+                        onPressed: () {
+                          DateTime now = DateTime.now();
+                          //TODO
+                            _print(
+                                  ipaddress: "192.168.1.130",
+                                  // ipaddress: "172.26.59.14",
+                                  bq: e.bundleQty,
+                                  qr: "${e.label.bundleId}",
+                                  routenumber1: "${e.label.routeNo}",
+                                    date: now.day.toString()+"-"+now.month.toString()+"-"+now.year.toString() ,
+                                  orderId: "${widget.schedule.orderId}",
+                                  fgPartNumber:
+                                      "${widget.schedule.finishedGoodsNumber}",
+                                  cutlength: "${widget.schedule.length}",
+                                  cablepart:
+                                      "${widget.schedule.cablePartNumber}",
+                                  wireGauge: "${e.label.wireGauge}",
+                                  terminalfrom: "${e.label.terminalFrom}",
+                                  terminalto: "${e.label.terminalTo}");
+                        },
+                        child: Text('Print'),
+                      )),
+                      DataCell(GestureDetector(
+                          onTap: () {
+                            showBundleDetail(e);
+                          },
+                          child: Icon(
+                            Icons.info_outline,
+                            color: Colors.blue,
+                          ))),
+                    ]))
+                .toList()),
       ),
     );
   }
@@ -897,6 +1010,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 focusNode: FocusNode(),
                 onKey: (event) => handleKey(event.data),
                 child: TextField(
+                  autofocus: true,
                     controller: _binController,
                     onSubmitted: (value) {
                       hasBin = true;
@@ -911,11 +1025,10 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       );
                     },
                     onTap: () {
-                     
-                        _binController.clear();
-                        setState(() {
-                           SystemChannels.textInput.invokeMethod('TextInput.hide');
-                        });
+                      _binController.clear();
+                      setState(() {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      });
                     },
                     onChanged: (value) {
                       setState(() {
@@ -923,6 +1036,16 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       });
                     },
                     decoration: new InputDecoration(
+                        suffix: _binController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _binController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
+                            : Container(),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.redAccent, width: 2.0),
@@ -951,24 +1074,21 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 'Scan Bundle',
               ),
               onPressed: () {
-              
-                  if (_binController.text.length>0) {
-                    setState(() {
-                      status = Status.scanBundle;
-                    });
-                  }else{
-                     Fluttertoast.showToast(
-                        msg: "Bin not Scanned",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
-
-                  }
-               
+                if (_binController.text.length > 0) {
+                  setState(() {
+                    status = Status.scanBundle;
+                  });
+                } else {
+                  Fluttertoast.showToast(
+                    msg: "Bin not Scanned",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                }
               },
             )),
           ),
@@ -991,32 +1111,35 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 focusNode: FocusNode(),
                 onKey: (event) => handleKey(event.data),
                 child: TextField(
+                      autofocus: true,
                     // focusNode: _bundleFocus,
                     controller: _bundleScanController,
                     onSubmitted: (value) {
                       setState(() {
                         hasBin = true;
-                        // bundleList.add(Bundle(
-                        //   binId: binId,
-                        //   bundleId: value,
-                        // ));
-                        // print(bundleList);
-                        // _bundleController.clear();
-                        // bundleId = null;
                       });
                     },
                     onTap: () {
-                     setState(() {
-                           SystemChannels.textInput.invokeMethod('TextInput.hide');
-                        });
+                      setState(() {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      });
                     },
                     onChanged: (value) {
                       setState(() {
-                      
                         bundleId = value;
                       });
                     },
                     decoration: new InputDecoration(
+                        suffix: _bundleScanController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _bundleScanController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
+                            : Container(),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.redAccent, width: 2.0),
@@ -1044,7 +1167,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 'Save & Scan Next',
               ),
               onPressed: () {
-                if (_bundleScanController.text.length>0) {
+                if (_bundleScanController.text.length > 0) {
                   apiService
                       .postTransferBundletoBin(
                           transferBundleToBin: getpostBundletoBin())
@@ -1062,6 +1185,14 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           textColor: Colors.white,
                           fontSize: 16.0);
                       setState(() {
+                        generatedBundleList.add(GeneratedBundle(
+                            bundleQty: bundleQty.text,
+                            label: label,
+                            transferBundleToBin: getpostBundletoBin()));
+                        clear();
+                        _bundleScanController.clear();
+                        _binController.clear();
+                        label = new GeneratedLabel();
                         status = Status.quantity;
                       });
                     } else {
@@ -1126,4 +1257,77 @@ class _GenerateLabelState extends State<GenerateLabel> {
     //TODO total the rejected quantity
     return null;
   }
+
+  Future<void> showBundleDetail(GeneratedBundle generatedBundle) async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return Center(
+          child: AlertDialog(
+            title: Container(
+                height: 100,
+                width: 400,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Bundle - ${generatedBundle.transferBundleToBin.binIdentification}',
+                          style: GoogleFonts.openSans(
+                              textStyle: TextStyle(fontSize: 16)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Bundle Qyantity - ${generatedBundle.transferBundleToBin.bundleQuantity}',
+                          style: GoogleFonts.openSans(
+                              textStyle: TextStyle(fontSize: 15)),
+                        ),
+                        Text(
+                          'Rejection Cases - ${generatedBundle.transferBundleToBin.bundleRejectedQuantity??"0"}',
+                          style: GoogleFonts.openSans(
+                              textStyle: TextStyle(fontSize: 15)),
+                        ),
+                      ],
+                    ),
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Bin Id - ${generatedBundle.transferBundleToBin.binIdentification}',
+                          style: GoogleFonts.openSans(
+                              textStyle: TextStyle(fontSize: 15)),
+                        ),
+                        Text(
+                          'Rejection Cases - ${generatedBundle.transferBundleToBin.bundleRejectedQuantity??"0"}',
+                          style: GoogleFonts.openSans(
+                              textStyle: TextStyle(fontSize: 15)),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class GeneratedBundle {
+  String bundleQty;
+  TransferBundleToBin transferBundleToBin;
+  GeneratedLabel label;
+  GeneratedBundle({this.bundleQty, this.label, this.transferBundleToBin});
 }

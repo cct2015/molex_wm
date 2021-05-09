@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
-import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/widgets/time.dart';
@@ -31,19 +30,18 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
   String partNumber;
   String trackingNumber;
   String qty;
-  List<ItemPart> items = [];
   List<ItemPart> selectditems = [];
   bool isCollapsedRawMaterial = false;
   bool isCollapsedScannedMaterial = false;
   DateTime selectedDate = DateTime.now();
   ApiService apiService;
-    List<RawMaterial> rawMaterial = [];
+  List<RawMaterial> rawMaterial = [];
   bool keyBoard = false;
-    List<RawMaterial> rawmaterial1;
-      List<PostRawMaterial> selectdItems = [];
+  List<RawMaterial> rawmaterial1;
+  List<PostRawMaterial> selectdItems = [];
   @override
   void initState() {
-        apiService = new ApiService();
+    apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     _textNode.requestFocus();
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -53,27 +51,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
       },
     );
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538504",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538505",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
-    items.add(ItemPart(
-      description: "1X20AWG DISC PVC OR 1.8MM UL 1569 HOOKUP",
-      partNo: "884538506",
-      uom: "M",
-      oty: "2.5",
-      schQty: "1.7",
-    ));
 
     super.initState();
   }
@@ -117,10 +94,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
   @override
   Widget build(BuildContext context) {
-    // if (!_qty.hasFocus && partNumber != null) {
-    //   checkPartNumber(partNumber);
-    //   checkTrackNumber(trackingNumber);
-    // }
     print("key $keyBoard");
     if (!keyBoard) {
       if (!_qty.hasFocus) {
@@ -304,7 +277,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
     );
   }
 
- Widget scannerInput() {
+  Widget scannerInput() {
     double width = MediaQuery.of(context).size.width * 0.8;
     return Row(
       children: [
@@ -552,18 +525,19 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                               postRawmaterial.orderidentification =
                                   "${widget.schedule.purchaseOrder}" ?? '0';
                               postRawmaterial.totalScheduledQuantity =
-                                  "${widget.schedule.bundleQuantityTotal}" ?? '0';
+                                  "${widget.schedule.bundleQuantityTotal}" ??
+                                      '0';
                               postRawmaterial.unitOfMeasurement = ip.uom ?? '0';
                               postRawmaterial.cablePartNumber =
                                   partNumber != null
                                       ? partNumber ?? '0'
                                       : 'null';
-                              postRawmaterial.machineIdentification =
-                                  widget.machine.machineNumber; //TODO machine number
+                              postRawmaterial.machineIdentification = widget
+                                  .machine.machineNumber; //TODO machine number
                               postRawmaterial.finishedGoodsNumber =
                                   "${widget?.schedule?.finishedGoods}" ?? '0';
                               postRawmaterial.schedulerIdentification =
-                          "${widget.schedule.scheduleId}";
+                                  "${widget.schedule.scheduleId}";
                               // ? int.parse(widget.schedule.scheduledId)
                               // : 0;
                               // "${selectedDate.toLocal()}".split(' ')[0];
@@ -624,7 +598,14 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
                 _showConfirmationDialog();
               } else {
-                _notAllRawMaterial();
+                Fluttertoast.showToast(
+                    msg: "Add All Raw Material To Start Process",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
               }
             },
             child: Text(
@@ -650,11 +631,11 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
   // to Show the raw material required
   Widget buildDataRawMaterial() {
-     return FutureBuilder(
+    return FutureBuilder(
         future: apiService.rawMaterial(
             machineId: widget.machine.machineNumber,
             fgNo: "${widget.schedule.finishedGoods}",
-            scheduleId:"${widget.schedule.scheduleId}"),
+            scheduleId: "${widget.schedule.scheduleId}"),
         // 'EMU-M/C-038B', '367760913', '367870011', '1223445'),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -663,116 +644,115 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
 
             rawMaterial = snapshot.data;
 
-        return Container(
-      child: Column(
-        children: [
-          // heading
-          SizedBox(height: 0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(width: 20),
-              GestureDetector(
-                onTap: () {
-                  triggerCollapseRawMaterial();
-                },
-                child: Text(
-                  'Required Raw Material',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Row(
+            return Container(
+              child: Column(
                 children: [
-                  IconButton(
-                      icon: isCollapsedRawMaterial
-                          ? Icon(Icons.keyboard_arrow_down)
-                          : Icon(Icons.keyboard_arrow_up),
-                      onPressed: () {
-                        triggerCollapseRawMaterial();
-                      })
-                ],
-              )
-            ],
-          ),
-          // scrollView
-          (() {
-            if (!isCollapsedRawMaterial) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(2),
-                child: DataTable(
-                    columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Part No.',
-                          style: TextStyle(fontSize: 12),
+                  // heading
+                  SizedBox(height: 0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 20),
+                      GestureDetector(
+                        onTap: () {
+                          triggerCollapseRawMaterial();
+                        },
+                        child: Text(
+                          'Required Raw Material',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                      DataColumn(
-                        label: Text(
-                          'Description',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'UOM',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Req. Per Unit',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Req Schedule Unit',
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                              icon: isCollapsedRawMaterial
+                                  ? Icon(Icons.keyboard_arrow_down)
+                                  : Icon(Icons.keyboard_arrow_up),
+                              onPressed: () {
+                                triggerCollapseRawMaterial();
+                              })
+                        ],
+                      )
                     ],
-                    rows: rawmaterial
-                        .map((e) => DataRow(cells: <DataCell>[
-                              DataCell(Text(
-                                e.partNunber,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.description,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.uom,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.requireQuantity,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                              DataCell(Text(
-                                e.toatalScheduleQuantity,
-                                style: TextStyle(fontSize: 12),
-                              )),
-                            ]))
-                        .toList()),
-              );
-            } else {
-              return Container();
-            }
-          }()),
-        ],
-      ),
-    );
-          }else{
+                  ),
+                  // scrollView
+                  (() {
+                    if (!isCollapsedRawMaterial) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.all(2),
+                        child: DataTable(
+                            columns: const <DataColumn>[
+                              DataColumn(
+                                label: Text(
+                                  'Part No.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Description',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'UOM',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Req. Per Unit',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Req Schedule Unit',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                            ],
+                            rows: rawmaterial
+                                .map((e) => DataRow(cells: <DataCell>[
+                                      DataCell(Text(
+                                        e.partNunber,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.description,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.uom,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.requireQuantity,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      DataCell(Text(
+                                        e.toatalScheduleQuantity,
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                    ]))
+                                .toList()),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }()),
+                ],
+              ),
+            );
+          } else {
             return Center(child: CircularProgressIndicator());
           }
-        }
-     );
+        });
   }
 
   // To Show the scanned products with quantity
@@ -810,14 +790,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                             ? Icons.keyboard_arrow_down
                             : Icons.keyboard_arrow_up),
                       ))
-
-                  // IconButton(
-                  //     icon: isCollapsedScannedMaterial
-                  //         ? Icon(Icons.keyboard_arrow_down)
-                  //         : Icon(Icons.keyboard_arrow_up),
-                  //     onPressed: () {
-
-                  //     })
                 ],
               )
             ],
@@ -857,12 +829,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                           style: TextStyle(fontSize: 12),
                         ),
                       ),
-                      // DataColumn(
-                      //   label: Text(
-                      //     'UOM',
-                      //     style: TextStyle(fontSize: 12),
-                      //   ),
-                      // ),
                       DataColumn(
                         label: Text(
                           'EXIST QTY	',
@@ -900,7 +866,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                                 "${e.date.toLocal()}".split(' ')[0],
                                 style: TextStyle(fontSize: 12),
                               )),
-                              // DataCell(Text(e.n.toString())),
                               DataCell(Text(e.existingQuantity.toString())),
                               DataCell(Text(e.scannedQuantity.toString())),
                               DataCell(IconButton(
@@ -990,16 +955,16 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
       color: Colors.grey[100],
       child: Container(
         decoration: BoxDecoration(
-          // border: Border(
-          //     left: BorderSide(
-          //   color: schedule.scheduledStatus == "Completed"
-          //       ? Colors.green
-          //       : schedule.scheduledStatus == "Pending"
-          //           ? Colors.red
-          //           : Colors.green[100],
-          //   width: 5,
-          // )),
-        ),
+            // border: Border(
+            //     left: BorderSide(
+            //   color: schedule.scheduledStatus == "Completed"
+            //       ? Colors.green
+            //       : schedule.scheduledStatus == "Pending"
+            //           ? Colors.red
+            //           : Colors.green[100],
+            //   width: 5,
+            // )),
+            ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -1039,7 +1004,6 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
       ),
     );
   }
-
 
   Future<void> _showConfirmationDialog() async {
     Future.delayed(
@@ -1098,50 +1062,4 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
       },
     );
   }
-
-  Future<void> _notAllRawMaterial() async {
-    Future.delayed(
-      const Duration(milliseconds: 50),
-      () {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-      },
-    );
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return Center(
-          child: AlertDialog(
-            title: Center(child: Text('Raw Material Not Added')),
-            content: Text('Add all raw material to start process'),
-            actions: <Widget>[
-              ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.green),
-                  ),
-                  onPressed: () {
-                    apiService.postRawmaterial(selectdItems).then((value) {
-                      if (value) {
-                        Navigator.pop(context);
-                        // Navigator.pushReplacement(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => ProcessPage2(
-                        //             schedule: widget.schedule,
-                        //             userId: widget.userId,
-                        //             machine: widget.machine,
-                        //           )),
-                        // );
-                      } else {}
-                    });
-                  },
-                  child: Text('        Add       ')),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:molex/login.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
-import 'package:molex/screens/Preparation/Home_0p3.dart';
+import 'package:molex/screens/Preparation/preparationDash.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/print.dart';
 import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
@@ -50,7 +50,7 @@ class _NavPageState extends State<NavPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => HomePageOp3(
+                    builder: (context) => PreprationDash(
                          
                           userId: widget.userId,
                         )),
