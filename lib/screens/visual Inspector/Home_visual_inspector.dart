@@ -20,63 +20,13 @@ class HomeVisualInspector extends StatefulWidget {
 }
 
 class _HomeVisualInspectorState extends State<HomeVisualInspector> {
-  Schedule schedule;
-  List<ViSchedule> viScheduleList = [];
-  String _chosenValue;
+  String _chosenValue = "Order Id";
   ApiService apiService;
+
+  TextEditingController _searchController = new TextEditingController();
   @override
   void initState() {
     apiService = new ApiService();
-    schedule = Schedule(
-        orderId: "100",
-        finishedGoodsNumber: "300",
-        scheduledId: "300",
-        cablePartNumber: "200",
-        process: "Wirecutting",
-        length: "100",
-        color: "Red",
-        scheduledQuantity: "50",
-        scheduledStatus: "Not Completed");
-    viScheduleList.add(ViSchedule(
-      binId: "1234567",
-      totalBundles: "100",
-      fgPart: "123456789",
-      orderId: "0123456789",
-      scheduleId: "123456789",
-      totalbundleQty: "100",
-    ));
-    viScheduleList.add(ViSchedule(
-      binId: "1234567",
-      totalBundles: "100",
-      fgPart: "123456789",
-      orderId: "0123456789",
-      scheduleId: "123456789",
-      totalbundleQty: "100",
-    ));
-    viScheduleList.add(ViSchedule(
-      binId: "1234567",
-      totalBundles: "100",
-      fgPart: "123456789",
-      orderId: "0123456789",
-      scheduleId: "123456789",
-      totalbundleQty: "100",
-    ));
-    viScheduleList.add(ViSchedule(
-      binId: "1234567",
-      totalBundles: "100",
-      fgPart: "123456789",
-      orderId: "0123456789",
-      scheduleId: "123456789",
-      totalbundleQty: "100",
-    ));
-    viScheduleList.add(ViSchedule(
-      binId: "1234567",
-      totalBundles: "100",
-      fgPart: "123456789",
-      orderId: "0123456789",
-      scheduleId: "123456789",
-      totalbundleQty: "100",
-    ));
   }
 
   @override
@@ -162,40 +112,11 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                           ],
                         )),
                       ),
-                      // Container(
-                      //   padding: EdgeInsets.symmetric(horizontal: 10),
-                      //   height: 24,
-                      //   decoration: BoxDecoration(
-                      //     color: Colors.grey[100],
-                      //     borderRadius: BorderRadius.all(Radius.circular(100)),
-                      //   ),
-                      //   child: Center(
-                      //       child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      //     children: [
-                      //       Padding(
-                      //         padding:
-                      //             const EdgeInsets.symmetric(horizontal: 4.0),
-                      //         child: Icon(
-                      //           Icons.settings,
-                      //           size: 18,
-                      //           color: Colors.redAccent,
-                      //         ),
-                      //       ),
-                      //       Text(
-                      //         widget.machineId ?? "",
-                      //         style:
-                      //             TextStyle(fontSize: 13, color: Colors.black),
-                      //       ),
-                      //     ],
-                      //   )),
-                      // ),
                     ],
                   )
                 ],
               ),
             ),
-
             TimeDisplay(),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -256,6 +177,12 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                               children: [
                                 Row(
                                   children: [
+                                    dropdown(options: [
+                                      "Order ID",
+                                      "FG No.",
+                                      "Schedule Id",
+                                    ], name: "Order Id"),
+                                    SizedBox(width: 10),
                                     Container(
                                       height: 38,
                                       width: 180,
@@ -281,6 +208,7 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                               padding: EdgeInsets.symmetric(
                                                   vertical: 5),
                                               child: TextField(
+                                                controller: _searchController,
                                                 onChanged: (value) {
                                                   setState(() {});
                                                 },
@@ -317,12 +245,6 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 10),
-                                    dropdown(options: [
-                                      "Order ID",
-                                      "FG No.",
-                                      "Schedule Id",
-                                    ], name: "Order Id"),
                                   ],
                                 ),
                                 Container(
@@ -374,7 +296,6 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                         MaterialPageRoute(
                                             builder: (context) => Viscan(
                                                   userId: widget.userId,
-                                                 
                                                 )),
                                       );
                                     },
@@ -396,7 +317,9 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                 thickness: 2,
               ),
               ViScheduleTable(
-                  viScheduleList: viScheduleList, schedule: schedule)
+                query: _searchController.text,
+                searchType: _chosenValue,
+              )
             ],
           ),
         ));
@@ -435,7 +358,14 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
 class ViScheduleTable extends StatefulWidget {
   List<ViSchedule> viScheduleList;
   Schedule schedule;
-  ViScheduleTable({this.viScheduleList, this.schedule});
+  String searchType;
+  String query;
+  ViScheduleTable({
+    this.viScheduleList,
+    this.schedule,
+    this.searchType,
+    this.query,
+  });
   @override
   _ViScheduleTableState createState() => _ViScheduleTableState();
 }
@@ -448,6 +378,29 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
     postViSchedule = new PostViSchedule();
     apiService = new ApiService();
     super.initState();
+  }
+  List<ViScheduler> searchfilter(List<ViScheduler> scheduleList) {
+    switch (widget.searchType) {
+      case "Order Id":
+        return scheduleList
+            .where((element) => element.orderId.startsWith(widget.query))
+            .toList();
+        break;
+      case "FG Part No.":
+        return scheduleList
+            .where((element) =>
+                element.fgNo.startsWith(widget.query))
+            .toList();
+        break;
+      case "Schedule Id":
+        return scheduleList
+            .where(
+                (element) => element.scheduleId.startsWith(widget.query))
+            .toList();
+        break;
+      default:
+        return scheduleList;
+    }
   }
 
   @override
@@ -466,7 +419,7 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
                   future: apiService.getviSchedule(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      List<ViScheduler> vischedule = snapshot.data;
+                      List<ViScheduler> vischedule = searchfilter(snapshot.data);
                       return ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,

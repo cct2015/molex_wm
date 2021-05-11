@@ -835,8 +835,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
                               DateTime now = DateTime.now();
 
                               _print(
-                                  ipaddress: "192.168.1.130",
-                                  // ipaddress: "172.26.59.14",
+                                  // ipaddress: "192.168.1.130",
+                                  ipaddress: "172.26.59.14",
                                   bq: bundleQty.text,
                                   qr: "${label.bundleId}",
                                   routenumber1: "${label.routeNo}",
@@ -918,8 +918,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           DateTime now = DateTime.now();
                           //TODO
                             _print(
-                                  ipaddress: "192.168.1.130",
-                                  // ipaddress: "172.26.59.14",
+                                  // ipaddress: "192.168.1.130",
+                                  ipaddress: "172.26.59.14",
                                   bq: e.bundleQty,
                                   qr: "${e.label.bundleId}",
                                   routenumber1: "${e.label.routeNo}",

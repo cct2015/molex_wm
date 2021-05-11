@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
+import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/materialTrackingCableDetails_model.dart';
-import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator%202/process/FullyCompleteP2.dart';
@@ -481,7 +481,11 @@ class _DetailState extends State<Detail> {
 
   Widget mainBox(String main) {
     if (main == "scanBundle") {
-      return ScanBundle();
+      return ScanBundle(
+        machineId: widget.machine.machineNumber,
+        userId: widget.userId,
+        schedule: widget.schedule,
+      );
     }
     if (main == "100") {
       return FullCompleteP2(
@@ -1439,7 +1443,7 @@ class _DetailState extends State<Detail> {
                   );
                 }).toList(),
                 hint: Text(
-                  'Select Terminal',
+                  'Select Process',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 14,

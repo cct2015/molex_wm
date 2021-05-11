@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
-import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
-import 'package:molex/model_api/operator2/scanBundle_model.dart';
+import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
+import 'package:molex/model_api/crimping/getbundleQtyCrimp.dart';
+import 'package:molex/model_api/crimping/postCrimprejectedDetail.dart';
+import 'package:molex/model_api/crimping/resPostCrimpRejectDetail.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
@@ -62,7 +64,8 @@ class ApiService {
     }
   }
 
-  Future<List<Schedule>> getScheduelarData({String machId, String type,String sameMachine}) async {
+  Future<List<Schedule>> getScheduelarData(
+      {String machId, String type, String sameMachine}) async {
     print("called api");
     print("called $machId");
     print("called $type");
@@ -358,15 +361,15 @@ class ApiService {
     var response = await http.post(url,
         body: postGenerateLabelToJson(postGenerateLabel), headers: headerList);
     print("response post generate label ${response.body}");
-     Fluttertoast.showToast(
-                    msg: "Generate label status ${response.statusCode}",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
+    Fluttertoast.showToast(
+      msg: "Generate label status ${response.statusCode}",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
     if (response.statusCode == 200) {
       ResponseGenerateLabel responseGenerateLabel =
           responseGenerateLabelFromJson(response.body);
@@ -376,17 +379,22 @@ class ApiService {
     }
   }
 
-  //Transfer Bundle to bin 
-    Future<BundleTransferToBinTracking> postTransferBundletoBin({TransferBundleToBin transferBundleToBin}) async {
-    var url =
-        Uri.parse(baseUrl + 'molex/bin-tracking/transfer-bundle-to-bin-tracking');
+  //Transfer Bundle to bin
+  Future<BundleTransferToBinTracking> postTransferBundletoBin(
+      {TransferBundleToBin transferBundleToBin}) async {
+    var url = Uri.parse(
+        baseUrl + 'molex/bin-tracking/transfer-bundle-to-bin-tracking');
     print(
         'post Transfer Bundle to bin :${transferbundleToBinToJson(transferBundleToBin)} ');
     var response = await http.post(url,
-        body: transferbundleToBinToJson(transferBundleToBin), headers: headerList);
+        body: transferbundleToBinToJson(transferBundleToBin),
+        headers: headerList);
     print("response post Transfer Bundle to bin ${response.body}");
     if (response.statusCode == 200) {
-      BundleTransferToBinTracking b= responseTransferBundletoBinFromJson(response.body).data.bundleTransferToBinTracking[0];
+      BundleTransferToBinTracking b =
+          responseTransferBundletoBinFromJson(response.body)
+              .data
+              .bundleTransferToBinTracking[0];
       return b;
     } else {
       return null;
@@ -544,7 +552,7 @@ class ApiService {
 // CRIMPING API
   // crimping Schedule
   Future<List<CrimpingSchedule>> getCrimpingSchedule(
-      {String scheduleType, String machineNo,String sameMachine}) async {
+      {String scheduleType, String machineNo, String sameMachine}) async {
     var url = Uri.parse(baseUrl +
         'molex/crimping/get-bundle-detail?machineNo=$machineNo&scheduleType=$scheduleType&sameMachine=$sameMachine');
     var response = await http.get(url);
@@ -569,11 +577,37 @@ class ApiService {
     print('Get BundleQty from Id status Code: ${response.statusCode}');
     print('bundle Scan schedule response :${response.body}');
     if (response.statusCode == 200) {
-      GetScanBundleId getScanBundleId = getScanBundleIdFromJson(response.body);
-      String qty = getScanBundleId.data.crimpingProcess.bundleQuantity;
-      return qty;
+      try {
+        GetBundleQtyCrimp getScanBundleId =
+            getBundleQtyCrimpFromJson(response.body);
+        String qty =
+            getScanBundleId.data.crimpingProcess[0].bundleQuantity.toString();
+        return qty;
+      } catch (e) {
+        return null;
+      }
     } else {
-      return '';
+      return null;
+    }
+  }
+
+  //post crimping rejected Quantity
+  Future<CrimpingRejectDetail> postCrimpRejectedQty(
+      PostCrimpingRejectedDetail postCrimpingRejectedDetail) async {
+    var url =
+        Uri.parse(baseUrl + 'molex/crimping/save-crimping-rejected-detal');
+    var response = await http.post(url,
+        body: postCrimpingRejectedDetailToJson(postCrimpingRejectedDetail));
+    print('Post Rejected status Code: ${response.statusCode}');
+    print('Post Rejected response body :${response.body}');
+    if (response.statusCode == 200) {
+      ResPostCrimpingRejectedDetail resPostCrimpingRejectedDetail =
+          resPostCrimpingRejectedDetailFromJson(response.body);
+      CrimpingRejectDetail crimpingRejectDetail =
+          resPostCrimpingRejectedDetail.data.crimpingProcess;
+      return crimpingRejectDetail;
+    } else {
+      return null;
     }
   }
 }

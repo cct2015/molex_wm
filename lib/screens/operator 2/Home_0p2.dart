@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
-import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/operator%202/materialPick2.dart';
 import 'package:molex/screens/widgets/time.dart';
@@ -118,7 +118,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
                     initialLabelIndex: scheduleType,
                     inactiveBgColor: Colors.grey[200],
                     inactiveFgColor: Colors.black,
-                    labels: ['Auto Shdl', 'Others'],
+                    labels: ['Same MC', 'Other MC'],
                     fontSize: 12,
                     onToggle: (index) {
                       print('switched to: $index');
@@ -310,6 +310,10 @@ class _HomePageOp2State extends State<HomePageOp2> {
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
+                 SizedBox(width: 10),
+            dropdown(
+                options: ["Order Id", "FG Part No.", "Cable Part No"],
+                name: "Order Id"),
             SizedBox(width: 10),
             Container(
               height: 38,
@@ -374,10 +378,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
                 ),
               ),
             ),
-            SizedBox(width: 10),
-            dropdown(
-                options: ["Order Id", "FG Part No.", "Cable Part No"],
-                name: "Order Id"),
+       
           ],
         ),
       );

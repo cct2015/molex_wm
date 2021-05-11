@@ -126,7 +126,7 @@ class _MachineIdState extends State<MachineId> {
                             ),
                           ),
                           onPressed: () {
-                            if (machineId == "preparation") {
+                            if (machineId.trim()== "preparation") {
                               Fluttertoast.showToast(
                                   msg: "logged In",
                                   toastLength: Toast.LENGTH_SHORT,
@@ -211,14 +211,18 @@ class _MachineIdState extends State<MachineId> {
                                       );
                                       break;
                                     default:
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => Homepage(
-                                                  userId: widget.employee.empId,
-                                                  machine: machineDetails,
-                                                )),
-                                      );
+                                   Fluttertoast.showToast(
+                                      msg: "Machine not Found",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                  setState(() {
+                                    machineId = null;
+                                    _textController.clear();
+                                  });
                                   }
                                 } else {
                                   Fluttertoast.showToast(

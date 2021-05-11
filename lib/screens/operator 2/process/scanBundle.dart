@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
+import 'package:molex/model_api/crimping/postCrimprejectedDetail.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/service/apiService.dart';
 
 enum Status {
   scan,
@@ -15,7 +19,8 @@ class ScanBundle extends StatefulWidget {
   int length;
   String userId;
   String machineId;
-  ScanBundle({this.length, this.machineId, this.userId});
+  @required CrimpingSchedule schedule;
+  ScanBundle({this.length, this.machineId, this.userId,this.schedule});
   @override
   _ScanBundleState createState() => _ScanBundleState();
 }
@@ -53,6 +58,14 @@ class _ScanBundleState extends State<ScanBundle> {
       new TextEditingController();
   TextEditingController rejectedQtyController = new TextEditingController();
   TextEditingController bundlQtyController = new TextEditingController();
+  TextEditingController seamopenController = new TextEditingController();
+  TextEditingController missCrimpController = new TextEditingController();
+  TextEditingController frontBellMouthController = new TextEditingController();
+  TextEditingController backbellmouthController = new TextEditingController();
+  TextEditingController cabledamageController = new TextEditingController();
+  TextEditingController extrutionOnBurrController = new TextEditingController();
+  TextEditingController brushLengthController = new TextEditingController();
+   TextEditingController burrOrCutOffController = new TextEditingController();
   FocusNode _scanfocus = new FocusNode();
   TextEditingController _scanIdController = new TextEditingController();
   bool next = false;
@@ -67,8 +80,12 @@ class _ScanBundleState extends State<ScanBundle> {
   bool hasBin;
 
   String binId;
+  //to store the bundle Quantity fetched from api after scanning bundle Id
+  String bundleQty='';
+  ApiService apiService = new ApiService();
   @override
   void initState() {
+    apiService = new ApiService();
     Future.delayed(
       const Duration(milliseconds: 10),
       () {
@@ -311,6 +328,19 @@ class _ScanBundleState extends State<ScanBundle> {
                         textAlignVertical: TextAlignVertical.center,
                         style: TextStyle(fontSize: 14),
                         decoration: new InputDecoration(
+                            suffix: _scanIdController.text.length > 1
+                            ? Padding(
+                              padding: const EdgeInsets.only(top:7.0),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _scanIdController.clear();
+                                    });
+                                  },
+                                  child: Icon(Icons.clear,
+                                      size: 18, color: Colors.red)),
+                            )
+                            : Container(),
                           contentPadding: EdgeInsets.symmetric(horizontal: 3),
                           labelText: "Scan Bundle",
                           fillColor: Colors.white,
@@ -332,11 +362,41 @@ class _ScanBundleState extends State<ScanBundle> {
                                 (states) => Colors.redAccent),
                           ),
                           onPressed: () {
-                            setState(() {
-                              clear();
-                              next = !next;
-                              status = Status.rejection;
-                            });
+                            if (_scanIdController.text.length > 0) {
+                              apiService
+                                  .scaBundleGetQty(
+                                      bundleID: _scanIdController.text)
+                                  .then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    clear();
+                                    bundleQty = value;
+                                    bundlQtyController.text = value;
+                                    next = !next;
+                                    status = Status.rejection;
+                                  });
+                                } else {
+                                    Fluttertoast.showToast(
+                                  msg: "Bundle Not Found",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+
+                                }
+                              });
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Scan Bundle to proceed",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            }
                           },
                           child: Text('Scan Bundle  ')),
                       SizedBox(width: 5),
@@ -414,7 +474,7 @@ class _ScanBundleState extends State<ScanBundle> {
                           quantitycell(
                             name: "Terminal Copper Mark	",
                             quantity: 10,
-                            textEditingController: terminalDamageController,
+                            textEditingController: terminalCopperMarkController,
                           ),
                         ],
                       ),
@@ -573,18 +633,44 @@ class _ScanBundleState extends State<ScanBundle> {
                             ),
                             child: Text("Save & Scan Next"),
                             onPressed: () {
+                              PostCrimpingRejectedDetail postCrimpingRejectedDetail = PostCrimpingRejectedDetail(
+                                bundleIdentification: _scanIdController.text,
+                                bundleQuantity: int.parse(bundleQty),
+                                passedQuantity: 0,
+                                rejectedQuantity: total(),
+                                crimpInslation: int.parse(crimpOnInsulationController.text.length>0?crimpOnInsulationController.text:"0"),
+                                insulationSlug: int.parse(insulationCurlingUpDownController.text.length>0?insulationCurlingUpDownController.text:'0'),//TODO check if both are same
+                                windowGap: int.parse(windowGapController.text.length>0?windowGapController.text:'0'),
+                                exposedStrands: int.parse(exposureStrandsController.text.length>0?exposureStrandsController.text:'0'),
+                                burrOrCutOff: int.parse(cutoffBurrController.text.length>0?cutoffBurrController.text:'0'),
+                                terminalBendOrClosedOrDamage: int.parse(terminalBendController.text.length>0?terminalBendController.text:'0'),
+                                nickMarkOrStrandsCut: int.parse("0" ),//TODO check nick mark in Qty
+                                brushLength: int.parse(brushLengthLessMoreController.text.length>0?brushLengthLessMoreController.text:'0'),
+                                seamOpen: int.parse(seamopenController.text.length>0?seamopenController.text:'0'),
+                                missCrimp: int.parse(missCrimpController.text.length>0?missCrimpController.text:'0'),
+                                frontBellMouth: int.parse(frontBellMouthController.text.length>0?frontBellMouthController.text:'0'),
+                                backBellMouth: int.parse(backbellmouthController.text.length>0?backbellmouthController.text:'0'),
+                                extrusionOnBurr: int.parse(extrutionOnBurrController.text.length>0?extrutionOnBurrController.text:'0'),
+                                cableDamage: int.parse(cabledamageController.text.length>0?cabledamageController.text:'0'),
+                                terminalTwist: int.parse(terminalTwistController.text.length>0?terminalTwistController.text:'0'),
+                                orderId: widget.schedule.purchaseOrder,
+                                fgPart: widget.schedule.finishedGoods,
+                                scheduleId: widget.schedule.scheduleId,
+
+
+
+                                );
                               setState(() {
                                 bundleScan.add(BundleScan(
                                     bundleId: _scanIdController.text,
                                     bundleProcessQty: "30",
-                                    bundleQty: "100"));
+                                    bundleQty: "$bundleQty"));
                                 _scanIdController.clear();
                                 Future.delayed(const Duration(milliseconds: 10),
                                     () {
                                   SystemChannels.textInput
                                       .invokeMethod('TextInput.hide');
                                 });
-
                                 status = Status.scanBin;
                               });
                             }),
@@ -598,6 +684,24 @@ class _ScanBundleState extends State<ScanBundle> {
         ),
       ),
     );
+  }
+  int total(){
+    int total = int.parse(crimpOnInsulationController.text.length>0?crimpOnInsulationController.text:'0')+
+    int.parse(insulationCurlingUpDownController.text.length>0?insulationCurlingUpDownController.text:'0')+
+    int.parse(windowGapController.text.length>0?windowGapController.text:'0')+
+    int.parse(exposureStrandsController.text.length>0?exposureStrandsController.text:'0')+
+    int.parse(burrOrCutOffController.text.length>0?burrOrCutOffController.text:'0')+
+    int.parse(terminalBendController.text.length>0?terminalBendController.text:'0')+
+    int.parse(seamopenController.text.length>0?seamopenController.text:'0')+
+    int.parse(missCrimpController.text.length>0?missCrimpController.text:'0')+
+    int.parse(frontBellMouthController.text.length>0?frontBellMouthController.text:'0')+
+    int.parse(backbellmouthController.text.length>0?backbellmouthController.text:'0')+
+    int.parse(extrutionOnBurrController.text.length>0?extrutionOnBurrController.text:'0')+
+    int.parse(brushLengthController.text.length>0?brushLengthController.text:'0')+
+    int.parse(cabledamageController.text.length>0?cabledamageController.text:'0')+
+    int.parse(terminalTwistController.text.length>0?terminalTwistController.text:'0');
+    //TODO nickMark
+    return total;
   }
 
   Widget quantitycell(
@@ -681,6 +785,7 @@ class _ScanBundleState extends State<ScanBundle> {
       ),
     );
   }
+
   void clear() {
     terminalDamageController.clear();
     terminalBendController.clear();
@@ -745,6 +850,16 @@ class _ScanBundleState extends State<ScanBundle> {
                       });
                     },
                     decoration: new InputDecoration(
+                        suffix: _binController.text.length > 1
+                            ? GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _binController.clear();
+                                  });
+                                },
+                                child: Icon(Icons.clear,
+                                    size: 18, color: Colors.red))
+                            : Container(),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.redAccent, width: 2.0),
@@ -774,6 +889,9 @@ class _ScanBundleState extends State<ScanBundle> {
               ),
               onPressed: () {
                 setState(() {
+                  clear();
+                  binId = '';
+                  bundlQtyController.clear();
                   status = Status.scan;
                 });
               },
@@ -784,5 +902,3 @@ class _ScanBundleState extends State<ScanBundle> {
     );
   }
 }
-
-

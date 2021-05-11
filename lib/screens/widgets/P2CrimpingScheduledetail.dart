@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
-import 'package:molex/model_api/operator2/getCrimpingSchedule.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -136,7 +136,7 @@ class _P2ScheduleDetailWIPState extends State<P2ScheduleDetailWIP> {
                 heading: "Cut Length",
                 value: '${widget.schedule.length}',
                 width: 0.08),
-            feild(heading: "Color", value: '${widget.schedule.wireColour}', width: 0.05),
+            feild(heading: "Color", value: '${widget.schedule.wireColour}', width: 0.08),
             feild(
                 heading: "Scheduled Qty",
                 value: '',

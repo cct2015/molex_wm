@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/models/preparationScan.dart';
 import 'package:molex/screens/Preparation/process/bundlePrep.dart';
@@ -207,12 +208,23 @@ class _PreparationprocessState extends State<Preparationprocess> {
           onPrimary: Colors.white,
         ),
         onPressed: () {
-          setState(() {
-            preparationList
-                .add(PreparationScan(employeeId: userId, bundleId: bundleId));
-            _bundleIdScanController.clear();
-            bundleId = '';
-          });
+          if (userId.length > 0 && bundleId.length > 0) {
+            setState(() {
+              preparationList
+                  .add(PreparationScan(employeeId: userId, bundleId: bundleId));
+              _bundleIdScanController.clear();
+              bundleId = '';
+            });
+          } else {
+            Fluttertoast.showToast(
+                msg: "Invalid userId and Bundle Id",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          }
         },
         child: Text(
           'Save',
@@ -268,15 +280,15 @@ class _PreparationprocessState extends State<Preparationprocess> {
                           },
                           decoration: new InputDecoration(
                               suffix: _userScanController.text.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _userScanController.clear();
-                                  });
-                                },
-                                child: Icon(Icons.clear,
-                                    size: 18, color: Colors.red))
-                            : Container(),
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _userScanController.clear();
+                                        });
+                                      },
+                                      child: Icon(Icons.clear,
+                                          size: 18, color: Colors.red))
+                                  : Container(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.redAccent, width: 2.0),
@@ -336,15 +348,15 @@ class _PreparationprocessState extends State<Preparationprocess> {
                           },
                           decoration: new InputDecoration(
                               suffix: _bundleIdScanController.text.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _bundleIdScanController.clear();
-                                  });
-                                },
-                                child: Icon(Icons.clear,
-                                    size: 18, color: Colors.red))
-                            : Container(),
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _bundleIdScanController.clear();
+                                        });
+                                      },
+                                      child: Icon(Icons.clear,
+                                          size: 18, color: Colors.red))
+                                  : Container(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.redAccent, width: 2.0),
@@ -354,8 +366,9 @@ class _PreparationprocessState extends State<Preparationprocess> {
                                     color: Colors.grey[400], width: 2.0),
                               ),
                               labelText: '  Scan Bundle Id  ',
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 5.0,))),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
+                              ))),
                     ),
                   ),
                 ),
@@ -413,17 +426,16 @@ class _PreparationprocessState extends State<Preparationprocess> {
                         style: TextStyle(fontSize: 12),
                       )),
                       DataCell(ElevatedButton(
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ScanBundleP3(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ScanBundleP3(
                                       bundleId: e.bundleId,
                                       userId: widget.userId,
                                       machineId: widget.machineId,
-                                      
                                     )),
-                              );
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 4,

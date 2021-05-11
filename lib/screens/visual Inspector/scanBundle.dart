@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 enum Status {
   scanBundle,
   rejection,
   scanBin,
 }
+
 class ViScanBundle extends StatefulWidget {
   @override
   Vi_ScanStateBundle createState() => Vi_ScanStateBundle();
@@ -13,30 +15,34 @@ class ViScanBundle extends StatefulWidget {
 
 class Vi_ScanStateBundle extends State<ViScanBundle> {
   Status status = Status.scanBundle;
-   TextEditingController scanBundleController = new TextEditingController();
+  TextEditingController scanBundleController = new TextEditingController();
 
-     TextEditingController crimpInslController = new TextEditingController();
-       TextEditingController insulationSlugController = new TextEditingController();
-       TextEditingController windowgapController = new TextEditingController();
-       TextEditingController exposedStrandsController = new TextEditingController();
-       TextEditingController burrCutOffController = new TextEditingController();
-       TextEditingController terminalBendCloseddamageController = new TextEditingController();
-       TextEditingController insulationCurlingController = new TextEditingController();
-       TextEditingController nickMarkStrandcutController = new TextEditingController();
-       TextEditingController seamOpenController = new TextEditingController();
-       TextEditingController missCrimpController = new TextEditingController();
-       TextEditingController frontBelMouthController = new TextEditingController();
-       TextEditingController backBellMouthController = new TextEditingController();
-       TextEditingController extructionOnBurrController = new TextEditingController();
-       TextEditingController brushLengthController = new TextEditingController();
-       TextEditingController cabledamageController = new TextEditingController();
-       TextEditingController terminalTwistController = new TextEditingController();
+  TextEditingController crimpInslController = new TextEditingController();
+  TextEditingController insulationSlugController = new TextEditingController();
+  TextEditingController windowgapController = new TextEditingController();
+  TextEditingController exposedStrandsController = new TextEditingController();
+  TextEditingController burrCutOffController = new TextEditingController();
+  TextEditingController terminalBendCloseddamageController =
+      new TextEditingController();
+  TextEditingController insulationCurlingController =
+      new TextEditingController();
+  TextEditingController nickMarkStrandcutController =
+      new TextEditingController();
+  TextEditingController seamOpenController = new TextEditingController();
+  TextEditingController missCrimpController = new TextEditingController();
+  TextEditingController frontBelMouthController = new TextEditingController();
+  TextEditingController backBellMouthController = new TextEditingController();
+  TextEditingController extructionOnBurrController =
+      new TextEditingController();
+  TextEditingController brushLengthController = new TextEditingController();
+  TextEditingController cabledamageController = new TextEditingController();
+  TextEditingController terminalTwistController = new TextEditingController();
 
   FocusNode scanFocus = new FocusNode();
 
   String _output = '';
 
-  TextEditingController maincontroller= new TextEditingController();
+  TextEditingController maincontroller = new TextEditingController();
 
   TextEditingController _binController = new TextEditingController();
 
@@ -49,14 +55,14 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
 
   @override
   Widget build(BuildContext context) {
-      SystemChrome.setEnabledSystemUIOverlays([]);
-       SystemChannels.textInput.invokeMethod('TextInput.hide');
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
-       height: MediaQuery.of(context).size.height*0.6,
+      height: MediaQuery.of(context).size.height * 0.6,
       child: Center(child: main(status)),
     );
   }
-  
+
   Widget main(Status status) {
     switch (status) {
       case Status.scanBundle:
@@ -65,14 +71,15 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
       case Status.rejection:
         return vitable();
         break;
-        case Status.scanBin:
+      case Status.scanBin:
         return binScan();
         break;
       default:
         return Container();
     }
   }
-    Widget viscanbundle() {
+
+  Widget viscanbundle() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.3,
       height: 150,
@@ -96,14 +103,23 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                         focusNode: scanFocus,
                         autofocus: true,
                         onTap: () {
-                          setState(() {
-                          
-                          });
+                          setState(() {});
                         },
-                        onChanged: (value){
-
-                        },
+                        onChanged: (value) {},
                         decoration: new InputDecoration(
+                             suffix: scanBundleController.text.length > 1
+                            ? Padding(
+                              padding: const EdgeInsets.only(top:7.0),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      scanBundleController.clear();
+                                    });
+                                  },
+                                  child: Icon(Icons.clear,
+                                      size: 18, color: Colors.red)),
+                            )
+                            : Container(),
                           labelText: "Scan Bundle",
                           fillColor: Colors.white,
                           border: new OutlineInputBorder(
@@ -134,7 +150,9 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                     ),
                     onPressed: () {
                       setState(() {
-                        status= scanBundleController.text.length>0? Status.rejection:Status.scanBundle;
+                        status = scanBundleController.text.length > 0
+                            ? Status.rejection
+                            : Status.scanBundle;
                       });
                     },
                     child: Text('Scan Bundle'),
@@ -153,7 +171,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
     });
   }
-  
+
   Widget keypad(TextEditingController controller) {
     buttonPressed(String buttonText) {
       if (buttonText == 'X') {
@@ -222,7 +240,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
       shadowColor: Colors.grey[200],
       child: Container(
         width: MediaQuery.of(context).size.width * 0.24,
-          height: MediaQuery.of(context).size.height*0.4,
+        height: MediaQuery.of(context).size.height * 0.4,
         decoration: new BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -271,12 +289,10 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
     );
   }
 
-
   Widget vitable() {
     return Row(
       children: [
         Container(
-       
           decoration: BoxDecoration(
             borderRadius: new BorderRadius.circular(20.0),
             color: Colors.grey[100],
@@ -319,95 +335,99 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                   children: [
                     Column(
                       children: [
-                         quantitycell(
-                                name: "Crimp Insl",
-                                quantity: 10,
-                                textEditingController: crimpInslController,
-                              ),
-                               quantitycell(
-                                name: "Insulation Slug",
-                                quantity: 10,
-                                textEditingController: insulationSlugController,
-                              ),
-                               quantitycell(
-                                name: "Window Gap",
-                                quantity: 10,
-                                textEditingController: windowgapController,
-                              ),
-                               quantitycell(
-                                name: "Exposed Strands",
-                                quantity: 10,
-                                textEditingController: exposedStrandsController,
-                              ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                          quantitycell(
-                                name: "Burr / Cut Off",
-                                quantity: 10,
-                                textEditingController: burrCutOffController,
-                              ),  quantitycell(
-                                name: "Terminal Bend / Closed / Damage",
-                                quantity: 10,
-                                textEditingController: terminalBendCloseddamageController,
-                              ),  quantitycell(
-                                name: "Insulation Curling / Half Curling",
-                                quantity: 10,
-                                textEditingController: insulationCurlingController,
-                              ),  quantitycell(
-                                name: "Nick Mark / Strands Cut",
-                                quantity: 10,
-                                textEditingController: nickMarkStrandcutController,
-                              ),
+                        quantitycell(
+                          name: "Crimp Insl",
+                          quantity: 10,
+                          textEditingController: crimpInslController,
+                        ),
+                        quantitycell(
+                          name: "Insulation Slug",
+                          quantity: 10,
+                          textEditingController: insulationSlugController,
+                        ),
+                        quantitycell(
+                          name: "Window Gap",
+                          quantity: 10,
+                          textEditingController: windowgapController,
+                        ),
+                        quantitycell(
+                          name: "Exposed Strands",
+                          quantity: 10,
+                          textEditingController: exposedStrandsController,
+                        ),
                       ],
                     ),
                     Column(
                       children: [
                         quantitycell(
-                                name: "Seam Open",
-                                quantity: 10,
-                                textEditingController: seamOpenController,
-                              ),
-                                 quantitycell(
-                                name: "Miss Crimp",
-                                quantity: 10,
-                                textEditingController: missCrimpController,
-                              ),
-                                 quantitycell(
-                                name: "Front Bell Mouth",
-                                quantity: 10,
-                                textEditingController: frontBelMouthController,
-                              ),
-                                 quantitycell(
-                                name: "Back Bell Mouth",
-                                quantity: 10,
-                                textEditingController: backBellMouthController,
-                              ),
+                          name: "Burr / Cut Off",
+                          quantity: 10,
+                          textEditingController: burrCutOffController,
+                        ),
+                        quantitycell(
+                          name: "Terminal Bend / Closed / Damage",
+                          quantity: 10,
+                          textEditingController:
+                              terminalBendCloseddamageController,
+                        ),
+                        quantitycell(
+                          name: "Insulation Curling / Half Curling",
+                          quantity: 10,
+                          textEditingController: insulationCurlingController,
+                        ),
+                        quantitycell(
+                          name: "Nick Mark / Strands Cut",
+                          quantity: 10,
+                          textEditingController: nickMarkStrandcutController,
+                        ),
                       ],
                     ),
                     Column(
                       children: [
-                          quantitycell(
-                                name: "Extrusion on Burr",
-                                quantity: 10,
-                                textEditingController: extructionOnBurrController,
-                              ),
-                                quantitycell(
-                                name: "Brush Length",
-                                quantity: 10,
-                                textEditingController: brushLengthController,
-                              ),
-                                quantitycell(
-                                name: "Cable Damage",
-                                quantity: 10,
-                                textEditingController: cabledamageController,
-                              ),
-                                quantitycell(
-                                name: "Terminal Twist",
-                                quantity: 10,
-                                textEditingController: terminalTwistController,
-                              ),
+                        quantitycell(
+                          name: "Seam Open",
+                          quantity: 10,
+                          textEditingController: seamOpenController,
+                        ),
+                        quantitycell(
+                          name: "Miss Crimp",
+                          quantity: 10,
+                          textEditingController: missCrimpController,
+                        ),
+                        quantitycell(
+                          name: "Front Bell Mouth",
+                          quantity: 10,
+                          textEditingController: frontBelMouthController,
+                        ),
+                        quantitycell(
+                          name: "Back Bell Mouth",
+                          quantity: 10,
+                          textEditingController: backBellMouthController,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        quantitycell(
+                          name: "Extrusion on Burr",
+                          quantity: 10,
+                          textEditingController: extructionOnBurrController,
+                        ),
+                        quantitycell(
+                          name: "Brush Length",
+                          quantity: 10,
+                          textEditingController: brushLengthController,
+                        ),
+                        quantitycell(
+                          name: "Cable Damage",
+                          quantity: 10,
+                          textEditingController: cabledamageController,
+                        ),
+                        quantitycell(
+                          name: "Terminal Twist",
+                          quantity: 10,
+                          textEditingController: terminalTwistController,
+                        ),
                       ],
                     ),
                   ],
@@ -418,9 +438,9 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    quantity("Bundle Qty", 10,bundleQtyController),
+                    quantity("Bundle Qty", 10, bundleQtyController),
                     // quantity("Passed Qty", 10,passedQtyController),
-                    quantity("Rejected Qty", 10,rejectedQtyController),
+                    quantity("Rejected Qty", 10, rejectedQtyController),
                   ],
                 ),
               ),
@@ -439,8 +459,8 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                                 (Set<MaterialState> states) {
                                   if (states.contains(MaterialState.pressed))
                                     return Colors.green[500];
-                                  return Colors
-                                      .green[900]; // Use the component's default.
+                                  return Colors.green[
+                                      900]; // Use the component's default.
                                 },
                               ),
                             ),
@@ -451,31 +471,31 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                             },
                             child: Text('Save & Scan Next'),
                           ),
-                          SizedBox(width:15),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.red[500];
-                                  return Colors
-                                      .red[900]; // Use the component's default.
-                                },
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         Location(userId: '121200', machine: '6541531'),
-                              //   ),
-                              // );
-                            },
-                            child: Text('Complete Inspection'),
-                          ),
+                          // SizedBox(width: 15),
+                          // ElevatedButton(
+                          //   style: ButtonStyle(
+                          //     backgroundColor:
+                          //         MaterialStateProperty.resolveWith<Color>(
+                          //       (Set<MaterialState> states) {
+                          //         if (states.contains(MaterialState.pressed))
+                          //           return Colors.red[500];
+                          //         return Colors
+                          //             .red[900]; // Use the component's default.
+                          //       },
+                          //     ),
+                          //   ),
+                          //   onPressed: () {
+                          //     Navigator.pop(context);
+                          //     // Navigator.push(
+                          //     //   context,
+                          //     //   MaterialPageRoute(
+                          //     //     builder: (context) =>
+                          //     //         Location(userId: '121200', machine: '6541531'),
+                          //     //   ),
+                          //     // );
+                          //   },
+                          //   child: Text('Complete Inspection'),
+                          // ),
                         ]),
                   ],
                 ),
@@ -483,12 +503,13 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
             ],
           ),
         ),
-          keypad(maincontroller)
+        keypad(maincontroller)
       ],
     );
   }
 
-  Widget quantity(String title, int quantity,TextEditingController textEditingController) {
+  Widget quantity(
+      String title, int quantity, TextEditingController textEditingController) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 0.0),
       child: Container(
@@ -511,12 +532,12 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                 style: TextStyle(fontSize: 12),
                 keyboardType: TextInputType.number,
                 controller: textEditingController,
-                onTap: (){
-                   SystemChannels.textInput.invokeMethod('TextInput.hide');
-                    setState(() {
-                      _output = '';
-                      maincontroller = textEditingController;
-                    });
+                onTap: () {
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  setState(() {
+                    _output = '';
+                    maincontroller = textEditingController;
+                  });
                 },
                 decoration: new InputDecoration(
                   labelText: "Qty",
@@ -538,7 +559,7 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
     );
   }
 
-   Widget quantitycell(
+  Widget quantitycell(
       {String name,
       int quantity,
       TextEditingController textEditingController,
@@ -580,7 +601,8 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
       ),
     );
   }
- Widget binScan() {
+
+  Widget binScan() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
       width: MediaQuery.of(context).size.width * 0.75,
@@ -598,7 +620,6 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                 child: TextField(
                     controller: _binController,
                     onSubmitted: (value) {
-                    
                       // _bundleFocus.requestFocus();
                       Future.delayed(
                         const Duration(milliseconds: 50),
@@ -610,19 +631,29 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                     },
                     onTap: () {
                       SystemChannels.textInput.invokeMethod('TextInput.hide');
-                   
-                        _binController.clear();
-                        setState(() {
-                        
-                        });
-                      },
-              
+
+                      _binController.clear();
+                      setState(() {});
+                    },
                     onChanged: (value) {
                       setState(() {
                         binId = value;
                       });
                     },
                     decoration: new InputDecoration(
+                        suffix: _binController.text.length > 1
+                            ? Padding(
+                              padding: const EdgeInsets.only(top:7.0),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _binController.clear();
+                                    });
+                                  },
+                                  child: Icon(Icons.clear,
+                                      size: 18, color: Colors.red)),
+                            )
+                            : Container(),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.redAccent, width: 2.0),
@@ -648,18 +679,20 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                 onPrimary: Colors.white,
               ),
               child: Text(
-                'Save & Sacn Next',
+                'Save & Scan Next',
               ),
               onPressed: () {
                 setState(() {
+                  clear();
+                  _binController.clear();
+                  scanBundleController.clear();
                   status = Status.scanBundle;
-                    Future.delayed(
-                        const Duration(milliseconds: 50),
-                        () {
-                          SystemChannels.textInput
-                              .invokeMethod('TextInput.hide');
-                        },
-                      );
+                  Future.delayed(
+                    const Duration(milliseconds: 50),
+                    () {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    },
+                  );
                 });
               },
             )),
@@ -669,4 +702,22 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
     );
   }
 
+  void clear() {
+    crimpInslController.clear();
+    insulationSlugController.clear();
+    windowgapController.clear();
+    exposedStrandsController.clear();
+    burrCutOffController.clear();
+    terminalBendCloseddamageController.clear();
+    insulationCurlingController.clear();
+    nickMarkStrandcutController.clear();
+    seamOpenController.clear();
+    missCrimpController.clear();
+    frontBelMouthController.clear();
+    backBellMouthController.clear();
+    extructionOnBurrController.clear();
+    brushLengthController.clear();
+    cabledamageController.clear();
+    terminalTwistController.clear();
+  }
 }

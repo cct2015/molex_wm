@@ -128,7 +128,7 @@ class _HomepageState extends State<Homepage> {
                     initialLabelIndex: scheduleType,
                     inactiveBgColor: Colors.grey[200],
                     inactiveFgColor: Colors.black,
-                    labels: ['Auto Shdl', 'Others'],
+                    labels: ['Same MC', 'Other MC'],
                     fontSize: 12,
                     onToggle: (index) {
                       print('switched to: $index');
@@ -330,6 +330,10 @@ class _HomepageState extends State<Homepage> {
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
+             SizedBox(width: 15),
+              dropdown(
+                options: ["Order Id", "FG Part No.", "Cable Part No"],
+                name: "Order Id"),
             SizedBox(width: 10),
             Container(
               height: 38,
@@ -401,9 +405,7 @@ class _HomepageState extends State<Homepage> {
             SizedBox(
               width: 10,
             ),
-            dropdown(
-                options: ["Order Id", "FG Part No.", "Cable Part No"],
-                name: "Order Id"),
+          
           ],
         ),
       );

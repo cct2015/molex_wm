@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final getScanBundleId = getScanBundleIdFromJson(jsonString);
+//     final getBundleQtyCrimp = getBundleQtyCrimpFromJson(jsonString);
 
 import 'dart:convert';
 
-GetScanBundleId getScanBundleIdFromJson(String str) => GetScanBundleId.fromJson(json.decode(str));
+GetBundleQtyCrimp getBundleQtyCrimpFromJson(String str) => GetBundleQtyCrimp.fromJson(json.decode(str));
 
-String getScanBundleIdToJson(GetScanBundleId data) => json.encode(data.toJson());
+String getBundleQtyCrimpToJson(GetBundleQtyCrimp data) => json.encode(data.toJson());
 
-class GetScanBundleId {
-    GetScanBundleId({
+class GetBundleQtyCrimp {
+    GetBundleQtyCrimp({
         this.status,
         this.statusMsg,
         this.errorCode,
@@ -21,7 +21,7 @@ class GetScanBundleId {
     dynamic errorCode;
     Data data;
 
-    factory GetScanBundleId.fromJson(Map<String, dynamic> json) => GetScanBundleId(
+    factory GetBundleQtyCrimp.fromJson(Map<String, dynamic> json) => GetBundleQtyCrimp(
         status: json["status"],
         statusMsg: json["statusMsg"],
         errorCode: json["errorCode"],
@@ -41,25 +41,25 @@ class Data {
         this.crimpingProcess,
     });
 
-    BundleQty crimpingProcess;
+    List<CrimpingProcess> crimpingProcess;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        crimpingProcess: BundleQty.fromJson(json["Crimping process "]),
+        crimpingProcess: List<CrimpingProcess>.from(json["Crimping process "].map((x) => CrimpingProcess.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "Crimping process ": crimpingProcess.toJson(),
+        "Crimping process ": List<dynamic>.from(crimpingProcess.map((x) => x.toJson())),
     };
 }
 
-class BundleQty {
-    BundleQty({
+class CrimpingProcess {
+    CrimpingProcess({
         this.bundleQuantity,
     });
 
-    String bundleQuantity;
+    int bundleQuantity;
 
-    factory BundleQty.fromJson(Map<String, dynamic> json) => BundleQty(
+    factory CrimpingProcess.fromJson(Map<String, dynamic> json) => CrimpingProcess(
         bundleQuantity: json["bundleQuantity"],
     );
 
