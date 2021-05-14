@@ -211,7 +211,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
           if (userId.length > 0 && bundleId.length > 0) {
             setState(() {
               preparationList
-                  .add(PreparationScan(employeeId: userId, bundleId: bundleId));
+                  .add(PreparationScan(employeeId: userId, bundleId: bundleId,status: 'In Process',binId: null ));
               _bundleIdScanController.clear();
               bundleId = '';
             });
@@ -227,7 +227,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
           }
         },
         child: Text(
-          'Save',
+          'Next',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
@@ -399,6 +399,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                     ),
                   ),
                 ),
+                
                 DataColumn(
                     label: Text(
                   'Bundle Id',
@@ -406,6 +407,22 @@ class _PreparationprocessState extends State<Preparationprocess> {
                     textStyle: TextStyle(fontSize: 12),
                   ),
                 )),
+                 DataColumn(
+                  label: Text(
+                    'BIN Id',
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
+                 DataColumn(
+                  label: Text(
+                    'Status',
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
                 DataColumn(
                     label: Text(
                   '',
@@ -425,6 +442,14 @@ class _PreparationprocessState extends State<Preparationprocess> {
                         e.bundleId,
                         style: TextStyle(fontSize: 12),
                       )),
+                       DataCell(Text(
+                        e.binId??'-',
+                        style: TextStyle(fontSize: 12),
+                      )),
+                       DataCell(Text(
+                        e.status,
+                        style: TextStyle(fontSize: 12),
+                      )),
                       DataCell(ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -442,7 +467,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                           primary: Colors.green, // background
                           onPrimary: Colors.white,
                         ),
-                        child: Text('Complete'),
+                        child: Text('Process'),
                       )),
                     ]),
                   )

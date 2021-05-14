@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
-import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/service/apiService.dart';
 
 class P3ScheduleDetailWIP extends StatefulWidget {
@@ -208,7 +207,7 @@ class _P3ScheduleDetailWIPState extends State<P3ScheduleDetailWIP> {
                               width: 0.09),
                           feild(
                               heading: 'Tolerance ',
-                              value: '${fgDetail.tolrance} /${fgDetail.tolrance}',
+                              value: '${fgDetail.tolrance}',
                               width: 0.1),
                         ]));
               } else {

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/transferLocation_model.dart';
 import 'package:molex/screens/operator/location.dart';
+import 'package:molex/screens/operator/process/partiallyComplete.dart';
 
 import '../../operator/bin.dart';
 
@@ -231,6 +232,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
         child: Column(
           children: [
             Row(
+              
               children: [
                 Padding(
                   padding: const EdgeInsets.all(0.0),
@@ -244,7 +246,32 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                             ))
                       ]),
                 ),
-                Container(height: 25, width: 300, child: TextField()),
+                SizedBox(width:10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showReasons();
+                    },
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Text(
+                            'reason',
+                            style: GoogleFonts.poppins(
+                                textStyle: TextStyle(
+                                    color: Colors.blue, fontSize: 14)),
+                          ),
+                          Icon(
+                            Icons.edit,
+                            color: Colors.blueAccent,
+                            size: 14,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
             Padding(
@@ -329,7 +356,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                             name: "Applicator Position Setting		",
                             quantity: 10,
                             textEditingController:
-                                applicatorChangeoverController,
+                                applicatorPositionSettingController,
                           ),
                         ],
                       ),
@@ -588,8 +615,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                               ),
                             ),
                             child: Text("Accept and Continue Process"),
-                            onPressed: () {
-                            }),
+                            onPressed: () {}),
                       ),
                     ),
                   ),
@@ -683,6 +709,22 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> showReasons() async {
+    Future.delayed(
+      const Duration(milliseconds: 50),
+      () {
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+    );
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return Center(child: ReasonSelection());
+      },
     );
   }
 }

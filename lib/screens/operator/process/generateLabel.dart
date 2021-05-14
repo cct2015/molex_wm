@@ -1177,13 +1177,14 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           value;
                       Fluttertoast.showToast(
                           msg:
-                              "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${bundleTransferToBinTracking.binIdentification}",
+                              "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${_binController.text??''}",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
                           backgroundColor: Colors.red,
                           textColor: Colors.white,
                           fontSize: 16.0);
+                          
                       setState(() {
                         generatedBundleList.add(GeneratedBundle(
                             bundleQty: bundleQty.text,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
@@ -66,14 +67,14 @@ class _MachineIdState extends State<MachineId> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Scan Machine",
-                  style: TextStyle(
-                    fontSize: 35,
-                    color: Colors.red[600],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: Text("Scan Machine",
+                    style: GoogleFonts.openSans(
+                      textStyle: TextStyle(
+                        fontSize: 33,
+                        color: Colors.red[600],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
               ),
               SizedBox(height: 20),
               Container(
@@ -106,7 +107,12 @@ class _MachineIdState extends State<MachineId> {
                         },
                         child: Text(
                           'Scan Machine ${machineId ?? ""}',
-                          style: TextStyle(color: Colors.grey, fontSize: 20),
+                          style: GoogleFonts.openSans(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -126,7 +132,7 @@ class _MachineIdState extends State<MachineId> {
                             ),
                           ),
                           onPressed: () {
-                            if (machineId.trim()== "preparation") {
+                            if (machineId.trim() == "preparation") {
                               Fluttertoast.showToast(
                                   msg: "logged In",
                                   toastLength: Toast.LENGTH_SHORT,
@@ -211,18 +217,18 @@ class _MachineIdState extends State<MachineId> {
                                       );
                                       break;
                                     default:
-                                   Fluttertoast.showToast(
-                                      msg: "Machine not Found",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                  setState(() {
-                                    machineId = null;
-                                    _textController.clear();
-                                  });
+                                      Fluttertoast.showToast(
+                                          msg: "Machine not Found",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                      setState(() {
+                                        machineId = null;
+                                        _textController.clear();
+                                      });
                                   }
                                 } else {
                                   Fluttertoast.showToast(

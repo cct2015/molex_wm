@@ -178,7 +178,7 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                 Row(
                                   children: [
                                     dropdown(options: [
-                                      "Order ID",
+                                      "Order Id",
                                       "FG No.",
                                       "Schedule Id",
                                     ], name: "Order Id"),

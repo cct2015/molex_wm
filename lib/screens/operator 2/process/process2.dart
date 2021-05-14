@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
@@ -14,7 +15,6 @@ import 'package:molex/screens/operator%202/process/partialCompletion.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
 import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/screens/widgets/P2CrimpingScheduledetail.dart';
-import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -253,7 +253,10 @@ class _DetailState extends State<Detail> {
                   children: [
                     Container(
                         color: Colors.transparent,
-                        child: Process(type: _chosenValue,schedule: widget.schedule,  )),
+                        child: Process(
+                          type: _chosenValue,
+                          schedule: widget.schedule,
+                        )),
 
                     //buttons and num pad
                     Container(
@@ -967,38 +970,54 @@ class _DetailState extends State<Detail> {
   }
 
   Widget scanedTable() {
+    int a = 1;
     if (bundleScan.length > 0) {
       return DataTable(
           columnSpacing: 35,
-          columns: const <DataColumn>[
+          columns: <DataColumn>[
             DataColumn(
-              label: Text('S No.'),
+              label: Text('S No.',
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(fontWeight: FontWeight.bold))),
             ),
             DataColumn(
-              label: Text('Bundle Id'),
+              label: Text('Bundle Id',
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(fontWeight: FontWeight.bold))),
             ),
             DataColumn(
-              label: Text('Bundle Qty'),
+              label: Text('Bundle Qty',
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(fontWeight: FontWeight.bold))),
             ),
             DataColumn(
-              label: Text('Process Qty'),
+              label: Text('Process Qty',
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(fontWeight: FontWeight.bold))),
             ),
             DataColumn(
-              label: Text('Remove'),
+              label: Text('Remove',
+                  style: GoogleFonts.openSans(
+                      textStyle: TextStyle(fontWeight: FontWeight.bold))),
             ),
           ],
           rows: bundleScan
               .map((e) => DataRow(cells: <DataCell>[
-                    DataCell(Text("1")),
-                    DataCell(Text(
-                      e.bundleId,
-                    )),
+                    DataCell(Text("${a++}",
+                        style: GoogleFonts.openSans(
+                            textStyle:
+                                TextStyle()))),
+                    DataCell(Text(e.bundleId,
+                        style: GoogleFonts.openSans(
+                            textStyle:
+                                TextStyle()))),
                     DataCell(Text(
                       e.bundleQty,
                     )),
-                    DataCell(Text(
-                      e.bundleProcessQty,
-                    )),
+                    DataCell(Text(e.bundleProcessQty,
+                        style: GoogleFonts.openSans(
+                            textStyle:
+                                TextStyle()))),
                     DataCell(IconButton(
                       icon: Icon(
                         Icons.delete,
@@ -1177,8 +1196,6 @@ class _DetailState extends State<Detail> {
     );
   }
 
-
-
   Widget boxes(
     String str1,
     String str2,
@@ -1220,8 +1237,9 @@ class _DetailState extends State<Detail> {
               height: 91,
               child: FutureBuilder(
                   future: apiService.getCableTerminalA(
-                      cablepartno: "${widget.schedule.cablePartNo.toString()}" ??
-                          "${widget.schedule.finishedGoods}"),
+                      cablepartno:
+                          "${widget.schedule.cablePartNo.toString()}" ??
+                              "${widget.schedule.finishedGoods}"),
                   builder: (context, snapshot) {
                     CableTerminalA terminalA = snapshot.data;
                     if (snapshot.hasData) {
@@ -1230,8 +1248,8 @@ class _DetailState extends State<Detail> {
                           '',
                           // 'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                          '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
-                            '',
+                          '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.pullforce})(${terminalA.comment})',
+                          '',
                           // 'From Unsheathing Length (mm) - 40',
                           0.35);
                     } else {
@@ -1279,7 +1297,7 @@ class _DetailState extends State<Detail> {
                         // 'To Strip Length Spec(mm) - ${cableTerminalB.stripLength}',
                         'Process(Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
                         '(${cableTerminalB.processType})(${cableTerminalB.stripLength})(${cableTerminalB.terminalPart})(${cableTerminalB.specCrimpLength})(${cableTerminalB.pullforce})(${cableTerminalB.comment})',
-                      '',
+                        '',
                         0.34);
                   } else {
                     return process(
@@ -1332,7 +1350,7 @@ class _DetailState extends State<Detail> {
   //   );
   // }
 
- Widget process(
+  Widget process(
       String p1, String p2, String p3, String p4, String p5, double width) {
     return Material(
       elevation: 10,
@@ -1414,7 +1432,7 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
-  
+
   Widget startProcess() {
     if (_chosenValue == null) {
       return Padding(
@@ -1469,7 +1487,7 @@ class _DetailState extends State<Detail> {
 class Process extends StatefulWidget {
   String type;
   CrimpingSchedule schedule;
-  Process({this.type,this.schedule});
+  Process({this.type, this.schedule});
   @override
   _ProcessState createState() => _ProcessState();
 }
@@ -1736,7 +1754,6 @@ class _ProcessState extends State<Process> {
     }
   }
 
-
   Widget process(String p1, String p2, String p3, String p4, String p5) {
     return Padding(
       padding: const EdgeInsets.all(.0),
@@ -1811,6 +1828,7 @@ class _ProcessState extends State<Process> {
       ),
     );
   }
+
   Widget table(String type, String pn, String r, String l, String a, String p) {
     ApiService apiService = new ApiService();
     return FutureBuilder(

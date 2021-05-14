@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum Status {
+  scanUser,
   scanBundle,
   rejection,
   scanBin,
@@ -14,7 +15,7 @@ class ViScanBundle extends StatefulWidget {
 }
 
 class Vi_ScanStateBundle extends State<ViScanBundle> {
-  Status status = Status.scanBundle;
+  Status status = Status.scanUser;
   TextEditingController scanBundleController = new TextEditingController();
 
   TextEditingController crimpInslController = new TextEditingController();
@@ -53,6 +54,8 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
 
   TextEditingController rejectedQtyController = new TextEditingController();
 
+  TextEditingController userScanController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
@@ -65,6 +68,9 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
 
   Widget main(Status status) {
     switch (status) {
+      case Status.scanUser:
+        return scanUser();
+        break;
       case Status.scanBundle:
         return viscanbundle();
         break;
@@ -77,6 +83,93 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
       default:
         return Container();
     }
+  }
+
+  Widget scanUser() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.3,
+      height: 150,
+      decoration: BoxDecoration(
+        borderRadius: new BorderRadius.circular(20.0),
+        color: Colors.grey[100],
+      ),
+      child: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.3 * 0.7,
+                  child: RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (event) => handleKey(event.data),
+                    child: Container(
+                      child: TextField(
+                        controller: userScanController,
+                        focusNode: scanFocus,
+                        autofocus: true,
+                        onTap: () {
+                          setState(() {});
+                        },
+                        onChanged: (value) {},
+                        decoration: new InputDecoration(
+                          suffix: userScanController.text.length > 1
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 7.0),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          scanBundleController.clear();
+                                        });
+                                      },
+                                      child: Icon(Icons.clear,
+                                          size: 18, color: Colors.red)),
+                                )
+                              : Container(),
+                          labelText: "Scan User",
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(7.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          //fillColor: Colors.green
+                        ),
+                      ),
+                    ),
+                  ))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.red[500];
+                          return Colors
+                              .red[900]; // Use the component's default.
+                        },
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        status = userScanController.text.length > 0
+                            ? Status.scanBundle
+                            : Status.scanUser;
+                      });
+                    },
+                    child: Text('Scan User'),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ]),
+      ),
+    );
   }
 
   Widget viscanbundle() {
@@ -107,19 +200,19 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                         },
                         onChanged: (value) {},
                         decoration: new InputDecoration(
-                             suffix: scanBundleController.text.length > 1
-                            ? Padding(
-                              padding: const EdgeInsets.only(top:7.0),
-                              child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      scanBundleController.clear();
-                                    });
-                                  },
-                                  child: Icon(Icons.clear,
-                                      size: 18, color: Colors.red)),
-                            )
-                            : Container(),
+                          suffix: scanBundleController.text.length > 1
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 7.0),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          scanBundleController.clear();
+                                        });
+                                      },
+                                      child: Icon(Icons.clear,
+                                          size: 18, color: Colors.red)),
+                                )
+                              : Container(),
                           labelText: "Scan Bundle",
                           fillColor: Colors.white,
                           border: new OutlineInputBorder(
@@ -299,30 +392,49 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
           ),
           child: Column(
             children: [
-              Container(
-                  height: 32,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 40,
                   width: MediaQuery.of(context).size.width * 0.5,
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Bundle ID',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          "${scanBundleController.text}",
-                          style: TextStyle(
-                            color: Colors.green[900],
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
+                  child: Row(
+                    children: [
+                      feild(
+                          heading: "User Id",
+                          value: "${userScanController.text}",
+                          width: 0.15),
+                      feild(
+                          heading: "Bundle Id",
+                          value: "${scanBundleController.text}",
+                          width: 0.15),
+                    ],
+                  ),
+                ),
+              ),
+              // Container(
+              //     height: 32,
+              //     width: MediaQuery.of(context).size.width * 0.5,
+              //     child: Center(
+              //       child: Column(
+              //         children: [
+              //           Text(
+              //             'Bundle ID',
+              //             style: TextStyle(
+              //               fontSize: 12,
+              //               fontWeight: FontWeight.w600,
+              //             ),
+              //           ),
+              //           Text(
+              //             "${scanBundleController.text}",
+              //             style: TextStyle(
+              //               color: Colors.green[900],
+              //               fontSize: 15,
+              //               fontWeight: FontWeight.w700,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     )),
               Text('Reason For Rejection',
                   style: TextStyle(
                     fontSize: 15,
@@ -458,9 +570,9 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                                   MaterialStateProperty.resolveWith<Color>(
                                 (Set<MaterialState> states) {
                                   if (states.contains(MaterialState.pressed))
-                                    return Colors.green[500];
-                                  return Colors.green[
-                                      900]; // Use the component's default.
+                                    return Colors.green;
+                                  return Colors
+                                      .green; // Use the component's default.
                                 },
                               ),
                             ),
@@ -469,7 +581,10 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                                 status = Status.scanBin;
                               });
                             },
-                            child: Text('Save & Scan Next'),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Save & Scan Next'),
+                            ),
                           ),
                           // SizedBox(width: 15),
                           // ElevatedButton(
@@ -604,100 +719,146 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
 
   Widget binScan() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          Container(
-            width: 250,
-            height: 50,
-            child: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: RawKeyboardListener(
-                focusNode: FocusNode(),
-                onKey: (event) => handleKey(event.data),
-                child: TextField(
-                    controller: _binController,
-                    onSubmitted: (value) {
-                      // _bundleFocus.requestFocus();
-                      Future.delayed(
-                        const Duration(milliseconds: 50),
-                        () {
-                          SystemChannels.textInput
-                              .invokeMethod('TextInput.hide');
-                        },
-                      );
-                    },
-                    onTap: () {
-                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    return Padding(
+      padding: const EdgeInsets.all(108.0),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Container(
+              width: 250,
+              height: 50,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: RawKeyboardListener(
+                  focusNode: FocusNode(),
+                  onKey: (event) => handleKey(event.data),
+                  child: TextField(
+                      controller: _binController,
+                      onSubmitted: (value) {
+                        // _bundleFocus.requestFocus();
+                        Future.delayed(
+                          const Duration(milliseconds: 50),
+                          () {
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
+                          },
+                        );
+                      },
+                      onTap: () {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
 
-                      _binController.clear();
-                      setState(() {});
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        binId = value;
-                      });
-                    },
-                    decoration: new InputDecoration(
-                        suffix: _binController.text.length > 1
-                            ? Padding(
-                              padding: const EdgeInsets.only(top:7.0),
-                              child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _binController.clear();
-                                    });
-                                  },
-                                  child: Icon(Icons.clear,
-                                      size: 18, color: Colors.red)),
-                            )
-                            : Container(),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.redAccent, width: 2.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey[400], width: 2.0),
-                        ),
-                        labelText: 'Scan bin',
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 5.0))),
+                        _binController.clear();
+                        setState(() {});
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          binId = value;
+                        });
+                      },
+                      decoration: new InputDecoration(
+                          suffix: _binController.text.length > 1
+                              ? Padding(
+                                  padding: const EdgeInsets.only(top: 7.0),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _binController.clear();
+                                        });
+                                      },
+                                      child: Icon(Icons.clear,
+                                          size: 18, color: Colors.red)),
+                                )
+                              : Container(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.redAccent, width: 2.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey[400], width: 2.0),
+                          ),
+                          labelText: 'Scan bin',
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 5.0))),
+                ),
               ),
             ),
-          ),
-          //Scan Bin Button
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Container(
-                child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 4,
-                primary: Colors.red, // background
-                onPrimary: Colors.white,
+            //Scan Bin Button
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                  child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 4,
+                  primary: Colors.red, // background
+                  onPrimary: Colors.white,
+                ),
+                child: Text(
+                  'Save & Scan Next',
+                ),
+                onPressed: () {
+                  setState(() {
+                    clear();
+                    _binController.clear();
+                    scanBundleController.clear();
+                    userScanController.clear();
+                    status = Status.scanUser;
+                    Future.delayed(
+                      const Duration(milliseconds: 50),
+                      () {
+                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      },
+                    );
+                  });
+                },
+              )),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget feild({String heading, String value, double width}) {
+    width = MediaQuery.of(context).size.width * width;
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Container(
+        // color: Colors.red[100],
+        width: width,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  heading,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey[500],
+                    fontWeight: FontWeight.normal,
+                  )),
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1.0),
+              child: Row(
+                children: [
+                  Text(
+                    value ?? '',
+                    style: GoogleFonts.poppins(
+                      textStyle:
+                          TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
+                    ),
+                  ),
+                ],
               ),
-              child: Text(
-                'Save & Scan Next',
-              ),
-              onPressed: () {
-                setState(() {
-                  clear();
-                  _binController.clear();
-                  scanBundleController.clear();
-                  status = Status.scanBundle;
-                  Future.delayed(
-                    const Duration(milliseconds: 50),
-                    () {
-                      SystemChannels.textInput.invokeMethod('TextInput.hide');
-                    },
-                  );
-                });
-              },
-            )),
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

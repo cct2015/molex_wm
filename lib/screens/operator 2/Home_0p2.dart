@@ -22,7 +22,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
   ApiService apiService;
   int scheduleType = 0;
 
-  var _chosenValue ="Order Id";
+  var _chosenValue = "Order Id";
   TextEditingController _searchController = new TextEditingController();
 
   @override
@@ -34,7 +34,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
 
   @override
   Widget build(BuildContext context) {
-     SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -43,10 +43,10 @@ class _HomePageOp2State extends State<HomePageOp2> {
         ),
         backwardsCompatibility: false,
         leading: null,
-        title: const Text(
-          'Crimping',
-          style: TextStyle(color: Colors.red),
-        ),
+        title: Text('Crimping',
+            style: GoogleFonts.openSans(
+              textStyle: TextStyle(color: Colors.red),
+            )),
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
@@ -162,10 +162,11 @@ class _HomePageOp2State extends State<HomePageOp2> {
                               color: Colors.redAccent,
                             ),
                           ),
-                          Text(
-                            "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
+                          Text("Shift A",
+                              style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                    fontSize: 13, color: Colors.black),
+                              )),
                         ],
                       )),
                     ),
@@ -204,10 +205,11 @@ class _HomePageOp2State extends State<HomePageOp2> {
                               color: Colors.redAccent,
                             ),
                           ),
-                          Text(
-                            widget.userId,
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
+                          Text(widget.userId,
+                              style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                    fontSize: 13, color: Colors.black),
+                              )),
                         ],
                       )),
                     ),
@@ -231,10 +233,11 @@ class _HomePageOp2State extends State<HomePageOp2> {
                               color: Colors.redAccent,
                             ),
                           ),
-                          Text(
-                            widget.machine.machineNumber ?? "",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
-                          ),
+                          Text(widget.machine.machineNumber ?? "",
+                              style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                    fontSize: 13, color: Colors.black),
+                              )),
                         ],
                       )),
                     ),
@@ -310,7 +313,7 @@ class _HomePageOp2State extends State<HomePageOp2> {
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
-                 SizedBox(width: 10),
+            SizedBox(width: 10),
             dropdown(
                 options: ["Order Id", "FG Part No.", "Cable Part No"],
                 name: "Order Id"),
@@ -346,18 +349,6 @@ class _HomePageOp2State extends State<HomePageOp2> {
                             textStyle: TextStyle(fontSize: 16)),
                         onTap: () {},
                         decoration: new InputDecoration(
-                          // suffix: _searchController.text.length > 1
-                          //     ? GestureDetector(
-                          //         onTap: () {
-                          //           setState(() {
-                          //              SystemChannels.textInput
-                          //         .invokeMethod('TextInput.hide');
-                          //             _searchController.clear();
-                          //           });
-                          //         },
-                          //         child: Icon(Icons.clear,
-                          //             size: 16, color: Colors.red))
-                          //     : Container(),
                           hintText: _chosenValue,
                           hintStyle: GoogleFonts.openSans(
                             textStyle: TextStyle(
@@ -378,7 +369,6 @@ class _HomePageOp2State extends State<HomePageOp2> {
                 ),
               ),
             ),
-       
           ],
         ),
       );
@@ -483,40 +473,65 @@ class _SchudleTableState extends State<SchudleTable> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Container(
+    return Container(
+        color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             tableHeading(),
-            Container(
-                // height: double.parse("${rowList.length*60}"),
-                child: FutureBuilder(
-              future: apiService.getCrimpingSchedule(
-                  scheduleType: "${widget.type}",
-                  machineNo: widget.machine.machineNumber,
-                  sameMachine: "${widget.scheduleType}"),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<CrimpingSchedule> schedulelist =
-                      searchfilter(snapshot.data);
-                  return ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: schedulelist.length,
-                      itemBuilder: (context, index) {
-                        return buildDataRow(
-                            schedule: schedulelist[index], c: index);
-                      });
-                } else {
-                  return Container();
-                }
-              },
-            )),
+            SingleChildScrollView(
+              child: Container(
+                  height: widget.type == "M" ? 430 : 490,
+                  // height: double.parse("${rowList.length*60}"),
+                  child: FutureBuilder(
+                    future: apiService.getCrimpingSchedule(
+                        scheduleType: "${widget.type}",
+                        machineNo: widget.machine.machineNumber,
+                        sameMachine: "${widget.scheduleType}"),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<CrimpingSchedule> schedulelist =
+                            searchfilter(snapshot.data);
+                        if (schedulelist.length > 0) {
+                          return ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: schedulelist.length,
+                              itemBuilder: (context, index) {
+                                return buildDataRow(
+                                    schedule: schedulelist[index], c: index);
+                              });
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.all(108.0),
+                            child: Center(
+                              child: Container(
+                                  child: Text(
+                                'No Schedule Found',
+                                style: GoogleFonts.openSans(
+                                    textStyle: TextStyle(color: Colors.black)),
+                              )),
+                            ),
+                          );
+                        }
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.all(108.0),
+                          child: Center(
+                            child: Container(
+                                child: Text(
+                              'No Schedule Found',
+                              style: GoogleFonts.openSans(
+                                  textStyle: TextStyle(color: Colors.black)),
+                            )),
+                          ),
+                        );
+                      }
+                    },
+                  )),
+            ),
           ],
         ),
-      ),
     );
   }
 
@@ -528,7 +543,8 @@ class _SchudleTableState extends State<SchudleTable> {
         child: Center(
           child: Text(
             name,
-            style: TextStyle(color: Colors.grey[600], fontSize: 12),
+            style: GoogleFonts.openSans(
+                textStyle: TextStyle(color: Colors.grey[600], fontSize: 12)),
           ),
         ),
       );
@@ -543,16 +559,16 @@ class _SchudleTableState extends State<SchudleTable> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              cell("Order Id", 0.1),
-              cell("FG Part", 0.1),
+              cell("Order Id", 0.09),
+              cell("FG Part", 0.09),
               cell("Schedule ID", 0.1),
               cell("Cable Part No.", 0.1),
-              cell("Process", 0.07),
+              cell("Process", 0.12),
               cell("Cut Length\n(mm)", 0.07),
               cell("Color", 0.04),
-              cell("Bin Id", 0.09),
+              cell("BIN Id", 0.09),
               cell("Total \nBundles", 0.05),
-              cell("total \nBundle Qty", 0.07),
+              cell("Total \nBundle Qty", 0.07),
               // cell("Status", 0.09),
               cell("Action", 0.1),
             ],
@@ -566,11 +582,11 @@ class _SchudleTableState extends State<SchudleTable> {
     Widget cell(String name, double width) {
       return Container(
         width: MediaQuery.of(context).size.width * width,
-        height: 30,
+        height: 38,
         child: Center(
           child: Text(
             name,
-            style: TextStyle(fontSize: 12),
+            style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 12)),
           ),
         ),
       );
@@ -596,15 +612,15 @@ class _SchudleTableState extends State<SchudleTable> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // orderId
-            cell('${schedule.purchaseOrder}', 0.1),
+            cell('${schedule.purchaseOrder}', 0.09),
             //Fg Part
-            cell('${schedule.finishedGoods}', 0.1),
+            cell('${schedule.finishedGoods}', 0.09),
             //Schudule ID
             cell('${schedule.scheduleId}', 0.1),
             //Cable Part
             cell('${schedule.cablePartNo}', 0.1),
             //Process
-            cell('${schedule.process}', 0.07),
+            cell('${schedule.process}', 0.12),
             // Cut length
             cell('${schedule.length}', 0.07),
             //Color

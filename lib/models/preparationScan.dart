@@ -1,5 +1,7 @@
 class PreparationScan{
   String employeeId;
   String bundleId;
-  PreparationScan({this.bundleId,this.employeeId});
+  String status;
+  String binId;
+  PreparationScan({this.bundleId,this.employeeId,this.status,this.binId});
 }

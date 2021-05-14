@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/models/bundle_scan.dart';
+import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 enum Status {
@@ -54,6 +56,26 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
   TextEditingController wrongBootInsertionController =
       new TextEditingController();
   TextEditingController bootDamageController = new TextEditingController();
+  PreparationSchedule schedule;
+
+  @override
+  void initState() {
+    schedule = PreparationSchedule(
+      orderId: '',
+      finishedGoodsNumber: '',
+      scheduledId: '',
+      cablePartNumber: '',
+      length: '',
+      numberOfBundles: '',
+      binIdentification: '',
+      rejectedQuantity: '',
+      bundleQuantity: '',
+      process: '',
+      passedQuantity: '',
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -203,7 +225,14 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
           )
         ],
       ),
-      body: Center(child: main(status)),
+      body: Center(child: Column(
+        children: [
+          P3ScheduleDetailWIP(
+            schedule: schedule,
+          ),
+          main(status),
+        ],
+      )),
     );
   }
 
@@ -358,71 +387,74 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
   }
 
   Widget scanBin() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.75,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-              height: 100,
-              child: Column(
-                children: [
-                  Container(
-                    height: 40,
-                    width: 200,
-                    child: RawKeyboardListener(
-                      focusNode: FocusNode(),
-                      onKey: (event) => handleKey(event.data),
-                      child: TextField(
-                        onTap: () {
-                          SystemChannels.textInput
-                              .invokeMethod('TextInput.hide');
-                        },
-                        controller: _scanIdController,
-                        autofocus: true,
-                        textAlign: TextAlign.center,
-                        textAlignVertical: TextAlignVertical.center,
-                        style: TextStyle(fontSize: 14),
-                        decoration: new InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 3),
-                          labelText: "Scan Bin",
-                          fillColor: Colors.white,
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(5.0),
-                            borderSide: new BorderSide(),
+    return Padding(
+      padding: const EdgeInsets.all(1056566558.0),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                height: 100,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 40,
+                      width: 200,
+                      child: RawKeyboardListener(
+                        focusNode: FocusNode(),
+                        onKey: (event) => handleKey(event.data),
+                        child: TextField(
+                          onTap: () {
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
+                          },
+                          controller: _scanIdController,
+                          autofocus: true,
+                          textAlign: TextAlign.center,
+                          textAlignVertical: TextAlignVertical.center,
+                          style: TextStyle(fontSize: 14),
+                          decoration: new InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 3),
+                            labelText: "Scan Bin",
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(5.0),
+                              borderSide: new BorderSide(),
+                            ),
+                            //fillColor: Colors.green
                           ),
-                          //fillColor: Colors.green
                         ),
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 40,
-                          width: 100,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.redAccent),
-                              ),
-                              onPressed: () {
-                               Navigator.pop(context);
-                              },
-                              child: Text('Scan Bin  ')),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            height: 40,
+                            width: 100,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.resolveWith(
+                                      (states) => Colors.redAccent),
+                                ),
+                                onPressed: () {
+                                 Navigator.pop(context);
+                                },
+                                child: Text('Scan Bin  ')),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 5),
-                     
-                    ],
-                  ),
-                ],
-              )),
-          // scanedTable(),
-        ],
+                        SizedBox(width: 5),
+                       
+                      ],
+                    ),
+                  ],
+                )),
+            // scanedTable(),
+          ],
+        ),
       ),
     );
   }

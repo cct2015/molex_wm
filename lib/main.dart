@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/login.dart';
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +32,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Molex',
         theme: ThemeData(
+          // fontFamily: 'OpenSans',
           primarySwatch: Colors.blue,
         ),
         home:

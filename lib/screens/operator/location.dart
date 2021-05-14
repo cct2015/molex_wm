@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/screens/operator/Homepage.dart';
@@ -52,9 +53,10 @@ class _LocationState extends State<Location> {
           iconTheme: IconThemeData(
             color: Colors.red,
           ),
-          title: const Text(
+          title: Text(
             'Location Transfer',
-            style: TextStyle(color: Colors.red),
+            style:
+                GoogleFonts.openSans(textStyle: TextStyle(color: Colors.red)),
           ),
           elevation: 0,
           actions: [
@@ -81,7 +83,9 @@ class _LocationState extends State<Location> {
                       ),
                       Text(
                         "Shift A",
-                        style: TextStyle(fontSize: 13, color: Colors.black),
+                        style: GoogleFonts.openSans(
+                            textStyle:
+                                TextStyle(fontSize: 13, color: Colors.black)),
                       ),
                     ],
                   )),
@@ -148,8 +152,9 @@ class _LocationState extends State<Location> {
                             ),
                             Text(
                               widget.machine.machineNumber ?? "",
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.black),
+                              style: GoogleFonts.openSans(
+                                  textStyle: TextStyle(
+                                      fontSize: 13, color: Colors.black)),
                             ),
                           ],
                         )),
@@ -257,16 +262,16 @@ class _LocationState extends State<Location> {
                               });
                             },
                             decoration: new InputDecoration(
-                               suffix: _locationController.text.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _locationController.clear();
-                                  });
-                                },
-                                child: Icon(Icons.clear,
-                                    size: 18, color: Colors.red))
-                            : Container(),
+                                suffix: _locationController.text.length > 1
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _locationController.clear();
+                                          });
+                                        },
+                                        child: Icon(Icons.clear,
+                                            size: 18, color: Colors.red))
+                                    : Container(),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.redAccent, width: 2.0),
@@ -301,11 +306,8 @@ class _LocationState extends State<Location> {
             ),
             onPressed: () {
               setState(() {
-                transferList
-                    .add(TransferBinToLocation(
-                      binLocation: locationId,
-                       binIdentification: binId
-                       ));
+                transferList.add(TransferBinToLocation(
+                    binLocation: locationId, binIdentification: binId));
                 _binController.clear();
                 binId = null;
               });
@@ -316,23 +318,24 @@ class _LocationState extends State<Location> {
   }
 
   Widget completeTransfer() {
-    
-    return transferList.length>0? Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width * 0.23,
-        child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.resolveWith((states) => Colors.green),
+    return transferList.length > 0
+        ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width * 0.23,
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.green),
+                  ),
+                  onPressed: () {
+                    _showConfirmationDialog();
+                  },
+                  child: Text('Complete Transfer')),
             ),
-            onPressed: () {
-              _showConfirmationDialog();
-            },
-            child: Text('Complete Transfer')),
-      ),
-    ):Container();
+          )
+        : Container();
   }
 
   Widget bin() {
@@ -351,7 +354,6 @@ class _LocationState extends State<Location> {
                 padding: const EdgeInsets.all(0.0),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.23,
-                
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: RawKeyboardListener(
@@ -375,19 +377,19 @@ class _LocationState extends State<Location> {
                             });
                           },
                           decoration: new InputDecoration(
-                               suffix: _binController.text.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _binController.clear();
-                                  });
-                                },
-                                child: Icon(Icons.clear,
-                                    size: 18, color: Colors.red))
-                            : Container(
-                              height: 1,
-                              width: 1,
-                            ),
+                              suffix: _binController.text.length > 1
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _binController.clear();
+                                        });
+                                      },
+                                      child: Icon(Icons.clear,
+                                          size: 18, color: Colors.red))
+                                  : Container(
+                                      height: 1,
+                                      width: 1,
+                                    ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Colors.redAccent, width: 2.0),
@@ -461,26 +463,37 @@ class _LocationState extends State<Location> {
         children: [
           DataTable(
               columnSpacing: 30,
-              columns: const <DataColumn>[
+              columns: <DataColumn>[
                 DataColumn(
-                  label: Text('No.'),
+                  label: Text('No.',
+                      style: GoogleFonts.openSans(
+                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
                 ),
                 DataColumn(
-                  label: Text('Location Id'),
+                  label: Text('Location Id',
+                      style: GoogleFonts.openSans(
+                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
                 ),
                 DataColumn(
-                  label: Text('Bin Id'),
+                  label: Text('Bin Id',
+                      style: GoogleFonts.openSans(
+                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
                 ),
                 DataColumn(
-                  label: Text('Remove'),
+                  label: Text('Remove',
+                      style: GoogleFonts.openSans(
+                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
                 ),
               ],
               rows: transferList
                   .map(
                     (e) => DataRow(cells: <DataCell>[
-                      DataCell(Text("${a++}")),
-                      DataCell(Text(e.binLocation ?? '')),
-                      DataCell(Text(e.binIdentification ?? '')),
+                      DataCell(Text("${a++}",
+                          style: GoogleFonts.openSans(textStyle: TextStyle()))),
+                      DataCell(Text(e.binLocation ?? '',
+                          style: GoogleFonts.openSans(textStyle: TextStyle()))),
+                      DataCell(Text(e.binIdentification ?? '',
+                          style: GoogleFonts.openSans(textStyle: TextStyle()))),
                       DataCell(
                         IconButton(
                           icon: Icon(
@@ -515,14 +528,7 @@ class _LocationState extends State<Location> {
       builder: (BuildContext context) {
         return Center(
           child: AlertDialog(
-            title: Center(child: Text('Confirm Transfer')),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Center(child: Text('Confirm Location Transfer'))
-                ],
-              ),
-            ),
+            title: Center(child: Text('Confirm Transfer of BIN\'s')),
             actions: <Widget>[
               ElevatedButton(
                   style: ButtonStyle(
@@ -538,7 +544,7 @@ class _LocationState extends State<Location> {
                       },
                     );
                   },
-                  child: Text('Cancel Transfer')),
+                  child: Text('Cancel')),
               ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
@@ -555,7 +561,8 @@ class _LocationState extends State<Location> {
                     apiService
                         .getmachinedetails(widget.machine.machineNumber)
                         .then((value) {
-                      Navigator.push(
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => Homepage(
@@ -563,7 +570,7 @@ class _LocationState extends State<Location> {
                           ));
                     });
                   },
-                  child: Text('Confirm Transfer')),
+                  child: Text('Confirm')),
             ],
           ),
         );

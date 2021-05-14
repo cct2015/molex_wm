@@ -141,7 +141,7 @@ class _P2ScheduleDetailWIPState extends State<P2ScheduleDetailWIP> {
                 heading: "Scheduled Qty",
                 value: '',
                 width: 0.1),
-            feild(heading: "Schedule", value: "10:00 - 11:00", width: 0.1)
+            feild(heading: "Schedule", value: "null", width: 0.1)
           ],
         ));
   }
@@ -208,7 +208,7 @@ class _P2ScheduleDetailWIPState extends State<P2ScheduleDetailWIP> {
                               width: 0.09),
                           feild(
                               heading: 'Tolerance ',
-                              value: '${fgDetail.tolrance} / ${fgDetail.tolrance}',
+                              value: '${fgDetail.tolrance}',
                               width: 0.1),
                         ]));
               } else {

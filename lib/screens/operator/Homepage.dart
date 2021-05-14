@@ -174,7 +174,9 @@ class _HomepageState extends State<Homepage> {
                           ),
                           Text(
                             "Shift A",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
+                            style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                    fontSize: 13, color: Colors.black)),
                           ),
                         ],
                       )),
@@ -216,7 +218,9 @@ class _HomepageState extends State<Homepage> {
                           ),
                           Text(
                             widget.userId,
-                            style: TextStyle(fontSize: 13, color: Colors.black),
+                            style: GoogleFonts.openSans(
+                                textStyle: TextStyle(
+                                    fontSize: 13, color: Colors.black)),
                           ),
                         ],
                       )),
@@ -243,7 +247,10 @@ class _HomepageState extends State<Homepage> {
                           ),
                           Text(
                             widget.machine.machineNumber ?? "",
-                            style: TextStyle(fontSize: 13, color: Colors.black),
+                            style: GoogleFonts.openSans(
+                              textStyle:
+                                  TextStyle(fontSize: 13, color: Colors.black),
+                            ),
                           ),
                         ],
                       )),
@@ -330,8 +337,8 @@ class _HomepageState extends State<Homepage> {
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
-             SizedBox(width: 15),
-              dropdown(
+            SizedBox(width: 15),
+            dropdown(
                 options: ["Order Id", "FG Part No.", "Cable Part No"],
                 name: "Order Id"),
             SizedBox(width: 10),
@@ -356,7 +363,6 @@ class _HomepageState extends State<Homepage> {
                       width: 180,
                       height: 40,
                       padding: EdgeInsets.symmetric(vertical: 5),
-
                       child: TextField(
                         keyboardType: TextInputType.number,
                         controller: _searchController,
@@ -364,10 +370,7 @@ class _HomepageState extends State<Homepage> {
                           setState(() {});
                         },
                         style: GoogleFonts.openSans(
-                          textStyle: TextStyle(
-                            fontSize: 16
-                          )
-                        ),
+                            textStyle: TextStyle(fontSize: 16)),
                         onTap: () {},
                         decoration: new InputDecoration(
                           // suffix: _searchController.text.length > 1
@@ -405,7 +408,6 @@ class _HomepageState extends State<Homepage> {
             SizedBox(
               width: 10,
             ),
-          
           ],
         ),
       );
@@ -435,11 +437,11 @@ class _HomepageState extends State<Homepage> {
           ),
         );
       }).toList(),
-      hint: Text(
-        name,
-        style: TextStyle(
-            color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
-      ),
+      hint: Text(name,
+          style: GoogleFonts.openSans(
+            textStyle: TextStyle(
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+          )),
       onChanged: (String value) {
         setState(() {
           _chosenValue = value;
@@ -519,6 +521,7 @@ class _SchudleTableState extends State<SchudleTable> {
             tableHeading(),
             SingleChildScrollView(
               child: Container(
+               
                   height: widget.type == "M" ? 430 : 490,
                   // height: double.parse("${rowList.length*60}"),
                   child: FutureBuilder(
@@ -531,15 +534,34 @@ class _SchudleTableState extends State<SchudleTable> {
                         // return  buildDataRow(schedule:widget.schedule,c:2);
                         List<Schedule> schedulelist =
                             searchfilter(snapshot.data);
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: schedulelist.length,
-                            itemBuilder: (context, index) {
-                              return buildDataRow(
-                                  schedule: schedulelist[index], c: index + 1);
-                            });
+                        if (schedulelist.length > 0) {
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: schedulelist.length,
+                              itemBuilder: (context, index) {
+                                return buildDataRow(
+                                    schedule: schedulelist[index],
+                                    c: index + 1);
+                              });
+                        } else {
+                          return Center(
+                            child: Container(
+                                child: Text(
+                              'No Schedule Found',
+                              style: GoogleFonts.openSans(
+                                  textStyle: TextStyle(color: Colors.black)),
+                            )),
+                          );
+                        }
                       } else {
-                        return Center(child: SingleChildScrollView());
+                        return Center(
+                          child: Container(
+                              child: Text(
+                            'No Schedule Found',
+                            style: GoogleFonts.openSans(
+                                textStyle: TextStyle(color: Colors.black)),
+                          )),
+                        );
                       }
                     },
                   )),
@@ -564,7 +586,7 @@ class _SchudleTableState extends State<SchudleTable> {
             children: [
               Text(
                 name,
-                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                style:GoogleFonts.openSans(textStyle: TextStyle(color: Colors.grey[600], fontSize: 12),)
               ),
               (() {
                 if (sort) {
@@ -612,11 +634,11 @@ class _SchudleTableState extends State<SchudleTable> {
               cell("Order Id", 0.08, true),
               cell("FG Part", 0.08, true),
               cell("Schedule ID", 0.08, false),
-              cell("Cable Part No.", 0.1, true),
+              cell("Cable Part No.", 0.12, true),
               cell("Process", 0.11, false),
               cell("Cut Length(mm)", 0.12, true),
               cell("Color", 0.07, false),
-              cell("Scheduled Qty", 0.1, true),
+              cell("Scheduled Qty", 0.12, true),
               cell("Status", 0.1, true),
               cell("Action", 0.08, true),
             ],

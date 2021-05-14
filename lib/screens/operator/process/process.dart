@@ -668,7 +668,7 @@ class _DetailState extends State<Detail> {
                           '',
                           // 'From Strip Length Spec(mm) - ${terminalA.fronStripLengthSpec}',
                           'Process (Strip Length)(Terminal Part#)Spec-(Crimp Height)(Pull Force)(Cmt)',
-                          '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.comment})',
+                          '(${terminalA.processType})(${terminalA.stripLength})(${terminalA.terminalPart})(${terminalA.specCrimpLength})(${terminalA.pullforce})(${terminalA.comment})',
                           '',
                           0.35);
                     } else {
@@ -776,6 +776,7 @@ class _DetailState extends State<Detail> {
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
+                            fontFamily: ''
                           ),
                         ),
                         SizedBox(width: 20),
@@ -783,11 +784,12 @@ class _DetailState extends State<Detail> {
                           p2,
                           style: TextStyle(
                             fontSize: 11,
+                             fontFamily: ''
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: 4),
                     Text(
                       p3,
                       style: TextStyle(fontSize: 9),
@@ -800,14 +802,15 @@ class _DetailState extends State<Detail> {
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.red,
+                           fontFamily: '',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: 4),
                     Text(
                       p5,
-                      style: TextStyle(fontSize: 11),
+                      style: TextStyle(fontSize: 11, fontFamily: ''),
                     ),
                   ],
                 ),

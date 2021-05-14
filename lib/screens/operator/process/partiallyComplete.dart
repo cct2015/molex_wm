@@ -780,51 +780,6 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
       builder: (BuildContext context) {
         return Center(
           child: ReasonSelection()
-            //  AlertDialog(
-            //     title: Container(
-            //   height: 400,
-            //   width: 400,
-            //   child: Column(
-            //     children: [
-            //       Row(
-            //         children: [
-            //           Text('Reason'),
-            //         ],
-            //       ),
-            //       Container(
-            //         child: SingleChildScrollView(
-            //           child: Row(
-            //             children: selectedreasons.map((e) =>  Text(e)).toList(),
-            //           ),
-            //         ),
-            //       ),
-            //       Container(
-            //         height: 300,
-            //         child: ListView.builder(
-            //           itemCount: reasonList.length,
-            //           itemBuilder: (context, index) {
-            //             return ListTile(
-            //               onTap: () {
-            //                 setState(() {
-            //                   selectedreasons.add(reasonList[index]);
-            //                 });
-            //               },
-            //               contentPadding: EdgeInsets.all(0),
-            //               title: Text(
-            //                 reasonList[index],
-            //                 style: GoogleFonts.poppins(
-            //                     textStyle: TextStyle(
-            //                   fontSize: 13,
-            //                 )),
-            //               ),
-            //               trailing: Icon(Icons.add),
-            //             );
-            //           },
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // )),
             );
       },
     );
