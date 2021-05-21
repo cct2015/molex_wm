@@ -7,9 +7,6 @@ import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 // import 'package:lottie/lottie.dart';
 import 'package:molex/Machine_Id.dart';
-import 'package:molex/screens/Preparation/preparationDash.dart';
-import 'package:molex/screens/Preparation/prepMachineScan.dart';
-import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
 import 'package:molex/service/apiService.dart';
 
 class LoginScan extends StatefulWidget {

@@ -10,6 +10,7 @@ import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/materialTrackingCableDetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/models/bundle_scan.dart';
+import 'package:molex/screens/Crimping%20Patrol/CrimpingPartrolDash.dart';
 import 'package:molex/screens/operator%202/process/FullyCompleteP2.dart';
 import 'package:molex/screens/operator%202/process/partialCompletion.dart';
 import 'package:molex/screens/operator%202/process/scanBundle.dart';
@@ -145,35 +146,47 @@ class _ProcessPage2State extends State<ProcessPage2> {
           ),
 
           TimeDisplay(),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              width: 40,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.redAccent[100],
-                      offset: const Offset(
-                        2.0,
-                        2.0,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CrimpingPatrolDash(
+                          userId: widget.userId,
+                          machineId: widget.machine.machineNumber,
+                        )),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                width: 40,
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.redAccent[100],
+                        offset: const Offset(
+                          2.0,
+                          2.0,
+                        ),
+                        blurRadius: 3.0,
+                        spreadRadius: 1.0,
                       ),
-                      blurRadius: 3.0,
-                      spreadRadius: 1.0,
-                    ),
-                    BoxShadow(
-                      color: Colors.white,
-                      offset: const Offset(0.0, 0.0),
-                      blurRadius: 0.0,
-                      spreadRadius: 0.0,
-                    ), //Bo
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                  image: DecorationImage(
-                      image: AssetImage(
-                        'assets/image/profile.jpg',
-                      ),
-                      fit: BoxFit.fill)),
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: const Offset(0.0, 0.0),
+                        blurRadius: 0.0,
+                        spreadRadius: 0.0,
+                      ), //Bo
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/image/profile.jpg',
+                        ),
+                        fit: BoxFit.fill)),
+              ),
             ),
           )
         ],
@@ -1004,20 +1017,14 @@ class _DetailState extends State<Detail> {
           rows: bundleScan
               .map((e) => DataRow(cells: <DataCell>[
                     DataCell(Text("${a++}",
-                        style: GoogleFonts.openSans(
-                            textStyle:
-                                TextStyle()))),
+                        style: GoogleFonts.openSans(textStyle: TextStyle()))),
                     DataCell(Text(e.bundleId,
-                        style: GoogleFonts.openSans(
-                            textStyle:
-                                TextStyle()))),
+                        style: GoogleFonts.openSans(textStyle: TextStyle()))),
                     DataCell(Text(
                       e.bundleQty,
                     )),
                     DataCell(Text(e.bundleProcessQty,
-                        style: GoogleFonts.openSans(
-                            textStyle:
-                                TextStyle()))),
+                        style: GoogleFonts.openSans(textStyle: TextStyle()))),
                     DataCell(IconButton(
                       icon: Icon(
                         Icons.delete,
@@ -1829,32 +1836,27 @@ class _ProcessState extends State<Process> {
     );
   }
 
-  Widget table(String type, String pn, String r, String l, String a, String p) {
+  Widget table() {
     ApiService apiService = new ApiService();
     return FutureBuilder(
         future: apiService.getMaterialTrackingCableDetail(
             partNo: "${widget.schedule.cablePartNo}"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<MaterialTrackingCableDetails> materialtrackingdetail =
-                snapshot.data;
+            MaterialTrackingCable materialTrackingCable = snapshot.data;
             return Container(
                 width: MediaQuery.of(context).size.width * 0.47,
                 child: Column(children: [
                   row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE',
                       'PENDING', Colors.blue[100]),
-                  ListView.builder(
-                      itemCount: materialtrackingdetail.length,
-                      itemBuilder: (context, index) {
-                        return row(
-                            "${materialtrackingdetail[index].partNumber.toString()}",
-                            "${materialtrackingdetail[index].uom}",
-                            "${materialtrackingdetail[index].required.toString()}",
-                            "${materialtrackingdetail[index].loaded.toString()}",
-                            "${materialtrackingdetail[index].available.toString()}",
-                            "${materialtrackingdetail[index].pending.toString()}",
-                            Colors.grey[100]);
-                      })
+                  row(
+                      "${materialTrackingCable.partNumber.toString()}",
+                      "${materialTrackingCable.uom}",
+                      "${materialTrackingCable.required1.toString()}",
+                      "${materialTrackingCable.loaded.toString()}",
+                      "${materialTrackingCable.available.toString()}",
+                      "${materialTrackingCable.pending.toString()}",
+                      Colors.grey[100]),
                 ]));
           } else {
             return Container(
@@ -1953,12 +1955,6 @@ class _ProcessState extends State<Process> {
   Widget tableRow(String name) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       table(
-        name,
-        '884538504',
-        '5000m',
-        '2500m',
-        '1000m',
-        '2500m',
       ),
     ]);
   }

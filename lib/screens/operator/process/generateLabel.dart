@@ -836,7 +836,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
                               _print(
                                   // ipaddress: "192.168.1.130",
-                                  ipaddress: "172.26.59.14",
+                                  ipaddress: "172.25.16.53",
                                   bq: bundleQty.text,
                                   qr: "${label.bundleId}",
                                   routenumber1: "${label.routeNo}",
@@ -977,7 +977,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
                   },
                   style: TextStyle(fontSize: 12),
-                  keyboardType: TextInputType.textscan,
+                  keyboardType: TextInputType.number,
                   decoration: new InputDecoration(
                     labelText: name,
                     fillColor: Colors.white,
@@ -1172,6 +1172,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       .postTransferBundletoBin(
                           transferBundleToBin: getpostBundletoBin())
                       .then((value) {
+                        
                     if (value != null) {
                       BundleTransferToBinTracking bundleTransferToBinTracking =
                           value;
@@ -1235,21 +1236,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
   TransferBundleToBin getpostBundletoBin() {
     TransferBundleToBin bundleToBin = TransferBundleToBin(
-      binIdentification: label.bundleId,
-      bundleQuantity: bundleQty.text,
-      finishedGoods: widget.schedule.finishedGoodsNumber,
-      scheduledId: widget.schedule.scheduledId,
-      bundleCreationTime: DateTime.now(),
-      machineIdentification: widget.machine.machineNumber,
-      operatorIdentification: widget.userId,
-      cablePartNumber: widget.schedule.cablePartNumber,
-      color: widget.schedule.color,
-      bundleRoute: label.routeNo,
-      purchaseOrder: widget.schedule.orderId,
-      orderIdentification: widget.schedule.orderId,
-      cutLength: widget.schedule.length,
-      scheduledQuantity: widget.schedule.scheduledQuantity,
-      bundleRejectedQuantity: total(),
+      binIdentification: _binController.text,
+      bundleId: label.bundleId
     );
     return bundleToBin;
   }
@@ -1291,12 +1279,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Bundle Qyantity - ${generatedBundle.transferBundleToBin.bundleQuantity}',
-                          style: GoogleFonts.openSans(
-                              textStyle: TextStyle(fontSize: 15)),
-                        ),
-                        Text(
-                          'Rejection Cases - ${generatedBundle.transferBundleToBin.bundleRejectedQuantity??"0"}',
+                          'Bundle Qyantity - ${generatedBundle.label.bundleQuantity}',
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(fontSize: 15)),
                         ),
@@ -1310,11 +1293,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(fontSize: 15)),
                         ),
-                        Text(
-                          'Rejection Cases - ${generatedBundle.transferBundleToBin.bundleRejectedQuantity??"0"}',
-                          style: GoogleFonts.openSans(
-                              textStyle: TextStyle(fontSize: 15)),
-                        ),
+                      
                       ],
                     ),
                   ],

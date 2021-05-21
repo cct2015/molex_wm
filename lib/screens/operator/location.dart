@@ -307,7 +307,7 @@ class _LocationState extends State<Location> {
             onPressed: () {
               setState(() {
                 transferList.add(TransferBinToLocation(
-                    binLocation: locationId, binIdentification: binId));
+                    locationId: locationId, binIdentification: binId));
                 _binController.clear();
                 binId = null;
               });
@@ -490,7 +490,7 @@ class _LocationState extends State<Location> {
                     (e) => DataRow(cells: <DataCell>[
                       DataCell(Text("${a++}",
                           style: GoogleFonts.openSans(textStyle: TextStyle()))),
-                      DataCell(Text(e.binLocation ?? '',
+                      DataCell(Text(e.locationId ?? '',
                           style: GoogleFonts.openSans(textStyle: TextStyle()))),
                       DataCell(Text(e.binIdentification ?? '',
                           style: GoogleFonts.openSans(textStyle: TextStyle()))),

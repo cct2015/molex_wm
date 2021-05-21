@@ -4,18 +4,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/login.dart';
 import 'package:molex/main.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/operator/location.dart';
 
 class FullyComplete extends StatefulWidget {
   String userId;
   MachineDetails machine;
-  FullyComplete({this.userId, this.machine});
+  Schedule schedule;
+  FullyComplete({this.userId, this.machine,this.schedule});
   @override
   _FullyCompleteState createState() => _FullyCompleteState();
 }
 
 class _FullyCompleteState extends State<FullyComplete> {
+    PostStartProcessP1 postStartprocess;
   //Text Eddititing Controller
   TextEditingController mainController = new TextEditingController();
   TextEditingController firstPatrolController = new TextEditingController();
@@ -138,6 +142,22 @@ class _FullyCompleteState extends State<FullyComplete> {
                       child: Text("Save & Complete Process"),
                       onPressed: () {
                         Future.delayed(Duration.zero, () {
+                             postStartprocess = new PostStartProcessP1(
+                            cablePartNumber:
+                                widget.schedule.cablePartNumber ?? "0",
+                            color: widget.schedule.color,
+                            finishedGoodsNumber:
+                                widget.schedule.finishedGoodsNumber ?? "0",
+                            lengthSpecificationInmm:
+                                widget.schedule.length ?? "0",
+                            machineIdentification: widget.machine.machineNumber,
+                            orderIdentification: widget.schedule.orderId ?? "0",
+                            scheduledIdentification:
+                                widget.schedule.scheduledId ?? "0",
+                            scheduledQuantity:
+                                widget.schedule.scheduledQuantity ?? "0",
+                            scheduleStatus: "complete",
+                          );
                           Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -41,47 +41,51 @@ class Data {
         this.materialTrackingCable,
     });
 
-    List<MaterialTrackingCableDetails> materialTrackingCable;
+    MaterialTrackingCable materialTrackingCable;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        materialTrackingCable: List<MaterialTrackingCableDetails>.from(json[" Material Tracking Cable "].map((x) => MaterialTrackingCableDetails.fromJson(x))),
+        materialTrackingCable: MaterialTrackingCable.fromJson(json[" Material Tracking Cable "]),
     );
 
     Map<String, dynamic> toJson() => {
-        " Material Tracking Cable ": List<dynamic>.from(materialTrackingCable.map((x) => x.toJson())),
+        " Material Tracking Cable ": materialTrackingCable.toJson(),
     };
 }
 
-class MaterialTrackingCableDetails{
-    MaterialTrackingCableDetails({
+class MaterialTrackingCable {
+    MaterialTrackingCable({
+        this.id,
         this.partNumber,
         this.uom,
-        this.required,
+        this.required1,
         this.loaded,
         this.available,
         this.pending,
     });
 
+    int id;
     int partNumber;
     String uom;
-    int required;
+    int required1;
     int loaded;
     int available;
     int pending;
 
-    factory MaterialTrackingCableDetails.fromJson(Map<String, dynamic> json) => MaterialTrackingCableDetails(
+    factory MaterialTrackingCable.fromJson(Map<String, dynamic> json) => MaterialTrackingCable(
+        id: json["id"],
         partNumber: json["partNumber"],
         uom: json["uom"],
-        required: json["required"],
+        required1: json["required"],
         loaded: json["loaded"],
         available: json["available"],
         pending: json["pending"],
     );
 
     Map<String, dynamic> toJson() => {
+        "id": id,
         "partNumber": partNumber,
         "uom": uom,
-        "required": required,
+        "required": required1,
         "loaded": loaded,
         "available": available,
         "pending": pending,

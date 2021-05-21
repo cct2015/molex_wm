@@ -285,13 +285,13 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: feild(
-                              heading: "Bundle Qty", value: "", width: 0.15),
+                          child: feild1(
+                              heading: "Bundle Qty", value: "", width: 0.2),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: feild(
-                              heading: "Rejected Qty", value: "", width: 0.15),
+                          child: feild1(
+                              heading: "Rejected Qty", value: "", width: 0.2),
                         ),
                       ],
                     ),
@@ -388,7 +388,7 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
 
   Widget scanBin() {
     return Padding(
-      padding: const EdgeInsets.all(1056566558.0),
+      padding: const EdgeInsets.all(100.0),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.75,
         child: Row(
@@ -447,7 +447,6 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                           ),
                         ),
                         SizedBox(width: 5),
-                       
                       ],
                     ),
                   ],
@@ -569,6 +568,72 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                           TextStyle(fontWeight: FontWeight.w400, fontSize: 13),
                     ),
                   ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+Widget feild1({String heading, String value, double width}) {
+    width = MediaQuery.of(context).size.width * width;
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Container(
+        // color: Colors.red[100],
+        width: width,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  heading,
+                  style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[500],
+                    fontWeight: FontWeight.normal,
+                  )),
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: .0),
+              child: Row(
+                children: [
+                  Container(
+                      width: 160,
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Colors.grey[200],
+                      ),
+                      child: Center(
+                        child: TextField(
+                          decoration: new InputDecoration(
+                            hintText: heading,
+                            hintStyle: GoogleFonts.openSans(
+                              textStyle: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            contentPadding: EdgeInsets.only(bottom: 12),
+                            fillColor: Colors.white,
+                          ),
+                        ),
+                      ))
+                  // Text(
+                  //   value ?? '',
+                  //   style: GoogleFonts.poppins(
+                  //     textStyle:
+                  //         TextStyle(fontWeight: FontWeight.w400, fontSize: 15),
+                  //   ),
+                  // ),
                 ],
               ),
             )

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
+import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/operator/materialPick.dart';
 import 'package:molex/screens/widgets/time.dart';
@@ -479,6 +481,8 @@ class _SchudleTableState extends State<SchudleTable> {
 
   List<DataRow> datarows = [];
   ApiService apiService;
+
+  PostStartProcessP1 postStartprocess;
   @override
   void initState() {
     apiService = new ApiService();
@@ -521,7 +525,6 @@ class _SchudleTableState extends State<SchudleTable> {
             tableHeading(),
             SingleChildScrollView(
               child: Container(
-               
                   height: widget.type == "M" ? 430 : 490,
                   // height: double.parse("${rowList.length*60}"),
                   child: FutureBuilder(
@@ -584,10 +587,10 @@ class _SchudleTableState extends State<SchudleTable> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                name,
-                style:GoogleFonts.openSans(textStyle: TextStyle(color: Colors.grey[600], fontSize: 12),)
-              ),
+              Text(name,
+                  style: GoogleFonts.openSans(
+                    textStyle: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  )),
               (() {
                 if (sort) {
                   return Container(
@@ -763,15 +766,54 @@ class _SchudleTableState extends State<SchudleTable> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MaterialPick(
-                                      schedule: schedule,
-                                      userId: widget.userId,
-                                      machine: widget.machine,
-                                    )),
+                          postStartprocess = new PostStartProcessP1(
+                            cablePartNumber:
+                                schedule.cablePartNumber ?? "0",
+                            color: schedule.color,
+                            finishedGoodsNumber:
+                                schedule.finishedGoodsNumber ?? "0",
+                            lengthSpecificationInmm:
+                                schedule.length ?? "0",
+                            machineIdentification: widget.machine.machineNumber,
+                            orderIdentification: schedule.orderId ?? "0",
+                            scheduledIdentification:
+                                schedule.scheduledId ?? "0",
+                            scheduledQuantity:
+                                schedule.scheduledQuantity ?? "0",
+                            scheduleStatus: "accepted",
                           );
+                            Fluttertoast.showToast(
+                                  msg: "Loading",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                          apiService
+                              .startProcess1(postStartprocess)
+                              .then((value) {
+                            if (value) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MaterialPick(
+                                          schedule: schedule,
+                                          userId: widget.userId,
+                                          machine: widget.machine,
+                                        )),
+                              );
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Unable to Start Process",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            }
+                          });
                         },
                         child: Container(
                             child: schedule.scheduledStatus.toLowerCase() ==

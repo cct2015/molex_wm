@@ -46,7 +46,7 @@ class _ProcessPageState extends State<ProcessPage> {
         iconTheme: IconThemeData(
           color: Colors.red,
         ),
-        title:  Text(
+        title: Text(
           '${widget.machine.category}',
           style: TextStyle(color: Colors.red),
         ),
@@ -501,6 +501,7 @@ class _DetailState extends State<Detail> {
                                   return FullyComplete(
                                     userId: widget.userId,
                                     machine: widget.machine,
+                                    schedule: widget.schedule,
                                   );
                                 } else {
                                   print("pusshed");
@@ -774,18 +775,14 @@ class _DetailState extends State<Detail> {
                         Text(
                           p1,
                           style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: ''
-                          ),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: ''),
                         ),
                         SizedBox(width: 20),
                         Text(
                           p2,
-                          style: TextStyle(
-                            fontSize: 11,
-                             fontFamily: ''
-                          ),
+                          style: TextStyle(fontSize: 11, fontFamily: ''),
                         ),
                       ],
                     ),
@@ -802,7 +799,7 @@ class _DetailState extends State<Detail> {
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.red,
-                           fontFamily: '',
+                          fontFamily: '',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -1099,22 +1096,22 @@ class Process extends StatefulWidget {
 
 class _ProcessState extends State<Process> {
   bool expanded = true;
-  PostStartProcessP1 process;
+  PostStartProcessP1 postStartprocess;
   ApiService apiService;
   @override
   void initState() {
-    process = new PostStartProcessP1();
+    postStartprocess = new PostStartProcessP1(
+      cablePartNumber: widget.schedule.cablePartNumber ?? "0",
+      color: widget.schedule.color,
+      finishedGoodsNumber: widget.schedule.finishedGoodsNumber ?? "0",
+      lengthSpecificationInmm: widget.schedule.length ?? "0",
+      machineIdentification: widget.machine.machineNumber,
+      orderIdentification: widget.schedule.orderId ?? "0",
+      scheduledIdentification: widget.schedule.scheduledId ?? "0",
+      scheduledQuantity: widget.schedule.scheduledQuantity ?? "0",
+      scheduleStatus: "",
+    );
     print('check ${widget.schedule.scheduledId.toString()}');
-    process.cablePartNumber = widget.schedule.cablePartNumber ?? "0";
-    process.color = widget.schedule.color;
-    process.finishedGoodsNumber = widget.schedule.finishedGoodsNumber ?? "0";
-    process.lengthSpecificationInmm = widget.schedule.length ?? "0";
-    process.machineIdentification = widget.machine.machineNumber;
-    process.orderIdentification = widget.schedule.orderId ?? "0";
-    //TODO: schedule id is giving empt string and not null
-    // process.scheduledIdentification = int.parse(widget.schedule.scheduledId??"0");
-    process.scheduledIdentification = widget.schedule.scheduledId;
-    process.scheduledQuantity = widget.schedule.scheduledQuantity ?? "0";
     apiService = new ApiService();
     super.initState();
   }
@@ -1123,46 +1120,31 @@ class _ProcessState extends State<Process> {
   Widget build(BuildContext context) {
     // Terminal A,Cutlength,Terminal B
     if (widget.type == "CRIMP-FROM,CUTLENGTH,CRIMP-TO") {
-      return FutureBuilder(
-          future: apiService.startProcess1(process),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data) {
-                return Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 140,
-                          padding: const EdgeInsets.all(0.0),
-                          child: Row(
-                            children: [
-                              SizedBox(width: 10),
-                              Padding(
-                                  padding: const EdgeInsets.all(0.0),
-                                  child: Text(
-                                    "Process Type :\nCRIMP-FROM,\nCUTLENGTH,\nCRIMP-TO",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ),
-                        tableRow('Terminal A,Cutlength,Terminal B'),
-                      ],
-                    ),
-                  ],
-                );
-              } else {
-                return Center(child: Text('Could not Start Process'));
-              }
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          });
+      return Row(
+        children: [
+          Container(
+            width: 140,
+            padding: const EdgeInsets.all(0.0),
+            child: Row(
+              children: [
+                SizedBox(width: 10),
+                Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Text(
+                      "Process Type :\nCRIMP-FROM,\nCUTLENGTH,\nCRIMP-TO",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          tableRow('Terminal A,Cutlength,Terminal B'),
+        ],
+      );
     }
+
     // Terminal A
 
     if (widget.type == "CRIMP-FROM,CUTLENGTH") {
@@ -1323,29 +1305,27 @@ class _ProcessState extends State<Process> {
   Widget table(String type, String pn, String r, String l, String a, String p) {
     ApiService apiService = new ApiService();
     return FutureBuilder(
-        future: apiService.getMaterialTrackingCableDetail(
-            partNo: widget.schedule.cablePartNumber),
+        future: apiService.getMaterialTrackingCableDetail(partNo: "884566210"
+            // widget.schedule.cablePartNumber,
+            ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<MaterialTrackingCableDetails> materialtrackingdetail =
+              MaterialTrackingCable materialTrackingCable =
                 snapshot.data;
             return Container(
                 width: MediaQuery.of(context).size.width * 0.47,
                 child: Column(children: [
                   row('Part No.', 'UOM', 'REQUIRED', 'LOADED', 'AVIALABE',
                       'PENDING', Colors.blue[100]),
-                  ListView.builder(
-                      itemCount: materialtrackingdetail.length,
-                      itemBuilder: (context, index) {
-                        return row(
-                            "${materialtrackingdetail[index].partNumber.toString()}",
-                            "${materialtrackingdetail[index].uom}",
-                            "${materialtrackingdetail[index].required.toString()}",
-                            "${materialtrackingdetail[index].loaded.toString()}",
-                            "${materialtrackingdetail[index].available.toString()}",
-                            "${materialtrackingdetail[index].pending.toString()}",
-                            Colors.grey[100]);
-                      })
+                  row(
+                      "${materialTrackingCable.uom}",
+                      "${materialTrackingCable.partNumber.toString()}",
+                      "${materialTrackingCable.required1.toString()}",
+                      "${materialTrackingCable.loaded.toString()}",
+                      "${materialTrackingCable.available.toString()}",
+                      "${materialTrackingCable.pending.toString()}",
+                      Colors.grey[100]),
+
                   // row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',
                   //     Colors.grey[100]),
                   // row('884538504', 'uom', '5000m', '1000m', '1000m', '2500m',

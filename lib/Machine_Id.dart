@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:molex/model_api/login_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/screens/Crimping%20Patrol/CrimpingPartrolDash.dart';
 import 'package:molex/screens/Preparation/preparationDash.dart';
 import 'package:molex/screens/Preparation/prepMachineScan.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
@@ -132,6 +133,24 @@ class _MachineIdState extends State<MachineId> {
                             ),
                           ),
                           onPressed: () {
+                              if (machineId.trim() == "new") {
+                              Fluttertoast.showToast(
+                                  msg: "logged In",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CrimpingPatrolDash(
+                                          userId: widget.employee.empId,
+                                          machineId: machineId,
+                                        )),
+                              );
+                            }
                             if (machineId.trim() == "preparation") {
                               Fluttertoast.showToast(
                                   msg: "logged In",

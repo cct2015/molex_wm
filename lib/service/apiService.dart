@@ -32,8 +32,8 @@ import 'package:molex/model_api/visualInspection/updateBundleStatus_model.dart';
 import 'package:molex/model_api/visualInspection/updatebundleStsScheStartTracking_mode.dart';
 
 class ApiService {
-  String baseUrl = "http://justerp.in:8080/wipts/";
-  // String baseUrl = "http://10.221.46.8:8080/wipts/";
+  // String baseUrl = "http://justerp.in:8080/wipts/";
+  String baseUrl = "http://10.221.46.8:8080/wipts/";
   // String baseUrl = "http://192.168.1.252:8080/wipts/";
 
   // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
@@ -225,7 +225,7 @@ class ApiService {
   }
 
   // Get material Tracking cable Detail
-  Future<List<MaterialTrackingCableDetails>> getMaterialTrackingCableDetail(
+  Future<MaterialTrackingCable> getMaterialTrackingCableDetail(
       {String partNo}) async {
     var url = Uri.parse(
         baseUrl + "molex/material-tracking/tracking-cable?partNo=$partNo");
@@ -235,11 +235,11 @@ class ApiService {
     if (response.statusCode == 200) {
       GetMaterialTrackingCableDetails getMaterialTrackingCableDetails =
           getMaterialTrackingCableDetailsFromJson(response.body);
-      List<MaterialTrackingCableDetails> materialTrackingCableDetails =
+      MaterialTrackingCable materialTrackingCableDetails =
           getMaterialTrackingCableDetails.data.materialTrackingCable;
       return materialTrackingCableDetails;
     } else {
-      return [];
+      return null;
     }
   }
 
@@ -296,7 +296,7 @@ class ApiService {
   }
 
   //MaterialTrackingCableDetails
-  Future<List<MaterialTrackingCableDetails>> getMaterialtrackingcableDetails(
+  Future<MaterialTrackingCable> getMaterialtrackingcableDetails(
       String partNo) async {
     var url = Uri.parse(
         baseUrl + 'molex/material-tracking/tracking-cable?partNo=$partNo');
@@ -305,9 +305,9 @@ class ApiService {
     if (response.statusCode == 200) {
       GetMaterialTrackingCableDetails getMaterialTrackingCableDetails =
           getMaterialTrackingCableDetailsFromJson(response.body);
-      List<MaterialTrackingCableDetails> materialTrackingCableDetails =
+      MaterialTrackingCable materialTrackingCable =
           getMaterialTrackingCableDetails.data.materialTrackingCable;
-      return materialTrackingCableDetails;
+      return materialTrackingCable;
     } else {
       return null;
     }
@@ -385,9 +385,9 @@ class ApiService {
     var url = Uri.parse(
         baseUrl + 'molex/bin-tracking/transfer-bundle-to-bin-tracking');
     print(
-        'post Transfer Bundle to bin :${transferbundleToBinToJson(transferBundleToBin)} ');
+        'post Transfer Bundle to bin :${transferBundleToBinToJson(transferBundleToBin)} ');
     var response = await http.post(url,
-        body: transferbundleToBinToJson(transferBundleToBin),
+        body: transferBundleToBinToJson(transferBundleToBin),
         headers: headerList);
     print("response post Transfer Bundle to bin ${response.body}");
     if (response.statusCode == 200) {
