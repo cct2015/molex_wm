@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final postRawMaterialList = postRawMaterialListFromJson(jsonString);
+//     final postRawMaterial = postRawMaterialFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -27,27 +27,27 @@ class PostRawMaterial {
         this.color,
         this.status,
         this.process,
-        this.date,
+        this.date
     });
 
     String schedulerIdentification;
     String machineIdentification;
-    String finishedGoodsNumber;
-    String orderidentification;
-    String partNumber;
+    int finishedGoodsNumber;
+    int orderidentification;
+    int partNumber;
     String partDescription;
-    String requiredQuantityOrPiece;
-    String totalScheduledQuantity;
+    double requiredQuantityOrPiece;
+    int totalScheduledQuantity;
     String unitOfMeasurement;
-    String traceabilityNumber;
-    String existingQuantity;
-    String scannedQuantity;
-    String cablePartNumber;
-    String length;
+    int traceabilityNumber;
+    int existingQuantity;
+    int scannedQuantity;
+    int cablePartNumber;
+    int length;
     String color;
     String status;
     String process;
-    DateTime date;
+    String date;
 
     factory PostRawMaterial.fromJson(Map<String, dynamic> json) => PostRawMaterial(
         schedulerIdentification: json["schedulerIdentification"],

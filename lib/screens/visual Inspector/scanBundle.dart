@@ -586,31 +586,6 @@ class Vi_ScanStateBundle extends State<ViScanBundle> {
                               child: Text('Save & Scan Next'),
                             ),
                           ),
-                          // SizedBox(width: 15),
-                          // ElevatedButton(
-                          //   style: ButtonStyle(
-                          //     backgroundColor:
-                          //         MaterialStateProperty.resolveWith<Color>(
-                          //       (Set<MaterialState> states) {
-                          //         if (states.contains(MaterialState.pressed))
-                          //           return Colors.red[500];
-                          //         return Colors
-                          //             .red[900]; // Use the component's default.
-                          //       },
-                          //     ),
-                          //   ),
-                          //   onPressed: () {
-                          //     Navigator.pop(context);
-                          //     // Navigator.push(
-                          //     //   context,
-                          //     //   MaterialPageRoute(
-                          //     //     builder: (context) =>
-                          //     //         Location(userId: '121200', machine: '6541531'),
-                          //     //   ),
-                          //     // );
-                          //   },
-                          //   child: Text('Complete Inspection'),
-                          // ),
                         ]),
                   ],
                 ),

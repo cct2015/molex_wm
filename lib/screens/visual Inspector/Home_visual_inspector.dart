@@ -7,6 +7,7 @@ import 'package:molex/model_api/visualInspection/postViSchedule_model.dart';
 
 import 'package:molex/models/vi_schedule.dart';
 import 'package:molex/screens/navigation.dart';
+import 'package:molex/screens/visual%20Inspector/VI_WIP_home.dart';
 import 'package:molex/screens/visual%20Inspector/VIscanWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
@@ -294,7 +295,7 @@ class _HomeVisualInspectorState extends State<HomeVisualInspector> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Viscan(
+                                            builder: (context) => VIWIP_Home(
                                                   userId: widget.userId,
                                                 )),
                                       );
@@ -372,13 +373,12 @@ class ViScheduleTable extends StatefulWidget {
 
 class _ViScheduleTableState extends State<ViScheduleTable> {
   ApiService apiService;
-  PostViSchedule postViSchedule;
   @override
   void initState() {
-    postViSchedule = new PostViSchedule();
     apiService = new ApiService();
     super.initState();
   }
+
   List<ViScheduler> searchfilter(List<ViScheduler> scheduleList) {
     switch (widget.searchType) {
       case "Order Id":
@@ -388,14 +388,12 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
         break;
       case "FG Part No.":
         return scheduleList
-            .where((element) =>
-                element.fgNo.startsWith(widget.query))
+            .where((element) => element.fgNo.startsWith(widget.query))
             .toList();
         break;
       case "Schedule Id":
         return scheduleList
-            .where(
-                (element) => element.scheduleId.startsWith(widget.query))
+            .where((element) => element.scheduleId.startsWith(widget.query))
             .toList();
         break;
       default:
@@ -419,7 +417,8 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
                   future: apiService.getviSchedule(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      List<ViScheduler> vischedule = searchfilter(snapshot.data);
+                      List<ViScheduler> vischedule =
+                          searchfilter(snapshot.data);
                       return ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -557,30 +556,7 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
             //Process
             cell(viSchedule.totalBundles, 0.10),
             // Cut length
-            GestureDetector(
-                onTap: () {
-                  postViSchedule.orderId = int.parse(viSchedule.orderId);
-                  postViSchedule.scheduledId = int.parse(viSchedule.scheduleId);
-                  postViSchedule.process = viSchedule.scheduleType;
-                  apiService
-                      .postVisualInspectionSchedular(postViSchedule)
-                      .then((value) {
-                    if (value) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Viscan(
-                                  userId: '45642313',
-                                  machineId: '45642313',
-                                  viSchedule: viSchedule,
-                                )),
-                      );
-                    } else {
-                      print('failed');
-                    }
-                  });
-                },
-                child: cell(viSchedule.totalBundles, 0.11)),
+            cell(viSchedule.totalBundles, 0.11),
             //Color
           ],
         ),

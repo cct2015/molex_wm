@@ -178,13 +178,13 @@ class _PreparationprocessState extends State<Preparationprocess> {
       body: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [scanUserAndBin(), table()],
+          children: [scanUserAndBundle(), table()],
         ),
       ),
     );
   }
 
-  Widget scanUserAndBin() {
+  Widget scanUserAndBundle() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(

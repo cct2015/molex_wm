@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final postSaveViBundleQty = postSaveViBundleQtyFromJson(jsonString);
+//     final viInspectedbudleQty = viInspectedbudleQtyFromJson(jsonString);
 
 import 'dart:convert';
 
-PostSaveViBundleQty postSaveViBundleQtyFromJson(String str) => PostSaveViBundleQty.fromJson(json.decode(str));
+ViInspectedbudle viInspectedbudleQtyFromJson(String str) => ViInspectedbudle.fromJson(json.decode(str));
 
-String postSaveViBundleQtyToJson(PostSaveViBundleQty data) => json.encode(data.toJson());
+String viInspectedbudleQtyToJson(ViInspectedbudle data) => json.encode(data.toJson());
 
-class PostSaveViBundleQty {
-    PostSaveViBundleQty({
+class ViInspectedbudle {
+    ViInspectedbudle({
         this.bundleIdentification,
         this.bundleQuantity,
         this.passedQuantity,
@@ -32,9 +32,11 @@ class PostSaveViBundleQty {
         this.fgPart,
         this.scheduleId,
         this.binId,
+        this.status,
+        this.employeeId,
     });
 
-    int bundleIdentification;
+    String bundleIdentification;
     int bundleQuantity;
     int passedQuantity;
     int rejectedQuantity;
@@ -56,8 +58,11 @@ class PostSaveViBundleQty {
     int fgPart;
     int scheduleId;
     String binId;
+    String status;
+    String employeeId;
 
-    factory PostSaveViBundleQty.fromJson(Map<String, dynamic> json) => PostSaveViBundleQty(
+
+    factory ViInspectedbudle.fromJson(Map<String, dynamic> json) => ViInspectedbudle(
         bundleIdentification: json["bundleIdentification"],
         bundleQuantity: json["bundleQuantity"],
         passedQuantity: json["passedQuantity"],

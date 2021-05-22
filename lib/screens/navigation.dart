@@ -16,7 +16,7 @@ class NavPage extends StatefulWidget {
   final Schedule schedule;
   NavPage({this.machine, this.userId, this.schedule});
   @override
-  _NavPageState createState() => _NavPageState();
+  _NavPageState createState() => _NavPageState(); 
 }
 
 class _NavPageState extends State<NavPage> {

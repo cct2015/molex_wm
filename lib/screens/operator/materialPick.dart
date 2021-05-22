@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
@@ -9,6 +13,8 @@ import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator/process/process.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class MaterialPick extends StatefulWidget {
   final Schedule schedule;
@@ -42,6 +48,7 @@ class _MaterialPickState extends State<MaterialPick> {
 
   @override
   void initState() {
+    initializeDateFormatting('az');
     apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     _textNode.requestFocus();
@@ -94,7 +101,7 @@ class _MaterialPickState extends State<MaterialPick> {
 
   @override
   Widget build(BuildContext context) {
-        SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIOverlays([]);
     // if (!_qty.hasFocus && partNumber != null) {
     //   checkPartNumber(partNumber);
     //   checkTrackNumber(trackingNumber);
@@ -513,47 +520,39 @@ class _MaterialPickState extends State<MaterialPick> {
                     onPressed: () {
                       print('rawmaterial = $rawMaterial');
                       setState(() {
-                        PostRawMaterial postRawmaterial = new PostRawMaterial();
                         for (RawMaterial ip in rawMaterial) {
-                          // print(rawMaterial.contains(ip).toString());
-                          // print('loop ${ip.partNunber.toString()}');
                           if (ip.partNunber == partNumber) {
                             if (!selectdItems.contains(ip)) {
                               print('loop ${ip.partNunber.toString()}');
-                              // postRawmaterial.date = selectedDate;
-                              postRawmaterial.partDescription = ip.description;
-                              print('qty $qty');
-                              postRawmaterial.existingQuantity = '0';
-                              postRawmaterial.scannedQuantity = qty;
-                              postRawmaterial.orderidentification =
-                                  widget.schedule.orderId ?? '0';
-                              postRawmaterial.totalScheduledQuantity =
-                                  widget.schedule.scheduledQuantity ?? '0';
-                              postRawmaterial.unitOfMeasurement = ip.uom ?? '0';
-                              postRawmaterial.cablePartNumber =
-                                  partNumber != null
-                                      ? partNumber ?? '0'
-                                      : 'null';
-                              postRawmaterial.machineIdentification =
-                                  "mac"; //TODO machine number
-                              postRawmaterial.finishedGoodsNumber =
-                                  widget?.schedule?.finishedGoodsNumber ?? '0';
-                              postRawmaterial.schedulerIdentification =
-                                  widget.schedule.scheduledId;
-                              // ? int.parse(widget.schedule.scheduledId)
-                              // : 0;
-                              // "${selectedDate.toLocal()}".split(' ')[0];
-                              postRawmaterial.color =
-                                  widget?.schedule?.color ?? 'color';
-                              postRawmaterial.process =
-                                  widget?.schedule?.process ?? '0';
-                              postRawmaterial.status = "SUCCESS";
-                              postRawmaterial.length =
-                                  widget.schedule.length ?? '0';
-                              postRawmaterial.traceabilityNumber =
-                                  trackingNumber;
-                              print(postRawmaterial);
-                              postRawmaterial.date = selectedDate;
+                              PostRawMaterial postRawmaterial =
+                                  new PostRawMaterial(
+                                      partDescription: ip.description,
+                                      existingQuantity: 0,
+                                      schedulerIdentification:
+                                          widget.schedule.scheduledId,
+                                      date: DateFormat.yMd('en')
+                                          .format(selectedDate), //TODO
+                                      machineIdentification:
+                                          widget.machine.machineNumber,
+                                      finishedGoodsNumber: int.parse(
+                                          widget.schedule.finishedGoodsNumber),
+                                      orderidentification:
+                                          int.parse(widget.schedule.orderId),
+                                      partNumber: int.parse(ip.partNunber),
+                                      requiredQuantityOrPiece:
+                                          double.parse(ip.requireQuantity),
+                                      totalScheduledQuantity:
+                                          int.parse(ip.toatalScheduleQuantity),
+                                      unitOfMeasurement: ip.uom,
+                                      traceabilityNumber:
+                                          int.parse(trackingNumber),
+                                      scannedQuantity: int.parse(qty),
+                                      cablePartNumber: int.parse(
+                                          widget.schedule.cablePartNumber),
+                                      length: int.parse(widget.schedule.length),
+                                      color: widget.schedule.color,
+                                      process: widget.schedule.process,
+                                      status: 'SUCCESS');
                               selectdItems.add(postRawmaterial);
                               _partNumberController.clear();
                               _trackingNumberController.clear();
@@ -589,18 +588,26 @@ class _MaterialPickState extends State<MaterialPick> {
               onPrimary: Colors.white,
             ),
             onPressed: () {
-              List<String> rawPartNo = rawmaterial1.map((e) {
-                return e.partNunber;
+              log(postRawMaterialListToJson(selectdItems));
+              List<int> rawPartNo = rawmaterial1.map((e) {
+                return int.parse(e.partNunber);
               }).toList();
               print(rawPartNo.toSet());
-              List<String> scannedPartNo = selectdItems.map((e) {
-                return e.cablePartNumber;
+              List<int> scannedPartNo = selectdItems.map((e) {
+                return e.partNumber;
               }).toList();
               print(scannedPartNo.toSet());
               if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
                 _showConfirmationDialog();
               } else {
-                _notAllRawMaterial();
+                Fluttertoast.showToast(
+                    msg: "Add All Raw Material To Start Process",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
               }
             },
             child: Text(
@@ -870,7 +877,7 @@ class _MaterialPickState extends State<MaterialPick> {
                     rows: selectdItems
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
-                                e.cablePartNumber.toString(),
+                                e.partNumber.toString(),
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
@@ -882,7 +889,7 @@ class _MaterialPickState extends State<MaterialPick> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                "${e.date.toLocal()}".split(' ')[0],
+                                "${e.date}".split(' ')[0],
                                 style: TextStyle(fontSize: 12),
                               )),
                               // DataCell(Text(e.n.toString())),

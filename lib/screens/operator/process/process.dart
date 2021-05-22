@@ -225,6 +225,7 @@ class _DetailState extends State<Detail> {
   bool orderDetailExpanded = true;
   String rightside = 'label';
   ApiService apiService;
+  String method = 'a-b-c';
   @override
   void initState() {
     apiService = new ApiService();
@@ -306,11 +307,12 @@ class _DetailState extends State<Detail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Process(
-                      type: _chosenValue,
-                      schedule: widget.schedule,
-                      machine: widget.machine,
-                    ),
+                    materialtable(),
+                    // Process(
+                    //   type: _chosenValue,
+                    //   schedule: widget.schedule,
+                    //   machine: widget.machine,
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(1.0),
                       child: Container(
@@ -494,6 +496,7 @@ class _DetailState extends State<Detail> {
                                   schedule: widget.schedule,
                                   machine: widget.machine,
                                   userId: widget.userId,
+                                  method: method,
                                 );
                               } else if (rightside == "complete") {
                                 if (widget.machine.category ==
@@ -708,7 +711,7 @@ class _DetailState extends State<Detail> {
                     cablepartno: widget.schedule.cablePartNumber ??
                         widget.schedule.finishedGoodsNumber),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData) { 
                     CableTerminalB cableTerminalB = snapshot.data;
                     return process(
                         'To Process',
@@ -1071,7 +1074,21 @@ class _DetailState extends State<Detail> {
                 onChanged: (String value) {
                   setState(() {
                     _chosenValue = value;
-                    value = value;
+                    if (value == "CRIMP-FROM,CUTLENGTH,CRIMP-TO") {
+                      method = 'a-b-c';
+                    }
+                    if (value == "CRIMP-FROM,CUTLENGTH") {
+                      method = 'a-b';
+                    }
+                    if (value == "CUTLENGTH,CRIMP-TO") {
+                      method = 'b-c';
+                    }
+                    if (value == "CRIMP-FROM") {
+                      method = 'a';
+                    }
+                    if (value == "CRIMP-TO") {
+                      method = 'c';
+                    }
                   });
                 },
               ),
@@ -1083,43 +1100,7 @@ class _DetailState extends State<Detail> {
       return Container();
     }
   }
-}
-
-class Process extends StatefulWidget {
-  final String type;
-  final Schedule schedule;
-  final MachineDetails machine;
-  Process({this.type, this.schedule, this.machine});
-  @override
-  _ProcessState createState() => _ProcessState();
-}
-
-class _ProcessState extends State<Process> {
-  bool expanded = true;
-  PostStartProcessP1 postStartprocess;
-  ApiService apiService;
-  @override
-  void initState() {
-    postStartprocess = new PostStartProcessP1(
-      cablePartNumber: widget.schedule.cablePartNumber ?? "0",
-      color: widget.schedule.color,
-      finishedGoodsNumber: widget.schedule.finishedGoodsNumber ?? "0",
-      lengthSpecificationInmm: widget.schedule.length ?? "0",
-      machineIdentification: widget.machine.machineNumber,
-      orderIdentification: widget.schedule.orderId ?? "0",
-      scheduledIdentification: widget.schedule.scheduledId ?? "0",
-      scheduledQuantity: widget.schedule.scheduledQuantity ?? "0",
-      scheduleStatus: "",
-    );
-    print('check ${widget.schedule.scheduledId.toString()}');
-    apiService = new ApiService();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Terminal A,Cutlength,Terminal B
-    if (widget.type == "CRIMP-FROM,CUTLENGTH,CRIMP-TO") {
+  Widget materialtable(){
       return Row(
         children: [
           Container(
@@ -1130,179 +1111,25 @@ class _ProcessState extends State<Process> {
                 SizedBox(width: 10),
                 Padding(
                     padding: const EdgeInsets.all(0.0),
-                    child: Text(
-                      "Process Type :\nCRIMP-FROM,\nCUTLENGTH,\nCRIMP-TO",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-          tableRow('Terminal A,Cutlength,Terminal B'),
-        ],
-      );
-    }
-
-    // Terminal A
-
-    if (widget.type == "CRIMP-FROM,CUTLENGTH") {
-      return Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                expanded = !expanded;
-              });
-            },
-            child: Row(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "Process Type : \nCRIMP-FROM,\nCUTLENGTH",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    )),
-              ],
-            ),
-          ),
-          (() {
-            if (expanded) {
-              return Column(
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                  tableRow('Terminal A,Cutlength,Terminal B'),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }()),
-        ],
-      );
-    }
-    // Terminal B
-
-    if (widget.type == "CUTLENGTH,CRIMP-TO") {
-      return Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                expanded = !expanded;
-              });
-            },
-            child: Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  child: Padding(
-                      padding: const EdgeInsets.all(6.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width*0.125,
                       child: Text(
-                        "Process Type :\nCUTLENGTH,\nCRIMP-TO",
+                        "Process Type :$_chosenValue",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
                         ),
-                      )),
-                ),
-                tableRow('Terminal A,Cutlength,Terminal B'),
-              ],
-            ),
-          ),
-        ],
-      );
-    }
-    if (widget.type == "CRIMP-FROM") {
-      return Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                expanded = !expanded;
-              });
-            },
-            child: Row(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "Process Type :\nCRIMP-FROM",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
                       ),
                     )),
-                tableRow('Terminal A,Cutlength,Terminal B'),
               ],
             ),
           ),
-          (() {
-            if (expanded) {
-              return Column(
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }()),
+          table(),
         ],
       );
-    }
-
-    if (widget.type == "CRIMP-TO") {
-      return Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                expanded = !expanded;
-              });
-            },
-            child: Row(
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Text(
-                      "Process Type : \nCRIMP-TO",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    )),
-                tableRow('Terminal A,Cutlength,Terminal B'),
-              ],
-            ),
-          ),
-          (() {
-            if (expanded) {
-              return Column(
-                children: [
-                  Row(
-                    children: [],
-                  ),
-                ],
-              );
-            } else {
-              return Container();
-            }
-          }()),
-        ],
-      );
-    }
   }
-
-  Widget table(String type, String pn, String r, String l, String a, String p) {
+  
+  Widget table() {
     ApiService apiService = new ApiService();
     return FutureBuilder(
         future: apiService.getMaterialTrackingCableDetail(partNo: "884566210"
@@ -1310,8 +1137,7 @@ class _ProcessState extends State<Process> {
             ),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-              MaterialTrackingCable materialTrackingCable =
-                snapshot.data;
+            MaterialTrackingCable materialTrackingCable = snapshot.data;
             return Container(
                 width: MediaQuery.of(context).size.width * 0.47,
                 child: Column(children: [
@@ -1358,14 +1184,14 @@ class _ProcessState extends State<Process> {
                 decoration: BoxDecoration(
                     border: Border.all(width: 0.5, color: Colors.grey[100])),
                 height: 20,
-                width: MediaQuery.of(context).size.width * 0.1,
+                width: MediaQuery.of(context).size.width * 0.07,
                 child: Center(
                     child: Text(partno, style: TextStyle(fontSize: 12)))),
             Container(
               decoration: BoxDecoration(
                   border: Border.all(width: 0.5, color: Colors.grey[100])),
               height: 20,
-              width: MediaQuery.of(context).size.width * 0.05,
+              width: MediaQuery.of(context).size.width * 0.08,
               child: Center(
                 child: Text(
                   uom,
@@ -1427,16 +1253,4 @@ class _ProcessState extends State<Process> {
     );
   }
 
-  Widget tableRow(String name) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      table(
-        name,
-        '884538504',
-        '5000m',
-        '2500m',
-        '1000m',
-        '2500m',
-      ),
-    ]);
-  }
 }

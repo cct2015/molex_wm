@@ -8,7 +8,7 @@ class Loc extends StatefulWidget {
 class _LocState extends State<Loc> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
       appBar: AppBar(),
       body: Container(
         child: Column(

@@ -750,7 +750,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
                   },
                   style: TextStyle(fontSize: 12),
-                  keyboardType: TextInputType.textscan,
+                  keyboardType: TextInputType.name,
                   decoration: new InputDecoration(
                     labelText: name,
                     fillColor: Colors.white,

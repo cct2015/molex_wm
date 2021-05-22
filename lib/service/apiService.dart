@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
@@ -6,6 +8,7 @@ import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/crimping/getbundleQtyCrimp.dart';
 import 'package:molex/model_api/crimping/postCrimprejectedDetail.dart';
 import 'package:molex/model_api/crimping/resPostCrimpRejectDetail.dart';
+import 'package:molex/model_api/getuserId.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
 import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
@@ -26,14 +29,11 @@ import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
 import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
-import 'package:molex/model_api/visualInspection/postViSchedule_model.dart';
-import 'package:molex/model_api/visualInspection/saveVIBundleQty.dart';
-import 'package:molex/model_api/visualInspection/updateBundleStatus_model.dart';
-import 'package:molex/model_api/visualInspection/updatebundleStsScheStartTracking_mode.dart';
+import 'package:molex/model_api/visualInspection/saveinspectedBundle_model.dart';
 
 class ApiService {
-  // String baseUrl = "http://justerp.in:8080/wipts/";
-  String baseUrl = "http://10.221.46.8:8080/wipts/";
+  String baseUrl = "http://justerp.in:8080/wipts/";
+  // String baseUrl = "http://10.221.46.8:8080/wipts/";
   // String baseUrl = "http://192.168.1.252:8080/wipts/";
 
   // String baseUrl = 'http://mlxbngvwqwip01.molex.com:8080/wipts/';
@@ -87,6 +87,7 @@ class ApiService {
   //Update Schedular Tracker information data POST method
 
   Future<List<MachineDetails>> getmachinedetails(String machineid) async {
+    print('sad');
     var url = Uri.parse(
         baseUrl + "molex/machine/get-by-machine-number?machNo=$machineid");
     var response = await http.get(url);
@@ -186,6 +187,7 @@ class ApiService {
         body: postRawMaterialListToJson(postRawmaterialList),
         headers: headerList);
     print('post raw material ${response.statusCode}');
+    log('post raw material body ${response.body}');
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -467,63 +469,14 @@ class ApiService {
     }
   }
 
-  //pOST Accept viual inspection schedular data
-  Future<bool> postVisualInspectionSchedular(
-      PostViSchedule postViSchedule) async {
+// Post ViSchedule data
+  Future<bool> postVIinspectedBundle({ViInspectedbudle viInspectedbudle } ) async {
     var url = Uri.parse(baseUrl +
-        'molex/visual-inspection/accept-visual-inspection-scheduler-data');
-    var response = await http.post(url,
-        body: postViScheduleToJson(postViSchedule), headers: headerList);
-    print('Post ViSchedular status code:${response.statusCode}');
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  //Save Visual Inspected bundle quantity
-  Future<bool> postVisualInspectedBundleQuantity(
-      PostSaveViBundleQty postSaveViBundleQty) async {
-    var url = Uri.parse(baseUrl +
-        'molex/visual-inspection/accept-visual-inspection-scheduler-data');
-    var response = await http.post(url,
-        body: postSaveViBundleQtyToJson(postSaveViBundleQty),
-        headers: headerList);
-    print("Post Save Visual Inspected Bundle Quality :${response.statusCode}");
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // Update Bundle Status in Schedule Master
-  Future<bool> updateBundleStatus(
-      ViUpdateBundleStatus viUpdateBundleStatus) async {
-    var url = Uri.parse(
-        baseUrl + 'molex/scheduler/update-bundle-status-in-schedule-master');
-    var response = await http.post(url,
-        body: viUpdateBundleStatusToJson(viUpdateBundleStatus),
-        headers: headerList);
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  //Update bundle Status in Schedule Start Track
-  Future<bool> viUpdateBundleStartTracking(
-      ViUpdateBundleStatusScheduleStartTracking
-          viUpdateBundleStatusScheduleStartTracking) async {
-    var url = Uri.parse(
-        baseUrl + 'molex/scheduler/update-bundle-status-in-schedule-master');
-    var response = await http.post(url,
-        body: viUpdateBundleStatusScheduleStartTrackingToJson(
-            viUpdateBundleStatusScheduleStartTracking),
-        headers: headerList);
-    print("post update bundle status in track: ${response.statusCode}");
+        'molex/visual-inspection/save-visual-inspected-bundle-quantity');
+    var response = await http.get(url);
+    print('postVIinspectedBundle status Code: ${response.statusCode}');
+    log('postVIinspectedBundle status body: ${response.body}');
+    print(response.body);
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -610,4 +563,20 @@ class ApiService {
       return null;
     }
   }
+
+    Future<List<Userid>> getUserList() async {
+    var url =
+        Uri.parse(baseUrl + 'molex/employee/get-user-id');
+    var response = await http.get(url);
+    print('Post Rejected status Code: ${response.statusCode}');
+    print('Post Rejected response body :${response.body}');
+    if (response.statusCode == 200) {
+      GetUser getuserId = getUserFromJson(response.body);
+     List<Userid> userIdList = getuserId.data.userId;
+     return userIdList;
+    } else {
+      return null;
+    }
+  }
+
 }

@@ -384,7 +384,7 @@ class _TableContentState extends State<TableContent> {
     );
   }
 
-  Widget fieldsItem(
+  Widget fieldsItem( 
       {String name, String fiels1, String fiels2, String fiels3}) {
     return Container(
       child: Row(

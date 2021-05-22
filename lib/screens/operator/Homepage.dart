@@ -784,7 +784,7 @@ class _SchudleTableState extends State<SchudleTable> {
                           );
                             Fluttertoast.showToast(
                                   msg: "Loading",
-                                  toastLength: Toast.LENGTH_LONG,
+                                  toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
                                   backgroundColor: Colors.red,

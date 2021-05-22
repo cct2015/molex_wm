@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final getuserId = getuserIdFromJson(jsonString);
+//     final getUser = getUserFromJson(jsonString);
 
 import 'dart:convert';
 
-GetuserId getuserIdFromJson(String str) => GetuserId.fromJson(json.decode(str));
+GetUser getUserFromJson(String str) => GetUser.fromJson(json.decode(str));
 
-String getuserIdToJson(GetuserId data) => json.encode(data.toJson());
+String getUserToJson(GetUser data) => json.encode(data.toJson());
 
-class GetuserId {
-    GetuserId({
+class GetUser {
+    GetUser({
         this.status,
         this.statusMsg,
         this.errorCode,
@@ -21,7 +21,7 @@ class GetuserId {
     dynamic errorCode;
     Data data;
 
-    factory GetuserId.fromJson(Map<String, dynamic> json) => GetuserId(
+    factory GetUser.fromJson(Map<String, dynamic> json) => GetUser(
         status: json["status"],
         statusMsg: json["statusMsg"],
         errorCode: json["errorCode"],
@@ -41,10 +41,10 @@ class Data {
         this.userId,
     });
 
-    List<UserId> userId;
+    List<Userid> userId;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        userId: List<UserId>.from(json["User Id "].map((x) => UserId.fromJson(x))),
+        userId: List<Userid>.from(json["User Id "].map((x) => Userid.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -52,14 +52,14 @@ class Data {
     };
 }
 
-class UserId {
-    UserId({
+class Userid {
+    Userid({
         this.empId,
     });
 
     String empId;
 
-    factory UserId.fromJson(Map<String, dynamic> json) => UserId(
+    factory Userid.fromJson(Map<String, dynamic> json) => Userid(
         empId: json["empId"],
     );
 

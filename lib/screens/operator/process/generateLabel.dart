@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
+import 'package:molex/model_api/cableTerminalA_model.dart';
+import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/generateLabel_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
@@ -20,7 +24,8 @@ class GenerateLabel extends StatefulWidget {
   Schedule schedule;
   MachineDetails machine;
   String userId;
-  GenerateLabel({this.machine, this.schedule, this.userId});
+  String method;
+  GenerateLabel({this.machine, this.schedule, this.userId, this.method});
   @override
   _GenerateLabelState createState() => _GenerateLabelState();
 }
@@ -97,6 +102,22 @@ class _GenerateLabelState extends State<GenerateLabel> {
   TextEditingController stripLengthController = new TextEditingController();
   TextEditingController lengthvariationController = new TextEditingController();
   TextEditingController _bundleScanController = new TextEditingController();
+  TextEditingController crimpPositionOutController =
+      new TextEditingController();
+  TextEditingController offcurlingController = new TextEditingController();
+
+  TextEditingController cfmpfmRejectionsController =
+      new TextEditingController();
+
+  TextEditingController incomingIssueController = new TextEditingController();
+
+  TextEditingController crossCutController = new TextEditingController();
+
+  TextEditingController insulationBarrelController =
+      new TextEditingController();
+
+  TextEditingController stripPositionOutController =
+      new TextEditingController();
   FocusNode lengthvariationFocus = new FocusNode();
 
   /// Main Content
@@ -137,8 +158,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
         "bundleQty": bq,
         "qr": qr,
         "routenumber1": routenumber1,
-        "date":date,
-        "orderId":orderId,
+        "date": date,
+        "orderId": orderId,
         "fgPartNumber": fgPartNumber,
         "cutlength": cutlength,
         "cutpart": cablepart,
@@ -165,10 +186,34 @@ class _GenerateLabelState extends State<GenerateLabel> {
   }
 
   ApiService apiService;
+  CableTerminalA terminalA;
+  CableTerminalB terminalB;
+  getTerminal() {
+     ApiService apiService = new ApiService();
+    apiService
+        .getCableTerminalA(
+            cablepartno: widget.schedule.cablePartNumber ??
+                widget.schedule.finishedGoodsNumber)
+        .then((termiA) {
+      apiService
+          .getCableTerminalB(
+              cablepartno: widget.schedule.cablePartNumber ??
+                  widget.schedule.finishedGoodsNumber)
+          .then((termiB) {
+        setState(() {
+          terminalA = termiA;
+          terminalB = termiB;
+        });
+      });
+    });
+  }
+
   GeneratedLabel label;
   @override
   void initState() {
+
     apiService = new ApiService();
+    getTerminal();
     transferBundle = new TransferBundle();
     label = new GeneratedLabel();
     transferBundle.cablePartDescription = widget.schedule.cablePartNumber;
@@ -226,7 +271,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
   @override
   Widget build(BuildContext context) {
-   Future.delayed(
+    print('method : ${widget.method}');
+    Future.delayed(
       const Duration(milliseconds: 50),
       () {
         SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -389,7 +435,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   }
 
   Widget quantity() {
-       maincontroller = bundleQty;
+    maincontroller = bundleQty;
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Container(
@@ -783,6 +829,45 @@ class _GenerateLabelState extends State<GenerateLabel> {
                             quantity: 10,
                             textEditingController: crimpOnInsulationController,
                           ),
+                          quantitycell(
+                            name: "Crimp Position Out",
+                            quantity: 10,
+                            textEditingController: crimpPositionOutController,
+                          ),
+                          quantitycell(
+                            name: "Strip Position Out",
+                            quantity: 10,
+                            textEditingController: stripPositionOutController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Off Curling	",
+                            quantity: 10,
+                            textEditingController: offcurlingController,
+                          ),
+                          quantitycell(
+                            name: "Cfm Pfm Rejections",
+                            quantity: 10,
+                            textEditingController: cfmpfmRejectionsController,
+                          ),
+                          quantitycell(
+                            name: "Incoming issue",
+                            quantity: 10,
+                            textEditingController: incomingIssueController,
+                          ),
+                          quantitycell(
+                            name: "Cross Cut",
+                            quantity: 10,
+                            textEditingController: crossCutController,
+                          ),
+                          quantitycell(
+                            name: "Insulation barrel",
+                            quantity: 10,
+                            textEditingController: insulationBarrelController,
+                          ),
                         ],
                       ),
                     ],
@@ -816,43 +901,39 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       ),
                       child: Text("Save & Generate Label"),
                       onPressed: () {
-                        setState(() {
-                          postGenerateLabel = new PostGenerateLabel();
-                          postGenerateLabel.cablePartNumber =
-                              widget.schedule.cablePartNumber;
-                          postGenerateLabel.finishedGoods =
-                              widget.schedule.finishedGoodsNumber;
-                          postGenerateLabel.color = widget.schedule.color;
-                          postGenerateLabel.cutLength = widget.schedule.length;
-                          apiService
-                              .postGeneratelabel(
-                                  postGenerateLabel, bundleQty.text)
-                              .then((value) {
-                            if (value != null) {
-                              setState(() {
-                                label = value.data.generateLabel;
-                              });
-                              DateTime now = DateTime.now();
+                         log(postGenerateLabelToJson( getPostGeneratelabel()));
+                        apiService
+                            .postGeneratelabel(
+                                getPostGeneratelabel(), bundleQty.text)
+                            .then((value) {
+                          if (value != null) {
+                            setState(() {
+                              label = value.data.generateLabel;
+                            });
+                            DateTime now = DateTime.now();
 
-                              _print(
-                                  // ipaddress: "192.168.1.130",
-                                  ipaddress: "172.25.16.53",
-                                  bq: bundleQty.text,
-                                  qr: "${label.bundleId}",
-                                  routenumber1: "${label.routeNo}",
-                                  date: now.day.toString()+"-"+now.month.toString()+"-"+now.year.toString() ,
-                                  orderId: "${widget.schedule.orderId}",
-                                  fgPartNumber:
-                                      "${widget.schedule.finishedGoodsNumber}",
-                                  cutlength: "${widget.schedule.length}",
-                                  cablepart:
-                                      "${widget.schedule.cablePartNumber}",
-                                  wireGauge: "${label.wireGauge}",
-                                  terminalfrom: "${label.terminalFrom}",
-                                  terminalto: "${label.terminalTo}");
-                            }
-                            clear();
-                          });
+                            _print(
+                                // ipaddress: "192.168.1.130",
+                                ipaddress: "172.25.16.53",
+                                bq: bundleQty.text,
+                                qr: "${label.bundleId}",
+                                routenumber1: "${label.routeNo}",
+                                date: now.day.toString() +
+                                    "-" +
+                                    now.month.toString() +
+                                    "-" +
+                                    now.year.toString(),
+                                orderId: "${widget.schedule.orderId}",
+                                fgPartNumber:
+                                    "${widget.schedule.finishedGoodsNumber}",
+                                cutlength: "${widget.schedule.length}",
+                                cablepart: "${widget.schedule.cablePartNumber}",
+                                wireGauge: "${label.wireGauge}",
+                                terminalfrom: "${label.terminalFrom}",
+                                terminalto: "${label.terminalTo}");
+                          }
+                          clear();
+
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;
                         });
@@ -864,6 +945,80 @@ class _GenerateLabelState extends State<GenerateLabel> {
         ),
       ),
     );
+  }
+
+  PostGenerateLabel getPostGeneratelabel() {
+    return PostGenerateLabel(
+        //Schedule Detail
+        cablePartNumber: widget.schedule.cablePartNumber,
+        purchaseorder: widget.schedule.orderId,
+        orderIdentification: widget.schedule.orderId,
+        finishedGoods: widget.schedule.finishedGoodsNumber,
+        color: widget.schedule.color,
+        cutLength: widget.schedule.length,
+        scheduleIdentification: widget.schedule.scheduledId,
+        scheduledQuantity: widget.schedule.scheduledQuantity,
+        machineIdentification: widget.machine.machineNumber,
+        operatorIdentification: widget.userId,
+        bundleIdentification: _bundleScanController.text,
+        // TODO rejectedQuantity: ""
+        // Quantitys
+        terminalDamage:terminalDamangeController.text==''? null:terminalDamangeController.text,
+        terminalBend: terminalBendController.text==''?null:  terminalBendController.text,
+        terminalTwist: terminalTwistController.text==''? null:terminalTwistController.text,
+        conductorCurlingUpDown: conductorCurlingUpDownController.text=='' ? null:conductorCurlingUpDownController.text,
+        insulationCurlingUpDown: insulationCurlingUpDownController.text ==''? null:insulationCurlingUpDownController.text,
+        conductorBurr: conductorBurrController.text ==''? null:conductorBurrController.text,
+        windowGap: windowGapController.text==''? null:windowGapController.text,
+        crimpOnInsulation: crimpOnInsulationController.text=='' ? null:crimpOnInsulationController.text,
+        improperCrimping: improperCrimpingController.text ==''? null:improperCrimpingController.text,
+        tabBendOrTabOpen: tabBendTapOpenController.text ==''? null:tabBendTapOpenController.text,
+        bellMouthLessOrMore: bellmouthLessMoreController.text ==''? null:bellmouthLessMoreController.text,
+        cutOffLessOrMore: cutOffLessMoreController.text ==''? null:cutOffLessMoreController.text,
+        cutOffBurr: cutoffBurrController.text ==''? null:cutoffBurrController.text,
+        cutOffBend: cutoffBendController.text ==''? null:cutoffBendController.text,
+        insulationDamage: insulationDamageController.text ==''? null:insulationDamageController.text,
+        exposureStrands: exposureStrandsController.text ==''? null:exposureStrandsController.text,
+        strandsCut: strandsCutController.text ==''? null:strandsCutController.text,
+        brushLengthLessorMore: brushLengthLessMoreController.text ==''? null:brushLengthLessMoreController.text,
+        terminalCoppermark: terminalCopperMarkController.text ==''? null:terminalCopperMarkController.text,
+        setupRejections: setupRejectionsController.text ==''? null:setupRejectionsController.text,
+        terminalBackOut: terminalBackOutController.text ==''? null:terminalBackOutController.text,
+        cableDamage: cableDamageController.text ==''? null:cableDamageController.text,
+        crimpingPositionOutOrMissCrimp:
+            crimpingPositionOutMissCrimpController.text ==''? null:crimpingPositionOutMissCrimpController.text,
+        terminalSeamOpen: terminalSeamOpenController.text ==''? null:terminalSeamOpenController.text,
+        rollerMark: rollerMarkController.text ==''? null:rollerMarkController.text,
+        lengthLessOrLengthMore: lengthlessLengthMoreController.text ==''? null:lengthlessLengthMoreController.text,
+        gripperMark: gripperMarkController.text ==''? null:gripperMarkController.text,
+        endWire: endWireController.text ==''? null:endWireController.text,
+        endTerminal: endTerminalController.text ==''? null:endTerminalController.text,
+        entangledCable: entangledCableController.text ==''? null:entangledCableController.text,
+        troubleShootingRejections:
+            troubleshootingRejectionsController.text ==''? null:troubleshootingRejectionsController.text,
+        wireOverLoadRejectionsJam:
+            wireOverloadRejectionsController.text ==''? null:wireOverloadRejectionsController.text,
+        halfCurlingA: halfCurlingController.text ==''? null:halfCurlingController.text,
+        brushLengthLessOrMoreC:
+            brushLengthLessMoreController.text ==''? null:brushLengthLessMoreController.text, //TODO
+        exposureStrandsD: exposureStrandsController.text ==''? null:exposureStrandsController.text,
+        cameraPositionOutE: cameraPositionOutController.text ==''? null:cameraPositionOutController.text,
+        crimpOnInsulationF: crimpOnInsulationController.text ==''? null:crimpOnInsulationController.text,
+        cablePositionMovementG: cablePositionController.text ==''? null:cablePositionController.text,
+        crimpOnInsulationC: crimpOnInsulationController.text ==''? null:crimpOnInsulationController.text, //TODO
+        crimpingPositionOutOrMissCrimpD:
+            crimpingPositionOutMissCrimpController.text ==''? null:crimpingPositionOutMissCrimpController.text,
+        crimpPositionOut: crimpPositionOutController.text ==''? null:crimpPositionOutController.text,
+        stripPositionOut: stripPositionOutController.text ==''? null:stripPositionOutController.text,
+        offCurling: offcurlingController.text ==''? null:offcurlingController.text,
+        cFmPfmRejections: cfmpfmRejectionsController.text ==''? null:cfmpfmRejectionsController.text,
+        incomingIssue: incomingIssueController.text ==''? null:incomingIssueController.text,
+        bladeMark: bladeMarkController.text ==''? null:bladeMarkController.text,
+        crossCut: crossCutController.text ==''? null:crossCutController.text,
+        insulationBarrel: insulationBarrelController.text ==''? null:insulationBarrelController.text,
+        method: widget.method,
+        terminalFrom: '${terminalA.terminalPart}',
+        terminalTo: '${terminalB.terminalPart}');
   }
 
   Widget showBundles() {
@@ -917,22 +1072,25 @@ class _GenerateLabelState extends State<GenerateLabel> {
                         onPressed: () {
                           DateTime now = DateTime.now();
                           //TODO
-                            _print(
-                                  // ipaddress: "192.168.1.130",
-                                  ipaddress: "172.26.59.14",
-                                  bq: e.bundleQty,
-                                  qr: "${e.label.bundleId}",
-                                  routenumber1: "${e.label.routeNo}",
-                                    date: now.day.toString()+"-"+now.month.toString()+"-"+now.year.toString() ,
-                                  orderId: "${widget.schedule.orderId}",
-                                  fgPartNumber:
-                                      "${widget.schedule.finishedGoodsNumber}",
-                                  cutlength: "${widget.schedule.length}",
-                                  cablepart:
-                                      "${widget.schedule.cablePartNumber}",
-                                  wireGauge: "${e.label.wireGauge}",
-                                  terminalfrom: "${e.label.terminalFrom}",
-                                  terminalto: "${e.label.terminalTo}");
+                          _print(
+                              // ipaddress: "192.168.1.130",
+                              ipaddress: "172.26.59.14",
+                              bq: e.bundleQty,
+                              qr: "${e.label.bundleId}",
+                              routenumber1: "${e.label.routeNo}",
+                              date: now.day.toString() +
+                                  "-" +
+                                  now.month.toString() +
+                                  "-" +
+                                  now.year.toString(),
+                              orderId: "${widget.schedule.orderId}",
+                              fgPartNumber:
+                                  "${widget.schedule.finishedGoodsNumber}",
+                              cutlength: "${widget.schedule.length}",
+                              cablepart: "${widget.schedule.cablePartNumber}",
+                              wireGauge: "${e.label.wireGauge}",
+                              terminalfrom: "${e.label.terminalFrom}",
+                              terminalto: "${e.label.terminalTo}");
                         },
                         child: Text('Print'),
                       )),
@@ -1010,7 +1168,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 focusNode: FocusNode(),
                 onKey: (event) => handleKey(event.data),
                 child: TextField(
-                  autofocus: true,
+                    autofocus: true,
                     controller: _binController,
                     onSubmitted: (value) {
                       hasBin = true;
@@ -1111,7 +1269,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 focusNode: FocusNode(),
                 onKey: (event) => handleKey(event.data),
                 child: TextField(
-                      autofocus: true,
+                    autofocus: true,
                     // focusNode: _bundleFocus,
                     controller: _bundleScanController,
                     onSubmitted: (value) {
@@ -1172,20 +1330,19 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       .postTransferBundletoBin(
                           transferBundleToBin: getpostBundletoBin())
                       .then((value) {
-                        
                     if (value != null) {
                       BundleTransferToBinTracking bundleTransferToBinTracking =
                           value;
                       Fluttertoast.showToast(
                           msg:
-                              "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${_binController.text??''}",
+                              "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${_binController.text ?? ''}",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
                           backgroundColor: Colors.red,
                           textColor: Colors.white,
                           fontSize: 16.0);
-                          
+
                       setState(() {
                         generatedBundleList.add(GeneratedBundle(
                             bundleQty: bundleQty.text,
@@ -1236,9 +1393,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
   TransferBundleToBin getpostBundletoBin() {
     TransferBundleToBin bundleToBin = TransferBundleToBin(
-      binIdentification: _binController.text,
-      bundleId: label.bundleId
-    );
+        binIdentification: _binController.text, bundleId: label.bundleId);
     return bundleToBin;
   }
 
@@ -1285,7 +1440,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                         ),
                       ],
                     ),
-                     Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -1293,7 +1448,6 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           style: GoogleFonts.openSans(
                               textStyle: TextStyle(fontSize: 15)),
                         ),
-                      
                       ],
                     ),
                   ],

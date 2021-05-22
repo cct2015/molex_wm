@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
-import 'package:molex/model_api/visualInspection/saveVIBundleQty.dart';
 import 'package:molex/screens/visual%20Inspector/scanBundle.dart';
-import 'package:molex/screens/widgets/VIscheduleDetailWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 
 class Viscan extends StatefulWidget {
@@ -19,10 +17,9 @@ class Viscan extends StatefulWidget {
 
 class _ViscanState extends State<Viscan> {
   ViScheduler viSchedule;
-  PostSaveViBundleQty saveViBundleQty;
+ 
   @override
   void initState() {
-    saveViBundleQty = new PostSaveViBundleQty();
     viSchedule = widget.viSchedule;
     super.initState();
   }
@@ -178,12 +175,8 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
-  bool orderDetailExpanded = true;
-  bool scanTap = false;
-  TextEditingController scanBundleController = new TextEditingController();
-  FocusNode scanFocus = new FocusNode();
-  TextEditingController userScanController = new TextEditingController();
-  FocusNode userScanFocus = new FocusNode();
+ 
+  
   @override
   void initState() {
     Future.delayed(

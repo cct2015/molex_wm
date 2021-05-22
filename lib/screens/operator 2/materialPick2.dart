@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/postrawmatList_model.dart';
@@ -511,48 +512,40 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                     onPressed: () {
                       print('rawmaterial = $rawMaterial');
                       setState(() {
-                        PostRawMaterial postRawmaterial = new PostRawMaterial();
                         for (RawMaterial ip in rawMaterial) {
-                          // print(rawMaterial.contains(ip).toString());
-                          // print('loop ${ip.partNunber.toString()}');
                           if (ip.partNunber == partNumber) {
                             if (!selectdItems.contains(ip)) {
                               print('loop ${ip.partNunber.toString()}');
-                              // postRawmaterial.date = selectedDate;
-                              postRawmaterial.partDescription = ip.description;
-                              print('qty $qty');
-                              postRawmaterial.existingQuantity = '0';
-                              postRawmaterial.scannedQuantity = qty;
-                              postRawmaterial.orderidentification =
-                                  "${widget.schedule.purchaseOrder}" ?? '0';
-                              postRawmaterial.totalScheduledQuantity =
-                                  "${widget.schedule.bundleQuantityTotal}" ??
-                                      '0';
-                              postRawmaterial.unitOfMeasurement = ip.uom ?? '0';
-                              postRawmaterial.cablePartNumber =
-                                  partNumber != null
-                                      ? partNumber ?? '0'
-                                      : 'null';
-                              postRawmaterial.machineIdentification = widget
-                                  .machine.machineNumber; //TODO machine number
-                              postRawmaterial.finishedGoodsNumber =
-                                  "${widget?.schedule?.finishedGoods}" ?? '0';
-                              postRawmaterial.schedulerIdentification =
-                                  "${widget.schedule.scheduleId}";
-                              // ? int.parse(widget.schedule.scheduledId)
-                              // : 0;
-                              // "${selectedDate.toLocal()}".split(' ')[0];
-                              // postRawmaterial.color =
-                              //     widget?.schedule?. ?? 'color';
-                              postRawmaterial.process =
-                                  widget?.schedule?.process ?? '0';
-                              postRawmaterial.status = "SUCCESS";
-                              postRawmaterial.length =
-                                  "${widget.schedule.length}" ?? '0';
-                              postRawmaterial.traceabilityNumber =
-                                  trackingNumber;
-                              print(postRawmaterial);
-                              postRawmaterial.date = selectedDate;
+                              PostRawMaterial postRawmaterial =
+                                  new PostRawMaterial(
+                                      partDescription: ip.description,
+                                      existingQuantity: 0,
+                                      schedulerIdentification:
+                                          "${widget.schedule.scheduleId}",
+                                      date: DateFormat.yMd('en')
+                                          .format(selectedDate), //TODO
+                                      machineIdentification:
+                                          widget.machine.machineNumber,
+                                      finishedGoodsNumber:
+                                          widget.schedule.finishedGoods,
+                                      // purchaseOrder:
+                                      //     "${widget.schedule.purchaseOrder}",
+                                      partNumber: int.parse(ip.partNunber),
+                                      requiredQuantityOrPiece:
+                                          double.parse(ip.requireQuantity),
+                                      totalScheduledQuantity:
+                                          int.parse(ip.toatalScheduleQuantity),
+                                      unitOfMeasurement: ip.uom,
+                                      traceabilityNumber:
+                                          int.parse(trackingNumber),
+                                      scannedQuantity: int.parse(qty),
+                                      cablePartNumber:
+                                          widget.schedule.cablePartNo,
+                                      length: widget.schedule.length,
+                                      color: "${widget.schedule.wireColour}",
+                                      process: widget.schedule.process,
+                                      status: 'SUCCESS');
+
                               selectdItems.add(postRawmaterial);
                               _partNumberController.clear();
                               _trackingNumberController.clear();
@@ -588,12 +581,12 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
               onPrimary: Colors.white,
             ),
             onPressed: () {
-              List<String> rawPartNo = rawmaterial1.map((e) {
-                return e.partNunber;
+              List<int> rawPartNo = rawmaterial1.map((e) {
+                return int.tryParse(e.partNunber);
               }).toList();
               print(rawPartNo.toSet());
-              List<String> scannedPartNo = selectdItems.map((e) {
-                return e.cablePartNumber;
+              List<int> scannedPartNo = selectdItems.map((e) {
+                return e.partNumber;
               }).toList();
               print(scannedPartNo.toSet());
               if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
@@ -852,7 +845,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                     rows: selectdItems
                         .map((e) => DataRow(cells: <DataCell>[
                               DataCell(Text(
-                                e.cablePartNumber.toString(),
+                                e.partNumber.toString(),
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
@@ -864,7 +857,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(
-                                "${e.date.toLocal()}".split(' ')[0],
+                                "${e.date}".split(' ')[0],
                                 style: TextStyle(fontSize: 12),
                               )),
                               DataCell(Text(e.existingQuantity.toString())),
