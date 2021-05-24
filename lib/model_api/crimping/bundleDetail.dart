@@ -1,51 +1,15 @@
 // To parse this JSON data, do
 //
-//     final transferBinToLocation = transferBinToLocationFromJson(jsonString);
+//     final getBundleDetail = getBundleDetailFromJson(jsonString);
 
 import 'dart:convert';
 
-TransferBinToLocation transferBinToLocationFromJson(String str) => TransferBinToLocation.fromJson(json.decode(str));
+GetBundleDetail getBundleDetailFromJson(String str) => GetBundleDetail.fromJson(json.decode(str));
 
-String transferBinToLocationToJson(TransferBinToLocation data) => json.encode(data.toJson());
+String getBundleDetailToJson(GetBundleDetail data) => json.encode(data.toJson());
 
-class TransferBinToLocation {
-    TransferBinToLocation({
-        this.binIdentification,
-        this.bundleId,
-        this.userId,
-        this.locationId,
-    });
-
-    String binIdentification;
-    String bundleId;
-    String userId;
-    String locationId;
-
-    factory TransferBinToLocation.fromJson(Map<String, dynamic> json) => TransferBinToLocation(
-        binIdentification: json["binIdentification"],
-        bundleId: json["bundleId"],
-        userId: json["userId"],
-        locationId: json["locationId"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "binIdentification": binIdentification,
-        "bundleId": bundleId,
-        "userId": userId,
-        "locationId": locationId,
-    };
-}
-
-// To parse this JSON data, do
-//
-//     final responseTransferBinToLocation = responseTransferBinToLocationFromJson(jsonString);
-
-ResponseTransferBinToLocation responseTransferBinToLocationFromJson(String str) => ResponseTransferBinToLocation.fromJson(json.decode(str));
-
-String responseTransferBinToLocationToJson(ResponseTransferBinToLocation data) => json.encode(data.toJson());
-
-class ResponseTransferBinToLocation {
-    ResponseTransferBinToLocation({
+class GetBundleDetail {
+    GetBundleDetail({
         this.status,
         this.statusMsg,
         this.errorCode,
@@ -57,7 +21,7 @@ class ResponseTransferBinToLocation {
     dynamic errorCode;
     Data data;
 
-    factory ResponseTransferBinToLocation.fromJson(Map<String, dynamic> json) => ResponseTransferBinToLocation(
+    factory GetBundleDetail.fromJson(Map<String, dynamic> json) => GetBundleDetail(
         status: json["status"],
         statusMsg: json["statusMsg"],
         errorCode: json["errorCode"],
@@ -74,22 +38,22 @@ class ResponseTransferBinToLocation {
 
 class Data {
     Data({
-        this.bundleTransferToBinTracking,
+        this.bundleData,
     });
 
-    BinToLocationTransfer bundleTransferToBinTracking;
+    BundleData bundleData;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        bundleTransferToBinTracking: BinToLocationTransfer.fromJson(json[" Bundle Transfer to Bin Tracking "]),
+        bundleData: BundleData.fromJson(json["Bundle Data"]),
     );
 
     Map<String, dynamic> toJson() => {
-        " Bundle Transfer to Bin Tracking ": bundleTransferToBinTracking.toJson(),
+        "Bundle Data": bundleData.toJson(),
     };
 }
 
-class BinToLocationTransfer {
-    BinToLocationTransfer({
+class BundleData {
+    BundleData({
         this.id,
         this.bundleIdentification,
         this.scheduledId,
@@ -114,7 +78,7 @@ class BinToLocationTransfer {
     dynamic scheduledId;
     DateTime bundleCreationTime;
     int bundleQuantity;
-    dynamic machineIdentification;
+    String machineIdentification;
     dynamic operatorIdentification;
     int finishedGoodsPart;
     int cablePartNumber;
@@ -122,12 +86,12 @@ class BinToLocationTransfer {
     int cutLengthSpecificationInmm;
     String color;
     String bundleStatus;
-    int binId;
-    String locationId;
+    dynamic binId;
+    dynamic locationId;
     dynamic orderId;
     String updateFromProcess;
 
-    factory BinToLocationTransfer.fromJson(Map<String, dynamic> json) => BinToLocationTransfer(
+    factory BundleData.fromJson(Map<String, dynamic> json) => BundleData(
         id: json["id"],
         bundleIdentification: json["bundleIdentification"],
         scheduledId: json["scheduledId"],
@@ -165,52 +129,5 @@ class BinToLocationTransfer {
         "locationId": locationId,
         "orderId": orderId,
         "updateFromProcess": updateFromProcess,
-    };
-}
-// To parse this JSON data, do
-//
-//     final errorTransferBinToLocation = errorTransferBinToLocationFromJson(jsonString);
-
-
-
-ErrorTransferBinToLocation errorTransferBinToLocationFromJson(String str) => ErrorTransferBinToLocation.fromJson(json.decode(str));
-
-String errorTransferBinToLocationToJson(ErrorTransferBinToLocation data) => json.encode(data.toJson());
-
-class ErrorTransferBinToLocation {
-    ErrorTransferBinToLocation({
-        this.status,
-        this.statusMsg,
-        this.errorCode,
-        this.data,
-    });
-
-    String status;
-    String statusMsg;
-    String errorCode;
-    Data1 data;
-
-    factory ErrorTransferBinToLocation.fromJson(Map<String, dynamic> json) => ErrorTransferBinToLocation(
-        status: json["status"],
-        statusMsg: json["statusMsg"],
-        errorCode: json["errorCode"],
-        data: Data1.fromJson(json["data"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "status": status,
-        "statusMsg": statusMsg,
-        "errorCode": errorCode,
-        "data": data.toJson(),
-    };
-}
-
-class Data1 {
-    Data1();
-
-    factory Data1.fromJson(Map<String, dynamic> json) => Data1(
-    );
-
-    Map<String, dynamic> toJson() => {
     };
 }

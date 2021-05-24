@@ -11,6 +11,8 @@ import 'package:molex/models/materialItem.dart';
 import 'package:molex/screens/operator%202/process/process2.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 class MaterialPickOp2 extends StatefulWidget {
   final CrimpingSchedule schedule;
@@ -42,6 +44,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
   List<PostRawMaterial> selectdItems = [];
   @override
   void initState() {
+    initializeDateFormatting('az');
     apiService = new ApiService();
     SystemChrome.setEnabledSystemUIOverlays([]);
     _textNode.requestFocus();
@@ -113,36 +116,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
         ),
         elevation: 0,
         actions: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                height: 24,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                ),
-                child: Center(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Icon(
-                        Icons.schedule,
-                        size: 18,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                    Text(
-                      "Shift A",
-                      style: TextStyle(fontSize: 13, color: Colors.black),
-                    ),
-                  ],
-                )),
-              ),
-            ],
-          ),
+      
 
           //machineID
           Container(
@@ -588,7 +562,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                 return e.partNumber;
               }).toList();
               print(scannedPartNo.toSet());
-              if (true) {
+              if (selectdItems.length>0) {
                 _showConfirmationDialog();
               } else {
                 Fluttertoast.showToast(
@@ -1034,9 +1008,23 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                         (states) => Colors.green),
                   ),
                   onPressed: () {
-                    apiService.postRawmaterial(selectdItems).then((value) {
-                      if (value) {
-                        Navigator.pushReplacement(
+                      int a = 0;
+                      for (PostRawMaterial material in selectdItems) {
+                      apiService.postRawmaterial([material]).then((value) {
+                        if (value) {
+                          a = a + 1;
+                          print("a : $a");
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => ProcessPage(
+                          //             schedule: widget.schedule,
+                          //             userId: widget.userId,
+                          //             machine: widget.machine,
+                          //           )),
+                          // );
+                          if (a == selectdItems.length) {
+                             Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProcessPage2(
@@ -1045,6 +1033,16 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                                     machine: widget.machine,
                                   )),
                         );
+                          }
+                        } else {
+                          print("error");
+                        }
+                      });
+                    }
+                    print("a : $a");
+                    apiService.postRawmaterial(selectdItems).then((value) {
+                      if (value) {
+                      
                       } else {}
                     });
                   },

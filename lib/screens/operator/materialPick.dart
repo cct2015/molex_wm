@@ -36,7 +36,7 @@ class _MaterialPickState extends State<MaterialPick> {
   String trackingNumber;
   String qty;
   List<ItemPart> items = [];
-  List<ItemPart> selectditems = [];
+  List<ItemPart> selectditems = []; 
   List<PostRawMaterial> selectdItems = [];
   List<RawMaterial> rawMaterial = [];
   bool isCollapsedRawMaterial = false;
@@ -566,11 +566,12 @@ class _MaterialPickState extends State<MaterialPick> {
                 return e.partNumber;
               }).toList();
               print(scannedPartNo.toSet());
-              if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
+              // if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
+                if(selectdItems.length>0){
                 _showConfirmationDialog();
               } else {
                 Fluttertoast.showToast(
-                    msg: "Add All Raw Material To Start Process",
+                    msg: "Add  Raw Material To Start Process",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,
@@ -938,7 +939,7 @@ class _MaterialPickState extends State<MaterialPick> {
                           //             machine: widget.machine,
                           //           )),
                           // );
-                          if (a == 3) {
+                          if (a == selectdItems.length) {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

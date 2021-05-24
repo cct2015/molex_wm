@@ -909,13 +909,13 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           if (value != null) {
                         
                             DateTime now = DateTime.now();
-
+                            GeneratedLabel  label1 = value;
                             _print(
                                 ipaddress: "192.168.1.130",
                                 // ipaddress: "172.25.16.53",
                                 bq: bundleQty.text,
-                                qr: "${label.bundleId}",
-                                routenumber1: "${label.routeNo}",
+                                qr: "${label1.bundleId}",
+                                routenumber1: "${label1.routeNo}",
                                 date: now.day.toString() +
                                     "-" +
                                     now.month.toString() +
@@ -926,16 +926,16 @@ class _GenerateLabelState extends State<GenerateLabel> {
                                     "${widget.schedule.finishedGoodsNumber}",
                                 cutlength: "${widget.schedule.length}",
                                 cablepart: "${widget.schedule.cablePartNumber}",
-                                wireGauge: "${label.wireGauge}",
-                                terminalfrom: "${label.terminalFrom}",
-                                terminalto: "${label.terminalTo}");
+                                wireGauge: "${label1.wireGauge}",
+                                terminalfrom: "${label1.terminalFrom}",
+                                terminalto: "${label1.terminalTo}");
                                   clear();
 
                         
                               setState(() {
                                   labelGenerated = !labelGenerated;
                           status = Status.scanBin;
-                              label = value.data.generateLabel;
+                              label = value;
                             });
                           }
                         
@@ -962,7 +962,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
         scheduleIdentification: int.parse(widget.schedule.scheduledId),
         scheduledQuantity: int.parse(widget.schedule.scheduledQuantity),
         machineIdentification: widget.machine.machineNumber,
-        operatorIdentification: int.parse(widget.userId),
+        operatorIdentification: widget.userId,
         bundleIdentification: _bundleScanController.text,
         rejectedQuantity: 0,
         // Quantitys

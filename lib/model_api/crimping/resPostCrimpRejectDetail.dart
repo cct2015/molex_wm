@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final resPostCrimpingRejectedDetail = resPostCrimpingRejectedDetailFromJson(jsonString);
+//     final responsePostCrimpingDetail = responsePostCrimpingDetailFromJson(jsonString);
 
 import 'dart:convert';
 
-ResPostCrimpingRejectedDetail resPostCrimpingRejectedDetailFromJson(String str) => ResPostCrimpingRejectedDetail.fromJson(json.decode(str));
+ResponsePostCrimpingDetail responsePostCrimpingDetailFromJson(String str) => ResponsePostCrimpingDetail.fromJson(json.decode(str));
 
-String resPostCrimpingRejectedDetailToJson(ResPostCrimpingRejectedDetail data) => json.encode(data.toJson());
+String responsePostCrimpingDetailToJson(ResponsePostCrimpingDetail data) => json.encode(data.toJson());
 
-class ResPostCrimpingRejectedDetail {
-    ResPostCrimpingRejectedDetail({
+class ResponsePostCrimpingDetail {
+    ResponsePostCrimpingDetail({
         this.status,
         this.statusMsg,
         this.errorCode,
@@ -21,7 +21,7 @@ class ResPostCrimpingRejectedDetail {
     dynamic errorCode;
     Data data;
 
-    factory ResPostCrimpingRejectedDetail.fromJson(Map<String, dynamic> json) => ResPostCrimpingRejectedDetail(
+    factory ResponsePostCrimpingDetail.fromJson(Map<String, dynamic> json) => ResponsePostCrimpingDetail(
         status: json["status"],
         statusMsg: json["statusMsg"],
         errorCode: json["errorCode"],
@@ -41,19 +41,19 @@ class Data {
         this.crimpingProcess,
     });
 
-    CrimpingRejectDetail crimpingProcess;
+    CrimpingResponse crimpingProcess;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        crimpingProcess: CrimpingRejectDetail.fromJson(json["Crimping process "]),
+        crimpingProcess: CrimpingResponse.fromJson(json[" Crimping process "]),
     );
 
     Map<String, dynamic> toJson() => {
-        "Crimping process ": crimpingProcess.toJson(),
+        " Crimping process ": crimpingProcess.toJson(),
     };
 }
 
-class CrimpingRejectDetail {
-    CrimpingRejectDetail({
+class CrimpingResponse {
+    CrimpingResponse({
         this.bundleIdentification,
         this.bundleQuantity,
         this.passedQuantity,
@@ -78,6 +78,15 @@ class CrimpingRejectDetail {
         this.scheduleId,
         this.binId,
         this.processType,
+        this.method,
+        this.machineIdentification,
+        this.cablePartNumber,
+        this.cutLength,
+        this.color,
+        this.finishedGoods,
+        this.terminalFrom,
+        this.terminalTo,
+        this.status,
     });
 
     String bundleIdentification;
@@ -104,8 +113,17 @@ class CrimpingRejectDetail {
     int scheduleId;
     String binId;
     String processType;
+    String method;
+    String machineIdentification;
+    int cablePartNumber;
+    int cutLength;
+    String color;
+    int finishedGoods;
+    int terminalFrom;
+    int terminalTo;
+    int status;
 
-    factory CrimpingRejectDetail.fromJson(Map<String, dynamic> json) => CrimpingRejectDetail(
+    factory CrimpingResponse.fromJson(Map<String, dynamic> json) => CrimpingResponse(
         bundleIdentification: json["bundleIdentification"],
         bundleQuantity: json["bundleQuantity"],
         passedQuantity: json["passedQuantity"],
@@ -130,6 +148,15 @@ class CrimpingRejectDetail {
         scheduleId: json["scheduleId"],
         binId: json["binId"],
         processType: json["processType"],
+        method: json["method"],
+        machineIdentification: json["machineIdentification"],
+        cablePartNumber: json["cablePartNumber"],
+        cutLength: json["cutLength"],
+        color: json["color"],
+        finishedGoods: json["finishedGoods"],
+        terminalFrom: json["terminalFrom"],
+        terminalTo: json["terminalTo"],
+        status: json["status"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -157,5 +184,14 @@ class CrimpingRejectDetail {
         "scheduleId": scheduleId,
         "binId": binId,
         "processType": processType,
+        "method": method,
+        "machineIdentification": machineIdentification,
+        "cablePartNumber": cablePartNumber,
+        "cutLength": cutLength,
+        "color": color,
+        "finishedGoods": finishedGoods,
+        "terminalFrom": terminalFrom,
+        "terminalTo": terminalTo,
+        "status": status,
     };
 }

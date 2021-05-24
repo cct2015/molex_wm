@@ -194,7 +194,7 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                 Text('Crimping Rejection Cases',
                     style: TextStyle(

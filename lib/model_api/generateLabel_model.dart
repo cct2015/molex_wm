@@ -84,7 +84,7 @@ class PostGenerateLabel {
     int scheduleIdentification;
     int scheduledQuantity;
     String machineIdentification;
-    int operatorIdentification;
+    String operatorIdentification;
     String bundleIdentification;
     int rejectedQuantity;
     int terminalDamage;

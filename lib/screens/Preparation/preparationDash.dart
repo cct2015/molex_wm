@@ -45,36 +45,7 @@ class _PreprationDashState extends State<PreprationDash> {
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                height: 24,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                ),
-                child: Center(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Icon(
-                        Icons.schedule,
-                        size: 18,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                    Text(
-                      "Shift A",
-                      style: TextStyle(fontSize: 13, color: Colors.black),
-                    ),
-                  ],
-                )),
-              ),
-            ],
-          ),
+         
 
           // machineID
           Container(

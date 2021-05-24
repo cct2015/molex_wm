@@ -34,6 +34,15 @@ class PostCrimpingRejectedDetail {
         this.scheduleId,
         this.binId,
         this.processType,
+        this.method,
+        this.status,
+        this.machineIdentification,
+        this.cablePartNumber,
+        this.cutLength,
+        this.color,
+        this.finishedGoods,
+        this.terminalFrom,
+        this.terminalTo,
     });
 
     String bundleIdentification;
@@ -60,6 +69,15 @@ class PostCrimpingRejectedDetail {
     int scheduleId;
     String binId;
     String processType;
+    String method;
+    String status;
+    String machineIdentification;
+    int cablePartNumber;
+    int cutLength;
+    String color;
+    int finishedGoods;
+    int terminalFrom;
+    int terminalTo;
 
     factory PostCrimpingRejectedDetail.fromJson(Map<String, dynamic> json) => PostCrimpingRejectedDetail(
         bundleIdentification: json["bundleIdentification"],
@@ -86,6 +104,15 @@ class PostCrimpingRejectedDetail {
         scheduleId: json["scheduleId"],
         binId: json["binId"],
         processType: json["processType"],
+        method: json["method"],
+        status: json["Status"],
+        machineIdentification: json["machineIdentification"],
+        cablePartNumber: json["cablePartNumber"],
+        cutLength: json["cutLength"],
+        color: json["color"],
+        finishedGoods: json["finishedGoods"],
+        terminalFrom: json["terminalFrom"],
+        terminalTo: json["terminalTo"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -113,5 +140,14 @@ class PostCrimpingRejectedDetail {
         "scheduleId": scheduleId,
         "binId": binId,
         "processType": processType,
+        "method": method,
+        "Status": status,
+        "machineIdentification": machineIdentification,
+        "cablePartNumber": cablePartNumber,
+        "cutLength": cutLength,
+        "color": color,
+        "finishedGoods": finishedGoods,
+        "terminalFrom": terminalFrom,
+        "terminalTo": terminalTo,
     };
 }

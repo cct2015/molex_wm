@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
@@ -60,39 +61,6 @@ class _LocationState extends State<Location> {
           ),
           elevation: 0,
           actions: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                  ),
-                  child: Center(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Icon(
-                          Icons.schedule,
-                          size: 18,
-                          color: Colors.redAccent,
-                        ),
-                      ),
-                      Text(
-                        "Shift A",
-                        style: GoogleFonts.openSans(
-                            textStyle:
-                                TextStyle(fontSize: 13, color: Colors.black)),
-                      ),
-                    ],
-                  )),
-                ),
-              ],
-            ),
-
             //machineID
             Container(
               padding: EdgeInsets.all(1),
@@ -305,11 +273,42 @@ class _LocationState extends State<Location> {
                   MaterialStateProperty.resolveWith((states) => Colors.green),
             ),
             onPressed: () {
-              setState(() {
-                transferList.add(TransferBinToLocation(
-                    locationId: locationId, binIdentification: binId));
-                _binController.clear();
-                binId = null;
+              ApiService apiService = new ApiService();
+              TransferBinToLocation transferBinToLocation =
+                  TransferBinToLocation(
+                locationId: locationId,
+                binIdentification: binId,
+                userId: widget.userId,
+              );
+              apiService
+                  .postTransferBinToLocation(transferBinToLocation)
+                  .then((value) {
+                if (value != null) {
+                  BinToLocationTransfer binToLocationTransfer = value;
+                  Fluttertoast.showToast(
+                      msg:
+                          "Transfered bIN-${binToLocationTransfer.binId} to Bin- ${binToLocationTransfer.locationId ?? ''}",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                  setState(() {
+                    transferList.add(transferBinToLocation);
+                    _binController.clear();
+                    binId = null;
+                  });
+                } else {
+                  Fluttertoast.showToast(
+                      msg: "Unable to Transfer",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                }
               });
             },
             child: Text('Confirm Transfer')),

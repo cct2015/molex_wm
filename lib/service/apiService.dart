@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/main.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
+import 'package:molex/model_api/crimping/bundleDetail.dart';
 import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/crimping/getbundleQtyCrimp.dart';
 import 'package:molex/model_api/crimping/postCrimprejectedDetail.dart';
@@ -15,7 +17,6 @@ import 'package:molex/model_api/cableDetails_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/fgDetail_model.dart';
-import 'package:molex/model_api/fullyComplete_model.dart';
 import 'package:molex/model_api/generateLabel_model.dart';
 import 'package:molex/model_api/login_model.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +33,6 @@ import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
 import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
 import 'package:molex/model_api/visualInspection/saveinspectedBundle_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   String baseUrl = "${sharedPref.baseIp}";
@@ -358,7 +358,7 @@ class ApiService {
   //BundleQuantity api Json missing
   //TODO
   // Generate label request model POst method
-  Future<ResponseGenerateLabel> postGeneratelabel(
+  Future<GeneratedLabel> postGeneratelabel(
       PostGenerateLabel postGenerateLabel, String bundleQuantiy) async {
     var url =
         Uri.parse(baseUrl + 'molex/wccr/generate-label/bdQty=$bundleQuantiy');
@@ -369,32 +369,14 @@ class ApiService {
     print("response post generate label ${response.body}");
 
     if (response.statusCode == 200) {
-       Fluttertoast.showToast(
-        msg: "Generate label status ${response.statusCode}",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
       try {
-        ResponseGenerateLabel responseGenerateLabel =
-            responseGenerateLabelFromJson(response.body);
-        return responseGenerateLabel;
+        GeneratedLabel generatedLabel =
+            responseGenerateLabelFromJson(response.body).data.generateLabel;
+        return generatedLabel;
       } catch (e) {
         try {
           ErrorGenerateLabel errorGenerateLabel =
               errorGenerateLabelFromJson(response.body);
-          Fluttertoast.showToast(
-            msg: "Generate label :  ${errorGenerateLabel.statusMsg}",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
           return null;
         } catch (e) {
           return null;
@@ -424,7 +406,7 @@ class ApiService {
     var response = await http.post(url,
         body: transferBundleToBinToJson(transferBundleToBin),
         headers: headerList);
-          print("status post Transfer Bundle to bin ${response.statusCode}");
+    print("status post Transfer Bundle to bin ${response.statusCode}");
     print("response post Transfer Bundle to bin ${response.body}");
     if (response.statusCode == 200) {
       BundleTransferToBinTracking b =
@@ -432,6 +414,44 @@ class ApiService {
               .data
               .bundleTransferToBinTracking;
       return b;
+    } else {
+      return null;
+    }
+  }
+
+  //Post transfer bin to location
+  Future<BinToLocationTransfer> postTransferBinToLocation(
+      TransferBinToLocation transferBinToLocation) async {
+    var url =
+        Uri.parse(baseUrl + 'molex/bin-tracking/update-bin-location-in-bin');
+    print(
+        'post Transfer BIn to Location :${transferBinToLocationToJson(transferBinToLocation)} ');
+    var response = await http.post(url,
+        body: transferBinToLocationToJson(transferBinToLocation),
+        headers: headerList);
+    print("status post Transfer Bin To Location ${response.statusCode}");
+    print("response post Transfer Bin to Location ${response.body}");
+    if (response.statusCode == 200) {
+      try {
+        BinToLocationTransfer b =
+            responseTransferBinToLocationFromJson(response.body)
+                .data
+                .bundleTransferToBinTracking;
+        return b;
+      } catch (e) {
+        ErrorTransferBinToLocation errorTransferBinToLocation =
+            errorTransferBinToLocationFromJson(response.body);
+        Fluttertoast.showToast(
+          msg: "status ${errorTransferBinToLocation.statusMsg}",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return null;
+      }
     } else {
       return null;
     }
@@ -458,7 +478,6 @@ class ApiService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      
       return false;
     }
   }
@@ -470,19 +489,6 @@ class ApiService {
         'molex/partial-completion-reason/save-in-partial-completion-reason');
     var response = await http.post(url,
         body: postpartiallyCompleteToJson(postpartiallyComplete));
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // Transfer bundle
-  Future<bool> transferBundle(TransferBundle transferBundle) async {
-    var url = Uri.parse(baseUrl + '');
-    var response = await http.post(url,
-        body: transferBundleToJson(transferBundle), headers: headerList);
-    print("response of transefer bundle ${response.statusCode}");
     if (response.statusCode == 200) {
       return true;
     } else {
@@ -590,21 +596,32 @@ class ApiService {
   }
 
   //post crimping rejected Quantity
-  Future<CrimpingRejectDetail> postCrimpRejectedQty(
+  Future<CrimpingResponse> postCrimpRejectedQty(
       PostCrimpingRejectedDetail postCrimpingRejectedDetail) async {
+    log('Post Rejected response body :${postCrimpingRejectedDetailToJson(postCrimpingRejectedDetail)}');
     var url =
         Uri.parse(baseUrl + 'molex/crimping/save-crimping-rejected-detal');
     var response = await http.post(url,
-        body: postCrimpingRejectedDetailToJson(postCrimpingRejectedDetail));
+        body: postCrimpingRejectedDetailToJson(postCrimpingRejectedDetail),
+        headers: headerList);
     print('Post Rejected status Code: ${response.statusCode}');
     print('Post Rejected response body :${response.body}');
     if (response.statusCode == 200) {
-      ResPostCrimpingRejectedDetail resPostCrimpingRejectedDetail =
-          resPostCrimpingRejectedDetailFromJson(response.body);
-      CrimpingRejectDetail crimpingRejectDetail =
+      ResponsePostCrimpingDetail resPostCrimpingRejectedDetail =
+           responsePostCrimpingDetailFromJson (response.body);
+      CrimpingResponse crimpingRejectDetail =
           resPostCrimpingRejectedDetail.data.crimpingProcess;
       return crimpingRejectDetail;
     } else {
+      Fluttertoast.showToast(
+        msg: "Post Crimping Reject Deatil Status ${response.statusCode}",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       return null;
     }
   }
@@ -619,6 +636,31 @@ class ApiService {
       List<Userid> userIdList = getuserId.data.userId;
       return userIdList;
     } else {
+      return null;
+    }
+  }
+
+  //Get bundle Detail
+  Future<BundleData> getBundleDetail(String bundleId) async {
+    var url = Uri.parse(
+        baseUrl + '/molex/material-codinator/getbundle?bundleId=$bundleId');
+    var response = await http.get(url);
+    print('Get Bundle Data status Code: ${response.statusCode}');
+    print('Get Bundle Data  response body :${response.body}');
+    if (response.statusCode == 200) {
+      GetBundleDetail getBundleDetail = getBundleDetailFromJson(response.body);
+      BundleData bundleDetail = getBundleDetail.data.bundleData;
+      return bundleDetail;
+    } else {
+      Fluttertoast.showToast(
+        msg: "Unable to Find Bundle",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       return null;
     }
   }
