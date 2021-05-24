@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:molex/login.dart';
-import 'package:molex/main.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
-import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/operator/location.dart';
 
 class FullyComplete extends StatefulWidget {

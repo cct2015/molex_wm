@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/getuserId.dart';
 import 'package:molex/model_api/visualInspection/saveinspectedBundle_model.dart';
-import 'package:molex/models/preparationScan.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -71,14 +71,27 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
 
   int selectedindex = 0;
   ApiService apiService;
+  List<Userid> usersList = [];
+  getUser() {
+    apiService = new ApiService();
+    apiService.getUserList().then((value) {
+      setState(() {
+        usersList = value;
+      });
+    });
+  }
+
   @override
   void initState() {
     apiService = new ApiService();
+    getUser();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+        SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Scaffold(
       appBar: AppBar(
@@ -93,36 +106,7 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
         elevation: 0,
         automaticallyImplyLeading: status == Status.dash ? true : false,
         actions: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                height: 24,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.all(Radius.circular(100)),
-                ),
-                child: Center(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Icon(
-                        Icons.schedule,
-                        size: 18,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                    Text(
-                      "Shift A",
-                      style: TextStyle(fontSize: 13, color: Colors.black),
-                    ),
-                  ],
-                )),
-              ),
-            ],
-          ),
+         
 
           //machineID
           Container(
@@ -251,17 +235,25 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
         onPressed: () {
           if (userId.length > 0 && bundleId.length > 0) {
             setState(() {
-              viIspectionBundleList.add(
-                ViInspectedbudle(
-                    bundleIdentification: bundleId,
-                    employeeId: userId,
-                    status: "Not Completed"),
-                // PreparationScan(
-                //   employeeId: userId,
-                //   bundleId: bundleId,
-                //   status: 'In Process',
-                //   binId: null)
-              );
+              if (usersList.contains(Userid(empId: userId))) {
+                viIspectionBundleList.add(
+                  ViInspectedbudle(
+                      bundleIdentification: bundleId,
+                      employeeId: userId,
+                      status: "Not Completed"),
+                );
+              }else{
+                 Fluttertoast.showToast(
+                msg: "Invalid userI",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);
+          
+
+              }
               _bundleIdScanController.clear();
               bundleId = '';
             });
@@ -296,67 +288,69 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
   Widget userScan() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.24,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.white,
-        ),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.23,
-                  height: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: RawKeyboardListener(
-                      focusNode: FocusNode(),
-                      onKey: (event) => handleKey(event.data),
-                      child: TextField(
-                          focusNode: _userScanFocus,
-                          controller: _userScanController,
-                          onTap: () {
-                            SystemChannels.textInput
-                                .invokeMethod('TextInput.hide');
-                          },
-                          onSubmitted: (value) {},
-                          onChanged: (value) {
-                            setState(() {
-                              userId = value;
-                            });
-                          },
-                          decoration: new InputDecoration(
-                              suffix: _userScanController.text.length > 1
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _userScanController.clear();
-                                        });
-                                      },
-                                      child: Icon(Icons.clear,
-                                          size: 18, color: Colors.red))
-                                  : Container(),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.redAccent, width: 2.0),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.grey[400], width: 2.0),
-                              ),
-                              labelText: '  Scan User  ',
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 5.0))),
+      child: Form(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.24,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.white,
+          ),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.23,
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: RawKeyboardListener(
+                        focusNode: FocusNode(),
+                        onKey: (event) => handleKey(event.data),
+                        child: TextField(
+                            focusNode: _userScanFocus,
+                            controller: _userScanController,
+                            onTap: () {
+                              SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                            },
+                            onSubmitted: (value) {},
+                            onChanged: (value) {
+                              setState(() {
+                                userId = value;
+                              });
+                            },
+                            decoration: new InputDecoration(
+                                suffix: _userScanController.text.length > 1
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _userScanController.clear();
+                                          });
+                                        },
+                                        child: Icon(Icons.clear,
+                                            size: 18, color: Colors.red))
+                                    : Container(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.redAccent, width: 2.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.grey[400], width: 2.0),
+                                ),
+                                labelText: '  Scan User  ',
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 5.0))),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ]),
+              ],
+            ),
+          ]),
+        ),
       ),
     );
   }

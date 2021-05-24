@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/login.dart';
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // SharedPreferences preferences =
-  //     await SharedPreferences.getInstance(); //for recent search in search
-  // var logged = preferences.getString('login');
+import 'package:molex/screens/utils/SharePref.dart';
+import 'package:molex/screens/utils/changeIp.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+SharedPref sharedPref = new SharedPref();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await sharedPref.init();
   runApp(MyApp());
 }
 
@@ -35,16 +38,7 @@ class _MyAppState extends State<MyApp> {
           // fontFamily: 'OpenSans',
           primarySwatch: Colors.blue,
         ),
-        home:
-        LoginScan()
-        // Homepage(
-        //   userId: "21029493",
-        //   machineId: "EMU-M/C-038A",
-        // )
-        //  HomePageOp3(
-        //   userId: "10000",2
-        //   machineId: "12000",
-        // )
+        home: ChangeIp()
         );
   }
 }

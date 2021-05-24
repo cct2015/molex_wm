@@ -6,6 +6,7 @@ import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/screens/Preparation/preparationDash.dart';
 import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/print.dart';
+import 'package:molex/screens/utils/changeIp.dart';
 import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
 import 'package:molex/service/apiService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,16 +30,15 @@ class _NavPageState extends State<NavPage> {
       body: Column(
         children: [
           ListTile(
-            title: Text('Crimping'),
+            title: Text('Change IP'),
             onTap: () {
               ApiService apiService = new ApiService();
               apiService.getmachinedetails(widget.machine.machineNumber).then((value) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => HomePageOp2(
-                            machine: value[0],
-                            userId: widget.userId,
+                      builder: (context) => ChangeIp(
+
                           )),
                 );
               });

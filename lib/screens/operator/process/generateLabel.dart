@@ -189,7 +189,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
   CableTerminalA terminalA;
   CableTerminalB terminalB;
   getTerminal() {
-     ApiService apiService = new ApiService();
+    ApiService apiService = new ApiService();
     apiService
         .getCableTerminalA(
             cablepartno: widget.schedule.cablePartNumber ??
@@ -211,7 +211,6 @@ class _GenerateLabelState extends State<GenerateLabel> {
   GeneratedLabel label;
   @override
   void initState() {
-
     apiService = new ApiService();
     getTerminal();
     transferBundle = new TransferBundle();
@@ -271,6 +270,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
 
   @override
   Widget build(BuildContext context) {
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
     print('method : ${widget.method}');
     Future.delayed(
       const Duration(milliseconds: 50),
@@ -901,7 +901,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                       ),
                       child: Text("Save & Generate Label"),
                       onPressed: () {
-                         log(postGenerateLabelToJson( getPostGeneratelabel()));
+                        log(postGenerateLabelToJson(getPostGeneratelabel()));
                         apiService
                             .postGeneratelabel(
                                 getPostGeneratelabel(), bundleQty.text)
@@ -931,11 +931,12 @@ class _GenerateLabelState extends State<GenerateLabel> {
                                 wireGauge: "${label.wireGauge}",
                                 terminalfrom: "${label.terminalFrom}",
                                 terminalto: "${label.terminalTo}");
-                          }
-                          clear();
+                                  clear();
 
                           labelGenerated = !labelGenerated;
                           status = Status.scanBin;
+                          }
+                        
                         });
                       }),
                 ),
@@ -948,77 +949,146 @@ class _GenerateLabelState extends State<GenerateLabel> {
   }
 
   PostGenerateLabel getPostGeneratelabel() {
-    return PostGenerateLabel(
+    return calculateTotal( PostGenerateLabel(
         //Schedule Detail
-        cablePartNumber: widget.schedule.cablePartNumber,
+        cablePartNumber: int.parse(widget.schedule.cablePartNumber),
         purchaseorder: widget.schedule.orderId,
-        orderIdentification: widget.schedule.orderId,
-        finishedGoods: widget.schedule.finishedGoodsNumber,
+        orderIdentification: int.parse(widget.schedule.orderId),
+        finishedGoods: int.parse(widget.schedule.finishedGoodsNumber),
         color: widget.schedule.color,
-        cutLength: widget.schedule.length,
-        scheduleIdentification: widget.schedule.scheduledId,
-        scheduledQuantity: widget.schedule.scheduledQuantity,
+        cutLength: int.parse(widget.schedule.length),
+        scheduleIdentification: int.parse(widget.schedule.scheduledId),
+        scheduledQuantity: int.parse(widget.schedule.scheduledQuantity),
         machineIdentification: widget.machine.machineNumber,
-        operatorIdentification: widget.userId,
+        operatorIdentification: int.parse(widget.userId),
         bundleIdentification: _bundleScanController.text,
-        // TODO rejectedQuantity: ""
+        rejectedQuantity: 0,
         // Quantitys
-        terminalDamage:terminalDamangeController.text==''? null:terminalDamangeController.text,
-        terminalBend: terminalBendController.text==''?null:  terminalBendController.text,
-        terminalTwist: terminalTwistController.text==''? null:terminalTwistController.text,
-        conductorCurlingUpDown: conductorCurlingUpDownController.text=='' ? null:conductorCurlingUpDownController.text,
-        insulationCurlingUpDown: insulationCurlingUpDownController.text ==''? null:insulationCurlingUpDownController.text,
-        conductorBurr: conductorBurrController.text ==''? null:conductorBurrController.text,
-        windowGap: windowGapController.text==''? null:windowGapController.text,
-        crimpOnInsulation: crimpOnInsulationController.text=='' ? null:crimpOnInsulationController.text,
-        improperCrimping: improperCrimpingController.text ==''? null:improperCrimpingController.text,
-        tabBendOrTabOpen: tabBendTapOpenController.text ==''? null:tabBendTapOpenController.text,
-        bellMouthLessOrMore: bellmouthLessMoreController.text ==''? null:bellmouthLessMoreController.text,
-        cutOffLessOrMore: cutOffLessMoreController.text ==''? null:cutOffLessMoreController.text,
-        cutOffBurr: cutoffBurrController.text ==''? null:cutoffBurrController.text,
-        cutOffBend: cutoffBendController.text ==''? null:cutoffBendController.text,
-        insulationDamage: insulationDamageController.text ==''? null:insulationDamageController.text,
-        exposureStrands: exposureStrandsController.text ==''? null:exposureStrandsController.text,
-        strandsCut: strandsCutController.text ==''? null:strandsCutController.text,
-        brushLengthLessorMore: brushLengthLessMoreController.text ==''? null:brushLengthLessMoreController.text,
-        terminalCoppermark: terminalCopperMarkController.text ==''? null:terminalCopperMarkController.text,
-        setupRejections: setupRejectionsController.text ==''? null:setupRejectionsController.text,
-        terminalBackOut: terminalBackOutController.text ==''? null:terminalBackOutController.text,
-        cableDamage: cableDamageController.text ==''? null:cableDamageController.text,
-        crimpingPositionOutOrMissCrimp:
-            crimpingPositionOutMissCrimpController.text ==''? null:crimpingPositionOutMissCrimpController.text,
-        terminalSeamOpen: terminalSeamOpenController.text ==''? null:terminalSeamOpenController.text,
-        rollerMark: rollerMarkController.text ==''? null:rollerMarkController.text,
-        lengthLessOrLengthMore: lengthlessLengthMoreController.text ==''? null:lengthlessLengthMoreController.text,
-        gripperMark: gripperMarkController.text ==''? null:gripperMarkController.text,
-        endWire: endWireController.text ==''? null:endWireController.text,
-        endTerminal: endTerminalController.text ==''? null:endTerminalController.text,
-        entangledCable: entangledCableController.text ==''? null:entangledCableController.text,
-        troubleShootingRejections:
-            troubleshootingRejectionsController.text ==''? null:troubleshootingRejectionsController.text,
-        wireOverLoadRejectionsJam:
-            wireOverloadRejectionsController.text ==''? null:wireOverloadRejectionsController.text,
-        halfCurlingA: halfCurlingController.text ==''? null:halfCurlingController.text,
-        brushLengthLessOrMoreC:
-            brushLengthLessMoreController.text ==''? null:brushLengthLessMoreController.text, //TODO
-        exposureStrandsD: exposureStrandsController.text ==''? null:exposureStrandsController.text,
-        cameraPositionOutE: cameraPositionOutController.text ==''? null:cameraPositionOutController.text,
-        crimpOnInsulationF: crimpOnInsulationController.text ==''? null:crimpOnInsulationController.text,
-        cablePositionMovementG: cablePositionController.text ==''? null:cablePositionController.text,
-        crimpOnInsulationC: crimpOnInsulationController.text ==''? null:crimpOnInsulationController.text, //TODO
-        crimpingPositionOutOrMissCrimpD:
-            crimpingPositionOutMissCrimpController.text ==''? null:crimpingPositionOutMissCrimpController.text,
-        crimpPositionOut: crimpPositionOutController.text ==''? null:crimpPositionOutController.text,
-        stripPositionOut: stripPositionOutController.text ==''? null:stripPositionOutController.text,
-        offCurling: offcurlingController.text ==''? null:offcurlingController.text,
-        cFmPfmRejections: cfmpfmRejectionsController.text ==''? null:cfmpfmRejectionsController.text,
-        incomingIssue: incomingIssueController.text ==''? null:incomingIssueController.text,
-        bladeMark: bladeMarkController.text ==''? null:bladeMarkController.text,
-        crossCut: crossCutController.text ==''? null:crossCutController.text,
-        insulationBarrel: insulationBarrelController.text ==''? null:insulationBarrelController.text,
+        terminalDamage: int.parse(terminalDamangeController.text == ''
+            ? "0"
+            : terminalDamangeController.text),
+        terminalBend: int.parse(terminalBendController.text == ''
+            ? "0"
+            : terminalBendController.text),
+        terminalTwist: int.parse(terminalTwistController.text == ''
+            ? "0"
+            : terminalTwistController.text),
+        conductorCurlingUpDown: int.parse(
+            conductorCurlingUpDownController.text == ''
+                ? "0"
+                : conductorCurlingUpDownController.text),
+        insulationCurlingUpDown: int.parse(
+            insulationCurlingUpDownController.text == ''
+                ? "0"
+                : insulationCurlingUpDownController.text),
+        conductorBurr: int.parse(conductorBurrController.text == ''
+            ? "0"
+            : conductorBurrController.text),
+        windowGap: int.parse(
+            windowGapController.text == '' ? "0" : windowGapController.text),
+        crimpOnInsulation: int.parse(crimpOnInsulationController.text == ''
+            ? "0"
+            : crimpOnInsulationController.text),
+        improperCrimping: int.parse(improperCrimpingController.text == ''
+            ? "0"
+            : improperCrimpingController.text),
+        tabBendOrTabOpen: int.parse(
+            tabBendTapOpenController.text == '' ? "0" : tabBendTapOpenController.text),
+        bellMouthLessOrMore: int.parse(bellmouthLessMoreController.text == '' ? "0" : bellmouthLessMoreController.text),
+        cutOffLessOrMore: int.parse(cutOffLessMoreController.text == '' ? "0" : cutOffLessMoreController.text),
+        cutOffBurr: int.parse(cutoffBurrController.text == '' ? "0" : cutoffBurrController.text),
+        cutOffBend: int.parse(cutoffBendController.text == '' ? "0" : cutoffBendController.text),
+        insulationDamage: int.parse(insulationDamageController.text == '' ? "0" : insulationDamageController.text),
+        exposureStrands: int.parse(exposureStrandsController.text == '' ? "0" : exposureStrandsController.text),
+        strandsCut: int.parse(strandsCutController.text == '' ? "0" : strandsCutController.text),
+        brushLengthLessorMore: int.parse(brushLengthLessMoreController.text == '' ? "0" : brushLengthLessMoreController.text),
+        terminalCoppermark: int.parse(terminalCopperMarkController.text == '' ? "0" : terminalCopperMarkController.text),
+        setupRejections: int.parse(setupRejectionsController.text == '' ? "0" : setupRejectionsController.text),
+        terminalBackOut: int.parse(terminalBackOutController.text == '' ? "0" : terminalBackOutController.text),
+        cableDamage: int.parse(cableDamageController.text == '' ? "0" : cableDamageController.text),
+        crimpingPositionOutOrMissCrimp: int.parse(crimpingPositionOutMissCrimpController.text == '' ? "0" : crimpingPositionOutMissCrimpController.text),
+        terminalSeamOpen: int.parse(terminalSeamOpenController.text == '' ? "0" : terminalSeamOpenController.text),
+        rollerMark: int.parse(rollerMarkController.text == '' ? "0" : rollerMarkController.text),
+        lengthLessOrLengthMore: int.parse(lengthlessLengthMoreController.text == '' ? "0" : lengthlessLengthMoreController.text),
+        gripperMark: int.parse(gripperMarkController.text == '' ? "0" : gripperMarkController.text),
+        endWire: int.parse(endWireController.text == '' ? "0" : endWireController.text),
+        endTerminal: int.parse(endTerminalController.text == '' ? "0" : endTerminalController.text),
+        entangledCable: int.parse(entangledCableController.text == '' ? "0" : entangledCableController.text),
+        troubleShootingRejections: int.parse(troubleshootingRejectionsController.text == '' ? "0" : troubleshootingRejectionsController.text),
+        wireOverLoadRejectionsJam: int.parse(wireOverloadRejectionsController.text == '' ? "0" : wireOverloadRejectionsController.text),
+        halfCurlingA: int.parse(halfCurlingController.text == '' ? "0" : halfCurlingController.text),
+        brushLengthLessOrMoreC: int.parse(brushLengthLessMoreController.text == '' ? "0" : brushLengthLessMoreController.text), //TODO
+        exposureStrandsD: int.parse(exposureStrandsController.text == '' ? "0" : exposureStrandsController.text),
+        cameraPositionOutE: int.parse(cameraPositionOutController.text == '' ? "0" : cameraPositionOutController.text),
+        crimpOnInsulationF: int.parse(crimpOnInsulationController.text == '' ? "0" : crimpOnInsulationController.text),
+        cablePositionMovementG: int.parse(cablePositionController.text == '' ? "0" : cablePositionController.text),
+        crimpOnInsulationC: int.parse(crimpOnInsulationController.text == '' ? "0" : crimpOnInsulationController.text), //TODO
+        crimpingPositionOutOrMissCrimpD: int.parse(crimpingPositionOutMissCrimpController.text == '' ? "0" : crimpingPositionOutMissCrimpController.text),
+        crimpPositionOut: int.parse(crimpPositionOutController.text == '' ? "0" : crimpPositionOutController.text),
+        stripPositionOut: int.parse(stripPositionOutController.text == '' ? "0" : stripPositionOutController.text),
+        offCurling: int.parse(offcurlingController.text == '' ? "0" : offcurlingController.text),
+        cFmPfmRejections: int.parse(cfmpfmRejectionsController.text == '' ? "0" : cfmpfmRejectionsController.text),
+        incomingIssue: int.parse(incomingIssueController.text == '' ? "0" : incomingIssueController.text),
+        bladeMark: int.parse(bladeMarkController.text == '' ? "0" : bladeMarkController.text),
+        crossCut: int.parse(crossCutController.text == '' ? "0" : crossCutController.text),
+        insulationBarrel: int.parse(insulationBarrelController.text == '' ? "0" : insulationBarrelController.text),
         method: widget.method,
-        terminalFrom: '${terminalA.terminalPart}',
-        terminalTo: '${terminalB.terminalPart}');
+        terminalFrom: int.parse('${terminalA.terminalPart}'),
+        terminalTo: int.parse('${terminalB.terminalPart}'))
+    );
+  }
+
+  PostGenerateLabel calculateTotal(PostGenerateLabel label){
+    int total =
+     label.terminalDamage+
+     label.brushLengthLessOrMoreC+
+     label.setupRejections+
+     label.insulationDamage+
+     label.improperCrimping+
+     label.terminalBackOut+
+     label.terminalSeamOpen+
+     label.exposureStrands+
+     label.crimpingPositionOutOrMissCrimp+
+     label.terminalBend+
+     label.cableDamage+
+     label.bellMouthLessOrMore+
+     label.tabBendOrTabOpen+
+     label.exposureStrands+
+     label.entangledCable+
+     label.rollerMark+
+     label.cameraPositionOutE+
+     label.terminalTwist+
+     label.halfCurlingA+
+     label.conductorCurlingUpDown+
+     label.cutOffLessOrMore+
+     label.strandsCut+
+     label.troubleShootingRejections+
+     label.lengthLessOrLengthMore+
+     label.windowGap+
+     label.endWire+
+     label.insulationCurlingUpDown+
+     label.cutOffBurr+
+     label.brushLengthLessOrMoreC+
+     label.wireOverLoadRejectionsJam+
+     label.gripperMark+
+     label.cablePositionMovementG+
+     label.endTerminal+
+     label.conductorBurr+
+     label.cutOffBend+
+     label.terminalCoppermark+
+     label.crimpingPositionOutOrMissCrimp+
+     label.crimpOnInsulation+
+     label.crimpPositionOut+
+     label.stripPositionOut+
+     label.offCurling+
+     label.cFmPfmRejections+
+     label.incomingIssue+
+     label.crossCut+
+     label.insulationBarrel;
+
+     label.rejectedQuantity = total;
+     return label;
+      
   }
 
   Widget showBundles() {

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:molex/main.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
 import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
@@ -30,9 +31,11 @@ import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/model_api/transferBundle_model.dart';
 import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
 import 'package:molex/model_api/visualInspection/saveinspectedBundle_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  String baseUrl = "http://justerp.in:8080/wipts/";
+  String baseUrl = "${sharedPref.baseIp}";
+
   // String baseUrl = "http://10.221.46.8:8080/wipts/";
   // String baseUrl = "http://192.168.1.252:8080/wipts/";
 
@@ -363,20 +366,40 @@ class ApiService {
     var response = await http.post(url,
         body: postGenerateLabelToJson(postGenerateLabel), headers: headerList);
     print("response post generate label ${response.body}");
-    Fluttertoast.showToast(
-      msg: "Generate label status ${response.statusCode}",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
+
     if (response.statusCode == 200) {
-      ResponseGenerateLabel responseGenerateLabel =
-          responseGenerateLabelFromJson(response.body);
-      return responseGenerateLabel;
+      try {
+        ResponseGenerateLabel responseGenerateLabel =
+            responseGenerateLabelFromJson(response.body);
+        return responseGenerateLabel;
+      } catch (e) {
+        try {
+          ErrorGenerateLabel errorGenerateLabel =
+              errorGenerateLabelFromJson(response.body);
+          Fluttertoast.showToast(
+            msg: "Generate label :  ${errorGenerateLabel.statusMsg}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+          return null;
+        } catch (e) {
+          return null;
+        }
+      }
     } else {
+      Fluttertoast.showToast(
+        msg: "Generate label status ${response.statusCode}",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       return null;
     }
   }
@@ -470,7 +493,8 @@ class ApiService {
   }
 
 // Post ViSchedule data
-  Future<bool> postVIinspectedBundle({ViInspectedbudle viInspectedbudle } ) async {
+  Future<bool> postVIinspectedBundle(
+      {ViInspectedbudle viInspectedbudle}) async {
     var url = Uri.parse(baseUrl +
         'molex/visual-inspection/save-visual-inspected-bundle-quantity');
     var response = await http.get(url);
@@ -564,19 +588,17 @@ class ApiService {
     }
   }
 
-    Future<List<Userid>> getUserList() async {
-    var url =
-        Uri.parse(baseUrl + 'molex/employee/get-user-id');
+  Future<List<Userid>> getUserList() async {
+    var url = Uri.parse(baseUrl + 'molex/employee/get-user-id');
     var response = await http.get(url);
     print('Post Rejected status Code: ${response.statusCode}');
     print('Post Rejected response body :${response.body}');
     if (response.statusCode == 200) {
       GetUser getuserId = getUserFromJson(response.body);
-     List<Userid> userIdList = getuserId.data.userId;
-     return userIdList;
+      List<Userid> userIdList = getuserId.data.userId;
+      return userIdList;
     } else {
       return null;
     }
   }
-
 }

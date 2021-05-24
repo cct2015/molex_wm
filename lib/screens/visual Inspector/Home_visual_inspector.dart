@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/visualInspection/VI_scheduler_model.dart';
-import 'package:molex/model_api/visualInspection/postViSchedule_model.dart';
-
 import 'package:molex/models/vi_schedule.dart';
-import 'package:molex/screens/navigation.dart';
 import 'package:molex/screens/visual%20Inspector/VI_WIP_home.dart';
-import 'package:molex/screens/visual%20Inspector/VIscanWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 

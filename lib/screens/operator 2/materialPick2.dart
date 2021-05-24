@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -589,7 +588,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                 return e.partNumber;
               }).toList();
               print(scannedPartNo.toSet());
-              if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
+              if (true) {
                 _showConfirmationDialog();
               } else {
                 Fluttertoast.showToast(

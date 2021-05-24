@@ -75,70 +75,69 @@ class PostGenerateLabel {
         this.terminalTo,
     });
 
-
-    String finishedGoods;
-    String purchaseorder;
-    String orderIdentification;
-    String cablePartNumber;
-    String cutLength;
+    int finishedGoods;
+    dynamic purchaseorder;
+    int orderIdentification;
+    int cablePartNumber;
+    int cutLength;
     String color;
-    String scheduleIdentification;
-    String scheduledQuantity;
+    int scheduleIdentification;
+    int scheduledQuantity;
     String machineIdentification;
-    String operatorIdentification;
+    int operatorIdentification;
     String bundleIdentification;
-    String rejectedQuantity;
-    String terminalDamage;
-    String terminalBend;
-    String terminalTwist;
-    String conductorCurlingUpDown;
-    String insulationCurlingUpDown;
-    String conductorBurr;
-    String windowGap;
-    String crimpOnInsulation;
-    String improperCrimping;
-    String tabBendOrTabOpen;
-    String bellMouthLessOrMore;
-    String cutOffLessOrMore;
-    String cutOffBurr;
-    String cutOffBend;
-    String insulationDamage;
-    String exposureStrands;
-    String strandsCut;
-    String brushLengthLessorMore;
-    String terminalCoppermark;
-    String setupRejections;
-    String terminalBackOut;
-    String cableDamage;
-    String crimpingPositionOutOrMissCrimp;
-    String terminalSeamOpen;
-    String rollerMark;
-    String lengthLessOrLengthMore;
-    String gripperMark;
-    String endWire;
-    String endTerminal;
-    String entangledCable;
-    String troubleShootingRejections;
-    String wireOverLoadRejectionsJam;
-    String halfCurlingA;
-    String brushLengthLessOrMoreC;
-    String exposureStrandsD;
-    String cameraPositionOutE;
-    String crimpOnInsulationF;
-    String cablePositionMovementG;
-    String crimpOnInsulationC;
-    String crimpingPositionOutOrMissCrimpD;
-    String crimpPositionOut;
-    String stripPositionOut;
-    String offCurling;
-    String cFmPfmRejections;
-    String incomingIssue;
-    String bladeMark;
-    String crossCut;
-    String insulationBarrel;
+    int rejectedQuantity;
+    int terminalDamage;
+    int terminalBend;
+    int terminalTwist;
+    int conductorCurlingUpDown;
+    int insulationCurlingUpDown;
+    int conductorBurr;
+    int windowGap;
+    int crimpOnInsulation;
+    int improperCrimping;
+    int tabBendOrTabOpen;
+    int bellMouthLessOrMore;
+    int cutOffLessOrMore;
+    int cutOffBurr;
+    int cutOffBend;
+    int insulationDamage;
+    int exposureStrands;
+    int strandsCut;
+    int brushLengthLessorMore;
+    int terminalCoppermark;
+    int setupRejections;
+    int terminalBackOut;
+    int cableDamage;
+    int crimpingPositionOutOrMissCrimp;
+    int terminalSeamOpen;
+    int rollerMark;
+    int lengthLessOrLengthMore;
+    int gripperMark;
+    int endWire;
+    int endTerminal;
+    int entangledCable;
+    int troubleShootingRejections;
+    int wireOverLoadRejectionsJam;
+    int halfCurlingA;
+    int brushLengthLessOrMoreC;
+    int exposureStrandsD;
+    int cameraPositionOutE;
+    int crimpOnInsulationF;
+    int cablePositionMovementG;
+    int crimpOnInsulationC;
+    int crimpingPositionOutOrMissCrimpD;
+    int crimpPositionOut;
+    int stripPositionOut;
+    int offCurling;
+    int cFmPfmRejections;
+    int incomingIssue;
+    int bladeMark;
+    int crossCut;
+    int insulationBarrel;
     String method;
-    String terminalFrom;
-    String terminalTo;
+    int terminalFrom;
+    int terminalTo;
 
     factory PostGenerateLabel.fromJson(Map<String, dynamic> json) => PostGenerateLabel(
         finishedGoods: json["finishedGoods"],
@@ -373,5 +372,52 @@ class GeneratedLabel {
         "bundleQuantity": bundleQuantity,
         "routeNo": routeNo,
         "bundleId": bundleId,
+    };
+}
+// To parse this JSON data, do
+//
+//     final errorGenerateLabel = errorGenerateLabelFromJson(jsonString);
+
+
+
+ErrorGenerateLabel errorGenerateLabelFromJson(String str) => ErrorGenerateLabel.fromJson(json.decode(str));
+
+String errorGenerateLabelToJson(ErrorGenerateLabel data) => json.encode(data.toJson());
+
+class ErrorGenerateLabel {
+    ErrorGenerateLabel({
+        this.status,
+        this.statusMsg,
+        this.errorCode,
+        this.data,
+    });
+
+    String status;
+    String statusMsg;
+    String errorCode;
+    Data1 data;
+
+    factory ErrorGenerateLabel.fromJson(Map<String, dynamic> json) => ErrorGenerateLabel(
+        status: json["status"],
+        statusMsg: json["statusMsg"],
+        errorCode: json["errorCode"],
+        data: Data1.fromJson(json["data"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "status": status,
+        "statusMsg": statusMsg,
+        "errorCode": errorCode,
+        "data": data.toJson(),
+    };
+}
+
+class Data1 {
+    Data1();
+
+    factory Data1.fromJson(Map<String, dynamic> json) => Data1(
+    );
+
+    Map<String, dynamic> toJson() => {
     };
 }

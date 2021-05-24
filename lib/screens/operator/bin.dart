@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/models/bundle_bun.dart';
-import 'package:molex/screens/operator/loc.dart';
 import 'package:molex/screens/operator/location.dart';
 
 class Bin extends StatefulWidget {
