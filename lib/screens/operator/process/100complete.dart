@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/model_api/process1/100Complete_model.dart';
 import 'package:molex/model_api/schedular_model.dart';
 import 'package:molex/model_api/startProcess_model.dart';
 import 'package:molex/screens/operator/location.dart';
+import 'package:molex/service/apiService.dart';
 
 class FullyComplete extends StatefulWidget {
   String userId;
   MachineDetails machine;
   Schedule schedule;
-  FullyComplete({this.userId, this.machine,this.schedule});
+  String bundleId;
+  FullyComplete({this.userId, this.machine,this.schedule,this.bundleId});
   @override
   _FullyCompleteState createState() => _FullyCompleteState();
 }
@@ -95,8 +98,10 @@ class _FullyCompleteState extends State<FullyComplete> {
   TextEditingController meetingController = new TextEditingController();
   TextEditingController systemFaultController = new TextEditingController();
   String _output = '';
+  ApiService apiService;
   @override
   void initState() {
+    apiService = new ApiService();
     super.initState();
   }
 
@@ -155,7 +160,25 @@ class _FullyCompleteState extends State<FullyComplete> {
                                 widget.schedule.scheduledQuantity ?? "0",
                             scheduleStatus: "complete",
                           );
-                          Navigator.push(
+                          FullyCompleteModel fullyComplete = FullyCompleteModel(
+                            finishedGoodsNumber: int.parse(widget.schedule.finishedGoodsNumber),
+                            purchaseOrder: int.parse(widget.schedule.orderId),
+                            orderId: int.parse(widget.schedule.orderId),
+                            cablePartNumber: int.parse(widget.schedule.cablePartNumber),
+                            length: int.parse(widget.schedule.length),
+                            color: widget.schedule.color,
+                            scheduledStatus: "Complete",
+                            scheduledId: int.parse(widget.schedule.scheduledId),
+                            scheduledQuantity: int.parse(widget.schedule.scheduledQuantity),
+                            machineIdentification: widget.machine.machineNumber,
+                            //TODO bundle ID
+                            firstPieceAndPatrol: firstPatrolController.text==''?0:int.parse(firstPatrolController.text),
+                            applicatorChangeover: firstPatrolController.text==''?0:int.parse(applicatorChangeoverController.text),
+
+                          );
+                          apiService.post100Complete(fullyComplete).then((value) {
+                            if(value){
+                                 Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Location(
@@ -163,6 +186,11 @@ class _FullyCompleteState extends State<FullyComplete> {
                                       machine: widget.machine,
                                     )),
                           );
+                            }else{
+
+                            }
+                          });
+                       
                         });
                       },
                     ),

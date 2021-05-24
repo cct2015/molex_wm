@@ -907,14 +907,12 @@ class _GenerateLabelState extends State<GenerateLabel> {
                                 getPostGeneratelabel(), bundleQty.text)
                             .then((value) {
                           if (value != null) {
-                            setState(() {
-                              label = value.data.generateLabel;
-                            });
+                        
                             DateTime now = DateTime.now();
 
                             _print(
-                                // ipaddress: "192.168.1.130",
-                                ipaddress: "172.25.16.53",
+                                ipaddress: "192.168.1.130",
+                                // ipaddress: "172.25.16.53",
                                 bq: bundleQty.text,
                                 qr: "${label.bundleId}",
                                 routenumber1: "${label.routeNo}",
@@ -933,8 +931,12 @@ class _GenerateLabelState extends State<GenerateLabel> {
                                 terminalto: "${label.terminalTo}");
                                   clear();
 
-                          labelGenerated = !labelGenerated;
+                        
+                              setState(() {
+                                  labelGenerated = !labelGenerated;
                           status = Status.scanBin;
+                              label = value.data.generateLabel;
+                            });
                           }
                         
                         });
@@ -1143,8 +1145,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           DateTime now = DateTime.now();
                           //TODO
                           _print(
-                              // ipaddress: "192.168.1.130",
-                              ipaddress: "172.26.59.14",
+                              ipaddress: "192.168.1.130",
+                              // ipaddress: "172.26.59.14",
                               bq: e.bundleQty,
                               qr: "${e.label.bundleId}",
                               routenumber1: "${e.label.routeNo}",
@@ -1299,7 +1301,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 onPrimary: Colors.white,
               ),
               child: Text(
-                'Scan Bundle',
+                'Scan Bin',
               ),
               onPressed: () {
                 if (_binController.text.length > 0) {

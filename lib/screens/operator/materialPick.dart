@@ -127,7 +127,6 @@ class _MaterialPickState extends State<MaterialPick> {
         ),
         elevation: 0,
         actions: [
-            
           //machineID
           Container(
             padding: EdgeInsets.all(1),
@@ -924,65 +923,40 @@ class _MaterialPickState extends State<MaterialPick> {
                         (states) => Colors.green),
                   ),
                   onPressed: () {
-                    apiService.postRawmaterial(selectdItems).then((value) {
-                      if (value) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProcessPage(
-                                    schedule: widget.schedule,
-                                    userId: widget.userId,
-                                    machine: widget.machine,
-                                  )),
-                        );
-                      } else {}
-                    });
+                    int a = 0;
+                    for (PostRawMaterial material in selectdItems) {
+                      apiService.postRawmaterial([material]).then((value) {
+                        if (value) {
+                          a = a + 1;
+                          print("a : $a");
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => ProcessPage(
+                          //             schedule: widget.schedule,
+                          //             userId: widget.userId,
+                          //             machine: widget.machine,
+                          //           )),
+                          // );
+                          if (a == 3) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProcessPage(
+                                        schedule: widget.schedule,
+                                        userId: widget.userId,
+                                        machine: widget.machine,
+                                      )),
+                            );
+                          }
+                        } else {
+                          print("error");
+                        }
+                      });
+                    }
+                    print("a : $a");
                   },
                   child: Text('       Confirm      ')),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _notAllRawMaterial() async {
-    Future.delayed(
-      const Duration(milliseconds: 50),
-      () {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-      },
-    );
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return Center(
-          child: AlertDialog(
-            title: Center(child: Text('Raw Material Not Added')),
-            content: Text('Add all raw material to start process'),
-            actions: <Widget>[
-              ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.green),
-                  ),
-                  onPressed: () {
-                    apiService.postRawmaterial(selectdItems).then((value) {
-                      if (value) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProcessPage(
-                                    schedule: widget.schedule,
-                                    userId: widget.userId,
-                                    machine: widget.machine,
-                                  )),
-                        );
-                      } else {}
-                    });
-                  },
-                  child: Text('        Add       ')),
             ],
           ),
         );

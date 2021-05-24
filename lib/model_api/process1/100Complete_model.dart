@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final fullyComplete = fullyCompleteFromJson(jsonString);
+//     final FullyCompleteModel = FullyCompleteModelFromJson(jsonString);
 
 import 'dart:convert';
 
-FullyComplete fullyCompleteFromJson(String str) => FullyComplete.fromJson(json.decode(str));
+FullyCompleteModel fullyCompleteModelFromJson(String str) => FullyCompleteModel.fromJson(json.decode(str));
 
-String fullyCompleteToJson(FullyComplete data) => json.encode(data.toJson());
+String fullyCompleteModelToJson(FullyCompleteModel data) => json.encode(data.toJson());
 
-class FullyComplete {
-    FullyComplete({
+class FullyCompleteModel {
+    FullyCompleteModel({
         this.finishedGoodsNumber,
         this.purchaseOrder,
         this.orderId,
@@ -39,7 +39,7 @@ class FullyComplete {
     int firstPieceAndPatrol;
     int applicatorChangeover;
 
-    factory FullyComplete.fromJson(Map<String, dynamic> json) => FullyComplete(
+    factory FullyCompleteModel.fromJson(Map<String, dynamic> json) => FullyCompleteModel(
         finishedGoodsNumber: json["finishedGoodsNumber"],
         purchaseOrder: json["purchaseOrder"],
         orderId: json["orderId"],

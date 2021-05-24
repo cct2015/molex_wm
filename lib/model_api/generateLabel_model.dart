@@ -279,6 +279,11 @@ class PostGenerateLabel {
 
 
 
+// To parse this JSON data, do
+//
+//     final responseGenerateLabel = responseGenerateLabelFromJson(jsonString);
+
+
 ResponseGenerateLabel responseGenerateLabelFromJson(String str) => ResponseGenerateLabel.fromJson(json.decode(str));
 
 String responseGenerateLabelToJson(ResponseGenerateLabel data) => json.encode(data.toJson());
@@ -338,17 +343,19 @@ class GeneratedLabel {
         this.bundleQuantity,
         this.routeNo,
         this.bundleId,
+        this.status,
     });
 
     int finishedGoods;
     int cablePartNumber;
-    dynamic cutLength;
-    dynamic wireGauge;
-    dynamic terminalFrom;
-    dynamic terminalTo;
+    int cutLength;
+    String wireGauge;
+    int terminalFrom;
+    int terminalTo;
     int bundleQuantity;
-    dynamic routeNo;
+    String routeNo;
     String bundleId;
+    int status;
 
     factory GeneratedLabel.fromJson(Map<String, dynamic> json) => GeneratedLabel(
         finishedGoods: json["finishedGoods"],
@@ -360,6 +367,7 @@ class GeneratedLabel {
         bundleQuantity: json["bundleQuantity"],
         routeNo: json["routeNo"],
         bundleId: json["bundleId"],
+        status: json["status"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -372,8 +380,10 @@ class GeneratedLabel {
         "bundleQuantity": bundleQuantity,
         "routeNo": routeNo,
         "bundleId": bundleId,
+        "status": status,
     };
 }
+
 // To parse this JSON data, do
 //
 //     final errorGenerateLabel = errorGenerateLabelFromJson(jsonString);

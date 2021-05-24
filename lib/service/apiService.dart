@@ -24,6 +24,7 @@ import 'package:molex/model_api/materialTrackingCableDetails_model.dart';
 import 'package:molex/model_api/materialTrackingTerminalA_model.dart';
 import 'package:molex/model_api/materialTrackingTerminalB_model.dart';
 import 'package:molex/model_api/partiallyComplete_model.dart';
+import 'package:molex/model_api/process1/100Complete_model.dart';
 import 'package:molex/model_api/rawMaterialDetail_model.dart';
 import 'package:molex/model_api/rawMaterial_modal.dart';
 import 'package:molex/model_api/schedular_model.dart';
@@ -368,6 +369,15 @@ class ApiService {
     print("response post generate label ${response.body}");
 
     if (response.statusCode == 200) {
+       Fluttertoast.showToast(
+        msg: "Generate label status ${response.statusCode}",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       try {
         ResponseGenerateLabel responseGenerateLabel =
             responseGenerateLabelFromJson(response.body);
@@ -414,12 +424,13 @@ class ApiService {
     var response = await http.post(url,
         body: transferBundleToBinToJson(transferBundleToBin),
         headers: headerList);
+          print("status post Transfer Bundle to bin ${response.statusCode}");
     print("response post Transfer Bundle to bin ${response.body}");
     if (response.statusCode == 200) {
       BundleTransferToBinTracking b =
           responseTransferBundletoBinFromJson(response.body)
               .data
-              .bundleTransferToBinTracking[0];
+              .bundleTransferToBinTracking;
       return b;
     } else {
       return null;
@@ -430,14 +441,24 @@ class ApiService {
   //TODO
   // Click on 9999 return value bndle id List api Json missing
   // 100% complete  post method
-  Future<bool> post100Complete(PostFullyComplete postFullyComplete) async {
+  Future<bool> post100Complete(FullyCompleteModel postFullyComplete) async {
     var url =
         Uri.parse(baseUrl + 'molex/production-report/save-production-report');
     var response =
-        await http.post(url, body: postFullyCompleteToJson(postFullyComplete));
+        await http.post(url, body: fullyCompleteModelToJson(postFullyComplete));
+    Fluttertoast.showToast(
+      msg: "100% Complete Post status ${response.statusCode}",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
     if (response.statusCode == 200) {
       return true;
     } else {
+      
       return false;
     }
   }
