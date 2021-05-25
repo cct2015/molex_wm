@@ -352,7 +352,7 @@ class _ViScheduleTableState extends State<ViScheduleTable> {
             .where((element) => element.orderId.startsWith(widget.query))
             .toList();
         break;
-      case "FG Part No.":
+      case "FG No.":
         return scheduleList
             .where((element) => element.fgNo.startsWith(widget.query))
             .toList();

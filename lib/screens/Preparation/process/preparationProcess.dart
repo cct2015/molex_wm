@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/getuserId.dart';
 import 'package:molex/models/preparationScan.dart';
 import 'package:molex/screens/Preparation/process/bundlePrep.dart';
 import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 
 class Preparationprocess extends StatefulWidget {
   String userId;
@@ -21,8 +23,23 @@ class _PreparationprocessState extends State<Preparationprocess> {
   FocusNode _bundleIdScanFocus = new FocusNode();
   String userId;
   List<PreparationScan> preparationList = [];
-
+  ApiService apiService;
   String bundleId;
+  List<String> usersList = [];
+  getUser() {
+    apiService = new ApiService();
+    apiService.getUserList().then((value) {
+      setState(() {
+        usersList = value.map((e) => e.empId).toList();
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +58,6 @@ class _PreparationprocessState extends State<Preparationprocess> {
         ),
         elevation: 0,
         actions: [
-  
-
           //machineID
           Container(
             padding: EdgeInsets.all(1),
@@ -181,10 +196,42 @@ class _PreparationprocessState extends State<Preparationprocess> {
         onPressed: () {
           if (userId.length > 0 && bundleId.length > 0) {
             setState(() {
-              preparationList
-                  .add(PreparationScan(employeeId: userId, bundleId: bundleId,status: 'In Process',binId: null ));
-              _bundleIdScanController.clear();
-              bundleId = '';
+              print("userList $usersList ");
+              if (usersList.contains(userId)) {
+                apiService.getBundleDetail(bundleId).then((value) {
+                  if (value != null) {
+                    setState(() {
+                       preparationList.add(PreparationScan(
+                        employeeId: userId,
+                        bundleId: bundleId,
+                        bundleDetail: value,
+                        status: 'In Process',
+                        binId: value.binId.toString()));
+                    _bundleIdScanController.clear();
+                    bundleId = '';
+                    });
+                   
+                  } else {
+                     Fluttertoast.showToast(
+                    msg: "Invalid Bundle Id",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                  }
+                });
+              } else {
+                Fluttertoast.showToast(
+                    msg: "Invalid user",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              }
             });
           } else {
             Fluttertoast.showToast(
@@ -370,7 +417,6 @@ class _PreparationprocessState extends State<Preparationprocess> {
                     ),
                   ),
                 ),
-                
                 DataColumn(
                     label: Text(
                   'Bundle Id',
@@ -378,7 +424,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                     textStyle: TextStyle(fontSize: 12),
                   ),
                 )),
-                 DataColumn(
+                DataColumn(
                   label: Text(
                     'BIN Id',
                     style: GoogleFonts.poppins(
@@ -386,7 +432,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                     ),
                   ),
                 ),
-                 DataColumn(
+                DataColumn(
                   label: Text(
                     'Status',
                     style: GoogleFonts.poppins(
@@ -413,11 +459,11 @@ class _PreparationprocessState extends State<Preparationprocess> {
                         e.bundleId,
                         style: TextStyle(fontSize: 12),
                       )),
-                       DataCell(Text(
-                        e.binId??'-',
+                      DataCell(Text(
+                        e.binId ?? '-',
                         style: TextStyle(fontSize: 12),
                       )),
-                       DataCell(Text(
+                      DataCell(Text(
                         e.status,
                         style: TextStyle(fontSize: 12),
                       )),
@@ -430,6 +476,7 @@ class _PreparationprocessState extends State<Preparationprocess> {
                                       bundleId: e.bundleId,
                                       userId: widget.userId,
                                       machineId: widget.machineId,
+                                      bundleDetail: e.bundleDetail
                                     )),
                           );
                         },

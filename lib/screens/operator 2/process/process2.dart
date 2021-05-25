@@ -1425,9 +1425,9 @@ class _DetailState extends State<Detail> {
                 iconEnabledColor: Colors.black,
 
                 items: <String>[
-                  'Terminal A Crimping',
-                  'Terminal B Crimping',
-                  'Terminal A,B Crimping',
+                  'Terminal From Crimping',
+                  'Terminal To Crimping',
+                  'Terminal From,To Crimping',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,

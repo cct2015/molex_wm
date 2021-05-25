@@ -6,6 +6,7 @@ import 'package:molex/main.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
 import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
+import 'package:molex/model_api/Transfer/getBinDetail.dart';
 import 'package:molex/model_api/crimping/bundleDetail.dart';
 import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/crimping/getbundleQtyCrimp.dart';
@@ -398,7 +399,7 @@ class ApiService {
 
   //Transfer Bundle to bin
   Future<BundleTransferToBinTracking> postTransferBundletoBin(
-      {TransferBundleToBin transferBundleToBin}) async {
+      {List<TransferBundleToBin> transferBundleToBin}) async {
     var url = Uri.parse(
         baseUrl + 'molex/bin-tracking/transfer-bundle-to-bin-tracking');
     print(
@@ -421,13 +422,13 @@ class ApiService {
 
   //Post transfer bin to location
   Future<BinToLocationTransfer> postTransferBinToLocation(
-      TransferBinToLocation transferBinToLocation) async {
+      List<TransferBinToLocation> transferBinToLocationList) async {
     var url =
         Uri.parse(baseUrl + 'molex/bin-tracking/update-bin-location-in-bin');
     print(
-        'post Transfer BIn to Location :${transferBinToLocationToJson(transferBinToLocation)} ');
+        'post Transfer BIn to Location :${transferBinToLocationToJson(transferBinToLocationList)} ');
     var response = await http.post(url,
-        body: transferBinToLocationToJson(transferBinToLocation),
+        body: transferBinToLocationToJson(transferBinToLocationList),
         headers: headerList);
     print("status post Transfer Bin To Location ${response.statusCode}");
     print("response post Transfer Bin to Location ${response.body}");
@@ -524,7 +525,7 @@ class ApiService {
       {ViInspectedbudle viInspectedbudle}) async {
     var url = Uri.parse(baseUrl +
         'molex/visual-inspection/save-visual-inspected-bundle-quantity');
-    var response = await http.get(url);
+    var response = await http.post(url,body:viInspectedbudleQtyToJson(viInspectedbudle),headers: headerList );
     print('postVIinspectedBundle status Code: ${response.statusCode}');
     log('postVIinspectedBundle status body: ${response.body}');
     print(response.body);
@@ -643,14 +644,18 @@ class ApiService {
   //Get bundle Detail
   Future<BundleData> getBundleDetail(String bundleId) async {
     var url = Uri.parse(
-        baseUrl + '/molex/material-codinator/getbundle?bundleId=$bundleId');
+        baseUrl + 'molex/material-codinator/getbundle?bundleId=$bundleId');
     var response = await http.get(url);
     print('Get Bundle Data status Code: ${response.statusCode}');
     print('Get Bundle Data  response body :${response.body}');
     if (response.statusCode == 200) {
+      try{
       GetBundleDetail getBundleDetail = getBundleDetailFromJson(response.body);
       BundleData bundleDetail = getBundleDetail.data.bundleData;
       return bundleDetail;
+      }catch(e){
+        return null;
+      }
     } else {
       Fluttertoast.showToast(
         msg: "Unable to Find Bundle",
@@ -664,4 +669,29 @@ class ApiService {
       return null;
     }
   }
+  Future<List<BundleDetail>> getBundlesinBin(String binId) async {
+    var url = Uri.parse(
+        baseUrl + 'molex/material-codinator/material-codinator-ytbp-data?binId=$binId');
+    var response = await http.get(url);
+    log('Get Bundles From Bin status Code: ${response.statusCode}');
+    log('Get Bundles From Bin  response body :${response.body}');
+    if (response.statusCode == 200) {
+      GetBinDetail getBinDetail= getBinDetailFromJson(response.body);
+      List<BundleDetail> bundleList = getBinDetail.data.materialCodinatorSchedulerData;
+      return bundleList;
+    } else {
+      Fluttertoast.showToast(
+        msg: "Unable to Find Bin",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      return null;
+    }
+  }
+
+
 }

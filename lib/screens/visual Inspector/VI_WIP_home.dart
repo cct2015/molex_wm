@@ -71,12 +71,12 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
 
   int selectedindex = 0;
   ApiService apiService;
-  List<Userid> usersList = [];
+  List<String> usersList = [];
   getUser() {
     apiService = new ApiService();
     apiService.getUserList().then((value) {
       setState(() {
-        usersList = value;
+        usersList = value.map((e) => e.empId).toList();
       });
     });
   }
@@ -90,8 +90,7 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
 
   @override
   Widget build(BuildContext context) {
-        SystemChannels.textInput
-                                .invokeMethod('TextInput.hide');
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Scaffold(
       appBar: AppBar(
@@ -106,8 +105,6 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
         elevation: 0,
         automaticallyImplyLeading: status == Status.dash ? true : false,
         actions: [
-         
-
           //machineID
           Container(
             padding: EdgeInsets.all(1),
@@ -235,24 +232,40 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
         onPressed: () {
           if (userId.length > 0 && bundleId.length > 0) {
             setState(() {
-              if (usersList.contains(Userid(empId: userId))) {
-                viIspectionBundleList.add(
-                  ViInspectedbudle(
-                      bundleIdentification: bundleId,
-                      employeeId: userId,
-                      status: "Not Completed"),
-                );
-              }else{
-                 Fluttertoast.showToast(
-                msg: "Invalid userI",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0);
-          
-
+              print(" USerList $userId $usersList");
+              if (usersList.contains(userId)) {
+                apiService.getBundleDetail(bundleId).then((value) {
+                  if (value != null) {
+                    setState(() {
+                                   viIspectionBundleList.add(
+                      ViInspectedbudle(
+                          bundleIdentification: value.bundleIdentification.toString(),
+                          binId: value.binId.toString(),
+                          employeeId: userId,
+                          status: "Not Completed"),
+                    );
+                    });
+       
+                  }else{
+                     Fluttertoast.showToast(
+                    msg: "Invalid Bundle Id",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                  }
+                });
+              } else {
+                Fluttertoast.showToast(
+                    msg: "Invalid user",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
               }
               _bundleIdScanController.clear();
               bundleId = '';

@@ -1,7 +1,11 @@
+import 'package:molex/model_api/Transfer/getBinDetail.dart';
+import 'package:molex/model_api/crimping/bundleDetail.dart';
+
 class PreparationScan{
   String employeeId;
   String bundleId;
   String status;
   String binId;
-  PreparationScan({this.bundleId,this.employeeId,this.status,this.binId});
+  BundleData bundleDetail;
+  PreparationScan({this.bundleId,this.bundleDetail,this.employeeId,this.status,this.binId});
 }

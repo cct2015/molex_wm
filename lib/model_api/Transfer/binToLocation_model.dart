@@ -4,9 +4,9 @@
 
 import 'dart:convert';
 
-TransferBinToLocation transferBinToLocationFromJson(String str) => TransferBinToLocation.fromJson(json.decode(str));
+List<TransferBinToLocation> transferBinToLocationFromJson(String str) => List<TransferBinToLocation>.from(json.decode(str).map((x) => TransferBinToLocation.fromJson(x)));
 
-String transferBinToLocationToJson(TransferBinToLocation data) => json.encode(data.toJson());
+String transferBinToLocationToJson(List<TransferBinToLocation> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class TransferBinToLocation {
     TransferBinToLocation({
@@ -35,6 +35,7 @@ class TransferBinToLocation {
         "locationId": locationId,
     };
 }
+
 
 // To parse this JSON data, do
 //

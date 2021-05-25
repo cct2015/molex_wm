@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Transfer/binToLocation_model.dart';
+import 'package:molex/model_api/Transfer/getBinDetail.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/screens/operator/Homepage.dart';
 import 'package:molex/screens/widgets/time.dart';
@@ -274,42 +275,35 @@ class _LocationState extends State<Location> {
             ),
             onPressed: () {
               ApiService apiService = new ApiService();
-              TransferBinToLocation transferBinToLocation =
-                  TransferBinToLocation(
-                locationId: locationId,
-                binIdentification: binId,
-                userId: widget.userId,
-              );
-              apiService
-                  .postTransferBinToLocation(transferBinToLocation)
-                  .then((value) {
-                if (value != null) {
-                  BinToLocationTransfer binToLocationTransfer = value;
-                  Fluttertoast.showToast(
-                      msg:
-                          "Transfered bIN-${binToLocationTransfer.binId} to Bin- ${binToLocationTransfer.locationId ?? ''}",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
+              apiService.getBundlesinBin(binId).then((value) {
+                if(value!=null){
+ for (BundleDetail bundle in value) {
                   setState(() {
-                    transferList.add(transferBinToLocation);
-                    _binController.clear();
-                    binId = null;
+                    transferList.add(TransferBinToLocation(
+                        userId: widget.userId,
+                        binIdentification: binId,
+                        bundleId: bundle.bundleIdentification,
+                        locationId: locationId));
                   });
-                } else {
-                  Fluttertoast.showToast(
-                      msg: "Unable to Transfer",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
                 }
+                }else{
+                   Fluttertoast.showToast(
+                          msg: "Invalid Bin Id",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                }
+               
               });
+
+              // setState(() {
+              //   _binController.clear();
+              //   binId = null;
+              // });
             },
             child: Text('Confirm Transfer')),
       ),
@@ -461,27 +455,32 @@ class _LocationState extends State<Location> {
       child: Column(
         children: [
           DataTable(
-              columnSpacing: 30,
+              columnSpacing: 40,
               columns: <DataColumn>[
                 DataColumn(
                   label: Text('No.',
                       style: GoogleFonts.openSans(
-                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
+                          textStyle: TextStyle(fontWeight: FontWeight.w600))),
                 ),
                 DataColumn(
                   label: Text('Location Id',
                       style: GoogleFonts.openSans(
-                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
+                          textStyle: TextStyle(fontWeight: FontWeight.w600))),
                 ),
                 DataColumn(
                   label: Text('Bin Id',
                       style: GoogleFonts.openSans(
-                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
+                          textStyle: TextStyle(fontWeight: FontWeight.w600))),
+                ),
+                DataColumn(
+                  label: Text('Bundles',
+                      style: GoogleFonts.openSans(
+                          textStyle: TextStyle(fontWeight: FontWeight.w600))),
                 ),
                 DataColumn(
                   label: Text('Remove',
                       style: GoogleFonts.openSans(
-                          textStyle: TextStyle(fontWeight: FontWeight.bold))),
+                          textStyle: TextStyle(fontWeight: FontWeight.w600))),
                 ),
               ],
               rows: transferList
@@ -492,6 +491,8 @@ class _LocationState extends State<Location> {
                       DataCell(Text(e.locationId ?? '',
                           style: GoogleFonts.openSans(textStyle: TextStyle()))),
                       DataCell(Text(e.binIdentification ?? '',
+                          style: GoogleFonts.openSans(textStyle: TextStyle()))),
+                      DataCell(Text(e.bundleId ?? '',
                           style: GoogleFonts.openSans(textStyle: TextStyle()))),
                       DataCell(
                         IconButton(
@@ -510,6 +511,36 @@ class _LocationState extends State<Location> {
                   )
                   .toList())
         ],
+      ),
+    );
+  }
+
+  void addBundles(
+      String locationId, String binId, List<BundleDetail> bundleList) {}
+
+  Widget showBundles(String binId) {
+    return Expanded(
+      child: FutureBuilder(
+        future: apiService.getBundlesinBin(binId),
+        builder: (context, snapshot) {
+          List<BundleDetail> bundleList = snapshot.data ?? [];
+          if (snapshot.hasData) {
+            return Container(
+              height: 300,
+              width: 150,
+              color: Colors.red,
+            );
+            // return ListView.builder(
+            //     itemCount: bundleList.length,
+            //     itemBuilder: (context, index) {
+            //       return Text("adsadfs");
+            //     });
+          } else {
+            return Container(
+              child: Text("Bundles"),
+            );
+          }
+        },
       ),
     );
   }
@@ -551,6 +582,7 @@ class _LocationState extends State<Location> {
                   ),
                   onPressed: () {
                     ApiService apiService = new ApiService();
+
                     Future.delayed(
                       const Duration(milliseconds: 50),
                       () {
@@ -558,15 +590,31 @@ class _LocationState extends State<Location> {
                       },
                     );
                     apiService
-                        .getmachinedetails(widget.machine.machineNumber)
+                        .postTransferBinToLocation(transferList)
                         .then((value) {
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Homepage(
-                                userId: widget.userId, machine: value[0]),
-                          ));
+                      if (value != null) {
+                        apiService
+                            .getmachinedetails(widget.machine.machineNumber)
+                            .then((value) {
+                          Navigator.pop(context);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Homepage(
+                                    userId: widget.userId, machine: value[0]),
+                              ));
+                        });
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "Transfer Failed",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      }
                     });
                   },
                   child: Text('Confirm')),

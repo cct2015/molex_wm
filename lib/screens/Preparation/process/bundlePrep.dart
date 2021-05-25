@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/Preparation/postPreparationDetail.dart';
+import 'package:molex/model_api/crimping/bundleDetail.dart';
+import 'package:molex/model_api/getuserId.dart';
 import 'package:molex/models/bundle_scan.dart';
 import 'package:molex/screens/widgets/P3scheduleDetaiLWIP.dart';
 import 'package:molex/screens/widgets/time.dart';
+import 'package:molex/service/apiService.dart';
 
 enum Status {
   rejection,
@@ -16,8 +20,9 @@ class ScanBundleP3 extends StatefulWidget {
   String bundleId;
   String machineId;
   String userId;
+  BundleData bundleDetail;
   // PreparationSchedule schedule;
-  ScanBundleP3({this.bundleId, this.machineId, this.userId});
+  ScanBundleP3({this.bundleId,this.bundleDetail, this.machineId, this.userId});
   @override
   _ScanBundleP3State createState() => _ScanBundleP3State();
 }
@@ -56,23 +61,23 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
   TextEditingController wrongBootInsertionController =
       new TextEditingController();
   TextEditingController bootDamageController = new TextEditingController();
-  PreparationSchedule schedule;
+
+   
+   List<Userid> usersList = [];
+   ApiService apiService;
+    getUser() {
+    apiService = new ApiService();
+    apiService.getUserList().then((value) {
+      setState(() {
+        usersList = value;
+      });
+    });
+  }
 
   @override
   void initState() {
-    schedule = PreparationSchedule(
-      orderId: '',
-      finishedGoodsNumber: '',
-      scheduledId: '',
-      cablePartNumber: '',
-      length: '',
-      numberOfBundles: '',
-      binIdentification: '',
-      rejectedQuantity: '',
-      bundleQuantity: '',
-      process: '',
-      passedQuantity: '',
-    );
+      apiService = new ApiService();
+      getUser();
     super.initState();
   }
 
@@ -200,7 +205,15 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
       body: Center(child: Column(
         children: [
           P3ScheduleDetailWIP(
-            schedule: schedule,
+            schedule: PreparationSchedule(
+                orderId: widget.bundleDetail.orderId,
+                finishedGoodsNumber: widget.bundleDetail.finishedGoodsPart.toString(),
+                scheduledId: widget.bundleDetail.scheduledId,
+                cablePartNumber: widget.bundleDetail.cablePartNumber.toString(),
+                process: widget.bundleDetail.updateFromProcess,
+                color: widget.bundleDetail.color,
+                scheduledQuantity: "null"
+            ),
           ),
           main(status),
         ],
@@ -258,12 +271,12 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: feild1(
-                              heading: "Bundle Qty", value: "", width: 0.2),
+                              heading: "Bundle Qty", value: "${widget.bundleDetail.bundleQuantity}", width: 0.2),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: feild1(
-                              heading: "Rejected Qty", value: "", width: 0.2),
+                              heading: "Rejected Qty", value: "${widget.bundleDetail.bundleQuantity}", width: 0.2),
                         ),
                       ],
                     ),
@@ -324,22 +337,41 @@ class _ScanBundleP3State extends State<ScanBundleP3> {
                           onPrimary: Colors.white,
                         ),
                         onPressed: () {
+                          PostPreparationDetail postPreparationDetail = new PostPreparationDetail(
+                            bundleIdentification: widget.bundleDetail.bundleIdentification,
+                            bundleQuantity: widget.bundleDetail.bundleQuantity,
+                            rejectedQuantity: 0,
+                            crimpInslation: 0,
+                            windowGap: 0,
+                            exposedStrands: 0,
+                            burrOrCutOff: 0,
+                            terminalBendOrClosedOrDamage: 0,
+                            nickMarkOrStrandsCut: 0,
+                            seamOpen: 0,
+                            missCrimp: 0,
+                            frontBellMouth: 0,
+                            backBellMouth: 0,
+                            extrusionOnBurr: 0,
+                            brushLength: 0,
+                            cableDamage: 0,
+                            terminalTwist: 0,
+                            orderId: widget.bundleDetail.orderId,
+                            fgPart: widget.bundleDetail.finishedGoodsPart,
+                            scheduleId: widget.bundleDetail.scheduledId,
+                            binId: widget.bundleDetail.binId,
+                            processType: "Preparation",
+                            method: "a-b-c",
+                            status: "",
+                            machineIdentification: widget.machineId,
+                            cablePartNumber: widget.bundleDetail.cablePartDescription,
+                            cutLength: widget.bundleDetail.cutLengthSpecificationInmm,
+                            color: widget.bundleDetail.color,
+                            finishedGoods: widget.bundleDetail.finishedGoodsPart,
+                          );
+                            
                      setState(() {
                        status =Status.scanBin;
                      });
-                          // setState(() {
-                          //   Future.delayed(
-                          //     const Duration(milliseconds: 50),
-                          //     () {
-                          //       SystemChannels.textInput
-                          //           .invokeMethod('TextInput.hide');
-                          //     },
-                          //   );
-                          //   _scanIdController.clear();
-
-                          //   status = Status.scan;
-                          //   next = !next;
-                          // });
                         },
                         child:
                             Text('Save', style: TextStyle(color: Colors.white)),
@@ -583,12 +615,18 @@ Widget feild1({String heading, String value, double width}) {
                         color: Colors.grey[200],
                       ),
                       child: Center(
-                        child: TextField(
+                        child: TextFormField(
+                          initialValue: value,
+                          style: TextStyle(
+                            fontSize: 14
+                          ),
+
                           decoration: new InputDecoration(
-                            hintText: heading,
+                            hintText: value,
+                            
                             hintStyle: GoogleFonts.openSans(
                               textStyle: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w500),
+                                  fontSize: 8, fontWeight: FontWeight.w500),
                             ),
                             focusedBorder: InputBorder.none,
                             enabledBorder: InputBorder.none,

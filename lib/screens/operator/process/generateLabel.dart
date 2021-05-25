@@ -1400,7 +1400,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                 if (_bundleScanController.text.length > 0) {
                   apiService
                       .postTransferBundletoBin(
-                          transferBundleToBin: getpostBundletoBin())
+                          transferBundleToBin: [getpostBundletoBin()])
                       .then((value) {
                     if (value != null) {
                       BundleTransferToBinTracking bundleTransferToBinTracking =

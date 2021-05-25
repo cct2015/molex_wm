@@ -36,7 +36,7 @@ class _MaterialPickState extends State<MaterialPick> {
   String trackingNumber;
   String qty;
   List<ItemPart> items = [];
-  List<ItemPart> selectditems = []; 
+  List<ItemPart> selectditems = [];
   List<PostRawMaterial> selectdItems = [];
   List<RawMaterial> rawMaterial = [];
   bool isCollapsedRawMaterial = false;
@@ -567,7 +567,7 @@ class _MaterialPickState extends State<MaterialPick> {
               }).toList();
               print(scannedPartNo.toSet());
               // if (setEquals(rawPartNo.toSet(), scannedPartNo.toSet())) {
-                if(selectdItems.length>0){
+              if (selectdItems.length > 0) {
                 _showConfirmationDialog();
               } else {
                 Fluttertoast.showToast(
@@ -924,38 +924,28 @@ class _MaterialPickState extends State<MaterialPick> {
                         (states) => Colors.green),
                   ),
                   onPressed: () {
-                    int a = 0;
-                    for (PostRawMaterial material in selectdItems) {
-                      apiService.postRawmaterial([material]).then((value) {
-                        if (value) {
-                          a = a + 1;
-                          print("a : $a");
-                          // Navigator.pushReplacement(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => ProcessPage(
-                          //             schedule: widget.schedule,
-                          //             userId: widget.userId,
-                          //             machine: widget.machine,
-                          //           )),
-                          // );
-                          if (a == selectdItems.length) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProcessPage(
-                                        schedule: widget.schedule,
-                                        userId: widget.userId,
-                                        machine: widget.machine,
-                                      )),
-                            );
-                          }
-                        } else {
-                          print("error");
-                        }
-                      });
-                    }
-                    print("a : $a");
+                    apiService.postRawmaterial(selectdItems).then((value) {
+                      if (value) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProcessPage(
+                                    schedule: widget.schedule,
+                                    userId: widget.userId,
+                                    machine: widget.machine,
+                                  )),
+                        );
+                      } else {
+                         Fluttertoast.showToast(
+                    msg: "Failed To Add Raw Material",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                      }
+                    });
                   },
                   child: Text('       Confirm      ')),
             ],

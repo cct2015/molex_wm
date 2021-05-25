@@ -1,53 +1,15 @@
 // To parse this JSON data, do
 //
-//     final transferBundleToBin = transferBundleToBinFromJson(jsonString);
+//     final getBinDetail = getBinDetailFromJson(jsonString);
 
 import 'dart:convert';
 
-List<TransferBundleToBin> transferBundleToBinFromJson(String str) => List<TransferBundleToBin>.from(json.decode(str).map((x) => TransferBundleToBin.fromJson(x)));
+GetBinDetail getBinDetailFromJson(String str) => GetBinDetail.fromJson(json.decode(str));
 
-String transferBundleToBinToJson(List<TransferBundleToBin> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String getBinDetailToJson(GetBinDetail data) => json.encode(data.toJson());
 
-class TransferBundleToBin {
-    TransferBundleToBin({
-        this.binIdentification,
-        this.bundleId,
-        this.userId,
-        this.locationId,
-    });
-
-    String binIdentification;
-    String bundleId;
-    String userId;
-    String locationId;
-
-    factory TransferBundleToBin.fromJson(Map<String, dynamic> json) => TransferBundleToBin(
-        binIdentification: json["binIdentification"],
-        bundleId: json["bundleId"],
-        userId: json["userId"],
-        locationId: json["locationId"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "binIdentification": binIdentification,
-        "bundleId": bundleId,
-        "userId": userId,
-        "locationId": locationId,
-    };
-}
-
-
-// To parse this JSON data, do
-//
-//     final responseTransferBundletoBin = responseTransferBundletoBinFromJson(jsonString);
-
-
-ResponseTransferBundletoBin responseTransferBundletoBinFromJson(String str) => ResponseTransferBundletoBin.fromJson(json.decode(str));
-
-String responseTransferBundletoBinToJson(ResponseTransferBundletoBin data) => json.encode(data.toJson());
-
-class ResponseTransferBundletoBin {
-    ResponseTransferBundletoBin({
+class GetBinDetail {
+    GetBinDetail({
         this.status,
         this.statusMsg,
         this.errorCode,
@@ -59,7 +21,7 @@ class ResponseTransferBundletoBin {
     dynamic errorCode;
     Data data;
 
-    factory ResponseTransferBundletoBin.fromJson(Map<String, dynamic> json) => ResponseTransferBundletoBin(
+    factory GetBinDetail.fromJson(Map<String, dynamic> json) => GetBinDetail(
         status: json["status"],
         statusMsg: json["statusMsg"],
         errorCode: json["errorCode"],
@@ -76,22 +38,22 @@ class ResponseTransferBundletoBin {
 
 class Data {
     Data({
-        this.bundleTransferToBinTracking,
+        this.materialCodinatorSchedulerData,
     });
 
-    BundleTransferToBinTracking bundleTransferToBinTracking;
+    List<BundleDetail> materialCodinatorSchedulerData;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        bundleTransferToBinTracking: BundleTransferToBinTracking.fromJson(json[" Bundle Transfer to Bin Tracking "]),
+        materialCodinatorSchedulerData: List<BundleDetail>.from(json["  Material Codinator Scheduler Data "].map((x) => BundleDetail.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        " Bundle Transfer to Bin Tracking ": bundleTransferToBinTracking.toJson(),
+        "  Material Codinator Scheduler Data ": List<dynamic>.from(materialCodinatorSchedulerData.map((x) => x.toJson())),
     };
 }
 
-class BundleTransferToBinTracking {
-    BundleTransferToBinTracking({
+class BundleDetail {
+    BundleDetail({
         this.id,
         this.bundleIdentification,
         this.scheduledId,
@@ -113,11 +75,11 @@ class BundleTransferToBinTracking {
 
     int id;
     String bundleIdentification;
-    dynamic scheduledId;
+    int scheduledId;
     DateTime bundleCreationTime;
     int bundleQuantity;
     String machineIdentification;
-    dynamic operatorIdentification;
+    String operatorIdentification;
     int finishedGoodsPart;
     int cablePartNumber;
     dynamic cablePartDescription;
@@ -125,11 +87,11 @@ class BundleTransferToBinTracking {
     String color;
     String bundleStatus;
     int binId;
-    dynamic locationId;
-    dynamic orderId;
+    String locationId;
+    String orderId;
     String updateFromProcess;
 
-    factory BundleTransferToBinTracking.fromJson(Map<String, dynamic> json) => BundleTransferToBinTracking(
+    factory BundleDetail.fromJson(Map<String, dynamic> json) => BundleDetail(
         id: json["id"],
         bundleIdentification: json["bundleIdentification"],
         scheduledId: json["scheduledId"],

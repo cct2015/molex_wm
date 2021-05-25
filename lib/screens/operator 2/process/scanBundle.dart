@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
 import 'package:molex/model_api/cableTerminalA_model.dart';
 import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
@@ -628,11 +629,13 @@ class _ScanBundleState extends State<ScanBundle> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  quantitycell(
-                    name: "Bundle Qty",
-                    quantity: 10,
-                    textEditingController: bundlQtyController,
-                  ),
+                  Text("Bundle Qty: ${bundlQtyController.text}"),
+                  SizedBox(width: 20),
+                  // quantitycell(
+                  //   name: "Bundle Qty",
+                  //   quantity: 10,
+                  //   textEditingController: bundlQtyController,
+                  // ),
                   quantitycell(
                     name: "Rejected Qty",
                     quantity: 10,
@@ -645,38 +648,152 @@ class _ScanBundleState extends State<ScanBundle> {
                     child: Center(
                       child: Container(
                         child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      side: BorderSide(
-                                          color: Colors.transparent))),
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.pressed))
-                                    return Colors.green[200];
-                                  return Colors.green[
-                                      500]; // Use the component's default.
-                                },
-                              ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    side:
+                                        BorderSide(color: Colors.transparent))),
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed))
+                                  return Colors.green[200];
+                                return Colors
+                                    .green[500]; // Use the component's default.
+                              },
                             ),
-                            child: Text("Save & Scan Next"),
-                            onPressed: () {
-                          setState(() {
-                                    bundleScan.add(BundleScan(
-                                        bundleId: _scanIdController.text,
-                                        bundleProcessQty: "30",
-                                        bundleQty: "$bundleQty"));
-                                 
-                                    Future.delayed(
-                                        const Duration(milliseconds: 10), () {
-                                      SystemChannels.textInput
-                                          .invokeMethod('TextInput.hide');
-                                    });
-                                    status = Status.scanBin;
-                                  });                            }),
+                          ),
+                          child: Text("Save & Scan Next"),
+                          onPressed: () {
+                            PostCrimpingRejectedDetail
+                                postCrimpingRejectedDetail =
+                                PostCrimpingRejectedDetail(
+                              bundleIdentification: _scanIdController.text,
+                              finishedGoods: widget.schedule.finishedGoods,
+                              cutLength: widget.schedule.length,
+                              color: widget.schedule.wireColour,
+                              cablePartNumber: widget.schedule.cablePartNo,
+                              processType: widget.schedule.process,
+                              method: "a-b",
+                              status: "Yet to Pick",
+                              machineIdentification: widget.machineId,
+                              binId: "",
+                              bundleQuantity: int.parse(bundleQty),
+                              passedQuantity: 0,
+                              rejectedQuantity: total(),
+                              crimpInslation: int.parse(
+                                  crimpOnInsulationController.text.length > 0
+                                      ? crimpOnInsulationController.text
+                                      : "0"),
+                              insulationSlug: int.parse(
+                                  insulationCurlingUpDownController
+                                              .text.length >
+                                          0
+                                      ? insulationCurlingUpDownController.text
+                                      : '0'), //TODO check if both are same
+                              windowGap: int.parse(
+                                  windowGapController.text.length > 0
+                                      ? windowGapController.text
+                                      : '0'),
+                              exposedStrands: int.parse(
+                                  exposureStrandsController.text.length > 0
+                                      ? exposureStrandsController.text
+                                      : '0'),
+                              burrOrCutOff: int.parse(
+                                  cutoffBurrController.text.length > 0
+                                      ? cutoffBurrController.text
+                                      : '0'),
+                              terminalBendOrClosedOrDamage: int.parse(
+                                  terminalBendController.text.length > 0
+                                      ? terminalBendController.text
+                                      : '0'),
+                              nickMarkOrStrandsCut:
+                                  int.parse("0"), //TODO check nick mark in Qty
+                              brushLength: int.parse(
+                                  brushLengthLessMoreController.text.length > 0
+                                      ? brushLengthLessMoreController.text
+                                      : '0'),
+                              seamOpen: int.parse(
+                                  seamopenController.text.length > 0
+                                      ? seamopenController.text
+                                      : '0'),
+                              missCrimp: int.parse(
+                                  missCrimpController.text.length > 0
+                                      ? missCrimpController.text
+                                      : '0'),
+                              frontBellMouth: int.parse(
+                                  frontBellMouthController.text.length > 0
+                                      ? frontBellMouthController.text
+                                      : '0'),
+                              backBellMouth: int.parse(
+                                  backbellmouthController.text.length > 0
+                                      ? backbellmouthController.text
+                                      : '0'),
+                              extrusionOnBurr: int.parse(
+                                  extrutionOnBurrController.text.length > 0
+                                      ? extrutionOnBurrController.text
+                                      : '0'),
+                              cableDamage: int.parse(
+                                  cabledamageController.text.length > 0
+                                      ? cabledamageController.text
+                                      : '0'),
+                              terminalTwist: int.parse(
+                                  terminalTwistController.text.length > 0
+                                      ? terminalTwistController.text
+                                      : '0'),
+                              orderId: widget.schedule.purchaseOrder,
+                              fgPart: widget.schedule.finishedGoods,
+                              scheduleId: widget.schedule.scheduleId,
+                              terminalFrom:
+                                  int.parse('${terminalA.terminalPart}'),
+                              terminalTo:
+                                  int.parse('${terminalB.terminalPart}'),
+                            );
+
+                            apiService
+                                .postCrimpRejectedQty(
+                                    postCrimpingRejectedDetail)
+                                .then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  bundleScan.add(BundleScan(
+                                      bundleId: _scanIdController.text,
+                                      bundleProcessQty: "30",
+                                      bundleQty: "$bundleQty"));
+
+                                  Future.delayed(
+                                      const Duration(milliseconds: 10), () {
+                                    SystemChannels.textInput
+                                        .invokeMethod('TextInput.hide');
+                                  });
+                                  status = Status.scanBin;
+                                });
+
+                                Fluttertoast.showToast(
+                                  msg: "Saved Crimping Detail ",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: "Post Crimping Reject Deatil Status ",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                              }
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -842,7 +959,7 @@ class _ScanBundleState extends State<ScanBundle> {
   Widget binScan() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Container(
-          width: MediaQuery.of(context).size.width * 0.75,
+      width: MediaQuery.of(context).size.width * 0.75,
       padding: const EdgeInsets.all(0.0),
       child: Column(
         children: [
@@ -895,7 +1012,7 @@ class _ScanBundleState extends State<ScanBundle> {
                           borderSide:
                               BorderSide(color: Colors.grey[400], width: 2.0),
                         ),
-                        labelText: '    Scan bin    '  ,
+                        labelText: '    Scan bin    ',
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 5.0))),
               ),
@@ -915,92 +1032,44 @@ class _ScanBundleState extends State<ScanBundle> {
                 'Save  & Scan Next',
               ),
               onPressed: () {
-     PostCrimpingRejectedDetail postCrimpingRejectedDetail =
-                                  PostCrimpingRejectedDetail(
-                                      bundleIdentification:
-                                          _scanIdController.text,
-                                          finishedGoods: widget.schedule.finishedGoods,
-                                          cutLength: widget.schedule.length,
-                                          color: widget.schedule.wireColour,
-                                          cablePartNumber: widget.schedule.cablePartNo,
-                                          processType: widget.schedule.process,
-                                          method: "a-b-c",
-                                          status: "Yet to Pick",
-                                          machineIdentification: widget.machineId,
-                                          binId: "$binId",         
-                                      bundleQuantity: int.parse(bundleQty),
-                                      passedQuantity: 0,
-                                      rejectedQuantity: total(),
-                                      crimpInslation: int.parse(
-                                          crimpOnInsulationController.text.length > 0
-                                              ? crimpOnInsulationController.text
-                                              : "0"),
-                                      insulationSlug: int.parse(
-                                          insulationCurlingUpDownController.text.length > 0
-                                              ? insulationCurlingUpDownController
-                                                  .text
-                                              : '0'), //TODO check if both are same
-                                      windowGap: int.parse(windowGapController.text.length > 0
-                                          ? windowGapController.text
-                                          : '0'),
-                                      exposedStrands: int.parse(
-                                          exposureStrandsController.text.length > 0
-                                              ? exposureStrandsController.text
-                                              : '0'),
-                                      burrOrCutOff: int.parse(cutoffBurrController.text.length > 0 ? cutoffBurrController.text : '0'),
-                                      terminalBendOrClosedOrDamage: int.parse(terminalBendController.text.length > 0 ? terminalBendController.text : '0'),
-                                      nickMarkOrStrandsCut: int.parse("0"), //TODO check nick mark in Qty
-                                      brushLength: int.parse(brushLengthLessMoreController.text.length > 0 ? brushLengthLessMoreController.text : '0'),
-                                      seamOpen: int.parse(seamopenController.text.length > 0 ? seamopenController.text : '0'),
-                                      missCrimp: int.parse(missCrimpController.text.length > 0 ? missCrimpController.text : '0'),
-                                      frontBellMouth: int.parse(frontBellMouthController.text.length > 0 ? frontBellMouthController.text : '0'),
-                                      backBellMouth: int.parse(backbellmouthController.text.length > 0 ? backbellmouthController.text : '0'),
-                                      extrusionOnBurr: int.parse(extrutionOnBurrController.text.length > 0 ? extrutionOnBurrController.text : '0'),
-                                      cableDamage: int.parse(cabledamageController.text.length > 0 ? cabledamageController.text : '0'),
-                                      terminalTwist: int.parse(terminalTwistController.text.length > 0 ? terminalTwistController.text : '0'),
-                                      orderId: widget.schedule.purchaseOrder,
-                                      fgPart: widget.schedule.finishedGoods,
-                                      scheduleId: widget.schedule.scheduleId,
-                                      terminalFrom: int.parse('${terminalA.terminalPart}'),
-                                      terminalTo: int.parse('${terminalB.terminalPart}'),
-                                       
-                                      );
-
-                              apiService
-                                  .postCrimpRejectedQty(
-                                      postCrimpingRejectedDetail)
-                                  .then((value) {
-                                if (value != null) {
-                                    setState(() {
+                TransferBundleToBin bundleToBin = TransferBundleToBin(
+                    userId: widget.userId,
+                    binIdentification: binId,
+                    bundleId: _scanIdController.text);
+                apiService
+                    .postTransferBundletoBin(transferBundleToBin:[ bundleToBin])
+                    .then((value) {
+                  if (value != null) {
+                    BundleTransferToBinTracking bundleTransferToBinTracking =
+                        value;
+                    Fluttertoast.showToast(
+                        msg:
+                            "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${_binController.text ?? ''}",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Unable to transfer Bundle to Bin",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                });
+                setState(() {
                   clear();
-                     _scanIdController.clear();
+                  _scanIdController.clear();
                   binId = '';
                   bundlQtyController.clear();
                   status = Status.scan;
                 });
-                 Fluttertoast.showToast(
-        msg: "Saved Crimping Detail ",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-                                } else {
-                                    Fluttertoast.showToast(
-        msg: "Post Crimping Reject Deatil Status ",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-                                }
-                              });
-
-             
               },
             )),
           ),
