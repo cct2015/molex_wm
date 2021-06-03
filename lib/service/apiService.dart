@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:molex/main.dart';
 import 'package:molex/model_api/Preparation/getpreparationSchedule.dart';
+import 'package:molex/model_api/Preparation/postPreparationDetail.dart';
 import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
 import 'package:molex/model_api/Transfer/getBinDetail.dart';
@@ -108,7 +109,7 @@ class ApiService {
     if (response.statusCode == 200) {
       try {
         GetMachineDetails getMachineDetails =
-            getmachinedetailsFromJson(response.body);
+            getMachineDetailsFromJson(response.body);
         List<MachineDetails> machineDetails =
             getMachineDetails.data.machineDetailsList;
         return machineDetails;
@@ -398,7 +399,7 @@ class ApiService {
   }
 
   //Transfer Bundle to bin
-  Future<BundleTransferToBinTracking> postTransferBundletoBin(
+  Future<List<BundleTransferToBin>> postTransferBundletoBin(
       {List<TransferBundleToBin> transferBundleToBin}) async {
     var url = Uri.parse(
         baseUrl + 'molex/bin-tracking/transfer-bundle-to-bin-tracking');
@@ -407,10 +408,10 @@ class ApiService {
     var response = await http.post(url,
         body: transferBundleToBinToJson(transferBundleToBin),
         headers: headerList);
-    print("status post Transfer Bundle to bin ${response.statusCode}");
-    print("response post Transfer Bundle to bin ${response.body}");
+    log("status post Transfer Bundle to bin ${response.statusCode}");
+    log("response post Transfer Bundle to bin ${response.body}");
     if (response.statusCode == 200) {
-      BundleTransferToBinTracking b =
+      List<BundleTransferToBin> b =
           responseTransferBundletoBinFromJson(response.body)
               .data
               .bundleTransferToBinTracking;
@@ -421,7 +422,7 @@ class ApiService {
   }
 
   //Post transfer bin to location
-  Future<BinToLocationTransfer> postTransferBinToLocation(
+  Future<List<BinTransferToLocationTracking>> postTransferBinToLocation(
       List<TransferBinToLocation> transferBinToLocationList) async {
     var url =
         Uri.parse(baseUrl + 'molex/bin-tracking/update-bin-location-in-bin');
@@ -434,7 +435,7 @@ class ApiService {
     print("response post Transfer Bin to Location ${response.body}");
     if (response.statusCode == 200) {
       try {
-        BinToLocationTransfer b =
+        List<BinTransferToLocationTracking> b =
             responseTransferBinToLocationFromJson(response.body)
                 .data
                 .bundleTransferToBinTracking;
@@ -465,10 +466,12 @@ class ApiService {
   Future<bool> post100Complete(FullyCompleteModel postFullyComplete) async {
     var url =
         Uri.parse(baseUrl + 'molex/production-report/save-production-report');
-    var response =
-        await http.post(url, body: fullyCompleteModelToJson(postFullyComplete));
+    var response = await http.post(url,
+        body: fullyCompleteModelToJson(postFullyComplete), headers: headerList);
+    log("Production Report Post status ${response.statusCode}");
+    log(fullyCompleteModelToJson(postFullyComplete));
     Fluttertoast.showToast(
-      msg: "100% Complete Post status ${response.statusCode}",
+      msg: "Production Report Post status ${response.statusCode}",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
@@ -522,11 +525,13 @@ class ApiService {
 
 // Post ViSchedule data
   Future<bool> postVIinspectedBundle(
-      {ViInspectedbudle viInspectedbudle}) async {
+      {ViInspectedbundle viInspectedbudle}) async {
     var url = Uri.parse(baseUrl +
         'molex/visual-inspection/save-visual-inspected-bundle-quantity');
-    var response = await http.post(url,body:viInspectedbudleQtyToJson(viInspectedbudle),headers: headerList );
-    print('postVIinspectedBundle status Code: ${response.statusCode}');
+    var response = await http.post(url,
+        body: viInspectedbudleQtyToJson(viInspectedbudle), headers: headerList);
+    log("postVIinspectedBundle :${viInspectedbudleQtyToJson(viInspectedbudle)}");
+    log('postVIinspectedBundle status Code: ${response.statusCode}');
     log('postVIinspectedBundle status body: ${response.body}');
     print(response.body);
     if (response.statusCode == 200) {
@@ -551,6 +556,23 @@ class ApiService {
       return preparationList;
     } else {
       return [];
+    }
+  }
+  //post Visual Inspected Data
+    Future<bool> postPreparationDetail(
+      {PostPreparationDetail postPreparationDetail}) async {
+    var url = Uri.parse(baseUrl +
+        'molex/visual-inspection/save-visual-inspected-bundle-quantity');
+    var response = await http.post(url,
+        body: postPreparationDetailToJson(postPreparationDetail), headers: headerList);
+    log("postPreparationDetail :${postPreparationDetailToJson(postPreparationDetail)}");
+    print('postPreparationDetail status Code: ${response.statusCode}');
+    log('postPreparationDetail status body: ${response.body}');
+    print(response.body);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -609,7 +631,7 @@ class ApiService {
     print('Post Rejected response body :${response.body}');
     if (response.statusCode == 200) {
       ResponsePostCrimpingDetail resPostCrimpingRejectedDetail =
-           responsePostCrimpingDetailFromJson (response.body);
+          responsePostCrimpingDetailFromJson(response.body);
       CrimpingResponse crimpingRejectDetail =
           resPostCrimpingRejectedDetail.data.crimpingProcess;
       return crimpingRejectDetail;
@@ -649,11 +671,12 @@ class ApiService {
     print('Get Bundle Data status Code: ${response.statusCode}');
     print('Get Bundle Data  response body :${response.body}');
     if (response.statusCode == 200) {
-      try{
-      GetBundleDetail getBundleDetail = getBundleDetailFromJson(response.body);
-      BundleData bundleDetail = getBundleDetail.data.bundleData;
-      return bundleDetail;
-      }catch(e){
+      try {
+        GetBundleDetail getBundleDetail =
+            getBundleDetailFromJson(response.body);
+        BundleData bundleDetail = getBundleDetail.data.bundleData;
+        return bundleDetail;
+      } catch (e) {
         return null;
       }
     } else {
@@ -669,15 +692,17 @@ class ApiService {
       return null;
     }
   }
+
   Future<List<BundleDetail>> getBundlesinBin(String binId) async {
-    var url = Uri.parse(
-        baseUrl + 'molex/material-codinator/material-codinator-ytbp-data?binId=$binId');
+    var url = Uri.parse(baseUrl +
+        'molex/material-codinator/material-codinator-ytbp-data?binId=$binId');
     var response = await http.get(url);
     log('Get Bundles From Bin status Code: ${response.statusCode}');
     log('Get Bundles From Bin  response body :${response.body}');
     if (response.statusCode == 200) {
-      GetBinDetail getBinDetail= getBinDetailFromJson(response.body);
-      List<BundleDetail> bundleList = getBinDetail.data.materialCodinatorSchedulerData;
+      GetBinDetail getBinDetail = getBinDetailFromJson(response.body);
+      List<BundleDetail> bundleList =
+          getBinDetail.data.materialCodinatorSchedulerData;
       return bundleList;
     } else {
       Fluttertoast.showToast(
@@ -692,6 +717,4 @@ class ApiService {
       return null;
     }
   }
-
-
 }

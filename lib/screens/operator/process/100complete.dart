@@ -182,6 +182,7 @@ class _FullyCompleteState extends State<FullyComplete> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Location(
+                                  type: "process",
                                       userId: widget.userId,
                                       machine: widget.machine,
                                     )),

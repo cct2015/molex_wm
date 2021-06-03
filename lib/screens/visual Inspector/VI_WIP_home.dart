@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:molex/model_api/getuserId.dart';
+import 'package:molex/model_api/Transfer/bundleToBin_model.dart';
+import 'package:molex/model_api/machinedetails_model.dart';
 import 'package:molex/model_api/visualInspection/saveinspectedBundle_model.dart';
+import 'package:molex/screens/operator/location.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
@@ -27,9 +31,8 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
   FocusNode _bundleIdScanFocus = new FocusNode();
   String userId;
   String bundleId;
-  List<ViInspectedbudle> viIspectionBundleList = [];
+  List<ViInspectedbundle> viIspectionBundleList = [];
   TextEditingController scanBundleController = new TextEditingController();
-
   TextEditingController crimpInslController = new TextEditingController();
   TextEditingController insulationSlugController = new TextEditingController();
   TextEditingController windowgapController = new TextEditingController();
@@ -58,6 +61,7 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
   TextEditingController maincontroller = new TextEditingController();
 
   TextEditingController _binController = new TextEditingController();
+  TextEditingController _locationController = new TextEditingController();
 
   String binId;
 
@@ -72,6 +76,7 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
   int selectedindex = 0;
   ApiService apiService;
   List<String> usersList = [];
+
   getUser() {
     apiService = new ApiService();
     apiService.getUserList().then((value) {
@@ -90,9 +95,11 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
 
   @override
   Widget build(BuildContext context) {
+    log(_locationController.text);
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(
@@ -220,46 +227,64 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
   }
 
   Widget button() {
-    return Container(
-      height: 40,
-      width: MediaQuery.of(context).size.width * 0.22,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 4,
-          primary: Colors.green, // background
-          onPrimary: Colors.white,
-        ),
-        onPressed: () {
-          if (userId.length > 0 && bundleId.length > 0) {
-            setState(() {
-              print(" USerList $userId $usersList");
-              if (usersList.contains(userId)) {
-                apiService.getBundleDetail(bundleId).then((value) {
-                  if (value != null) {
-                    setState(() {
-                                   viIspectionBundleList.add(
-                      ViInspectedbudle(
-                          bundleIdentification: value.bundleIdentification.toString(),
-                          binId: value.binId.toString(),
-                          employeeId: userId,
-                          status: "Not Completed"),
-                    );
+    return Column(
+      children: [
+        Container(
+          height: 40,
+          width: MediaQuery.of(context).size.width * 0.22,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: 4,
+              primary: Colors.green, // background
+              onPrimary: Colors.white,
+            ),
+            onPressed: () {
+              if (userId.length > 0 && bundleId.length > 0) {
+                setState(() {
+                  print(" USerList $userId $usersList");
+                  if (usersList.contains(userId)) {
+                    apiService.getBundleDetail(bundleId).then((value) {
+                      if (value != null) {
+                        setState(() {
+                          _locationController.text =
+                              value.locationId.toString();
+                          viIspectionBundleList.add(
+                            ViInspectedbundle(
+                                locationId: value.locationId.toString(),
+                                bundleIdentification:
+                                    value.bundleIdentification.toString(),
+                                binId: value.binId.toString(),
+                                employeeId: userId,
+                                status: "Not Completed"),
+                          );
+                        });
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Invalid Bundle Id",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      }
                     });
-       
-                  }else{
-                     Fluttertoast.showToast(
-                    msg: "Invalid Bundle Id",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
+                  } else {
+                    Fluttertoast.showToast(
+                        msg: "Invalid user",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
                   }
+                  _bundleIdScanController.clear();
+                  bundleId = '';
                 });
               } else {
                 Fluttertoast.showToast(
-                    msg: "Invalid user",
+                    msg: "Invalid userId and Bundle Id",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,
@@ -267,28 +292,49 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
                     textColor: Colors.white,
                     fontSize: 16.0);
               }
-              _bundleIdScanController.clear();
-              bundleId = '';
-            });
-          } else {
-            Fluttertoast.showToast(
-                msg: "Invalid userId and Bundle Id",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0);
-          }
-        },
-        child: Text(
-          'Next',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
+            },
+            child: Text(
+              'Next',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 40,
+            width: MediaQuery.of(context).size.width * 0.22,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 4,
+                primary: Colors.green, // background
+                onPrimary: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Location(
+                        type: "visualInspection",
+                            userId: widget.userId,
+                            machine: MachineDetails(machineNumber: ""),
+                          )),
+                );
+              },
+              child: Text(
+                'Complete Inspection',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -862,8 +908,146 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
                                       ),
                                     ),
                                     onPressed: () {
-                                      setState(() {
-                                        status = Status.binScan;
+                                      viIspectionBundleList[selectedindex]
+                                              .backBellMouth =
+                                          int.parse(
+                                              backBellMouthController.text == ''
+                                                  ? "0"
+                                                  : backBellMouthController
+                                                      .text);
+                                      viIspectionBundleList[selectedindex]
+                                              .brushLength =
+                                          int.parse(
+                                              brushLengthController.text == ''
+                                                  ? "0"
+                                                  : brushLengthController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .crimpInslation =
+                                          int.parse(
+                                              crimpInslController.text == ''
+                                                  ? "0"
+                                                  : crimpInslController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .burrOrCutOff =
+                                          int.parse(
+                                              burrCutOffController.text == ''
+                                                  ? "0"
+                                                  : burrCutOffController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .seamOpen =
+                                          int.parse(
+                                              seamOpenController.text == ''
+                                                  ? "0"
+                                                  : seamOpenController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .insulationSlug =
+                                          int.parse(insulationSlugController
+                                                      .text ==
+                                                  ''
+                                              ? "0"
+                                              : insulationSlugController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .terminalBendOrClosedOrDamage =
+                                          int.parse(
+                                              terminalBendCloseddamageController
+                                                          .text ==
+                                                      ''
+                                                  ? "0"
+                                                  : terminalBendCloseddamageController
+                                                      .text);
+                                      viIspectionBundleList[selectedindex]
+                                              .missCrimp =
+                                          int.parse(
+                                              missCrimpController.text == ''
+                                                  ? "0"
+                                                  : missCrimpController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .brushLength =
+                                          int.parse(
+                                              brushLengthController.text == ''
+                                                  ? "0"
+                                                  : brushLengthController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .windowGap =
+                                          int.parse(
+                                              windowgapController.text == ''
+                                                  ? "0"
+                                                  : windowgapController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .cableDamage =
+                                          int.parse(
+                                              cabledamageController.text == ''
+                                                  ? "0"
+                                                  : cabledamageController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .exposedStrands =
+                                          int.parse(exposedStrandsController
+                                                      .text ==
+                                                  ''
+                                              ? "0"
+                                              : exposedStrandsController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .backBellMouth =
+                                          int.parse(
+                                              backBellMouthController.text == ''
+                                                  ? "0"
+                                                  : backBellMouthController
+                                                      .text);
+                                      viIspectionBundleList[selectedindex]
+                                              .terminalTwist =
+                                          int.parse(
+                                              terminalTwistController.text == ''
+                                                  ? "0"
+                                                  : terminalTwistController
+                                                      .text);
+                                      viIspectionBundleList[selectedindex]
+                                              .rejectedQuantity =
+                                          int.parse(
+                                              rejectedQtyController.text == ''
+                                                  ? "0"
+                                                  : rejectedQtyController.text);
+                                      viIspectionBundleList[selectedindex]
+                                              .passedQuantity =
+                                          viIspectionBundleList[selectedindex]
+                                                  .bundleQuantity -
+                                              int.parse(rejectedQtyController
+                                                          .text ==
+                                                      ''
+                                                  ? "0"
+                                                  : rejectedQtyController.text);
+                                      viIspectionBundleList[selectedindex]
+                                          .status = "completed";
+
+                                      apiService
+                                          .postVIinspectedBundle(
+                                              viInspectedbudle:
+                                                  viIspectionBundleList[
+                                                      selectedindex])
+                                          .then((value) {
+                                        if (value) {
+                                          Fluttertoast.showToast(
+                                              msg: "Inspected data uploaded",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+
+                                          setState(() {
+                                            status = Status.binScan;
+                                          });
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Unable to upload inspected data",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                        }
                                       });
                                     },
                                     child: Padding(
@@ -1030,62 +1214,130 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            Container(
-              width: 250,
-              height: 50,
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: RawKeyboardListener(
-                  focusNode: FocusNode(),
-                  onKey: (event) => handleKey(event.data),
-                  child: TextField(
-                      controller: _binController,
-                      onSubmitted: (value) {
-                        // _bundleFocus.requestFocus();
-                        Future.delayed(
-                          const Duration(milliseconds: 50),
-                          () {
-                            SystemChannels.textInput
-                                .invokeMethod('TextInput.hide');
-                          },
-                        );
-                      },
-                      onTap: () {
-                        SystemChannels.textInput.invokeMethod('TextInput.hide');
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 250,
+                height: 50,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (event) => handleKey(event.data),
+                    child: TextField(
+                        controller: _binController,
+                        onSubmitted: (value) {
+                          // _bundleFocus.requestFocus();
+                          Future.delayed(
+                            const Duration(milliseconds: 50),
+                            () {
+                              SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                            },
+                          );
+                        },
+                        onTap: () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
 
-                        _binController.clear();
-                        setState(() {});
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          binId = value;
-                        });
-                      },
-                      decoration: new InputDecoration(
-                          suffix: _binController.text.length > 1
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 7.0),
-                                  child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _binController.clear();
-                                        });
-                                      },
-                                      child: Icon(Icons.clear,
-                                          size: 18, color: Colors.red)),
-                                )
-                              : Container(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.redAccent, width: 2.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey[400], width: 2.0),
-                          ),
-                          labelText: 'Scan bin',
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 5.0))),
+                          _binController.clear();
+                          setState(() {});
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            binId = value;
+                          });
+                        },
+                        decoration: new InputDecoration(
+                            suffix: _binController.text.length > 1
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 7.0),
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _binController.clear();
+                                          });
+                                        },
+                                        child: Icon(Icons.clear,
+                                            size: 18, color: Colors.red)),
+                                  )
+                                : Container(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.redAccent, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.grey[400], width: 2.0),
+                            ),
+                            labelText: 'Scan bin',
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 5.0))),
+                  ),
+                ),
+              ),
+            ),
+            //Scan Location
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 250,
+                height: 50,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: RawKeyboardListener(
+                    focusNode: FocusNode(),
+                    onKey: (event) => handleKey(event.data),
+                    child: TextField(
+                        controller: _locationController,
+                        onSubmitted: (value) {
+                          // _bundleFocus.requestFocus();
+                          Future.delayed(
+                            const Duration(milliseconds: 50),
+                            () {
+                              SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
+                            },
+                          );
+                        },
+                        onTap: () {
+                          SystemChannels.textInput
+                              .invokeMethod('TextInput.hide');
+
+                          _locationController.clear();
+                          setState(() {});
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            binId = value;
+                          });
+                        },
+                        decoration: new InputDecoration(
+                            suffix: _locationController.text.length > 1
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 7.0),
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            _locationController.clear();
+                                          });
+                                        },
+                                        child: Icon(Icons.clear,
+                                            size: 18, color: Colors.red)),
+                                  )
+                                : Container(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.redAccent, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Colors.grey[400], width: 2.0),
+                            ),
+                            labelText: 'Scan Location',
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 5.0))),
+                  ),
                 ),
               ),
             ),
@@ -1106,17 +1358,35 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
                   setState(() {
                     clear();
 
-                    viIspectionBundleList[selectedindex].status = "completed";
                     viIspectionBundleList[selectedindex].binId =
                         "${_binController.text}";
                   });
-                  apiService
-                      .postVIinspectedBundle(
-                          viInspectedbudle:
-                              viIspectionBundleList[selectedindex])
-                      .then((value) {
-                    if (value) {
+                  apiService.postTransferBundletoBin(transferBundleToBin: [
+                    TransferBundleToBin(
+                      binIdentification: _binController.text,
+                      userId: widget.userId,
+                      bundleId: viIspectionBundleList[selectedindex]
+                          .bundleIdentification,
+                      locationId: _locationController.text == ''
+                          ? ""
+                          : _locationController.text,
+                    )
+                  ]).then((value) {
+                    if (value != null) {
+                      BundleTransferToBin bundleTransferToBinTracking =
+                          value[0];
+                      Fluttertoast.showToast(
+                          msg:
+                              "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${_binController.text ?? ''}",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                       setState(() {
+                        viIspectionBundleList
+                            .remove(viIspectionBundleList[selectedindex]);
                         status = Status.dash;
                       });
                       scanBundleController.clear();
@@ -1124,7 +1394,7 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
                       _binController.clear();
                     } else {
                       Fluttertoast.showToast(
-                          msg: "Unable to upload inspected data",
+                          msg: "Unable to Transfer bundle",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
@@ -1166,5 +1436,6 @@ class _VIWIP_HomeState extends State<VIWIP_Home> {
     brushLengthController.clear();
     cabledamageController.clear();
     terminalTwistController.clear();
+    rejectedQtyController.clear();
   }
 }

@@ -701,6 +701,7 @@ class _PartiallyCompleteState extends State<PartiallyComplete> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Location(
+                                    type: "process",
                                         userId: widget.userId,
                                         machine: widget.machine,
                                       )),

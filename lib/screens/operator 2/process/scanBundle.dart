@@ -8,7 +8,6 @@ import 'package:molex/model_api/cableTerminalB_model.dart';
 import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/crimping/postCrimprejectedDetail.dart';
 import 'package:molex/models/bundle_scan.dart';
-import 'package:molex/screens/operator/bin.dart';
 import 'package:molex/service/apiService.dart';
 
 enum Status {
@@ -681,7 +680,7 @@ class _ScanBundleState extends State<ScanBundle> {
                               machineIdentification: widget.machineId,
                               binId: "",
                               bundleQuantity: int.parse(bundleQty),
-                              passedQuantity: 0,
+                              passedQuantity:  int.parse(bundleQty)-total(),
                               rejectedQuantity: total(),
                               crimpInslation: int.parse(
                                   crimpOnInsulationController.text.length > 0
@@ -1040,8 +1039,8 @@ class _ScanBundleState extends State<ScanBundle> {
                     .postTransferBundletoBin(transferBundleToBin:[ bundleToBin])
                     .then((value) {
                   if (value != null) {
-                    BundleTransferToBinTracking bundleTransferToBinTracking =
-                        value;
+                    BundleTransferToBin bundleTransferToBinTracking =
+                        value[0];
                     Fluttertoast.showToast(
                         msg:
                             "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${_binController.text ?? ''}",

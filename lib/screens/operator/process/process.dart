@@ -471,7 +471,7 @@ class _DetailState extends State<Detail> {
                                 );
                               } else if (rightside == "complete") {
                                 if (widget.machine.category ==
-                                    "Manual Cutting") {
+                                    "Manual Cutting" || widget.schedule.process=="Cutting"){
                                   return FullyComplete(
                                     userId: widget.userId,
                                     machine: widget.machine,
@@ -484,6 +484,7 @@ class _DetailState extends State<Detail> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => Location(
+                                            type: "processs",
                                                 userId: widget.userId,
                                                 machine: widget.machine,
                                               )),
@@ -1024,6 +1025,7 @@ class _DetailState extends State<Detail> {
                   'CRIMP-FROM,CUTLENGTH,CRIMP-TO',
                   'CRIMP-FROM,CUTLENGTH',
                   'CUTLENGTH,CRIMP-TO',
+                  'CUTLENGTH',
                   'CRIMP-FROM',
                   'CRIMP-TO',
                 ].map<DropdownMenuItem<String>>((String value) {
@@ -1049,16 +1051,19 @@ class _DetailState extends State<Detail> {
                       method = 'a-b-c';
                     }
                     if (value == "CRIMP-FROM,CUTLENGTH") {
-                      method = 'a-b';
+                      method = 'a-c';
                     }
                     if (value == "CUTLENGTH,CRIMP-TO") {
                       method = 'b-c';
+                    }
+                      if (value == "CUTLENGTH") {
+                      method = 'c';
                     }
                     if (value == "CRIMP-FROM") {
                       method = 'a';
                     }
                     if (value == "CRIMP-TO") {
-                      method = 'c';
+                      method = 'b';
                     }
                   });
                 },

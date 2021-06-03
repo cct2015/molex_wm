@@ -87,5 +87,6 @@ class PostRawMaterial {
         "color": color,
         "Status": status,
         "process": process,
+        "date":date
     };
 }

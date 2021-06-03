@@ -911,7 +911,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                             DateTime now = DateTime.now();
                             GeneratedLabel  label1 = value;
                             _print(
-                                ipaddress: "192.168.1.130",
+                                ipaddress: "${widget.machine.printerIp}",
                                 // ipaddress: "172.25.16.53",
                                 bq: bundleQty.text,
                                 qr: "${label1.bundleId}",
@@ -1145,7 +1145,7 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           DateTime now = DateTime.now();
                           //TODO
                           _print(
-                              ipaddress: "192.168.1.130",
+                              ipaddress: "${widget.machine.printerIp}",
                               // ipaddress: "172.26.59.14",
                               bq: e.bundleQty,
                               qr: "${e.label.bundleId}",
@@ -1403,8 +1403,8 @@ class _GenerateLabelState extends State<GenerateLabel> {
                           transferBundleToBin: [getpostBundletoBin()])
                       .then((value) {
                     if (value != null) {
-                      BundleTransferToBinTracking bundleTransferToBinTracking =
-                          value;
+                      BundleTransferToBin bundleTransferToBinTracking =
+                          value[0];
                       Fluttertoast.showToast(
                           msg:
                               "Transfered Bundle-${bundleTransferToBinTracking.bundleIdentification} to Bin- ${_binController.text ?? ''}",

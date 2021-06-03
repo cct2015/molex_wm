@@ -36,10 +36,8 @@ class TransferBundleToBin {
     };
 }
 
-
 // To parse this JSON data, do
 //
-//     final responseTransferBundletoBin = responseTransferBundletoBinFromJson(jsonString);
 
 
 ResponseTransferBundletoBin responseTransferBundletoBinFromJson(String str) => ResponseTransferBundletoBin.fromJson(json.decode(str));
@@ -79,19 +77,19 @@ class Data {
         this.bundleTransferToBinTracking,
     });
 
-    BundleTransferToBinTracking bundleTransferToBinTracking;
+    List<BundleTransferToBin> bundleTransferToBinTracking;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        bundleTransferToBinTracking: BundleTransferToBinTracking.fromJson(json[" Bundle Transfer to Bin Tracking "]),
+        bundleTransferToBinTracking: List<BundleTransferToBin>.from(json[" Bundle Transfer to Bin Tracking "].map((x) => BundleTransferToBin.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        " Bundle Transfer to Bin Tracking ": bundleTransferToBinTracking.toJson(),
+        " Bundle Transfer to Bin Tracking ": List<dynamic>.from(bundleTransferToBinTracking.map((x) => x.toJson())),
     };
 }
 
-class BundleTransferToBinTracking {
-    BundleTransferToBinTracking({
+class BundleTransferToBin {
+    BundleTransferToBin({
         this.id,
         this.bundleIdentification,
         this.scheduledId,
@@ -117,7 +115,7 @@ class BundleTransferToBinTracking {
     DateTime bundleCreationTime;
     int bundleQuantity;
     String machineIdentification;
-    dynamic operatorIdentification;
+    String operatorIdentification;
     int finishedGoodsPart;
     int cablePartNumber;
     dynamic cablePartDescription;
@@ -125,11 +123,11 @@ class BundleTransferToBinTracking {
     String color;
     String bundleStatus;
     int binId;
-    dynamic locationId;
+    String locationId;
     dynamic orderId;
     String updateFromProcess;
 
-    factory BundleTransferToBinTracking.fromJson(Map<String, dynamic> json) => BundleTransferToBinTracking(
+    factory BundleTransferToBin.fromJson(Map<String, dynamic> json) => BundleTransferToBin(
         id: json["id"],
         bundleIdentification: json["bundleIdentification"],
         scheduledId: json["scheduledId"],

@@ -342,7 +342,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                           context: context,
                           initialDate: selectedDate, // Refer step 1
                           firstDate: DateTime(2000),
-                          lastDate: DateTime(2025),
+                         lastDate: DateTime.now().add(Duration(days:0))
                         );
                         if (picked != null && picked != selectedDate)
                           setState(() {
@@ -405,7 +405,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                     context: context,
                     initialDate: selectedDate, // Refer step 1
                     firstDate: DateTime(2000),
-                    lastDate: DateTime(2025),
+                   lastDate: DateTime.now().add(Duration(days:0))
                   );
                   if (picked != null && picked != selectedDate)
                     setState(() {
@@ -495,7 +495,7 @@ class _MaterialPickOp2State extends State<MaterialPickOp2> {
                                       existingQuantity: 0,
                                       schedulerIdentification:
                                           "${widget.schedule.scheduleId}",
-                                      date: DateFormat.yMd('en')
+                                      date: DateFormat("dd-MM-yyyy")
                                           .format(selectedDate), //TODO
                                       machineIdentification:
                                           widget.machine.machineNumber,

@@ -4,12 +4,12 @@
 
 import 'dart:convert';
 
-ViInspectedbudle viInspectedbudleQtyFromJson(String str) => ViInspectedbudle.fromJson(json.decode(str));
+ViInspectedbundle viInspectedbudleQtyFromJson(String str) => ViInspectedbundle.fromJson(json.decode(str));
 
-String viInspectedbudleQtyToJson(ViInspectedbudle data) => json.encode(data.toJson());
+String viInspectedbudleQtyToJson(ViInspectedbundle data) => json.encode(data.toJson());
 
-class ViInspectedbudle {
-    ViInspectedbudle({
+class ViInspectedbundle {
+    ViInspectedbundle({
         this.bundleIdentification,
         this.bundleQuantity,
         this.passedQuantity,
@@ -34,6 +34,7 @@ class ViInspectedbudle {
         this.binId,
         this.status,
         this.employeeId,
+        this.locationId,
     });
 
     String bundleIdentification;
@@ -60,9 +61,10 @@ class ViInspectedbudle {
     String binId;
     String status;
     String employeeId;
+    String locationId;
 
 
-    factory ViInspectedbudle.fromJson(Map<String, dynamic> json) => ViInspectedbudle(
+    factory ViInspectedbundle.fromJson(Map<String, dynamic> json) => ViInspectedbundle(
         bundleIdentification: json["bundleIdentification"],
         bundleQuantity: json["bundleQuantity"],
         passedQuantity: json["passedQuantity"],

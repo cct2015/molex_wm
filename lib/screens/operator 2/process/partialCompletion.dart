@@ -6,8 +6,6 @@ import 'package:molex/model_api/transferLocation_model.dart';
 import 'package:molex/screens/operator/location.dart';
 import 'package:molex/screens/operator/process/partiallyComplete.dart';
 
-import '../../operator/bin.dart';
-
 class PartialCompletionP2 extends StatefulWidget {
   String userId;
   MachineDetails machine;
@@ -653,6 +651,7 @@ class _PartialCompletionP2State extends State<PartialCompletionP2> {
                                 MaterialPageRoute(
                                     builder: (context) => Location(
                                           userId: widget.userId,
+                                          type: 'process',
                                           machine: widget.machine,
                                         )),
                               );

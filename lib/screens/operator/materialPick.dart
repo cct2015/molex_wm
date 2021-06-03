@@ -346,7 +346,7 @@ class _MaterialPickState extends State<MaterialPick> {
                           context: context,
                           initialDate: selectedDate, // Refer step 1
                           firstDate: DateTime(2000),
-                          lastDate: DateTime(2025),
+                          lastDate: DateTime(2000),
                         );
                         if (picked != null && picked != selectedDate)
                           setState(() {
@@ -409,7 +409,8 @@ class _MaterialPickState extends State<MaterialPick> {
                     context: context,
                     initialDate: selectedDate, // Refer step 1
                     firstDate: DateTime(2000),
-                    lastDate: DateTime(2025),
+                    // lastDate: DateTime.now().add(Duration(days:1)),
+                    lastDate: DateTime.now().add(Duration(days:0))
                   );
                   if (picked != null && picked != selectedDate)
                     setState(() {
@@ -499,8 +500,8 @@ class _MaterialPickState extends State<MaterialPick> {
                                       existingQuantity: 0,
                                       schedulerIdentification:
                                           widget.schedule.scheduledId,
-                                      date: DateFormat.yMd('en')
-                                          .format(selectedDate), //TODO
+                                      date: DateFormat("dd-MM-yyyy")
+                                          .format(selectedDate), //ODO
                                       machineIdentification:
                                           widget.machine.machineNumber,
                                       finishedGoodsNumber: int.parse(

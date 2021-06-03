@@ -36,10 +36,14 @@ class TransferBinToLocation {
     };
 }
 
+// To parse this JSON data, do
+//
+//     final responseTransferBinToLocation = responseTransferBinToLocationFromJson(jsonString);
 
 // To parse this JSON data, do
 //
 //     final responseTransferBinToLocation = responseTransferBinToLocationFromJson(jsonString);
+
 
 ResponseTransferBinToLocation responseTransferBinToLocationFromJson(String str) => ResponseTransferBinToLocation.fromJson(json.decode(str));
 
@@ -78,19 +82,19 @@ class Data {
         this.bundleTransferToBinTracking,
     });
 
-    BinToLocationTransfer bundleTransferToBinTracking;
+    List<BinTransferToLocationTracking> bundleTransferToBinTracking;
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        bundleTransferToBinTracking: BinToLocationTransfer.fromJson(json[" Bundle Transfer to Bin Tracking "]),
+        bundleTransferToBinTracking: List<BinTransferToLocationTracking>.from(json[" Bundle Transfer to Bin Tracking "].map((x) => BinTransferToLocationTracking.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        " Bundle Transfer to Bin Tracking ": bundleTransferToBinTracking.toJson(),
+        " Bundle Transfer to Bin Tracking ": List<dynamic>.from(bundleTransferToBinTracking.map((x) => x.toJson())),
     };
 }
 
-class BinToLocationTransfer {
-    BinToLocationTransfer({
+class BinTransferToLocationTracking {
+    BinTransferToLocationTracking({
         this.id,
         this.bundleIdentification,
         this.scheduledId,
@@ -115,8 +119,8 @@ class BinToLocationTransfer {
     dynamic scheduledId;
     DateTime bundleCreationTime;
     int bundleQuantity;
-    dynamic machineIdentification;
-    dynamic operatorIdentification;
+    String machineIdentification;
+    String operatorIdentification;
     int finishedGoodsPart;
     int cablePartNumber;
     dynamic cablePartDescription;
@@ -128,14 +132,15 @@ class BinToLocationTransfer {
     dynamic orderId;
     String updateFromProcess;
 
-    factory BinToLocationTransfer.fromJson(Map<String, dynamic> json) => BinToLocationTransfer(
+    factory BinTransferToLocationTracking.fromJson(Map<String, dynamic> json) => BinTransferToLocationTracking
+    (
         id: json["id"],
         bundleIdentification: json["bundleIdentification"],
         scheduledId: json["scheduledId"],
         bundleCreationTime: DateTime.parse(json["bundleCreationTime"]),
         bundleQuantity: json["bundleQuantity"],
         machineIdentification: json["machineIdentification"],
-        operatorIdentification: json["operatorIdentification"],
+        operatorIdentification: json["operatorIdentification"] == null ? null : json["operatorIdentification"],
         finishedGoodsPart: json["finishedGoodsPart"],
         cablePartNumber: json["cablePartNumber"],
         cablePartDescription: json["cablePartDescription"],
@@ -155,7 +160,7 @@ class BinToLocationTransfer {
         "bundleCreationTime": "${bundleCreationTime.year.toString().padLeft(4, '0')}-${bundleCreationTime.month.toString().padLeft(2, '0')}-${bundleCreationTime.day.toString().padLeft(2, '0')}",
         "bundleQuantity": bundleQuantity,
         "machineIdentification": machineIdentification,
-        "operatorIdentification": operatorIdentification,
+        "operatorIdentification": operatorIdentification == null ? null : operatorIdentification,
         "finishedGoodsPart": finishedGoodsPart,
         "cablePartNumber": cablePartNumber,
         "cablePartDescription": cablePartDescription,
@@ -168,6 +173,7 @@ class BinToLocationTransfer {
         "updateFromProcess": updateFromProcess,
     };
 }
+
 // To parse this JSON data, do
 //
 //     final errorTransferBinToLocation = errorTransferBinToLocationFromJson(jsonString);

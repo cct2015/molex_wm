@@ -1,56 +1,107 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:molex/model_api/crimping/getCrimpingSchedule.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
-import 'package:molex/screens/operator/bin.dart';
+import 'package:molex/model_api/process1/100Complete_model.dart';
+
+import 'package:molex/model_api/startProcess_model.dart';
+
 import 'package:molex/screens/operator/location.dart';
+import 'package:molex/service/apiService.dart';
 
 class FullCompleteP2 extends StatefulWidget {
   String userId;
   MachineDetails machine;
-  FullCompleteP2({this.userId, this.machine});
+  CrimpingSchedule schedule;
+  FullCompleteP2({this.userId, this.machine, this.schedule});
   @override
   _FullCompleteP2State createState() => _FullCompleteP2State();
 }
 
 class _FullCompleteP2State extends State<FullCompleteP2> {
+  PostStartProcessP1 postStartprocess;
   TextEditingController mainController = new TextEditingController();
-  TextEditingController terminalDamageController = new TextEditingController();
-  TextEditingController windowGapController = new TextEditingController();
-  TextEditingController cutoffBurrController = new TextEditingController();
-  TextEditingController terminalCopperMarkController =
+  TextEditingController firstPatrolController = new TextEditingController();
+  TextEditingController spareChangeoverController = new TextEditingController();
+  TextEditingController crimpHeightSettingController =
+      new TextEditingController();
+  TextEditingController resettingCFMProgramController =
+      new TextEditingController();
+  TextEditingController newProgramSettingCVMCFMController =
+      new TextEditingController();
+  TextEditingController airPressureLowController = new TextEditingController();
+  TextEditingController machineTakenforRemovingCVMController =
+      new TextEditingController();
+  TextEditingController noMaterialController = new TextEditingController();
+  TextEditingController applicatorChangeoverController =
+      new TextEditingController();
+  TextEditingController sinkHeightAdjustmentController =
+      new TextEditingController();
+  TextEditingController feedingAdjustmentController =
+      new TextEditingController();
+  TextEditingController applicatorPositionSettingController =
+      new TextEditingController();
+  TextEditingController validationController = new TextEditingController();
+  TextEditingController cFACrimpingFaultController =
+      new TextEditingController();
+  TextEditingController cableEntangleController = new TextEditingController();
+  TextEditingController jobTicketIssueController = new TextEditingController();
+  TextEditingController lengthChangeoverController =
       new TextEditingController();
   TextEditingController terminalBendController = new TextEditingController();
-  TextEditingController crimpOnInsulationController =
+  TextEditingController cutOffBurrIssueController = new TextEditingController();
+  TextEditingController cVMErrorCorrectionController =
       new TextEditingController();
-  TextEditingController cutoffBendController = new TextEditingController();
-  TextEditingController setupRejectionsController = new TextEditingController();
+  TextEditingController cableFeedingFrontUnitProblemController =
+      new TextEditingController();
+  TextEditingController driftLimitReachedController =
+      new TextEditingController();
+  TextEditingController machineSlowController = new TextEditingController();
+  TextEditingController noPlanforMachineController =
+      new TextEditingController();
+  TextEditingController terminalChangeoverController =
+      new TextEditingController();
   TextEditingController terminalTwistController = new TextEditingController();
-  TextEditingController improperCrimpingController =
+  TextEditingController extrusionBurrIssueController =
       new TextEditingController();
-  TextEditingController insulationDamageController =
+  TextEditingController cFMErrorController = new TextEditingController();
+  TextEditingController supplierTakenforMaintenanceController =
       new TextEditingController();
-  TextEditingController terminalBackOutController = new TextEditingController();
-  TextEditingController conductorCurlingUpDownController =
+  TextEditingController rollerChangeoverController =
       new TextEditingController();
-  TextEditingController tabBendTapOpenController = new TextEditingController();
-  TextEditingController exposureStrandsController = new TextEditingController();
-  TextEditingController insulationCurlingUpDownController =
+  TextEditingController gripenUnitProblemController =
       new TextEditingController();
-  TextEditingController bellmouthLessMoreController =
+  TextEditingController technicianNotAvailableController =
       new TextEditingController();
-  TextEditingController strandsCutController = new TextEditingController();
-  TextEditingController conductorBurrController = new TextEditingController();
-  TextEditingController cutOffLessMoreController = new TextEditingController();
-  TextEditingController brushLengthLessMoreController =
+  TextEditingController coilChangeoverController = new TextEditingController();
+  TextEditingController bellmouthAdjustmentController =
       new TextEditingController();
-  TextEditingController bundleQuantityController = new TextEditingController();
-  TextEditingController passedQuantityController = new TextEditingController();
-  TextEditingController rejectedQuantityController =
+  TextEditingController cameraSettingController = new TextEditingController();
+  TextEditingController cVMErrorController = new TextEditingController();
+  TextEditingController lengthVariationsController =
       new TextEditingController();
+  TextEditingController powerFailureController = new TextEditingController();
+  TextEditingController machineCleaningController = new TextEditingController();
+  TextEditingController noOperatorController = new TextEditingController();
+  TextEditingController lastPieceController = new TextEditingController();
+  TextEditingController curlingAdjustmentController =
+      new TextEditingController();
+  TextEditingController wireFeedingAdjustmentController =
+      new TextEditingController();
+  TextEditingController cVMProgramReloadingController =
+      new TextEditingController();
+  TextEditingController sensorNotWorkingController =
+      new TextEditingController();
+  TextEditingController preventiveMaintenanceController =
+      new TextEditingController();
+  TextEditingController meetingController = new TextEditingController();
+  TextEditingController systemFaultController = new TextEditingController();
   String _output = '';
+  ApiService apiService;
   @override
   void initState() {
+    apiService = new ApiService();
     super.initState();
   }
 
@@ -194,14 +245,17 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Text('Crimping Rejection Cases',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
-                    ))
-              ]),
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                width: 1500,
+                child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Text('Crimping Production Report',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ))
+                ]),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(0.0),
@@ -215,24 +269,100 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                       Column(
                         children: [
                           quantitycell(
-                            name: "Terminal Damage	",
+                            name: "First Piece & Patrol",
                             quantity: 10,
-                            textEditingController: terminalDamageController,
+                            textEditingController: firstPatrolController,
                           ),
                           quantitycell(
-                            name: "Window Gap	",
+                            name: "Spare Changeover",
                             quantity: 10,
-                            textEditingController: windowGapController,
+                            textEditingController: spareChangeoverController,
                           ),
                           quantitycell(
-                            name: "Cut-off Burr	",
+                            name: "Crimp Height Setting",
                             quantity: 10,
-                            textEditingController: cutoffBurrController,
+                            textEditingController: crimpHeightSettingController,
                           ),
                           quantitycell(
-                            name: "Terminal Copper Mark	",
+                            name: "Resetting CFM Program",
                             quantity: 10,
-                            textEditingController: terminalDamageController,
+                            textEditingController:
+                                resettingCFMProgramController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "New Program Setting CVM/CFM	",
+                            quantity: 10,
+                            textEditingController:
+                                newProgramSettingCVMCFMController,
+                          ),
+                          quantitycell(
+                            name: "Air Pressure Low",
+                            quantity: 10,
+                            textEditingController: airPressureLowController,
+                          ),
+                          quantitycell(
+                            name: "Machine Taken for Removing CVM	",
+                            quantity: 10,
+                            textEditingController: machineCleaningController,
+                          ),
+                          quantitycell(
+                            name: "No Material",
+                            quantity: 10,
+                            textEditingController: noMaterialController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Sink Height Adjustment",
+                            quantity: 10,
+                            textEditingController:
+                                sinkHeightAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "Feeding Adjustment	",
+                            quantity: 10,
+                            textEditingController: feedingAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "Applicator Position Setting		",
+                            quantity: 10,
+                            textEditingController:
+                                applicatorChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Validation",
+                            quantity: 10,
+                            textEditingController: validationController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "CFA Crimping Fault",
+                            quantity: 10,
+                            textEditingController: cFACrimpingFaultController,
+                          ),
+                          quantitycell(
+                            name: "Cable Entangle",
+                            quantity: 10,
+                            textEditingController: cableEntangleController,
+                          ),
+                          quantitycell(
+                            name: "Job Ticket Issue	",
+                            quantity: 10,
+                            textEditingController: jobTicketIssueController,
+                          ),
+                          quantitycell(
+                            name: "Length Changeover",
+                            quantity: 10,
+                            textEditingController: lengthChangeoverController,
                           ),
                         ],
                       ),
@@ -244,103 +374,194 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                             textEditingController: terminalBendController,
                           ),
                           quantitycell(
-                            name: "Crimp On Insulation	",
+                            name: "Cut Off Burr Issue",
                             quantity: 10,
-                            textEditingController: crimpOnInsulationController,
+                            textEditingController: cutOffBurrIssueController,
                           ),
                           quantitycell(
-                            name: "Cut-off Bend	",
+                            name: "CVM Error Correction",
                             quantity: 10,
-                            textEditingController: cutoffBendController,
+                            textEditingController: cVMErrorController,
                           ),
                           quantitycell(
-                            name: "Setup Rejections	",
+                            name: "Cable Feeding Front Unit Problem",
                             quantity: 10,
-                            textEditingController: setupRejectionsController,
+                            textEditingController:
+                                cableFeedingFrontUnitProblemController,
                           ),
                         ],
                       ),
                       Column(
                         children: [
                           quantitycell(
-                            name: "Terminal Twist	",
+                            name: "Drift Limit Reached	",
+                            quantity: 10,
+                            textEditingController: driftLimitReachedController,
+                          ),
+                          quantitycell(
+                            name: "Machine Slow	",
+                            quantity: 10,
+                            textEditingController: machineSlowController,
+                          ),
+                          quantitycell(
+                            name: "No Plan for Machine	",
+                            quantity: 10,
+                            textEditingController: noPlanforMachineController,
+                          ),
+                          quantitycell(
+                            name: "Terminal Changeover",
+                            quantity: 10,
+                            textEditingController: terminalBendController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Terminal Twist",
                             quantity: 10,
                             textEditingController: terminalTwistController,
                           ),
                           quantitycell(
-                            name: "Improper Crimping	",
+                            name: "Extrusion Burr Issue",
                             quantity: 10,
-                            textEditingController: improperCrimpingController,
+                            textEditingController: extrusionBurrIssueController,
                           ),
                           quantitycell(
-                            name: "Insulation Damage	",
+                            name: "CFM Error",
                             quantity: 10,
-                            textEditingController: insulationDamageController,
+                            textEditingController: cFMErrorController,
                           ),
                           quantitycell(
-                            name: "Terminal Back Out	",
+                            name: "Supplier Taken for Maintenance	",
                             quantity: 10,
-                            textEditingController: terminalBackOutController,
+                            textEditingController:
+                                supplierTakenforMaintenanceController,
                           ),
                         ],
                       ),
                       Column(
                         children: [
                           quantitycell(
-                            name: "Conductor Curling Up & Down	",
+                            name: "Roller Changeover",
+                            quantity: 10,
+                            textEditingController: rollerChangeoverController,
+                          ),
+                          quantitycell(
+                            name: "Gripen Unit Problem",
+                            quantity: 10,
+                            textEditingController: gripenUnitProblemController,
+                          ),
+                          quantitycell(
+                            name: "Technician Not Available	",
                             quantity: 10,
                             textEditingController:
-                                conductorCurlingUpDownController,
+                                technicianNotAvailableController,
                           ),
                           quantitycell(
-                            name: "Tab Bend / Tap Open	",
+                            name: "Coil Changeover	",
                             quantity: 10,
-                            textEditingController: tabBendTapOpenController,
-                          ),
-                          quantitycell(
-                            name: "Exposure Strands",
-                            quantity: 10,
-                            textEditingController: exposureStrandsController,
-                          ),
-                          quantitycell(
-                            name: "Insulation Curling Up & Down",
-                            quantity: 10,
-                            textEditingController:
-                                insulationCurlingUpDownController,
+                            textEditingController: coilChangeoverController,
                           ),
                         ],
                       ),
                       Column(
                         children: [
                           quantitycell(
-                            name: "Bellmouth Less / More",
+                            name: "Bellmouth Adjustment",
                             quantity: 10,
-                            textEditingController: bellmouthLessMoreController,
+                            textEditingController:
+                                bellmouthAdjustmentController,
                           ),
                           quantitycell(
-                            name: "Strands Cut	",
+                            name: "Camera Setting	",
                             quantity: 10,
-                            textEditingController: strandsCutController,
+                            textEditingController: cameraSettingController,
                           ),
                           quantitycell(
-                            name: "Conductor Burr	",
+                            name: "CVM Error",
                             quantity: 10,
-                            textEditingController: conductorBurrController,
+                            textEditingController: cVMErrorController,
                           ),
                           quantitycell(
-                            name: "Cut-Off Less / More	",
+                            name: "Length Variations	",
                             quantity: 10,
-                            textEditingController: cutoffBurrController,
+                            textEditingController: lengthVariationsController,
                           ),
                         ],
                       ),
                       Column(
                         children: [
                           quantitycell(
-                            name: "Brush Length Less / More	",
+                            name: "Power Failure",
+                            quantity: 10,
+                            textEditingController: powerFailureController,
+                          ),
+                          quantitycell(
+                            name: "Machine Cleaning",
+                            quantity: 10,
+                            textEditingController: machineCleaningController,
+                          ),
+                          quantitycell(
+                            name: "No Operator",
+                            quantity: 10,
+                            textEditingController: noOperatorController,
+                          ),
+                          quantitycell(
+                            name: "Last Piece	",
+                            quantity: 10,
+                            textEditingController: lastPieceController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Curling Adjustment",
+                            quantity: 10,
+                            textEditingController: curlingAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "Wire Feeding Adjustment",
                             quantity: 10,
                             textEditingController:
-                                brushLengthLessMoreController,
+                                wireFeedingAdjustmentController,
+                          ),
+                          quantitycell(
+                            name: "CVM Program Reloading",
+                            quantity: 10,
+                            textEditingController: cVMErrorController,
+                          ),
+                          quantitycell(
+                            name: "Sensor Not Working",
+                            quantity: 10,
+                            textEditingController: sensorNotWorkingController,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          quantitycell(
+                            name: "Preventive Maintenance	",
+                            quantity: 10,
+                            textEditingController:
+                                preventiveMaintenanceController,
+                          ),
+                          quantitycell(
+                            name: "Meeting	",
+                            quantity: 10,
+                            textEditingController: meetingController,
+                          ),
+                          quantitycell(
+                            name: "System Fault	",
+                            quantity: 10,
+                            textEditingController: systemFaultController,
+                          ),
+                          quantitycell(
+                            name: "Applicator Changeover	",
+                            quantity: 10,
+                            textEditingController:
+                                applicatorChangeoverController,
                           ),
                         ],
                       ),
@@ -356,8 +577,6 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  quantity("Bundle Qty", 10, bundleQuantityController),
-                  quantity("Rejected Qty", 10, rejectedQuantityController),
                   Container(
                     height: 50,
                     child: Center(
@@ -382,14 +601,76 @@ class _FullCompleteP2State extends State<FullCompleteP2> {
                             ),
                             child: Text("Save & Complete Process"),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Location(
-                                          userId: widget.userId,
-                                          machine: widget.machine,
-                                        )),
-                              );
+                              Future.delayed(Duration.zero, () {
+                                //    postStartprocess = new PostStartProcessP1(
+                                //   cablePartNumber:
+                                //       widget.schedule.cablePartNo ?? "0",
+                                //   color: widget.schedule.wireColour,
+                                //   finishedGoodsNumber:
+                                //       widget.schedule.finishedGoods ?? "0",
+                                //   lengthSpecificationInmm:
+                                //       widget.schedule.length ?? "0",
+                                //   machineIdentification: widget.machine.machineNumber,
+                                //   orderIdentification: widget.schedule.purchaseOrder ?? "0",
+                                //   scheduledIdentification:
+                                //       widget.schedule.scheduleId ?? "0",
+                                //   scheduledQuantity:
+                                //       widget.schedule.bundleQuantityTotal ?? "0",
+                                //   scheduleStatus: "complete",
+                                // );
+                                FullyCompleteModel fullyComplete =
+                                    FullyCompleteModel(
+                                  finishedGoodsNumber:
+                                      widget.schedule.finishedGoods,
+                                  orderId: widget.schedule.purchaseOrder,
+                                  purchaseOrder: widget.schedule.purchaseOrder,
+
+                                  cablePartNumber: widget.schedule.cablePartNo,
+                                  length: widget.schedule.length,
+                                  color: widget.schedule.wireColour,
+                                  scheduledStatus: "Complete",
+                                  scheduledId: widget.schedule.scheduleId,
+                                  scheduledQuantity:
+                                      widget.schedule.bundleQuantityTotal,
+                                  machineIdentification:
+                                      widget.machine.machineNumber,
+                                  //TODO bundle ID
+                                  firstPieceAndPatrol: firstPatrolController
+                                              .text ==
+                                          ''
+                                      ? 0
+                                      : int.parse(firstPatrolController.text),
+                                  applicatorChangeover: firstPatrolController
+                                              .text ==
+                                          ''
+                                      ? 0
+                                      : int.parse(
+                                          applicatorChangeoverController.text),
+                                );
+                                apiService
+                                    .post100Complete(fullyComplete)
+                                    .then((value) {
+                                  if (value) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Location(
+                                            type: "process",
+                                                userId: widget.userId,
+                                                machine: widget.machine,
+                                              )),
+                                    );
+                                  } else {}
+                                });
+                              });
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => Location(
+                              //             userId: widget.userId,
+                              //             machine: widget.machine,
+                              //           )),
+                              // );
                             }),
                       ),
                     ),

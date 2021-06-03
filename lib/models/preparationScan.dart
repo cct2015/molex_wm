@@ -1,4 +1,3 @@
-import 'package:molex/model_api/Transfer/getBinDetail.dart';
 import 'package:molex/model_api/crimping/bundleDetail.dart';
 
 class PreparationScan{

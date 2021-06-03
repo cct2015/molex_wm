@@ -5,14 +5,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:molex/model_api/Transfer/binToLocation_model.dart';
 import 'package:molex/model_api/Transfer/getBinDetail.dart';
 import 'package:molex/model_api/machinedetails_model.dart';
+import 'package:molex/screens/Preparation/preparationDash.dart';
+import 'package:molex/screens/operator%202/Home_0p2.dart';
 import 'package:molex/screens/operator/Homepage.dart';
+import 'package:molex/screens/visual%20Inspector/Home_visual_inspector.dart';
 import 'package:molex/screens/widgets/time.dart';
 import 'package:molex/service/apiService.dart';
 
 class Location extends StatefulWidget {
   String userId;
   MachineDetails machine;
-  Location({this.userId, this.machine});
+  String type;
+  Location({this.userId, this.machine, this.type});
   @override
   _LocationState createState() => _LocationState();
 }
@@ -276,28 +280,27 @@ class _LocationState extends State<Location> {
             onPressed: () {
               ApiService apiService = new ApiService();
               apiService.getBundlesinBin(binId).then((value) {
-                if(value!=null){
- for (BundleDetail bundle in value) {
-                  setState(() {
-                    transferList.add(TransferBinToLocation(
-                        userId: widget.userId,
-                        binIdentification: binId,
-                        bundleId: bundle.bundleIdentification,
-                        locationId: locationId));
-                  });
+                if (value != null) {
+                  for (BundleDetail bundle in value) {
+                    setState(() {
+                      transferList.add(TransferBinToLocation(
+                          userId: widget.userId,
+                          binIdentification: binId,
+                          bundleId: bundle.bundleIdentification,
+                          locationId: locationId));
+                    });
+                  }
+                } else {
+                  Fluttertoast.showToast(
+                    msg: "Invalid Bin Id",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 }
-                }else{
-                   Fluttertoast.showToast(
-                          msg: "Invalid Bin Id",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
-                }
-               
               });
 
               // setState(() {
@@ -305,7 +308,7 @@ class _LocationState extends State<Location> {
               //   binId = null;
               // });
             },
-            child: Text('Confirm Transfer')),
+            child: Text('Transfer')),
       ),
     );
   }
@@ -593,17 +596,104 @@ class _LocationState extends State<Location> {
                         .postTransferBinToLocation(transferList)
                         .then((value) {
                       if (value != null) {
-                        apiService
-                            .getmachinedetails(widget.machine.machineNumber)
-                            .then((value) {
-                          Navigator.pop(context);
+                        if (widget.type == "preparation") {
                           Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Homepage(
-                                    userId: widget.userId, machine: value[0]),
-                              ));
-                        });
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PreprationDash(
+                                      userId: widget.userId,
+                                      machineId: 'preparation',
+                                    )),
+                          );
+                        }
+                        if (widget.type == 'process') {
+                          apiService
+                              .getmachinedetails(widget.machine.machineNumber)
+                              .then((value) {
+                            // Navigator.pop(context);
+                            MachineDetails machineDetails = value[0];
+                            Fluttertoast.showToast(
+                                msg: widget.machine.machineNumber,
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 16.0);
+
+                            print("machineID:${widget.machine.machineNumber}");
+                            switch (machineDetails.category) {
+                              case "Manual Crimping":
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePageOp2(
+                                            userId: widget.userId,
+                                            machine: machineDetails,
+                                          )),
+                                );
+                                break;
+                              case "Manual Cutting":
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Homepage(
+                                            userId: widget.userId,
+                                            machine: machineDetails,
+                                          )),
+                                );
+                                break;
+                              case "Automatic Cut & Crimp":
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Homepage(
+                                            userId: widget.userId,
+                                            machine: machineDetails,
+                                          )),
+                                );
+                                break;
+                              case "Semi Automatic Strip and Crimp machine":
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePageOp2(
+                                            userId: widget.userId,
+                                            machine: machineDetails,
+                                          )),
+                                );
+                                break;
+                              case "Automatic Cutting":
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Homepage(
+                                            userId: widget.userId,
+                                            machine: machineDetails,
+                                          )),
+                                );
+                                break;
+                              default:
+                                Fluttertoast.showToast(
+                                    msg: "Machine not Found",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                            }
+                          });
+                        }
+                        if (widget.type == 'visualInspection') {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeVisualInspector(
+                                      userId: widget.userId,
+                                    )),
+                          );
+                        }
                       } else {
                         Fluttertoast.showToast(
                           msg: "Transfer Failed",
